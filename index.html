@@ -54,10 +54,10 @@
         <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
         <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
     </div>
-    <!-- Librería JavaScript del Mapa Cargada Completa -->
+        <!-- Librería JavaScript del Mapa Cargada Completa -->
     <script src="https://unpkg.com"></script>
     <script>
-        // Enlace de API de Exportación Directa con tu ID de Excel Real Integrado Correctamente
+        // Enlace de API con tu ID de Excel Real Fijo
         const excelUrl = "https://google.com";
 
         var map = L.map('map', { zoomControl: false }).setView([-11.8463, -77.1351], 14);
@@ -107,19 +107,19 @@
 
                 for(let i = 1; i < matriz.length; i++) {
                     let celdas = matriz[i];
-                    if(celdas.length < 5) continue;
+                    if(celdas.length < 4) continue;
                     
+                    // MAQUEO MULTIREGIONAL MAPADO ESTRICTAMENTE DESDE TU IMAGEN ENVIADA
                     let red = celdas[0] || "";
                     let zona = celdas[1] || "";
                     let nombre = celdas[2] || "";
                     let niveles = celdas[3] || "";
                     let direccion = celdas[4] || "";
-                    let referencia = celdas[5] || "";
-                    let gpsLink = celdas[6] || ""; 
-                    let horarios = celdas[7] || "MAÑANA / TARDE";
-                    let talleres = celdas[8] || "NO APLICA";
-                    let fotoLink = celdas[9] || ""; 
-                    let requisitos = celdas[10] || "";
+                    let gpsLink = celdas[5] || ""; // Columna F (6) - ENLACE GPS
+                    let horarios = celdas[6] || "MAÑANA / TARDE"; // Columna G (7) - TURNOS
+                    let talleres = celdas[7] || "NO APLICA"; // Columna H (8) - SECUNDARIA TÉCNICA
+                    let fotoLink = celdas[8] || ""; // Columna I (9) - ENLACE FOTO
+                    let requisitos = celdas[9] || ""; // Columna J (10) - REQUISITOS MATRÍCULA
 
                     let coords = extraerCoordenadas(gpsLink);
 
@@ -144,7 +144,7 @@
                                                 
                                 <button class="accordion-btn" onclick="toggleAcc(this)">🗺️ DIRECCIÓN Y REFERENCIA <span>▼</span></button>
                                 <div class="accordion-content">
-                                    <p><b>Ubicación:</b> ${direccion}<br><b>Referencia:</b> ${referencia || 'SIN REFERENCIA'}</p>
+                                    <p><b>Ubicación:</b> ${direccion}</p>
                                 </div>
                             </div>
                         `;
