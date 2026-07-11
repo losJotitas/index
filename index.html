@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
+    <link rel="stylesheet" href="https://unpkg.com" />
+    <style>
+        body { margin: 0; padding: 0; background-color: #06223f; font-family: 'Segoe UI', sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        header { text-align: center; padding: 10px 5px; background: #06223f; position: relative; }
+        .logo-container { display: inline-block; position: relative; padding: 5px; }
+        .glow-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 130px; height: 130px; background: radial-gradient(circle, rgba(234,179,8,0.35) 0%, rgba(239,68,68,0.35) 50%, rgba(6,34,63,0) 70%); filter: blur(8px); z-index: 1; }
+        .icon-svg { width: 80px; height: 80px; position: relative; z-index: 2; }
+        h1 { margin: 5px 0 0 0; font-size: 26px; letter-spacing: 2px; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .subtitle { margin: 0; font-size: 11px; letter-spacing: 3px; color: #cbd5e1; font-weight: 600; }
+        .slogan { margin: 10px 0 5px 0; font-size: 13px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
+        #search-box { padding: 8px 15px; background-color: #06223f; display: flex; justify-content: center; z-index: 10; }
+        #search-input { width: 100%; max-width: 450px; padding: 12px 20px; border-radius: 25px; border: 2px solid #1e3a5f; background-color: #0c2d54; color: #ffffff; font-size: 15px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        #map { flex: 1; width: 100%; z-index: 5; }
+        .road-base { height: 25px; background-color: #24252a; position: relative; box-shadow: 0 -4px 10px rgba(0,0,0,0.4); display: flex; justify-content: center; overflow: hidden; z-index: 10; }
+        .road-line { width: 15px; height: 4px; background-color: #ffffff; margin: 10px 8px; opacity: 0.8; }
+        .popup-card { color: #333333; font-family: Arial, sans-serif; min-width: 220px; }
+        .popup-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #06223f; }
+        .accordion-btn { background-color: #0f2d4a; color: white; padding: 6px; width: 100%; text-align: left; border: none; outline: none; transition: 0.2s; font-size: 11px; font-weight: bold; margin-top: 4px; cursor: pointer; border-radius: 3px; }
+        .accordion-content { padding: 0 8px; display: none; background-color: #f1f5f9; overflow: hidden; border-left: 3px solid #0f2d4a; font-size: 11px; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container"><div class="glow-bg"></div>
+            <svg class="icon-svg" viewBox="0 0 100 100" fill="none" xmlns="http://w3.org">
+                <path d="M50 15L15 32L50 49L85 32L50 15Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M23.5 36V62C23.5 62 35 70 50 70C65 70 76.5 62 76.5 62V36" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M85 32V58" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="50" cy="42" r="10" fill="white" opacity="0.15"/>
+                <path d="M50 32C45.5 32 42 35.5 42 40C42 45.5 50 52 50 52C50 52 58 45.5 58 40C58 35.5 54.5 32 50 32ZM50 43.5C48.1 43.5 46.5 41.9 46.5 40C46.5 38.1 48.1 36.5 50 36.5C51.9 36.5 53.5 38.1 53.5 40C53.5 41.9 51.9 43.5 50 43.5Z" fill="white"/>
+            </svg>
+        </div>
+        <h1>UBIKTUCOLEYA!</h1>
+        <div class="subtitle">VENTANILLA & MI PERÚ</div>
+        <div class="slogan">"TU COLE A UN MAPA DE DISTANCIA"</div>
+    </header>
+
+    <div id="search-box">
+        <input type="text" id="search-input" placeholder="Buscar colegio por nombre o número de Red...">
+    </div>
+
+    <div id="map"></div>
+
+    <div class="road-base">
+        <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
+        <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
+    </div>
+
+    <script src="https://unpkg.com"></script>
+    <script>
+        // PEGA AQUÍ TU ENLACE DE PUBLICACIÓN CSV ENTRE LAS COMILLAS
+        const excelUrl = "REEMPLAZA_ESTE_TEXTO_CON_EL_ENLACE_DE_GOOGLE_SHEETS";
+
+        var map = L.map('map', { zoomControl: false }).setView([-11.8543, -77.1234], 13);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        let marcadoresColegios = [];
+
+        function cargarDatosExcel() {
+            if(excelUrl.includes("REEMPLAZA_ESTE_TEXTO")) return;
+            fetch(excelUrl)
+            .then(res => res.text())
+            .then(csvText => {
+                let lineas = csvText.split("\n");
+                for(let i = 1; i < lineas.length; i++) {
+                    let celdas = lineas[i].split("\t");
+                    if(celdas.length < 3) continue;
+                    
+                    let red = celdas[0];
+                    let zona = celdas[1];
+                    let nombre = celdas[2];
+                    let niveles = celdas[3];
+                    let direccion = celdas[4];
+                    let gpsLink = celdas[5];
+                    let horarios = celdas[6];
+                    let talleres = celdas[7] || "Regular";
+                    let requisitos = celdas[8] || "";
+
+                    if(gpsLink && gpsLink.includes("q=")) {
+                        let coordPart = gpsLink.split("q=")[1].split("&")[0].split(",");
+                        let lat = parseFloat(coordPart[0]);
+                        let lng = parseFloat(coordPart[1]);
+
+                        if(!isNaN(lat) && !isNaN(lng)) {
+                            let popupHtml = `
+                                <div class="popup-card">
+                                    <div class="popup-title">${nombre}</div>
+                                    <span style="font-size:11px;color:#666;">${niveles} | ${red}</span>
+                                    
+                                    <button class="accordion-btn" onclick="toggleAcc(this)">🕒 HORARIOS Y ESPECIALIDAD</button>
+                                    <div class="accordion-content">
+                                        <p><b>Horarios:</b> ${horarios}<br><b>Especialidad:</b> ${talleres}</p>
+                                    </div>
+                                    
+                                    <button class="accordion-btn" onclick="toggleAcc(this)">📄 REQUISITOS DE MATRÍCULA</button>
+                                    <div class="accordion-content">
+                                        <p>${requisitos.replace(/\|/g, '<br>')}</p>
+                                    </div>
+                                    
+                                    <button class="accordion-btn" onclick="toggleAcc(this)">🗺️ DIRECCIÓN Y RUTA</button>
+                                    <div class="accordion-content">
+                                        <p>${direccion}</p>
+                                    </div>
+                                </div>
+                            `;
+
+                            let marker = L.marker([lat, lng]).addTo(map).bindPopup(popupHtml);
+                            marcadoresColegios.push({ marker: marker, nombre: nombre, red: red });
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleAcc(btn) {
+            btn.classList.toggle("active");
+            var panel = btn.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            let busqueda = e.target.value.toUpperCase();
+            marcadoresColegios.forEach(item => {
+                if(item.nombre.includes(busqueda) || item.red.toUpperCase().includes(busqueda)) {
+                    map.addLayer(item.marker);
+                } else {
+                    map.removeLayer(item.marker);
+                }
+            });
+        });
+
+        cargarDatosExcel();
+    </script>
+</body>
+</html>
