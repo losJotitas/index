@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
-    <!-- Motor de Mapas Leaflet Oficial Enlazado Correctamente -->
+    <!-- Motor de Mapas Leaflet Oficial -->
     <link rel="stylesheet" href="https://unpkg.com" />
     <style>
         body { margin: 0; padding: 0; background-color: #06223f; font-family: 'Segoe UI', sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -54,10 +54,10 @@
         <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
         <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
     </div>
-        <!-- Librería JavaScript del Mapa Cargada Completa -->
+    <!-- Librería JavaScript del Mapa Cargada Completa -->
     <script src="https://unpkg.com"></script>
     <script>
-        // Enlace de API con tu ID de Excel Real Fijo
+        // Enlace de API con tu ID de Excel Real Integrado
         const excelUrl = "https://google.com";
 
         var map = L.map('map', { zoomControl: false }).setView([-11.8463, -77.1351], 14);
@@ -70,32 +70,35 @@
             let lineas = text.split(/\r?\n/);
             return lineas.map(linea => {
                 if (!linea.trim()) return null;
-                if (linea.includes("\t")) return linea.split("\t");
-                if (linea.includes(";")) return linea.split(";");
-                return linea.split(",");
+                return linea.split("\t");
             }).filter(l => l !== null);
         }
 
+        // Extractor Analítico para Coordenadas (Soporta links de PC y celular)
         function extraerCoordenadas(link) {
             if(!link) return null;
-            let lat = null, lng = null;
-            if(link.includes("@")) {
-                let partes = link.split("@")[1].split(",");
-                lat = parseFloat(partes[0]);
-                lng = parseFloat(partes[1]);
+            let match = link.match(/q=([-+]?\d+\.\d+),([-+]?\d+\.\d+)/i) || link.match(/@([-+]?\d+\.\d+),([-+]?\d+\.\d+)/);
+            if(match) {
+                return { lat: parseFloat(match[1]), lng: parseFloat(match[2]) };
             }
-            else if(link.includes("q=")) {
-                let partes = link.split("q=")[1].split("&")[0].split(",");
-                lat = parseFloat(partes[0]);
-                lng = parseFloat(partes[1]);
-            }
-            else if(link.includes(",")) {
+            if(link.includes(",")) {
                 let partes = link.split(",");
-                lat = parseFloat(partes[0]);
-                lng = parseFloat(partes[1]);
+                let lat = parseFloat(partes[0]), lng = parseFloat(partes[1]);
+                if(!isNaN(lat) && !isNaN(lng)) return { lat: lat, lng: lng };
             }
-            if(!isNaN(lat) && !isNaN(lng)) return { lat: lat, lng: lng };
             return null;
+        }
+
+        // Convertidor de Bypass Automatizado para Fotos de Google Drive
+        function optimizarEnlaceFoto(link) {
+            if(!link) return 'https://unsplash.com';
+            if(link.includes("://google.com")) {
+                let match = link.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if(match && match[1]) {
+                    return `https://google.com{match[1]}`;
+                }
+            }
+            return link;
         }
 
         function cargarDatosExcel() {
@@ -107,30 +110,30 @@
 
                 for(let i = 1; i < matriz.length; i++) {
                     let celdas = matriz[i];
-                    if(celdas.length < 4) continue;
+                    if(celdas.length < 7) continue;
                     
-                    // MAQUEO MULTIREGIONAL MAPADO ESTRICTAMENTE DESDE TU IMAGEN ENVIADA
+                    // Sincronización Estricta con tus 11 Columnas reales de tu captura
                     let red = celdas[0] || "";
                     let zona = celdas[1] || "";
                     let nombre = celdas[2] || "";
                     let niveles = celdas[3] || "";
                     let direccion = celdas[4] || "";
-                    let gpsLink = celdas[5] || ""; // Columna F (6) - ENLACE GPS
-                    let horarios = celdas[6] || "MAÑANA / TARDE"; // Columna G (7) - TURNOS
-                    let talleres = celdas[7] || "NO APLICA"; // Columna H (8) - SECUNDARIA TÉCNICA
-                    let fotoLink = celdas[8] || ""; // Columna I (9) - ENLACE FOTO
-                    let requisitos = celdas[9] || ""; // Columna J (10) - REQUISITOS MATRÍCULA
+                    let gpsLink = celdas[6] || "";       // Columna G (7) - GPS
+                    let horarios = celdas[7] || "MAÑANA / TARDE"; // Columna H (8) - TURNOS
+                    let talleres = celdas[8] || "NO APLICA";     // Columna I (9) - JEC
+                    let fotoLink = celdas[9] || "";      // Columna J (10) - FOTO
+                    let requisitos = celdas[10] || "";   // Columna K (11) - REQUISITOS
 
                     let coords = extraerCoordenadas(gpsLink);
 
                     if(coords) {
-                        let imgSrc = fotoLink ? fotoLink : 'https://unsplash.com';
+                        let imgSrc = optimizarEnlaceFoto(fotoLink);
                         
                         let popupHtml = `
                             <div class="popup-card">
                                 <div class="popup-title">${nombre}</div>
                                 <span style="font-size:11px;color:#475569;font-weight:600;">${niveles} | ${red}</span>
-                                <img class="popup-img" src="${imgSrc}" alt="Fachada">
+                                <img class="popup-img" src="${imgSrc}" alt="Fachada" onerror="this.src='https://unsplash.com'">
                                 
                                 <button class="accordion-btn" onclick="toggleAcc(this)">🕒 HORARIOS Y ESPECIALIDAD <span>▼</span></button>
                                 <div class="accordion-content">
@@ -139,12 +142,12 @@
                                 
                                 <button class="accordion-btn" onclick="toggleAcc(this)">📄 REQUISITOS DE MATRÍCULA <span>▼</span></button>
                                 <div class="accordion-content">
-                                    <p>${requisitos}</p>
+                                    <p>${requisitos.replace(/ \+ /g, '<br>• ')}</p>
                                 </div>
                                                 
                                 <button class="accordion-btn" onclick="toggleAcc(this)">🗺️ DIRECCIÓN Y REFERENCIA <span>▼</span></button>
                                 <div class="accordion-content">
-                                    <p><b>Ubicación:</b> ${direccion}</p>
+                                    <p><b>Ubicación:</b> ${direccion}<br><b>Zona:</b> ${zona}</p>
                                 </div>
                             </div>
                         `;
