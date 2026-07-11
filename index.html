@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
-    <!-- Motor de Mapas Leaflet Oficial -->
+    <!-- Motor de Mapas Leaflet Oficial Enlazado Correctamente -->
     <link rel="stylesheet" href="https://unpkg.com" />
     <style>
         body { margin: 0; padding: 0; background-color: #06223f; font-family: 'Segoe UI', sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -54,13 +54,13 @@
         <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
         <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
     </div>
-
+    <!-- Librería JavaScript del Mapa Cargada Completa -->
     <script src="https://unpkg.com"></script>
     <script>
-        // Enlace de API de Exportación Directa con tu ID de Excel Real
+        // Enlace de API de Exportación Directa con tu ID de Excel Real Integrado Correctamente
         const excelUrl = "https://google.com";
 
-        var map = L.map('map', { zoomControl: false }).setView([-11.8543, -77.1234], 13);
+        var map = L.map('map', { zoomControl: false }).setView([-11.8463, -77.1351], 14);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
@@ -79,19 +79,16 @@
         function extraerCoordenadas(link) {
             if(!link) return null;
             let lat = null, lng = null;
-            // Extractor Inteligente para formato @lat,lng (Enlaces largos de PC)
             if(link.includes("@")) {
                 let partes = link.split("@")[1].split(",");
                 lat = parseFloat(partes[0]);
                 lng = parseFloat(partes[1]);
             }
-            // Extractor alternativo para formato q=lat,lng (Enlaces de celular)
             else if(link.includes("q=")) {
                 let partes = link.split("q=")[1].split("&")[0].split(",");
                 lat = parseFloat(partes[0]);
                 lng = parseFloat(partes[1]);
             }
-            // Extractor de choque por si escribes la coordenada limpia directa
             else if(link.includes(",")) {
                 let partes = link.split(",");
                 lat = parseFloat(partes[0]);
@@ -112,7 +109,6 @@
                     let celdas = matriz[i];
                     if(celdas.length < 5) continue;
                     
-                    // Mapeo Exacto alineado al 100% con tu captura de pantalla
                     let red = celdas[0] || "";
                     let zona = celdas[1] || "";
                     let nombre = celdas[2] || "";
@@ -128,7 +124,6 @@
                     let coords = extraerCoordenadas(gpsLink);
 
                     if(coords) {
-                        // Si hay foto en el drive se muestra, sino se inyecta la silueta vectorizada de contingencia
                         let imgSrc = fotoLink ? fotoLink : 'https://unsplash.com';
                         
                         let popupHtml = `
@@ -144,12 +139,12 @@
                                 
                                 <button class="accordion-btn" onclick="toggleAcc(this)">📄 REQUISITOS DE MATRÍCULA <span>▼</span></button>
                                 <div class="accordion-content">
-                                    <p>${requisitos.replace(/\|/g, '<br>')}</p>
+                                    <p>${requisitos}</p>
                                 </div>
                                                 
                                 <button class="accordion-btn" onclick="toggleAcc(this)">🗺️ DIRECCIÓN Y REFERENCIA <span>▼</span></button>
                                 <div class="accordion-content">
-                                    <p><b>Ubicación:</b> ${direccion}<br><b>Referencia:</b> ${referencia || 'Falta campo'}</p>
+                                    <p><b>Ubicación:</b> ${direccion}<br><b>Referencia:</b> ${referencia || 'SIN REFERENCIA'}</p>
                                 </div>
                             </div>
                         `;
@@ -160,4 +155,32 @@
                 }
             }).catch(err => console.error("Error en base de datos: ", err));
         }
-function toggleAcc(btn) {btn.classList.toggle("active");var panel = btn.nextElementSibling;let span = btn.querySelector("span");if (panel.style.display === "block") {panel.style.display = "none";span.innerText = "▼";} else {panel.style.display = "block";span.innerText = "▲";}}document.getElementById('search-input').addEventListener('input', function(e) {let busqueda = e.target.value.toUpperCase();marcadoresColegios.forEach(item => {if(item.nombre.includes(busqueda) || item.red.toUpperCase().includes(busqueda)) {map.addLayer(item.marker);} else {map.removeLayer(item.marker);}});});cargarDatosExcel();
+
+        function toggleAcc(btn) {
+            btn.classList.toggle("active");
+            var panel = btn.nextElementSibling;
+            let span = btn.querySelector("span");
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+                span.innerText = "▼";
+            } else {
+                panel.style.display = "block";
+                span.innerText = "▲";
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            let busqueda = e.target.value.toUpperCase();
+            marcadoresColegios.forEach(item => {
+                if(item.nombre.includes(busqueda) || item.red.toUpperCase().includes(busqueda)) {
+                    map.addLayer(item.marker);
+                } else {
+                    map.removeLayer(item.marker);
+                }
+            });
+        });
+
+        cargarDatosExcel();
+    </script>
+</body>
+</html>
