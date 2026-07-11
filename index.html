@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
-    <!-- Motor de Mapas Leaflet Oficial Enlazado Corectamente -->
+    <!-- Motor de Mapas Leaflet Oficial -->
     <link rel="stylesheet" href="https://unpkg.com" />
     <style>
         body { margin: 0; padding: 0; background-color: #06223f; font-family: 'Segoe UI', sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -20,10 +20,11 @@
         #map { flex: 1; width: 100%; z-index: 5; }
         .road-base { height: 25px; background-color: #24252a; position: relative; box-shadow: 0 -4px 10px rgba(0,0,0,0.4); display: flex; justify-content: center; overflow: hidden; z-index: 10; }
         .road-line { width: 15px; height: 4px; background-color: #ffffff; margin: 10px 8px; opacity: 0.8; }
-        .popup-card { color: #333333; font-family: Arial, sans-serif; min-width: 220px; }
-        .popup-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #06223f; }
-        .accordion-btn { background-color: #0f2d4a; color: white; padding: 6px; width: 100%; text-align: left; border: none; outline: none; transition: 0.2s; font-size: 11px; font-weight: bold; margin-top: 4px; cursor: pointer; border-radius: 3px; }
-        .accordion-content { padding: 0 8px; display: none; background-color: #f1f5f9; overflow: hidden; border-left: 3px solid #0f2d4a; font-size: 11px; margin-bottom: 4px; }
+        .popup-card { color: #333333; font-family: Arial, sans-serif; min-width: 230px; }
+        .popup-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #06223f; text-transform: uppercase; }
+        .accordion-btn { background-color: #0f2d4a; color: white; padding: 8px; width: 100%; text-align: left; border: none; outline: none; transition: 0.2s; font-size: 11px; font-weight: bold; margin-top: 4px; cursor: pointer; border-radius: 3px; display: flex; justify-content: space-between; align-items: center; }
+        .accordion-content { padding: 0 8px; display: none; background-color: #f1f5f9; overflow: hidden; border-left: 3px solid #0f2d4a; font-size: 11px; margin-bottom: 4px; color: #334155; }
+        .popup-img { width: 100%; height: 110px; object-fit: cover; margin-top: 5px; border-radius: 4px; display: block; background-color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -44,7 +45,7 @@
     </header>
 
     <div id="search-box">
-        <input type="text" id="search-input" placeholder="Buscar colegio por nombre o número de Red...">
+        <input type="text" id="search-input" placeholder="Buscar por nombre de colegio o número de Red...">
     </div>
 
     <div id="map"></div>
@@ -54,10 +55,9 @@
         <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
     </div>
 
-    <!-- Librería JavaScript del Mapa Cargada Completa -->
     <script src="https://unpkg.com"></script>
     <script>
-        // Enlace de API de Exportación Directa Amarrado a Tu ID de Excel Real
+        // Enlace de API de Exportación Directa con tu ID de Excel Real
         const excelUrl = "https://google.com";
 
         var map = L.map('map', { zoomControl: false }).setView([-11.8543, -77.1234], 13);
@@ -76,6 +76,31 @@
             }).filter(l => l !== null);
         }
 
+        function extraerCoordenadas(link) {
+            if(!link) return null;
+            let lat = null, lng = null;
+            // Extractor Inteligente para formato @lat,lng (Enlaces largos de PC)
+            if(link.includes("@")) {
+                let partes = link.split("@")[1].split(",");
+                lat = parseFloat(partes[0]);
+                lng = parseFloat(partes[1]);
+            }
+            // Extractor alternativo para formato q=lat,lng (Enlaces de celular)
+            else if(link.includes("q=")) {
+                let partes = link.split("q=")[1].split("&")[0].split(",");
+                lat = parseFloat(partes[0]);
+                lng = parseFloat(partes[1]);
+            }
+            // Extractor de choque por si escribes la coordenada limpia directa
+            else if(link.includes(",")) {
+                let partes = link.split(",");
+                lat = parseFloat(partes[0]);
+                lng = parseFloat(partes[1]);
+            }
+            if(!isNaN(lat) && !isNaN(lng)) return { lat: lat, lng: lng };
+            return null;
+        }
+
         function cargarDatosExcel() {
             fetch(excelUrl)
             .then(res => res.text())
@@ -85,77 +110,54 @@
 
                 for(let i = 1; i < matriz.length; i++) {
                     let celdas = matriz[i];
-                    if(celdas.length < 6) continue;
+                    if(celdas.length < 5) continue;
                     
+                    // Mapeo Exacto alineado al 100% con tu captura de pantalla
                     let red = celdas[0] || "";
                     let zona = celdas[1] || "";
                     let nombre = celdas[2] || "";
                     let niveles = celdas[3] || "";
                     let direccion = celdas[4] || "";
-                    let gpsLink = celdas[5] || "";
-                    let horarios = celdas[6] || "Mañana / Tarde";
-                    let talleres = celdas[7] || "Regular";
-                    let requisitos = celdas[8] || "DNI original y copias";
+                    let referencia = celdas[5] || "";
+                    let gpsLink = celdas[6] || ""; 
+                    let horarios = celdas[7] || "MAÑANA / TARDE";
+                    let talleres = celdas[8] || "NO APLICA";
+                    let fotoLink = celdas[9] || ""; 
+                    let requisitos = celdas[10] || "";
 
-                    if(gpsLink && gpsLink.includes("q=")) {
-                        let partesLink = gpsLink.split("q=");
-                        let coordPart = partesLink[1].split("&")[0].split(",");
-                        let lat = parseFloat(coordPart[0]);
-                        let lng = parseFloat(coordPart[1]);
+                    let coords = extraerCoordenadas(gpsLink);
 
-                        if(!isNaN(lat) && !isNaN(lng)) {
-                            let popupHtml = `
-                                <div class="popup-card">
-                                    <div class="popup-title">${nombre}</div>
-                                    <span style="font-size:11px;color:#666;">${niveles} | ${red}</span>
-                                    
-                                    <button class="accordion-btn" onclick="toggleAcc(this)">🕒 HORARIOS Y ESPECIALIDAD</button>
-                                    <div class="accordion-content">
-                                        <p><b>Horarios:</b> ${horarios}<br><b>Especialidad:</b> ${talleres}</p>
-                                    </div>
-                                    
-                                    <button class="accordion-btn" onclick="toggleAcc(this)">📄 REQUISITOS DE MATRÍCULA</button>
-                                    <div class="accordion-content">
-                                        <p>${requisitos}</p>
-                                    </div>
-                                                    
-                                    <button class="accordion-btn" onclick="toggleAcc(this)">🗺️ DIRECCIÓN Y RUTA</button>
-                                    <div class="accordion-content">
-                                        <p>${direccion}</p>
-                                    </div>
+                    if(coords) {
+                        // Si hay foto en el drive se muestra, sino se inyecta la silueta vectorizada de contingencia
+                        let imgSrc = fotoLink ? fotoLink : 'https://unsplash.com';
+                        
+                        let popupHtml = `
+                            <div class="popup-card">
+                                <div class="popup-title">${nombre}</div>
+                                <span style="font-size:11px;color:#475569;font-weight:600;">${niveles} | ${red}</span>
+                                <img class="popup-img" src="${imgSrc}" alt="Fachada">
+                                
+                                <button class="accordion-btn" onclick="toggleAcc(this)">🕒 HORARIOS Y ESPECIALIDAD <span>▼</span></button>
+                                <div class="accordion-content">
+                                    <p><b>Turnos:</b> ${horarios}<br><b>Especialidad:</b> ${talleres}</p>
                                 </div>
-                            `;
+                                
+                                <button class="accordion-btn" onclick="toggleAcc(this)">📄 REQUISITOS DE MATRÍCULA <span>▼</span></button>
+                                <div class="accordion-content">
+                                    <p>${requisitos.replace(/\|/g, '<br>')}</p>
+                                </div>
+                                                
+                                <button class="accordion-btn" onclick="toggleAcc(this)">🗺️ DIRECCIÓN Y REFERENCIA <span>▼</span></button>
+                                <div class="accordion-content">
+                                    <p><b>Ubicación:</b> ${direccion}<br><b>Referencia:</b> ${referencia || 'Falta campo'}</p>
+                                </div>
+                            </div>
+                        `;
 
-                            let marker = L.marker([lat, lng]).addTo(map).bindPopup(popupHtml);
-                            marcadoresColegios.push({ marker: marker, nombre: nombre, red: red });
-                        }
+                        let marker = L.marker([coords.lat, coords.lng]).addTo(map).bindPopup(popupHtml);
+                        marcadoresColegios.push({ marker: marker, nombre: nombre, red: red });
                     }
                 }
-            }).catch(err => console.error("Error cargando Excel: ", err));
+            }).catch(err => console.error("Error en base de datos: ", err));
         }
-
-        function toggleAcc(btn) {
-            btn.classList.toggle("active");
-            var panel = btn.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
-            }
-        }
-
-        document.getElementById('search-input').addEventListener('input', function(e) {
-            let busqueda = e.target.value.toUpperCase();
-            marcadoresColegios.forEach(item => {
-                if(item.nombre.includes(busqueda) || item.red.toUpperCase().includes(busqueda)) {
-                    map.addLayer(item.marker);
-                } else {
-                    map.removeLayer(item.marker);
-                }
-            });
-        });
-
-        cargarDatosExcel();
-    </script>
-</body>
-</html>
+function toggleAcc(btn) {btn.classList.toggle("active");var panel = btn.nextElementSibling;let span = btn.querySelector("span");if (panel.style.display === "block") {panel.style.display = "none";span.innerText = "▼";} else {panel.style.display = "block";span.innerText = "▲";}}document.getElementById('search-input').addEventListener('input', function(e) {let busqueda = e.target.value.toUpperCase();marcadoresColegios.forEach(item => {if(item.nombre.includes(busqueda) || item.red.toUpperCase().includes(busqueda)) {map.addLayer(item.marker);} else {map.removeLayer(item.marker);}});});cargarDatosExcel();
