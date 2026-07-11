@@ -65,7 +65,7 @@
         let marcadoresColegios = [];
 
         function cargarDatosExcel() {
-            if(excelUrl.includes("REEMPLAZA_ESTE_TEXTO")) return;
+            if(excelUrl.includes("https://docs.google.com/spreadsheets/d/e/2PACX-1vSBtVN1MbvvKfT2Mm-lgBi5oByfXElZ-Bhax2RHSrYL2wIoyFBL3VLSJhkPUwItaBKrX011Buq95HZo/pub?output=csv")) return;
             fetch(excelUrl)
             .then(res => res.text())
             .then(csvText => {
