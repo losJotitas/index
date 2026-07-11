@@ -64,43 +64,28 @@
 
         let marcadoresColegios = [];
 
-        // Sistema Inteligente de Separación de Celdas (Autodetectores Coma / Tabulación)
-        function parserCSV(text) {
-            let lineas = text.split(/\r?\n/);
-            return lineas.map(linea => {
-                if (!linea.trim()) return null;
-                // Si la línea contiene tabulaciones, separa por tabulación; si no, intenta por comas o punto y coma
-                if (linea.includes("\t")) return linea.split("\t");
-                if (linea.includes(";")) return linea.split(";");
-                return linea.split(",");
-            }).filter(l => l !== null);
-        }
-
         function cargarDatosExcel() {
             if(excelUrl.includes("REEMPLAZA_ESTE_TEXTO")) return;
             fetch(excelUrl)
             .then(res => res.text())
             .then(csvText => {
-                let matriz = parserCSV(csvText);
-                if (matriz.length < 2) return;
-
-                for(let i = 1; i < matriz.length; i++) {
-                    let celdas = matriz[i];
+                let lineas = csvText.split("\n");
+                for(let i = 1; i < lineas.length; i++) {
+                    let celdas = lineas[i].split("\t");
                     if(celdas.length < 3) continue;
                     
-                    let red = celdas[0] || "";
-                    let zona = celdas[1] || "";
-                    let nombre = celdas[2] || "";
-                    let niveles = celdas[3] || "";
-                    let direccion = celdas[4] || "";
-                    let gpsLink = celdas[5] || "";
-                    let horarios = celdas[6] || "";
+                    let red = celdas[0];
+                    let zona = celdas[1];
+                    let nombre = celdas[2];
+                    let niveles = celdas[3];
+                    let direccion = celdas[4];
+                    let gpsLink = celdas[5];
+                    let horarios = celdas[6];
                     let talleres = celdas[7] || "Regular";
                     let requisitos = celdas[8] || "";
 
                     if(gpsLink && gpsLink.includes("q=")) {
-                        let partesLink = gpsLink.split("q=");
-                        let coordPart = partesLink[1].split("&")[0].split(",");
+                        let coordPart = gpsLink.split("q=")[1].split("&")[0].split(",");
                         let lat = parseFloat(coordPart[0]);
                         let lng = parseFloat(coordPart[1]);
 
@@ -132,7 +117,7 @@
                         }
                     }
                 }
-            }).catch(err => console.error("Error cargando base de datos: ", err));
+            });
         }
 
         function toggleAcc(btn) {
