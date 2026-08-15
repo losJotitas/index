@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    /* AZUL MUCHO MÁS OSCURO Y PROFUNDO */
-    body { margin: 0; padding: 0; background-color: #051A33; font-family: 'Segoe UI', Roboto, sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    /* 🌙 AZUL NOCHE MUCHO MÁS OSCURO */
+    body { margin: 0; padding: 0; background-color: #031224; font-family: 'Segoe UI', Roboto, sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
     /* ==== ENCABEZADO IGUAL A TU PORTADA ==== */
     header {
-      background: linear-gradient(180deg, #0C3A66 0%, #051A33 100%);
+      background: linear-gradient(180deg, #0A2A54 0%, #031224 100%);
       padding: 12px 20px 18px;
       text-align: center;
       border-bottom: 3px solid #2EA8E0;
@@ -78,7 +78,7 @@
 
     /* ==== CONTROLES ==== */
     .controls {
-      background: rgba(12, 58, 102, 0.9);
+      background: rgba(10, 42, 84, 0.9);
       padding: 10px 16px;
       display: flex;
       flex-wrap: wrap;
@@ -99,12 +99,12 @@
     }
     select {
       background: rgba(255, 255, 255, 0.95);
-      color: #051A33;
+      color: #031224;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
     }
     select:hover { background: #ffffff; }
     button {
-      background: linear-gradient(135deg, #2EA8E0, #0C3A66);
+      background: linear-gradient(135deg, #2EA8E0, #0A2A54);
       color: #fff;
       margin-left: auto;
       box-shadow: 0 3px 10px rgba(46, 168, 224, 0.3);
@@ -120,7 +120,7 @@
 
     /* ==== LEYENDA ==== */
     .leyenda {
-      background: rgba(5, 26, 51, 0.95);
+      background: rgba(3, 18, 36, 0.95);
       padding: 10px 16px;
       font-size: 0.88rem;
       border-top: 2px solid #2EA8E0;
@@ -164,7 +164,7 @@
       <path d="M95 35 L105 70 L90 65 L90 40 Z" fill="#fff" opacity="0.9"/>
       <path d="M20 38 L60 60 L100 38 L60 22 Z" fill="none" stroke="#fff" stroke-width="2"/>
       <circle cx="60" cy="38" r="12" fill="#fff"/>
-      <path d="M60 32 A8 8 0 0 1 68 40 C68 46 60 52 60 52 C60 52 52 46 52 40 A8 8 0 0 1 60 32 Z" fill="#051A33"/>
+      <path d="M60 32 A8 8 0 0 1 68 40 C68 46 60 52 60 52 C60 52 52 46 52 40 A8 8 0 0 1 60 32 Z" fill="#031224"/>
     </svg>
   </div>
   <h1>UBIKTUCOLEYA!</h1>
@@ -196,22 +196,22 @@
 
 <script>
 const colegios = [
-  { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpg" },
-  { id: 2, nombre: "I.E.I N° 108", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.846319, lng: -77.135186, referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/108.jpg" },
-  { id: 3, nombre: "I.E N° 5147 Santa Rosa de Lima", red: 4, zona: "Pachacútec Este", niveles: "Primaria", lat: -11.8438763, lng: -77.1284196, referencia: "Av. Los Topógrafos MZ. C2 LT. 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5147_Santa_Rosa_de_Lima.jpg" },
-  { id: 4, nombre: "I.E.I N° 141 Inmaculada Virgen de Guadalupe", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8591298, lng: -77.1225196, referencia: "MZ E LOTE 1 AA.HH. Virgen de Guadalupe", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpg" },
-  { id: 5, nombre: "I.E.I N° 167 Cristo Rey de los Niños", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8499804, lng: -77.1223254, referencia: "Av. El Bosque MZ. JK Lote 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/167_Cristo_Rey_de_los_Ninos.jpg" },
-  { id: 6, nombre: "I.E N° 5119 Villa Emilia", red: 6, zona: "Mi Perú", niveles: "Primaria", lat: -11.8498337, lng: -77.1213922, referencia: "Calle Los Ficus MZ M LOTE 1", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5119_Villa_Emilia.jpg" },
-  { id: 7, nombre: "I.E N° 5151 San Juan Bosco", red: 6, zona: "Mi Perú", niveles: "Secundaria", lat: -11.8505098, lng: -77.1264982, referencia: "Calle Los Ficus MZ L LOTE 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5151_San_Juan_Bosco.jpg" },
+  { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg" },
+  { id: 2, nombre: "I.E.I N° 108", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.846319, lng: -77.135186, referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/108.jpeg" },
+  { id: 3, nombre: "I.E N° 5147 Santa Rosa de Lima", red: 4, zona: "Pachacútec Este", niveles: "Primaria", lat: -11.8438763, lng: -77.1284196, referencia: "Av. Los Topógrafos MZ. C2 LT. 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5147_Santa_Rosa_de_Lima.jpeg" },
+  { id: 4, nombre: "I.E.I N° 141 Inmaculada Virgen de Guadalupe", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8591298, lng: -77.1225196, referencia: "MZ E LOTE 1 AA.HH. Virgen de Guadalupe", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg" },
+  { id: 5, nombre: "I.E.I N° 167 Cristo Rey de los Niños", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8499804, lng: -77.1223254, referencia: "Av. El Bosque MZ. JK Lote 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/167_Cristo_Rey_de_los_Ninos.jpeg" },
+  { id: 6, nombre: "I.E N° 5119 Villa Emilia", red: 6, zona: "Mi Perú", niveles: "Primaria", lat: -11.8498337, lng: -77.1213922, referencia: "Calle Los Ficus MZ M LOTE 1", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5119_Villa_Emilia.jpeg" },
+  { id: 7, nombre: "I.E N° 5151 San Juan Bosco", red: 6, zona: "Mi Perú", niveles: "Secundaria", lat: -11.8505098, lng: -77.1264982, referencia: "Calle Los Ficus MZ L LOTE 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5151_San_Juan_Bosco.jpeg" },
   { id: 8, nombre: "CEBE Sagrado Corazón de Jesús", red: 6, zona: "Mi Perú", niveles: "Especial", lat: -11.8540579, lng: -77.1230456, referencia: "Av. Trujillo S/N MZ. J 17 LT. 2", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "" },
-  { id: 9, nombre: "I.E.I N° 107 Los Pastorcitos de Fátima", red: 9, zona: "Angamos", niveles: "Inicial", lat: -11.8860892, lng: -77.1326308, referencia: "Calle 5 Elías Aguirre S/N — AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/107_Pastorcitos_de_Fatima.jpg" },
-  { id: 10, nombre: "I.E.I N° 113 Domingo Savio", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8873928, lng: -77.1231337, referencia: "MZ F S/N I Sector Derecho - URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/113_Domingo_Savio.jpg" },
-  { id: 11, nombre: "I.E.I N° 133 Divina Pastora", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8886578, lng: -77.1206898, referencia: "Psje. Johnny Watson S/N II Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/133_Divina_Pastora.jpg" },
-  { id: 12, nombre: "I.E.I N° 135 Mi Pequeño Mundo", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.891201, lng: -77.116792, referencia: "Av. Marcos Calderón S/N IV Sector Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/135_Mi_Pequeno_Mundo.jpg" },
-  { id: 13, nombre: "I.E N° 5090 Antonia Moreno de Cáceres", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8930743, lng: -77.1123801, referencia: "VI Sector Derecho S/N — Ciudad del Deporte", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5090_Antonia_Moreno_de_Caceres.jpg" },
-  { id: 14, nombre: "I.E N° 5093 Antonio Raymondi", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8859367, lng: -77.1239704, referencia: "Av. Gonzales Ganoza S/N I Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5093_Antonio_Raymondi.jpg" },
-  { id: 15, nombre: "I.E N° 5091 Hijos de Grau", red: 9, zona: "Angamos", niveles: "Primaria", lat: -11.8863777, lng: -77.1324341, referencia: "MZ O S/N Hijos del Almirante Miguel Grau — III Sector Angamos", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5091_Hijos_de_Grau.jpg" },
-  { id: 16, nombre: "Coprodeli La Providencia Virgen de Chapí", red: 9, zona: "Angamos", niveles: "Cuna Jardín", lat: -11.8853088, lng: -77.1333501, referencia: "AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/Coprodeli_Virgen_de_Chapi.jpg" }
+  { id: 9, nombre: "I.E.I N° 107 Los Pastorcitos de Fátima", red: 9, zona: "Angamos", niveles: "Inicial", lat: -11.8860892, lng: -77.1326308, referencia: "Calle 5 Elías Aguirre S/N — AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/107_Pastorcitos_de_Fatima.jpeg" },
+  { id: 10, nombre: "I.E.I N° 113 Domingo Savio", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8873928, lng: -77.1231337, referencia: "MZ F S/N I Sector Derecho - URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/113_Domingo_Savio.jpeg" },
+  { id: 11, nombre: "I.E.I N° 133 Divina Pastora", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8886578, lng: -77.1206898, referencia: "Psje. Johnny Watson S/N II Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/133_Divina_Pastora.jpeg" },
+  { id: 12, nombre: "I.E.I N° 135 Mi Pequeño Mundo", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.891201, lng: -77.116792, referencia: "Av. Marcos Calderón S/N IV Sector Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/135_Mi_Pequeno_Mundo.jpeg" },
+  { id: 13, nombre: "I.E N° 5090 Antonia Moreno de Cáceres", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8930743, lng: -77.1123801, referencia: "VI Sector Derecho S/N — Ciudad del Deporte", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5090_Antonia_Moreno_de_Caceres.jpeg" },
+  { id: 14, nombre: "I.E N° 5093 Antonio Raymondi", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8859367, lng: -77.1239704, referencia: "Av. Gonzales Ganoza S/N I Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5093_Antonio_Raymondi.jpeg" },
+  { id: 15, nombre: "I.E N° 5091 Hijos de Grau", red: 9, zona: "Angamos", niveles: "Primaria", lat: -11.8863777, lng: -77.1324341, referencia: "MZ O S/N Hijos del Almirante Miguel Grau — III Sector Angamos", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5091_Hijos_de_Grau.jpeg" },
+  { id: 16, nombre: "Coprodeli La Providencia Virgen de Chapí", red: 9, zona: "Angamos", niveles: "Cuna Jardín", lat: -11.8853088, lng: -77.1333501, referencia: "AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/Coprodeli_virgen_de_Chapi.jpeg" }
 ];
 
 const colores = { 4: '#FF5722', 6: '#4CAF50', 8: '#FFC107', 9: '#9C27B0' };
