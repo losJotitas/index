@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
-  <!-- Motor de Mapas Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -282,3 +281,60 @@ const colegios = [
     foto: "https://drive.google.com/uc?export=view&id=1K7jwvy6LL-U2sAGFjjXjtlybyLIN89ve"
   }
 ];
+
+const colores = {
+  4: '#FF5722',
+  6: '#4CAF50',
+  8: '#FFC107',
+  9: '#9C27B0'
+};
+
+const map = L.map('map').setView([-11.868, -77.125], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+let marcadores = [];
+
+function dibujarMarcadores(redFiltro) {
+  marcadores.forEach(m => map.removeLayer(m));
+  marcadores = [];
+  colegios.forEach(c => {
+    if (redFiltro !== 'todas' && c.red !== parseInt(redFiltro)) return;
+    const color = colores[c.red];
+    const icono = L.divIcon({
+      className: 'pin-personalizado',
+      html: `<div style="width:22px;height:22px;border-radius:50%;background:${color};border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.4);"></div>`,
+      iconSize: [22,22],
+      iconAnchor: [11,11]
+    });
+    let contenido = `<div class="popup-foto">
+      <h4 style="margin:4px 0 6px 0; color:${color}">${c.nombre}</h4>
+      <p><b>Red N° ${c.red}</b> · ${c.zona}</p>
+      <p><b>Nivel:</b> ${c.niveles}</p>
+      <p><b>Referencia:</b> ${c.referencia}</p>
+      <p><b>Turnos:</b> ${c.turnos}</p>
+      <p><b>Requisitos:</b> ${c.requisitos}</p>`;
+    if (c.foto) {
+      contenido += `<img src="${c.foto}" alt="Foto del colegio" />`;
+    }
+    contenido += `<p style="font-size:0.75rem; color:#666;">📍 ${c.lat}, ${c.lng}</p></div>`;
+    const m = L.marker([c.lat, c.lng], {icon: icono}).addTo(map).bindPopup(contenido);
+    marcadores.push(m);
+  });
+}
+
+dibujarMarcadores('todas');
+
+document.getElementById('filtroRed').addEventListener('change', e => {
+  dibujarMarcadores(e.target.value);
+});
+
+document.getElementById('btnVerTodos').addEventListener('click', () => {
+  document.getElementById('filtroRed').value = 'todas';
+  dibujarMarcadores('todas');
+  map.setView([-11.868, -77.125], 13);
+});
+</script>
+</body>
+</html>
