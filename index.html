@@ -1,189 +1,342 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
-    <!-- Motor de Mapas Leaflet Oficial -->
-    <link rel="stylesheet" href="https://unpkg.com" />
-    <style>
-        body { margin: 0; padding: 0; background-color: #06223f; font-family: 'Segoe UI', sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        header { text-align: center; padding: 10px 5px; background: #06223f; position: relative; }
-        .logo-container { display: inline-block; position: relative; padding: 5px; }
-        .glow-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 130px; height: 130px; background: radial-gradient(circle, rgba(234,179,8,0.35) 0%, rgba(239,68,68,0.35) 50%, rgba(6,34,63,0) 70%); filter: blur(8px); z-index: 1; }
-        .icon-svg { width: 80px; height: 80px; position: relative; z-index: 2; }
-        h1 { margin: 5px 0 0 0; font-size: 26px; letter-spacing: 2px; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .subtitle { margin: 0; font-size: 11px; letter-spacing: 3px; color: #cbd5e1; font-weight: 600; }
-        .slogan { margin: 10px 0 5px 0; font-size: 13px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
-        #search-box { padding: 8px 15px; background-color: #06223f; display: flex; justify-content: center; z-index: 10; }
-        #search-input { width: 100%; max-width: 450px; padding: 12px 20px; border-radius: 25px; border: 2px solid #1e3a5f; background-color: #0c2d54; color: #ffffff; font-size: 15px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        #map { flex: 1; width: 100%; z-index: 5; }
-        .road-base { height: 25px; background-color: #24252a; position: relative; box-shadow: 0 -4px 10px rgba(0,0,0,0.4); display: flex; justify-content: center; overflow: hidden; z-index: 10; }
-        .road-line { width: 15px; height: 4px; background-color: #ffffff; margin: 10px 8px; opacity: 0.8; }
-        .popup-card { color: #333333; font-family: Arial, sans-serif; min-width: 230px; }
-        .popup-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #06223f; text-transform: uppercase; }
-        .accordion-btn { background-color: #0f2d4a; color: white; padding: 8px; width: 100%; text-align: left; border: none; outline: none; transition: 0.2s; font-size: 11px; font-weight: bold; margin-top: 4px; cursor: pointer; border-radius: 3px; display: flex; justify-content: space-between; align-items: center; }
-        .accordion-content { padding: 0 8px; display: none; background-color: #f1f5f9; overflow: hidden; border-left: 3px solid #0f2d4a; font-size: 11px; margin-bottom: 4px; color: #334155; }
-        .popup-img { width: 100%; height: 110px; object-fit: cover; margin-top: 5px; border-radius: 4px; display: block; background-color: #e2e8f0; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
+  <!-- Motor de Mapas Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    body { margin: 0; padding: 0; background-color: #06223F; font-family: 'Segoe UI', sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    header { background: linear-gradient(135deg, #0F4C81, #06223F); padding: 12px 20px; text-align: center; border-bottom: 3px solid #2EA8E0; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    header h1 { margin: 0; font-size: 1.4rem; color: #fff; text-shadow: 0 0 10px #2EA8E0; }
+    header p { margin: 4px 0 0 0; font-size: 0.9rem; color: #BFE3FF; }
+    .controls { background: rgba(15,76,129,0.8); padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-bottom: 2px solid #2EA8E0; }
+    .controls label { font-size: 0.85rem; font-weight: 600; }
+    select, button { padding: 6px 10px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; }
+    button { background: #2EA8E0; color: #000; margin-left: auto; }
+    button:hover { background: #71D1FF; }
+    #map { flex: 1; width: 100%; }
+    .leyenda { background: rgba(6,34,63,0.9); padding: 8px 12px; font-size: 0.8rem; border-top: 2px solid #2EA8E0; display: flex; flex-wrap: wrap; gap: 12px; }
+    .leyenda span { display: flex; align-items: center; gap: 4px; }
+    .punto { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; }
+    .r4 { background: #FF5722; }
+    .r6 { background: #4CAF50; }
+    .r8 { background: #FFC107; }
+    .r9 { background: #9C27B0; }
+    .popup-foto { width: 220px; }
+    .popup-foto img { width: 100%; border-radius: 6px; margin: 6px 0; }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-container"><div class="glow-bg"></div>
-            <svg class="icon-svg" viewBox="0 0 100 100" fill="none" xmlns="http://w3.org">
-                <path d="M50 15L15 32L50 49L85 32L50 15Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M23.5 36V62C23.5 62 35 70 50 70C65 70 76.5 62 76.5 62V36" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M85 32V58" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="50" cy="42" r="10" fill="white" opacity="0.15"/>
-                <path d="M50 32C45.5 32 42 35.5 42 40C42 45.5 50 52 50 52C50 52 58 45.5 58 40C58 35.5 54.5 32 50 32ZM50 43.5C48.1 43.5 46.5 41.9 46.5 40C46.5 38.1 48.1 36.5 50 36.5C51.9 36.5 53.5 38.1 53.5 40C53.5 41.9 51.9 43.5 50 43.5Z" fill="white"/>
-            </svg>
-        </div>
-        <h1>UBIKTUCOLEYA!</h1>
-        <div class="subtitle">VENTANILLA & MI PERÚ</div>
-        <div class="slogan">"TU COLE A UN MAPA DE DISTANCIA"</div>
-    </header>
+<header>
+  <h1>🏫 UBIKTUCOLEYA! — Ventanilla / Mi Perú</h1>
+  <p>Redes N°04 · N°06 · N°08 · N°09 — Selecciona y ubica tu colegio</p>
+</header>
 
-    <div id="search-box">
-        <input type="text" id="search-input" placeholder="Buscar por nombre de colegio o número de Red...">
-    </div>
+<div class="controls">
+  <label>Filtrar por Red Educativa:</label>
+  <select id="filtroRed">
+    <option value="todas">🔴 Todas las Redes</option>
+    <option value="4">🟠 Red N° 04 — Pachacútec Este</option>
+    <option value="6">🟢 Red N° 06 — Mi Perú</option>
+    <option value="8">🟡 Red N° 08 — AMC</option>
+    <option value="9">🟣 Red N° 09 — Angamos</option>
+  </select>
+  <button id="btnVerTodos">📍 Ver todos en el mapa</button>
+</div>
 
-    <div id="map"></div>
+<div id="map"></div>
 
-    <div class="road-base">
-        <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
-        <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
-    </div>
-    <!-- Librería JavaScript del Mapa Cargada Completa -->
-    <script src="https://unpkg.com"></script>
-    <script>
-        // Enlace de API con tu ID de Excel Real Integrado
-        const excelUrl = "https://google.com";
+<div class="leyenda">
+  <span><b>Red:</b></span>
+  <span><span class="punto r4"></span> N°04 Pachacútec Este</span>
+  <span><span class="punto r6"></span> N°06 Mi Perú</span>
+  <span><span class="punto r8"></span> N°08 AMC</span>
+  <span><span class="punto r9"></span> N°09 Angamos</span>
+</div>
 
-        var map = L.map('map', { zoomControl: false }).setView([-11.8463, -77.1351], 14);
-        L.control.zoom({ position: 'bottomright' }).addTo(map);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+<script>
+const colegios = [
+  {
+    id: 1,
+    nombre: "I.E.I N° 125 Divino Niño Jesús",
+    red: 4,
+    zona: "Pachacútec Este",
+    niveles: "Inicial",
+    lat: -11.843456,
+    lng: -77.128518,
+    referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/11Zz7u3M2hYRfo27efxirGxqqJqXuLlkb/view?usp=drive_link"
+  },
+  {
+    id: 2,
+    nombre: "I.E.I N° 157",
+    red: 4,
+    zona: "Pachacútec Este",
+    niveles: "Inicial",
+    lat: -11.846319,
+    lng: -77.135186,
+    referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/1q1NOzdHsXiEd3wQnd3hMFdzYS8cBdwdG/view?usp=drive_link"
+  },
+  {
+    id: 3,
+    nombre: "I.E N° 5147 Santa Rosa de Lima",
+    red: 4,
+    zona: "Pachacútec Este",
+    niveles: "Primaria",
+    lat: -11.8438763,
+    lng: -77.1284196,
+    referencia: "Av. Los Topógrafos MZ. C2 LT. 1 AA.HH. María Jesús Espinoza",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",
+    foto: "https://drive.google.com/file/d/12gDKzC3OC-1g5hvuRWnGHscC5LlgNGcu/view?usp=drive_link"
+  },
+  {
+    id: 4,
+    nombre: "I.E.I N° 141",
+    red: 6,
+    zona: "Mi Perú",
+    niveles: "Inicial",
+    lat: -11.8591298,
+    lng: -77.1225196,
+    referencia: "MZ E LOTE 1 AA.HH. Virgen de Guadalupe",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/18ZeTPDdbNzEVvTdnuN-WN5idgMqoGoIe/view?usp=drive_link"
+  },
+  {
+    id: 5,
+    nombre: "I.E.I N° 167 Cristo Rey de los Niños",
+    red: 6,
+    zona: "Mi Perú",
+    niveles: "Inicial",
+    lat: -11.8499804,
+    lng: -77.1223254,
+    referencia: "Av. El Bosque MZ. JK Lote 1 AA.HH. Villa Emilia",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/1xnsSMkm_SRjjEKV0-rB3r0B6vnm6GcV8/view?usp=drive_link"
+  },
+  {
+    id: 6,
+    nombre: "I.E N° 5119 Villa Emilia",
+    red: 6,
+    zona: "Mi Perú",
+    niveles: "Primaria",
+    lat: -11.8498337,
+    lng: -77.1213922,
+    referencia: "Calle Los Ficus MZ M LOTE 1",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",
+    foto: "https://drive.google.com/file/d/13mD6m49-Lw5admRGyL5zlfhR7cN5Q1dx/view?usp=drive_link"
+  },
+  {
+    id: 7,
+    nombre: "I.E N° 5151 San Juan Bosco",
+    red: 6,
+    zona: "Mi Perú",
+    niveles: "Secundaria",
+    lat: -11.8505098,
+    lng: -77.1264982,
+    referencia: "Calle Los Ficus MZ L LOTE 1 AA.HH. Villa Emilia",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",
+    foto: "https://drive.google.com/file/d/1xzkMh1XFxXvysBExKgHpOfyTWducYG7G/view?usp=drive_link"
+  },
+  {
+    id: 8,
+    nombre: "CEBE Sagrado Corazón de Jesús",
+    red: 6,
+    zona: "Mi Perú",
+    niveles: "Especial",
+    lat: -11.8540579,
+    lng: -77.1230456,
+    referencia: "Av. Trujillo S/N MZ. J 17 LT. 2",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",
+    foto: ""
+  },
+  {
+    id: 9,
+    nombre: "I.E.I N° 108",
+    red: 8,
+    zona: "AMC",
+    niveles: "Inicial",
+    lat: -11.8899016,
+    lng: -77.1177087,
+    referencia: "Víctor Lavalle Guardera S/N URB. Antonia Moreno de Cáceres",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/1V4LLHs2ioHM_NBo6MPjicQzrW9M7V8Db/view?usp=drive_link"
+  },
+  {
+    id: 10,
+    nombre: "I.E.I N° 113 Domingo Savio",
+    red: 8,
+    zona: "AMC",
+    niveles: "Inicial",
+    lat: -11.8873928,
+    lng: -77.1231337,
+    referencia: "MZ F S/N I Sector Derecho - URB. Antonia Moreno de Cáceres",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/13jZLxAM7Jz8GxnVWZgptS5ZQXvlcLoMa/view?usp=drive_link"
+  },
+  {
+    id: 11,
+    nombre: "I.E.I N° 133 Divina Pastora",
+    red: 8,
+    zona: "AMC",
+    niveles: "Inicial",
+    lat: -11.8886578,
+    lng: -77.1206898,
+    referencia: "Psje. Johnny Watson S/N II Sector URB. Antonia Moreno de Cáceres",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/1KjdbWy3DfbC_4RQO1bI8dBGvbt7djG2a/view?usp=drive_link"
+  },
+  {
+    id: 12,
+    nombre: "I.E.I N° 135 Mi Pequeño Mundo",
+    red: 8,
+    zona: "AMC",
+    niveles: "Inicial",
+    lat: -11.891201,
+    lng: -77.116792,
+    referencia: "Av. Marcos Calderón S/N IV Sector Antonia Moreno de Cáceres",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/1l4wki20izZW7fdKxBc_fa3E_MhYRMHeW/view?usp=drive_link"
+  },
+  {
+    id: 13,
+    nombre: "I.E N° 5090 Antonia Moreno de Cáceres",
+    red: 8,
+    zona: "AMC",
+    niveles: "Primaria / Secundaria",
+    lat: -11.8930743,
+    lng: -77.1123801,
+    referencia: "VI Sector Derecho S/N — Ciudad del Deporte",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",
+    foto: "https://drive.google.com/file/d/1PsCGQtCgA6K-hxEetAis8-JxHZYzIHF2/view?usp=drive_link"
+  },
+  {
+    id: 14,
+    nombre: "I.E N° 5093 Antonio Raymondi",
+    red: 8,
+    zona: "AMC",
+    niveles: "Primaria / Secundaria",
+    lat: -11.8859367,
+    lng: -77.1239704,
+    referencia: "Av. Gonzales Ganoza S/N I Sector URB. Antonia Moreno de Cáceres",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",
+    foto: "https://drive.google.com/file/d/13jXod6asXzkIz9zD68WpTwg-Z2nzwBDJ/view?usp=drive_link"
+  },
+  {
+    id: 15,
+    nombre: "I.E.I N° 107 Los Pastorcitos de Fátima",
+    red: 9,
+    zona: "Angamos",
+    niveles: "Inicial",
+    lat: -11.8860892,
+    lng: -77.1326308,
+    referencia: "Calle 5 Elías Aguirre S/N — AA.HH. Hijos de Grau",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",
+    foto: "https://drive.google.com/file/d/1pRdXXwtqSKLL7mtTqlDsrPE43x5eMIb4/view?usp=drive_link"
+  },
+  {
+    id: 16,
+    nombre: "I.E N° 5091 Hijos de Grau",
+    red: 9,
+    zona: "Angamos",
+    niveles: "Primaria",
+    lat: -11.8863777,
+    lng: -77.1324341,
+    referencia: "MZ O S/N Hijos del Almirante Miguel Grau — III Sector Angamos",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",
+    foto: "https://drive.google.com/file/d/1xLXXrDY5Mxg8RE5r75PwLDBFiQ7wPCHM/view?usp=drive_link"
+  },
+  {
+    id: 17,
+    nombre: "Coprodeli La Providencia Virgen de Chapí",
+    red: 9,
+    zona: "Angamos",
+    niveles: "Cuna Jardín",
+    lat: -11.8853088,
+    lng: -77.1333501,
+    referencia: "AA.HH. Hijos de Grau",
+    turnos: "Mañana / Tarde",
+    requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",
+    foto: "https://drive.google.com/file/d/1K7jwvy6LL-U2sAGFjjXjtlybyLIN89ve/view?usp=drive_link"
+  }
+];
 
-        let marcadoresColegios = [];
+const colores = {
+  4: '#FF5722',
+  6: '#4CAF50',
+  8: '#FFC107',
+  9: '#9C27B0'
+};
 
-        function parserCSV(text) {
-            let lineas = text.split(/\r?\n/);
-            return lineas.map(linea => {
-                if (!linea.trim()) return null;
-                return linea.split("\t");
-            }).filter(l => l !== null);
-        }
+const map = L.map('map').setView([-11.868, -77.125], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors'
+}).addTo(map);
 
-        // Extractor Analítico para Coordenadas (Soporta links de PC y celular)
-        function extraerCoordenadas(link) {
-            if(!link) return null;
-            let match = link.match(/q=([-+]?\d+\.\d+),([-+]?\d+\.\d+)/i) || link.match(/@([-+]?\d+\.\d+),([-+]?\d+\.\d+)/);
-            if(match) {
-                return { lat: parseFloat(match[1]), lng: parseFloat(match[2]) };
-            }
-            if(link.includes(",")) {
-                let partes = link.split(",");
-                let lat = parseFloat(partes[0]), lng = parseFloat(partes[1]);
-                if(!isNaN(lat) && !isNaN(lng)) return { lat: lat, lng: lng };
-            }
-            return null;
-        }
+let marcadores = [];
 
-        // Convertidor de Bypass Automatizado para Fotos de Google Drive
-        function optimizarEnlaceFoto(link) {
-            if(!link) return 'https://unsplash.com';
-            if(link.includes("://google.com")) {
-                let match = link.match(/\/d\/([a-zA-Z0-9_-]+)/);
-                if(match && match[1]) {
-                    return `https://google.com{match[1]}`;
-                }
-            }
-            return link;
-        }
+function dibujarMarcadores(redFiltro) {
+  marcadores.forEach(m => map.removeLayer(m));
+  marcadores = [];
+  colegios.forEach(c => {
+    if (redFiltro !== 'todas' && c.red !== parseInt(redFiltro)) return;
+    const color = colores[c.red];
+    const icono = L.divIcon({
+      className: 'pin-personalizado',
+      html: `<div style="width:22px;height:22px;border-radius:50%;background:${color};border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.4);"></div>`,
+      iconSize: [22,22],
+      iconAnchor: [11,11]
+    });
+    let contenido = `<div class="popup-foto">
+      <h4 style="margin:4px 0 6px 0; color:${color}">${c.nombre}</h4>
+      <p><b>Red N° ${c.red}</b> · ${c.zona}</p>
+      <p><b>Nivel:</b> ${c.niveles}</p>
+      <p><b>Referencia:</b> ${c.referencia}</p>
+      <p><b>Turnos:</b> ${c.turnos}</p>
+      <p><b>Requisitos:</b> ${c.requisitos}</p>`;
+    if (c.foto) {
+      const vista = c.foto.replace('/view?usp=drive_link','/preview');
+      contenido += `<img src="${vista}" alt="Foto del colegio" />`;
+    }
+    contenido += `<p style="font-size:0.75rem; color:#666;">📍 ${c.lat}, ${c.lng}</p></div>`;
+    const m = L.marker([c.lat, c.lng], {icon: icono}).addTo(map).bindPopup(contenido);
+    marcadores.push(m);
+  });
+}
 
-        function cargarDatosExcel() {
-            fetch(excelUrl)
-            .then(res => res.text())
-            .then(csvText => {
-                let matriz = parserCSV(csvText);
-                if (matriz.length < 2) return;
+dibujarMarcadores('todas');
 
-                for(let i = 1; i < matriz.length; i++) {
-                    let celdas = matriz[i];
-                    if(celdas.length < 7) continue;
-                    
-                    // Sincronización Estricta con tus 11 Columnas reales de tu captura
-                    let red = celdas[0] || "";
-                    let zona = celdas[1] || "";
-                    let nombre = celdas[2] || "";
-                    let niveles = celdas[3] || "";
-                    let direccion = celdas[4] || "";
-                    let gpsLink = celdas[6] || "";       // Columna G (7) - GPS
-                    let horarios = celdas[7] || "MAÑANA / TARDE"; // Columna H (8) - TURNOS
-                    let talleres = celdas[8] || "NO APLICA";     // Columna I (9) - JEC
-                    let fotoLink = celdas[9] || "";      // Columna J (10) - FOTO
-                    let requisitos = celdas[10] || "";   // Columna K (11) - REQUISITOS
+document.getElementById('filtroRed').addEventListener('change', e => {
+  dibujarMarcadores(e.target.value);
+});
 
-                    let coords = extraerCoordenadas(gpsLink);
-
-                    if(coords) {
-                        let imgSrc = optimizarEnlaceFoto(fotoLink);
-                        
-                        let popupHtml = `
-                            <div class="popup-card">
-                                <div class="popup-title">${nombre}</div>
-                                <span style="font-size:11px;color:#475569;font-weight:600;">${niveles} | ${red}</span>
-                                <img class="popup-img" src="${imgSrc}" alt="Fachada" onerror="this.src='https://unsplash.com'">
-                                
-                                <button class="accordion-btn" onclick="toggleAcc(this)">🕒 HORARIOS Y ESPECIALIDAD <span>▼</span></button>
-                                <div class="accordion-content">
-                                    <p><b>Turnos:</b> ${horarios}<br><b>Especialidad:</b> ${talleres}</p>
-                                </div>
-                                
-                                <button class="accordion-btn" onclick="toggleAcc(this)">📄 REQUISITOS DE MATRÍCULA <span>▼</span></button>
-                                <div class="accordion-content">
-                                    <p>${requisitos.replace(/ \+ /g, '<br>• ')}</p>
-                                </div>
-                                                
-                                <button class="accordion-btn" onclick="toggleAcc(this)">🗺️ DIRECCIÓN Y REFERENCIA <span>▼</span></button>
-                                <div class="accordion-content">
-                                    <p><b>Ubicación:</b> ${direccion}<br><b>Zona:</b> ${zona}</p>
-                                </div>
-                            </div>
-                        `;
-
-                        let marker = L.marker([coords.lat, coords.lng]).addTo(map).bindPopup(popupHtml);
-                        marcadoresColegios.push({ marker: marker, nombre: nombre, red: red });
-                    }
-                }
-            }).catch(err => console.error("Error en base de datos: ", err));
-        }
-
-        function toggleAcc(btn) {
-            btn.classList.toggle("active");
-            var panel = btn.nextElementSibling;
-            let span = btn.querySelector("span");
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-                span.innerText = "▼";
-            } else {
-                panel.style.display = "block";
-                span.innerText = "▲";
-            }
-        }
-
-        document.getElementById('search-input').addEventListener('input', function(e) {
-            let busqueda = e.target.value.toUpperCase();
-            marcadoresColegios.forEach(item => {
-                if(item.nombre.includes(busqueda) || item.red.toUpperCase().includes(busqueda)) {
-                    map.addLayer(item.marker);
-                } else {
-                    map.removeLayer(item.marker);
-                }
-            });
-        });
-
-        cargarDatosExcel();
-    </script>
+document.getElementById('btnVerTodos').addEventListener('click', () => {
+  document.getElementById('filtroRed').value = 'todas';
+  dibujarMarcadores('todas');
+  map.setView([-11.868, -77.125], 13);
+});
+</script>
 </body>
 </html>
