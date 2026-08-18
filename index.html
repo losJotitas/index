@@ -7,87 +7,259 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    /* 🌙 AZUL NOCHE MUCHO MÁS OSCURO */
-    body { margin: 0; padding: 0; background-color: #031224; font-family: 'Segoe UI', Roboto, sans-serif; color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    /* 🌙 COLORES — AZUL NOCHE PROFUNDO */
+    :root {
+      --azul-fondo: #031224;
+      --azul-medio: #0A2A54;
+      --azul-resaltado: #0E3A70;
+      --celeste: #2EA8E0;
+      --texto-claro: #BFE3FF;
+      --blanco: #ffffff;
+      --sombra: rgba(0,0,0,0.35);
+    }
 
-    /* ==== ENCABEZADO IGUAL A TU PORTADA ==== */
-    header {
-      background: linear-gradient(180deg, #0A2A54 0%, #031224 100%);
-      padding: 12px 20px 18px;
-      text-align: center;
-      border-bottom: 3px solid #2EA8E0;
-      box-shadow: 0 4px 15px rgba(46, 168, 224, 0.25);
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      margin: 0; padding: 0; 
+      background-color: var(--azul-fondo); 
+      font-family: 'Segoe UI', Roboto, sans-serif; 
+      color: var(--blanco); 
+      overflow-x: hidden;
+    }
+
+    /* ================================================== */
+    /* 🏠 FACHADA DE INICIO — PANTALLA COMPLETA */
+    /* ================================================== */
+    .fachada {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      background: linear-gradient(180deg, var(--azul-medio) 0%, var(--azul-fondo) 100%);
       position: relative;
       overflow: hidden;
     }
-    /* Brillo amarillo-rojo suave detrás del logo */
-    header::before {
+    .fachada::before {
       content: '';
       position: absolute;
       top: 15%; left: 50%;
       transform: translateX(-50%);
-      width: 260px; height: 130px;
-      background: radial-gradient(ellipse at center, rgba(255,210,60,0.35) 0%, rgba(255,110,50,0.18) 55%, transparent 75%);
+      width: 320px; height: 160px;
+      background: radial-gradient(ellipse at center, rgba(255,210,60,0.28) 0%, rgba(255,110,50,0.12) 55%, transparent 75%);
       border-radius: 50%;
+      filter: blur(18px);
       z-index: 0;
-      filter: blur(14px);
     }
-    /* Logo: Birrete + Libro + Ubicación */
-    .logo-icon {
+
+    /* 🎯 LOGO + NOMBRE + LEMA */
+    .seccion-presentacion {
       position: relative;
       z-index: 1;
-      margin-bottom: 4px;
+      text-align: center;
+      margin-bottom: 40px;
     }
-    .logo-icon svg {
-      width: 90px; height: auto;
-      filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+    .logo-grande {
+      width: 130px;
+      height: auto;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.25));
     }
-    /* Título principal — igual que portada */
-    header h1 {
-      margin: 0;
-      font-size: 2.4rem;
+    .seccion-presentacion h1 {
+      font-size: 3rem;
       font-weight: 900;
-      letter-spacing: 2px;
-      color: #ffffff;
-      position: relative;
-      z-index: 1;
-      text-shadow: 0 0 12px rgba(255,255,255,0.2);
-    }
-    /* Subtítulo: Ventanilla & Mi Perú */
-    .subtitulo {
-      margin: 2px 0 6px;
-      font-size: 1rem;
       letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #BFE3FF;
-      position: relative;
-      z-index: 1;
+      color: var(--blanco);
+      margin-bottom: 6px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
-    /* Lema — misma fuente, tamaño y resaltado */
+    .subtitulo {
+      font-size: 1.1rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--texto-claro);
+      margin-bottom: 12px;
+    }
     .lema {
-      margin: 8px 0 0;
-      font-size: 1.25rem;
+      font-size: 1.4rem;
       font-weight: 700;
       letter-spacing: 1px;
-      color: #ffffff;
-      position: relative;
-      z-index: 1;
-      text-shadow: 0 0 8px rgba(46, 168, 224, 0.3);
+      color: var(--blanco);
+      text-shadow: 0 0 10px rgba(46,168,224,0.35);
       font-style: normal;
     }
 
-    /* ==== CONTROLES ==== */
+    /* 🔍 BUSCADOR CON LUPA */
+    .contenedor-buscador {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 580px;
+      margin-bottom: 40px;
+    }
+    .barra-busqueda {
+      display: flex;
+      align-items: center;
+      background: var(--blanco);
+      border-radius: 50px;
+      padding: 6px 6px 6px 20px;
+      box-shadow: 0 6px 20px rgba(46,168,224,0.25);
+    }
+    .barra-busqueda input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 1.05rem;
+      padding: 12px 10px;
+      color: var(--azul-fondo);
+      background: transparent;
+    }
+    .barra-busqueda input::placeholder {
+      color: #7A95B5;
+    }
+    .boton-buscar {
+      background: linear-gradient(135deg, var(--celeste), var(--azul-medio));
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .boton-buscar:hover {
+      transform: scale(1.08);
+      box-shadow: 0 4px 14px rgba(46,168,224,0.4);
+    }
+    .icono-lupa {
+      font-size: 20px;
+      color: var(--blanco);
+    }
+
+    /* 📋 SUGERENCIAS AL BUSCAR */
+    .sugerencias {
+      background: var(--blanco);
+      border-radius: 12px;
+      margin-top: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      box-shadow: 0 6px 18px var(--sombra);
+      position: absolute;
+      width: 100%;
+      z-index: 10;
+    }
+    .sugerencia-item {
+      padding: 12px 20px;
+      color: var(--azul-fondo);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .sugerencia-item:hover {
+      background: #E8F4FC;
+    }
+
+    /* 📢 ESPACIO PARA ANUNCIOS */
+    .seccion-anuncios {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 800px;
+      background: rgba(14, 58, 112, 0.4);
+      border: 2px solid rgba(46,168,224,0.25);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .seccion-anuncios h3 {
+      color: var(--celeste);
+      font-size: 1rem;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(46,168,224,0.2);
+      padding-bottom: 6px;
+    }
+    .espacio-anuncios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .anuncio-vacio {
+      background: rgba(255,255,255,0.06);
+      border: 2px dashed rgba(46,168,224,0.35);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: var(--texto-claro);
+      font-size: 0.9rem;
+    }
+
+    /* ⬇️ BOTÓN IR AL MAPA */
+    .boton-mapa {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(135deg, var(--celeste), var(--azul-resaltado));
+      color: var(--blanco);
+      border: none;
+      padding: 14px 36px;
+      border-radius: 50px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 5px 18px rgba(46,168,224,0.3);
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    .boton-mapa:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(46,168,224,0.4);
+    }
+
+    /* ================================================== */
+    /* 🗺️ SECCIÓN DEL MAPA */
+    /* ================================================== */
+    .seccion-mapa {
+      width: 100%;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .encabezado-mapa {
+      background: linear-gradient(180deg, var(--azul-medio) 0%, var(--azul-fondo) 100%);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--celeste);
+    }
+    .boton-volver {
+      background: transparent;
+      color: var(--celeste);
+      border: 2px solid var(--celeste);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .boton-volver:hover {
+      background: var(--celeste);
+      color: var(--blanco);
+    }
     .controls {
       background: rgba(10, 42, 84, 0.9);
-      padding: 10px 16px;
+      padding: 10px 20px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
-      border-bottom: 2px solid #2EA8E0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      border-bottom: 2px solid var(--celeste);
     }
-    .controls label { font-size: 0.9rem; font-weight: 600; color: #BFE3FF; }
+    .controls label { font-size: 0.9rem; font-weight: 600; color: var(--texto-claro); }
     select, button {
       padding: 8px 12px;
       border-radius: 8px;
@@ -95,39 +267,19 @@
       font-weight: 600;
       cursor: pointer;
       font-size: 0.88rem;
-      transition: all 0.3s ease;
     }
     select {
-      background: rgba(255, 255, 255, 0.95);
-      color: #031224;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+      background: rgba(255,255,255,0.95);
+      color: var(--azul-fondo);
     }
-    select:hover { background: #ffffff; }
-    button {
-      background: linear-gradient(135deg, #2EA8E0, #0A2A54);
-      color: #fff;
-      margin-left: auto;
-      box-shadow: 0 3px 10px rgba(46, 168, 224, 0.3);
-    }
-    button:hover {
-      background: linear-gradient(135deg, #71D1FF, #2EA8E0);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(46, 168, 224, 0.4);
-    }
-
-    /* ==== MAPA ==== */
-    #map { flex: 1; width: 100%; }
-
-    /* ==== LEYENDA ==== */
+    #map { flex: 1; width: 100%; min-height: 500px; }
     .leyenda {
-      background: rgba(3, 18, 36, 0.95);
-      padding: 10px 16px;
-      font-size: 0.88rem;
-      border-top: 2px solid #2EA8E0;
+      background: rgba(3,18,36,0.95);
+      padding: 10px 20px;
+      border-top: 2px solid var(--celeste);
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
     }
     .leyenda span { display: flex; align-items: center; gap: 6px; }
     .punto {
@@ -140,61 +292,100 @@
     .r6 { background: #4CAF50; }
     .r8 { background: #FFC107; }
     .r9 { background: #9C27B0; }
-
-    /* ==== VENTANAS DE INFORMACIÓN ==== */
-    .popup-foto { width: 250px; }
+    .popup-foto { width: 260px; }
     .popup-foto img {
       width: 100%;
       height: auto;
       border-radius: 10px;
       margin: 8px 0;
       box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-      border: 2px solid #2EA8E0;
-      display: block;
+      border: 2px solid var(--celeste);
     }
+    .oculto { display: none !important; }
   </style>
 </head>
 <body>
 
-<header>
-  <!-- Logo: Birrete + Libro + Ubicación -->
-  <div class="logo-icon">
-    <svg viewBox="0 0 120 80" fill="#ffffff">
+<!-- ================================================== -->
+<!-- 🏠 FACHADA DE INICIO -->
+<!-- ================================================== -->
+<div id="fachada" class="fachada">
+  <div class="seccion-presentacion">
+    <!-- Logo del proyecto -->
+    <svg class="logo-grande" viewBox="0 0 120 80" fill="#ffffff">
       <path d="M60 5 L15 30 L25 35 L60 15 L95 35 L105 30 Z" stroke="#fff" stroke-width="2" fill="none"/>
       <path d="M95 35 L105 70 L90 65 L90 40 Z" fill="#fff" opacity="0.9"/>
       <path d="M20 38 L60 60 L100 38 L60 22 Z" fill="none" stroke="#fff" stroke-width="2"/>
       <circle cx="60" cy="38" r="12" fill="#fff"/>
       <path d="M60 32 A8 8 0 0 1 68 40 C68 46 60 52 60 52 C60 52 52 46 52 40 A8 8 0 0 1 60 32 Z" fill="#031224"/>
     </svg>
+    <h1>UBIKTUCOLEYA!</h1>
+    <p class="subtitulo">VENTANILLA & MI PERÚ</p>
+    <p class="lema">"TU COLE A UN MAPA DE DISTANCIA"</p>
   </div>
-  <h1>UBIKTUCOLEYA!</h1>
-  <p class="subtitulo">VENTANILLA & MI PERÚ</p>
-  <p class="lema">"TU COLE A UN MAPA DE DISTANCIA"</p>
-</header>
 
-<div class="controls">
-  <label>Filtrar por Red Educativa:</label>
-  <select id="filtroRed">
-    <option value="todas">🔴 Todas las Redes</option>
-    <option value="4">🟠 Red N° 04 — Pachacútec Este</option>
-    <option value="6">🟢 Red N° 06 — Mi Perú</option>
-    <option value="8">🟡 Red N° 08 — AMC</option>
-    <option value="9">🟣 Red N° 09 — Angamos</option>
-  </select>
-  <button id="btnVerTodos">📍 Ver todos en el mapa</button>
+  <!-- 🔍 BUSCADOR CON LUPA -->
+  <div class="contenedor-buscador">
+    <div class="barra-busqueda">
+      <input type="text" id="buscador" placeholder="🔍 Escribe el nombre del colegio aquí...">
+      <button class="boton-buscar" id="botonBuscar" title="Buscar colegio">
+        <span class="icono-lupa">🔍</span>
+      </button>
+    </div>
+    <div id="sugerencias" class="sugerencias oculto"></div>
+  </div>
+
+  <!-- 📢 ESPACIO PARA ANUNCIOS -->
+  <div class="seccion-anuncios">
+    <h3>📢 ESPACIO DE ANUNCIOS Y COMUNICADOS</h3>
+    <div class="espacio-anuncios">
+      <div class="anuncio-vacio">Aquí puedes colocar avisos importantes</div>
+      <div class="anuncio-vacio">Espacio para noticias de las Redes Educativas</div>
+      <div class="anuncio-vacio">Información de matrícula y fechas</div>
+    </div>
+  </div>
+
+  <!-- ⬇️ BOTÓN PARA IR AL MAPA -->
+  <button class="boton-mapa" id="btnIrMapa">🗺️ Ver todos los colegios en el mapa</button>
 </div>
 
-<div id="map"></div>
+<!-- ================================================== -->
+<!-- 🗺️ SECCIÓN DEL MAPA -->
+<!-- ================================================== -->
+<div id="seccionMapa" class="seccion-mapa oculto">
+  <div class="encabezado-mapa">
+    <button class="boton-volver" id="btnVolver">← Volver al Inicio</button>
+    <h2 style="font-size:1.1rem; color:#BFE3FF;">UBIKTUCOLEYA! — Mapa de Colegios</h2>
+    <div style="width:80px;"></div>
+  </div>
 
-<div class="leyenda">
-  <span><b>Red:</b></span>
-  <span><span class="punto r4"></span> N°04 Pachacútec Este</span>
-  <span><span class="punto r6"></span> N°06 Mi Perú</span>
-  <span><span class="punto r8"></span> N°08 AMC</span>
-  <span><span class="punto r9"></span> N°09 Angamos</span>
+  <div class="controls">
+    <label>Filtrar por Red Educativa:</label>
+    <select id="filtroRed">
+      <option value="todas">🔴 Todas las Redes</option>
+      <option value="4">🟠 Red N° 04 — Pachacútec Este</option>
+      <option value="6">🟢 Red N° 06 — Mi Perú</option>
+      <option value="8">🟡 Red N° 08 — AMC</option>
+      <option value="9">🟣 Red N° 09 — Angamos</option>
+    </select>
+    <button id="btnVerTodos">📍 Ver todos en el mapa</button>
+  </div>
+
+  <div id="map"></div>
+
+  <div class="leyenda">
+    <span><b>Red:</b></span>
+    <span><span class="punto r4"></span> N°04 Pachacútec Este</span>
+    <span><span class="punto r6"></span> N°06 Mi Perú</span>
+    <span><span class="punto r8"></span> N°08 AMC</span>
+    <span><span class="punto r9"></span> N°09 Angamos</span>
+  </div>
 </div>
 
 <script>
+// ==================================================
+// 📋 LISTA DE COLEGIOS CON NOMBRES CORREGIDOS
+// ==================================================
 const colegios = [
   { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg" },
   { id: 2, nombre: "I.E.I N° 108", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.846319, lng: -77.135186, referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/108.jpeg" },
@@ -216,16 +407,146 @@ const colegios = [
 
 const colores = { 4: '#FF5722', 6: '#4CAF50', 8: '#FFC107', 9: '#9C27B0' };
 
-const map = L.map('map').setView([-11.868, -77.125], 13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
+// ==================================================
+// 🔍 VARIABLES GLOBALES
+// ==================================================
+let map, marcadores = [];
+let colegioSeleccionado = null;
 
-let marcadores = [];
+// ==================================================
+// 📱 NAVEGACIÓN — Cambiar entre fachada y mapa
+// ==================================================
+const fachada = document.getElementById('fachada');
+const seccionMapa = document.getElementById('seccionMapa');
+const buscador = document.getElementById('buscador');
+const sugerencias = document.getElementById('sugerencias');
 
+document.getElementById('btnIrMapa').addEventListener('click', () => {
+  fachada.classList.add('oculto');
+  seccionMapa.classList.remove('oculto');
+  if (!map) inicializarMapa();
+  setTimeout(() => { map.invalidateSize(); }, 100);
+  window.scrollTo(0, 0);
+});
+
+document.getElementById('btnVolver').addEventListener('click', () => {
+  seccionMapa.classList.add('oculto');
+  fachada.classList.remove('oculto');
+  window.scrollTo(0, 0);
+});
+
+// ==================================================
+// 🔍 BUSCADOR — Sugerencias al escribir
+// ==================================================
+buscador.addEventListener('input', (e) => {
+  const texto = e.target.value.trim().toLowerCase();
+  sugerencias.innerHTML = '';
+  
+  if (texto.length < 2) {
+    sugerencias.classList.add('oculto');
+    return;
+  }
+
+  const coincidencias = colegios.filter(c => 
+    c.nombre.toLowerCase().includes(texto)
+  ).slice(0, 6);
+
+  if (coincidencias.length === 0) {
+    sugerencias.classList.add('oculto');
+    return;
+  }
+
+  sugerencias.classList.remove('oculto');
+  coincidencias.forEach(c => {
+    const item = document.createElement('div');
+    item.className = 'sugerencia-item';
+    item.innerHTML = `<strong>${c.nombre}</strong> — Red N°${c.red}`;
+    item.addEventListener('click', () => buscarYAbrirColegio(c));
+    sugerencias.appendChild(item);
+  });
+});
+
+// ==================================================
+// 🔍 BOTÓN LUPA — Buscar al presionar
+// ==================================================
+document.getElementById('botonBuscar').addEventListener('click', () => {
+  const texto = buscador.value.trim().toLowerCase();
+  const resultado = colegios.find(c => c.nombre.toLowerCase().includes(texto));
+  if (resultado) buscarYAbrirColegio(resultado);
+});
+
+// Buscar con tecla Enter
+buscador.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const texto = buscador.value.trim().toLowerCase();
+    const resultado = colegios.find(c => c.nombre.toLowerCase().includes(texto));
+    if (resultado) buscarYAbrirColegio(resultado);
+  }
+});
+
+// ==================================================
+// 🎯 FUNCIÓN PRINCIPAL — Ir al colegio y abrir su ficha
+// ==================================================
+function buscarYAbrirColegio(colegio) {
+  colegioSeleccionado = colegio;
+  buscador.value = colegio.nombre;
+  sugerencias.classList.add('oculto');
+
+  // Cambiar a pantalla del mapa
+  fachada.classList.add('oculto');
+  seccionMapa.classList.remove('oculto');
+
+  if (!map) inicializarMapa();
+
+  // Esperar a que el mapa cargue, luego centrar y abrir
+  setTimeout(() => {
+    map.invalidateSize();
+    map.setView([colegio.lat, colegio.lng], 17);
+    
+    // Buscar el marcador y abrirlo
+    marcadores.forEach(m => {
+      if (m.colegioId === colegio.id) {
+        m.openPopup();
+      }
+    });
+  }, 150);
+
+  window.scrollTo(0, 0);
+}
+
+// ==================================================
+// 🗺️ INICIALIZAR MAPA
+// ==================================================
+function inicializarMapa() {
+  map = L.map('map').setView([-11.868, -77.125], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+    attribution: '© OpenStreetMap contributors' 
+  }).addTo(map);
+
+  dibujarMarcadores('todas');
+
+  // Filtro por red
+  document.getElementById('filtroRed').addEventListener('change', e => {
+    dibujarMarcadores(e.target.value);
+  });
+
+  document.getElementById('btnVerTodos').addEventListener('click', () => {
+    document.getElementById('filtroRed').value = 'todas';
+    dibujarMarcadores('todas');
+    map.setView([-11.868, -77.125], 13);
+  });
+}
+
+// ==================================================
+// 📍 DIBUJAR MARCADORES EN EL MAPA
+// ==================================================
 function dibujarMarcadores(redFiltro) {
   marcadores.forEach(m => map.removeLayer(m));
   marcadores = [];
+
   colegios.forEach(c => {
     if (redFiltro !== 'todas' && c.red !== parseInt(redFiltro)) return;
+
     const color = colores[c.red];
     const icono = L.divIcon({
       className: 'pin-personalizado',
@@ -233,6 +554,7 @@ function dibujarMarcadores(redFiltro) {
       iconSize: [26,26],
       iconAnchor: [13,13]
     });
+
     let contenido = `<div class="popup-foto">
       <h4 style="margin:4px 0 8px 0; color:${color}; font-size: 1.15rem; border-bottom: 2px solid ${color}33; padding-bottom: 6px;">${c.nombre}</h4>
       <p><b>Red N° ${c.red}</b> · ${c.zona}</p>
@@ -240,26 +562,20 @@ function dibujarMarcadores(redFiltro) {
       <p><b>Referencia:</b> ${c.referencia}</p>
       <p><b>Turnos:</b> ${c.turnos}</p>
       <p><b>Requisitos:</b> ${c.requisitos}</p>`;
+
     if (c.foto) {
       contenido += `<img src="${c.foto}" alt="Foto del colegio" onerror="this.outerHTML='<p style=\\'color:#888;font-size:0.85rem\\'>📷 Foto no disponible</p>'"/>`;
     }
     contenido += `<p style="font-size:0.75rem; color:#666; margin-top: 8px; padding-top: 6px; border-top: 1px dashed #ccc;">📍 ${c.lat}, ${c.lng}</p></div>`;
-    const m = L.marker([c.lat, c.lng], {icon: icono}).addTo(map).bindPopup(contenido);
-    marcadores.push(m);
+
+    const marcador = L.marker([c.lat, c.lng], {icon: icono})
+      .addTo(map)
+      .bindPopup(contenido);
+    
+    marcador.colegioId = c.id;
+    marcadores.push(marcador);
   });
 }
-
-dibujarMarcadores('todas');
-
-document.getElementById('filtroRed').addEventListener('change', e => {
-  dibujarMarcadores(e.target.value);
-});
-
-document.getElementById('btnVerTodos').addEventListener('click', () => {
-  document.getElementById('filtroRed').value = 'todas';
-  dibujarMarcadores('todas');
-  map.setView([-11.868, -77.125], 13);
-});
 </script>
 </body>
 </html>
