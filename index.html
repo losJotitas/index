@@ -13,9 +13,12 @@
       --azul-medio: #0A2A54;
       --azul-resaltado: #0E3A70;
       --celeste: #2EA8E0;
+      --verde-ruta: #00C853;
       --texto-claro: #BFE3FF;
       --blanco: #ffffff;
       --sombra: rgba(0,0,0,0.35);
+      --naranja: #FF9800;
+      --rojo: #F44336;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,7 +31,7 @@
     }
 
     /* ================================================== */
-    /* 🏠 FACHADA DE INICIO — PANTALLA COMPLETA */
+    /* 🏠 FACHADA DE INICIO */
     /* ================================================== */
     .fachada {
       width: 100%;
@@ -54,7 +57,6 @@
       z-index: 0;
     }
 
-    /* 🎯 LOGO + NOMBRE + LEMA */
     .seccion-presentacion {
       position: relative;
       z-index: 1;
@@ -91,7 +93,7 @@
       font-style: normal;
     }
 
-    /* 🔍 BUSCADOR CON LUPA */
+    /* 🔍 BUSCADOR */
     .contenedor-buscador {
       position: relative;
       z-index: 1;
@@ -116,9 +118,7 @@
       color: var(--azul-fondo);
       background: transparent;
     }
-    .barra-busqueda input::placeholder {
-      color: #7A95B5;
-    }
+    .barra-busqueda input::placeholder { color: #7A95B5; }
     .boton-buscar {
       background: linear-gradient(135deg, var(--celeste), var(--azul-medio));
       border: none;
@@ -132,16 +132,9 @@
       transition: all 0.3s ease;
       flex-shrink: 0;
     }
-    .boton-buscar:hover {
-      transform: scale(1.08);
-      box-shadow: 0 4px 14px rgba(46,168,224,0.4);
-    }
-    .icono-lupa {
-      font-size: 20px;
-      color: var(--blanco);
-    }
+    .boton-buscar:hover { transform: scale(1.08); }
+    .icono-lupa { font-size: 20px; color: var(--blanco); }
 
-    /* 📋 SUGERENCIAS AL BUSCAR */
     .sugerencias {
       background: var(--blanco);
       border-radius: 12px;
@@ -159,11 +152,9 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    .sugerencia-item:hover {
-      background: #E8F4FC;
-    }
+    .sugerencia-item:hover { background: #E8F4FC; }
 
-    /* 📢 ESPACIO PARA ANUNCIOS */
+    /* 📢 ANUNCIOS */
     .seccion-anuncios {
       position: relative;
       z-index: 1;
@@ -197,10 +188,7 @@
       font-size: 0.9rem;
     }
 
-    /* ⬇️ BOTÓN IR AL MAPA */
     .boton-mapa {
-      position: relative;
-      z-index: 1;
       background: linear-gradient(135deg, var(--celeste), var(--azul-resaltado));
       color: var(--blanco);
       border: none;
@@ -213,10 +201,7 @@
       transition: all 0.3s ease;
       margin-top: 10px;
     }
-    .boton-mapa:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 22px rgba(46,168,224,0.4);
-    }
+    .boton-mapa:hover { transform: translateY(-3px); }
 
     /* ================================================== */
     /* 🗺️ SECCIÓN DEL MAPA */
@@ -246,10 +231,8 @@
       cursor: pointer;
       transition: all 0.3s;
     }
-    .boton-volver:hover {
-      background: var(--celeste);
-      color: var(--blanco);
-    }
+    .boton-volver:hover { background: var(--celeste); color: var(--blanco); }
+
     .controls {
       background: rgba(10, 42, 84, 0.9);
       padding: 10px 20px;
@@ -268,11 +251,88 @@
       cursor: pointer;
       font-size: 0.88rem;
     }
-    select {
-      background: rgba(255,255,255,0.95);
-      color: var(--azul-fondo);
+    select { background: rgba(255,255,255,0.95); color: var(--azul-fondo); }
+
+    #map { flex: 1; width: 100%; min-height: 400px; }
+
+    /* ================================================== */
+    /* 📍 PANEL DE NAVEGACIÓN — RUTA, DISTANCIA, TIEMPO */
+    /* ================================================== */
+    .panel-ruta {
+      background: linear-gradient(180deg, var(--azul-medio), var(--azul-fondo));
+      border-top: 3px solid var(--verde-ruta);
+      padding: 14px 18px;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
     }
-    #map { flex: 1; width: 100%; min-height: 500px; }
+    .panel-ruta.activo { border-top-color: var(--naranja); }
+
+    .info-ruta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .dato-ruta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.08);
+      padding: 8px 14px;
+      border-radius: 8px;
+    }
+    .dato-ruta strong { font-size: 1.1rem; color: var(--celeste); }
+    .dato-ruta span { font-size: 0.9rem; color: var(--texto-claro); }
+
+    .botones-navegacion {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn-ruta {
+      flex: 1;
+      min-width: 130px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-como-llegar {
+      background: linear-gradient(135deg, var(--celeste), var(--azul-resaltado));
+      color: white;
+    }
+    .btn-comenzar {
+      background: linear-gradient(135deg, var(--verde-ruta), #008C4A);
+      color: white;
+    }
+    .btn-compartir {
+      background: linear-gradient(135deg, #7B61FF, #5540CC);
+      color: white;
+    }
+    .btn-ruta:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+
+    .mensaje-ruta {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: rgba(0,200,83,0.1);
+      border-left: 3px solid var(--verde-ruta);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #C8F7D8;
+    }
+    .mensaje-ruta.error {
+      background: rgba(244,67,54,0.1);
+      border-left-color: var(--rojo);
+      color: #FFD6D6;
+    }
+
+    /* LEYENDA */
     .leyenda {
       background: rgba(3,18,36,0.95);
       padding: 10px 20px;
@@ -292,15 +352,7 @@
     .r6 { background: #4CAF50; }
     .r8 { background: #FFC107; }
     .r9 { background: #9C27B0; }
-    .popup-foto { width: 260px; }
-    .popup-foto img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      margin: 8px 0;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-      border: 2px solid var(--celeste);
-    }
+
     .oculto { display: none !important; }
   </style>
 </head>
@@ -311,7 +363,6 @@
 <!-- ================================================== -->
 <div id="fachada" class="fachada">
   <div class="seccion-presentacion">
-    <!-- Logo del proyecto -->
     <svg class="logo-grande" viewBox="0 0 120 80" fill="#ffffff">
       <path d="M60 5 L15 30 L25 35 L60 15 L95 35 L105 30 Z" stroke="#fff" stroke-width="2" fill="none"/>
       <path d="M95 35 L105 70 L90 65 L90 40 Z" fill="#fff" opacity="0.9"/>
@@ -324,67 +375,77 @@
     <p class="lema">"TU COLE A UN MAPA DE DISTANCIA"</p>
   </div>
 
-  <!-- 🔍 BUSCADOR CON LUPA -->
   <div class="contenedor-buscador">
     <div class="barra-busqueda">
-      <input type="text" id="buscador" placeholder="🔍 Escribe el nombre del colegio aquí...">
-      <button class="boton-buscar" id="botonBuscar" title="Buscar colegio">
-        <span class="icono-lupa">🔍</span>
-      </button>
+      <input type="text" id="buscador" placeholder="🔍 Escribe el nombre del colegio...">
+      <button class="boton-buscar" id="botonBuscar"><span class="icono-lupa">🔍</span></button>
     </div>
     <div id="sugerencias" class="sugerencias oculto"></div>
   </div>
 
-  <!-- 📢 ESPACIO PARA ANUNCIOS -->
   <div class="seccion-anuncios">
-    <h3>📢 ESPACIO DE ANUNCIOS Y COMUNICADOS</h3>
+    <h3>📢 ANUNCIOS Y COMUNICADOS</h3>
     <div class="espacio-anuncios">
-      <div class="anuncio-vacio">Aquí puedes colocar avisos importantes</div>
-      <div class="anuncio-vacio">Espacio para noticias de las Redes Educativas</div>
-      <div class="anuncio-vacio">Información de matrícula y fechas</div>
+      <div class="anuncio-vacio">Avisos importantes</div>
+      <div class="anuncio-vacio">Noticias de Redes Educativas</div>
+      <div class="anuncio-vacio">Fechas de matrícula</div>
     </div>
   </div>
 
-  <!-- ⬇️ BOTÓN PARA IR AL MAPA -->
-  <button class="boton-mapa" id="btnIrMapa">🗺️ Ver todos los colegios en el mapa</button>
+  <button class="boton-mapa" id="btnIrMapa">🗺️ Ver todos los colegios</button>
 </div>
 
 <!-- ================================================== -->
-<!-- 🗺️ SECCIÓN DEL MAPA -->
+<!-- 🗺️ SECCIÓN MAPA + NAVEGACIÓN -->
 <!-- ================================================== -->
 <div id="seccionMapa" class="seccion-mapa oculto">
   <div class="encabezado-mapa">
-    <button class="boton-volver" id="btnVolver">← Volver al Inicio</button>
-    <h2 style="font-size:1.1rem; color:#BFE3FF;">UBIKTUCOLEYA! — Mapa de Colegios</h2>
+    <button class="boton-volver" id="btnVolver">← Volver</button>
+    <h2 style="font-size:1.1rem; color:#BFE3FF;">UBIKTUCOLEYA! — Mapa y Rutas</h2>
     <div style="width:80px;"></div>
   </div>
 
   <div class="controls">
-    <label>Filtrar por Red Educativa:</label>
+    <label>Filtrar por Red:</label>
     <select id="filtroRed">
       <option value="todas">🔴 Todas las Redes</option>
-      <option value="4">🟠 Red N° 04 — Pachacútec Este</option>
-      <option value="6">🟢 Red N° 06 — Mi Perú</option>
-      <option value="8">🟡 Red N° 08 — AMC</option>
-      <option value="9">🟣 Red N° 09 — Angamos</option>
+      <option value="4">🟠 Red N° 04</option>
+      <option value="6">🟢 Red N° 06</option>
+      <option value="8">🟡 Red N° 08</option>
+      <option value="9">🟣 Red N° 09</option>
     </select>
-    <button id="btnVerTodos">📍 Ver todos en el mapa</button>
+    <button id="btnVerTodos">📍 Ver todos</button>
   </div>
 
   <div id="map"></div>
 
+  <!-- 📍 PANEL DE RUTA Y NAVEGACIÓN -->
+  <div id="panelRuta" class="panel-ruta oculto">
+    <div class="info-ruta">
+      <div class="dato-ruta">📍 <strong id="distanciaValor">—</strong> <span>distancia</span></div>
+      <div class="dato-ruta">⏱️ <strong id="tiempoValor">—</strong> <span>aprox.</span></div>
+      <div class="dato-ruta">🏫 <span id="colegioDestino">—</span></div>
+    </div>
+    <div class="botones-navegacion">
+      <button class="btn-ruta btn-como-llegar" id="btnComoLlegar">📍 ¿Cómo acercarse?</button>
+      <button class="btn-ruta btn-comenzar" id="btnComenzar">▶️ Comenzar ruta</button>
+      <button class="btn-ruta btn-compartir" id="btnCompartir">🔗 Compartir</button>
+    </div>
+    <div id="mensajeRuta" class="mensaje-ruta oculto"></div>
+  </div>
+
   <div class="leyenda">
     <span><b>Red:</b></span>
-    <span><span class="punto r4"></span> N°04 Pachacútec Este</span>
-    <span><span class="punto r6"></span> N°06 Mi Perú</span>
-    <span><span class="punto r8"></span> N°08 AMC</span>
-    <span><span class="punto r9"></span> N°09 Angamos</span>
+    <span><span class="punto r4"></span> N°04</span>
+    <span><span class="punto r6"></span> N°06</span>
+    <span><span class="punto r8"></span> N°08</span>
+    <span><span class="punto r9"></span> N°09</span>
   </div>
 </div>
 
 <script>
 // ==================================================
-// 📋 LISTA DE COLEGIOS CON NOMBRES CORREGIDOS
+// 📋 LISTA DE COLEGIOS
 // ==================================================
 const colegios = [
   { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg" },
@@ -411,16 +472,20 @@ const colores = { 4: '#FF5722', 6: '#4CAF50', 8: '#FFC107', 9: '#9C27B0' };
 // 🔍 VARIABLES GLOBALES
 // ==================================================
 let map, marcadores = [];
-let colegioSeleccionado = null;
+let colegioDestino = null;
+let ubicacionUsuario = null;
+let rutaDibujada = null;
 
-// ==================================================
-// 📱 NAVEGACIÓN — Cambiar entre fachada y mapa
-// ==================================================
 const fachada = document.getElementById('fachada');
 const seccionMapa = document.getElementById('seccionMapa');
 const buscador = document.getElementById('buscador');
 const sugerencias = document.getElementById('sugerencias');
+const panelRuta = document.getElementById('panelRuta');
+const mensajeRuta = document.getElementById('mensajeRuta');
 
+// ==================================================
+// 📱 NAVEGACIÓN ENTRE PANTALLAS
+// ==================================================
 document.getElementById('btnIrMapa').addEventListener('click', () => {
   fachada.classList.add('oculto');
   seccionMapa.classList.remove('oculto');
@@ -436,26 +501,14 @@ document.getElementById('btnVolver').addEventListener('click', () => {
 });
 
 // ==================================================
-// 🔍 BUSCADOR — Sugerencias al escribir
+// 🔍 BUSCADOR
 // ==================================================
 buscador.addEventListener('input', (e) => {
   const texto = e.target.value.trim().toLowerCase();
   sugerencias.innerHTML = '';
-  
-  if (texto.length < 2) {
-    sugerencias.classList.add('oculto');
-    return;
-  }
-
-  const coincidencias = colegios.filter(c => 
-    c.nombre.toLowerCase().includes(texto)
-  ).slice(0, 6);
-
-  if (coincidencias.length === 0) {
-    sugerencias.classList.add('oculto');
-    return;
-  }
-
+  if (texto.length < 2) { sugerencias.classList.add('oculto'); return; }
+  const coincidencias = colegios.filter(c => c.nombre.toLowerCase().includes(texto)).slice(0, 6);
+  if (coincidencias.length === 0) { sugerencias.classList.add('oculto'); return; }
   sugerencias.classList.remove('oculto');
   coincidencias.forEach(c => {
     const item = document.createElement('div');
@@ -466,16 +519,11 @@ buscador.addEventListener('input', (e) => {
   });
 });
 
-// ==================================================
-// 🔍 BOTÓN LUPA — Buscar al presionar
-// ==================================================
 document.getElementById('botonBuscar').addEventListener('click', () => {
   const texto = buscador.value.trim().toLowerCase();
   const resultado = colegios.find(c => c.nombre.toLowerCase().includes(texto));
   if (resultado) buscarYAbrirColegio(resultado);
 });
-
-// Buscar con tecla Enter
 buscador.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const texto = buscador.value.trim().toLowerCase();
@@ -485,33 +533,136 @@ buscador.addEventListener('keydown', (e) => {
 });
 
 // ==================================================
-// 🎯 FUNCIÓN PRINCIPAL — Ir al colegio y abrir su ficha
+// 🎯 ABRIR COLEGIO Y MOSTRAR PANEL DE RUTA
 // ==================================================
 function buscarYAbrirColegio(colegio) {
-  colegioSeleccionado = colegio;
+  colegioDestino = colegio;
   buscador.value = colegio.nombre;
   sugerencias.classList.add('oculto');
-
-  // Cambiar a pantalla del mapa
   fachada.classList.add('oculto');
   seccionMapa.classList.remove('oculto');
-
   if (!map) inicializarMapa();
-
-  // Esperar a que el mapa cargue, luego centrar y abrir
   setTimeout(() => {
     map.invalidateSize();
-    map.setView([colegio.lat, colegio.lng], 17);
-    
-    // Buscar el marcador y abrirlo
-    marcadores.forEach(m => {
-      if (m.colegioId === colegio.id) {
-        m.openPopup();
-      }
-    });
+    map.setView([colegio.lat, colegio.lng], 16);
+    marcadores.forEach(m => { if (m.colegioId === colegio.id) m.openPopup(); });
+    mostrarPanelRuta(colegio);
   }, 150);
-
   window.scrollTo(0, 0);
+}
+
+// ==================================================
+// 📍 MOSTRAR PANEL DE RUTA Y CALCULAR DATOS
+// ==================================================
+function mostrarPanelRuta(colegio) {
+  panelRuta.classList.remove('oculto');
+  panelRuta.classList.remove('activo');
+  document.getElementById('colegioDestino').textContent = colegio.nombre.substring(0, 25) + '...';
+  mensajeRuta.classList.add('oculto');
+
+  // Intentar obtener ubicación del usuario
+  if (navigator.geolocation) {
+    mostrarMensaje('🔍 Buscando tu ubicación...', false);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        ubicacionUsuario = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        calcularRuta(ubicacionUsuario, colegio);
+      },
+      (error) => {
+        mostrarMensaje('ℹ️ No se pudo obtener tu ubicación. Presiona "¿Cómo acercarse?" para abrir en Google Maps.', false);
+        ubicacionUsuario = null;
+      },
+      { timeout: 8000, maximumAge: 60000 }
+    );
+  } else {
+    mostrarMensaje('⚠️ Tu navegador no permite ubicación. Usa los botones para abrir en Google Maps.', true);
+    ubicacionUsuario = null;
+  }
+}
+
+// ==================================================
+// 📐 CALCULAR DISTANCIA Y TIEMPO ESTIMADO
+// ==================================================
+function calcularRuta(origen, destino) {
+  // Fórmula de Haversine — distancia en línea recta
+  const R = 6371;
+  const dLat = (destino.lat - origen.lat) * Math.PI / 180;
+  const dLng = (destino.lng - origen.lng) * Math.PI / 180;
+  const a = Math.sin(dLat/2) ** 2 + Math.cos(origen.lat * Math.PI / 180) * Math.cos(destino.lat * Math.PI / 180) * Math.sin(dLng/2) ** 2;
+  const distanciaKm = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  // Estimar tiempo: caminando ~4 km/h, en auto ~30 km/h (zona urbana)
+  const tiempoMinutos = Math.round((distanciaKm / 30) * 60); // auto
+  const tiempoCaminando = Math.round((distanciaKm / 4) * 60);
+
+  // Mostrar datos
+  document.getElementById('distanciaValor').textContent = distanciaKm.toFixed(2) + ' km';
+  document.getElementById('tiempoValor').textContent = tiempoMinutos + ' min (auto) / ' + tiempoCaminando + ' min a pie';
+
+  // Dibujar línea aproximada en el mapa
+  if (rutaDibujada) map.removeLayer(rutaDibujada);
+  rutaDibujada = L.polyline([[origen.lat, origen.lng], [destino.lat, destino.lng]], {
+    color: '#00C853', weight: 4, opacity: 0.8, dashArray: '10, 10'
+  }).addTo(map);
+
+  // Marcar ubicación del usuario
+  L.marker([origen.lat, origen.lng], {
+    icon: L.divIcon({
+      className: 'mi-ubicacion',
+      html: '<div style="width:24px;height:24px;background:#2EA8E0;border-radius:50%;border:3px solid white;box-shadow:0 0 10px rgba(46,168,224,0.6);"></div>',
+      iconSize: [24,24], iconAnchor: [12,12]
+    })
+  }).addTo(map).bindPopup('<b>Tu ubicación</b>');
+
+  panelRuta.classList.add('activo');
+  mostrarMensaje('✅ Ubicación encontrada. Ruta calculada de forma aproximada.', false);
+}
+
+// ==================================================
+// 🔘 BOTONES DE NAVEGACIÓN
+// ==================================================
+
+// ¿Cómo acercarse? → Abre Google Maps con la ruta
+document.getElementById('btnComoLlegar').addEventListener('click', () => {
+  if (!colegioDestino) return;
+  const url = `https://www.google.com/maps/search/?api=1&query=${colegioDestino.lat},${colegioDestino.lng}`;
+  window.open(url, '_blank');
+});
+
+// Comenzar ruta → Abre Google Maps con indicaciones desde mi ubicación
+document.getElementById('btnComenzar').addEventListener('click', () => {
+  if (!colegioDestino) return;
+  let url;
+  if (ubicacionUsuario) {
+    url = `https://www.google.com/maps/dir/${ubicacionUsuario.lat},${ubicacionUsuario.lng}/${colegioDestino.lat},${colegioDestino.lng}`;
+  } else {
+    url = `https://www.google.com/maps/dir/?api=1&destination=${colegioDestino.lat},${colegioDestino.lng}`;
+  }
+  window.open(url, '_blank');
+});
+
+// Compartir → Copiar enlace al portapapeles
+document.getElementById('btnCompartir').addEventListener('click', () => {
+  if (!colegioDestino) return;
+  const enlace = `https://www.google.com/maps/search/?api=1&query=${colegioDestino.lat},${colegioDestino.lng}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(enlace).then(() => {
+      mostrarMensaje('✅ ¡Enlace copiado! Puedes pegarlo en WhatsApp o redes.', false);
+    }).catch(() => {
+      mostrarMensaje(enlace, false);
+    });
+  } else {
+    alert('Copia este enlace:\n' + enlace);
+  }
+});
+
+// ==================================================
+// 🛠️ FUNCIONES AUXILIARES
+// ==================================================
+function mostrarMensaje(texto, esError) {
+  mensajeRuta.textContent = texto;
+  mensajeRuta.classList.remove('oculto', 'error');
+  if (esError) mensajeRuta.classList.add('error');
 }
 
 // ==================================================
@@ -525,7 +676,6 @@ function inicializarMapa() {
 
   dibujarMarcadores('todas');
 
-  // Filtro por red
   document.getElementById('filtroRed').addEventListener('change', e => {
     dibujarMarcadores(e.target.value);
   });
@@ -534,11 +684,14 @@ function inicializarMapa() {
     document.getElementById('filtroRed').value = 'todas';
     dibujarMarcadores('todas');
     map.setView([-11.868, -77.125], 13);
+    if (rutaDibujada) { map.removeLayer(rutaDibujada); rutaDibujada = null; }
+    panelRuta.classList.add('oculto');
+    colegioDestino = null;
   });
 }
 
 // ==================================================
-// 📍 DIBUJAR MARCADORES EN EL MAPA
+// 📍 DIBUJAR MARCADORES
 // ==================================================
 function dibujarMarcadores(redFiltro) {
   marcadores.forEach(m => map.removeLayer(m));
@@ -546,7 +699,6 @@ function dibujarMarcadores(redFiltro) {
 
   colegios.forEach(c => {
     if (redFiltro !== 'todas' && c.red !== parseInt(redFiltro)) return;
-
     const color = colores[c.red];
     const icono = L.divIcon({
       className: 'pin-personalizado',
@@ -555,23 +707,21 @@ function dibujarMarcadores(redFiltro) {
       iconAnchor: [13,13]
     });
 
-    let contenido = `<div class="popup-foto">
-      <h4 style="margin:4px 0 8px 0; color:${color}; font-size: 1.15rem; border-bottom: 2px solid ${color}33; padding-bottom: 6px;">${c.nombre}</h4>
+    let contenido = `<div style="width:260px;">
+      <h4 style="margin:4px 0 8px 0; color:${color}; font-size:1.15rem; border-bottom:2px solid ${color}33; padding-bottom:6px;">${c.nombre}</h4>
       <p><b>Red N° ${c.red}</b> · ${c.zona}</p>
       <p><b>Nivel:</b> ${c.niveles}</p>
-      <p><b>Referencia:</b> ${c.referencia}</p>
+      <p><b>Dirección:</b> ${c.referencia}</p>
       <p><b>Turnos:</b> ${c.turnos}</p>
       <p><b>Requisitos:</b> ${c.requisitos}</p>`;
-
-    if (c.foto) {
-      contenido += `<img src="${c.foto}" alt="Foto del colegio" onerror="this.outerHTML='<p style=\\'color:#888;font-size:0.85rem\\'>📷 Foto no disponible</p>'"/>`;
-    }
-    contenido += `<p style="font-size:0.75rem; color:#666; margin-top: 8px; padding-top: 6px; border-top: 1px dashed #ccc;">📍 ${c.lat}, ${c.lng}</p></div>`;
+    if (c.foto) contenido += `<p style="color:#2EA8E0; font-size:0.9rem;">📷 Foto disponible</p>`;
+    contenido += `<p style="font-size:0.75rem; color:#666; margin-top:8px;">📍 ${c.lat}, ${c.lng}</p>
+      <button onclick="buscarYAbrirColegio(colegios.find(x=>x.id===${c.id}))" style="margin-top:6px; padding:6px 12px; background:#2EA8E0; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">📍 Ver ruta</button>
+    </div>`;
 
     const marcador = L.marker([c.lat, c.lng], {icon: icono})
       .addTo(map)
       .bindPopup(contenido);
-    
     marcador.colegioId = c.id;
     marcadores.push(marcador);
   });
