@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -22,6 +22,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body { 
       margin: 0; padding: 0; 
       background-color: var(--azul-fondo); 
@@ -40,7 +41,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 18px 20px 30px 20px;
+      padding: 15px 16px 20px 16px;
       background: linear-gradient(180deg, var(--azul-medio) 0%, var(--azul-fondo) 100%);
       position: relative;
       overflow: hidden;
@@ -61,35 +62,35 @@
       position: relative;
       z-index: 1;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       width: 100%;
       max-width: 520px;
     }
     .logo-grande {
-      width: 110px;
+      width: 100px;
       height: auto;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       filter: drop-shadow(0 0 10px rgba(255,255,255,0.25));
     }
     .seccion-presentacion h1 {
-      font-size: clamp(1.8rem, 8vw, 2.6rem);
+      font-size: clamp(1.8rem, 8vw, 2.4rem);
       font-weight: 900;
       letter-spacing: 2px;
       color: var(--blanco);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       text-shadow: 0 0 15px rgba(255,255,255,0.2);
       word-break: break-word;
       line-height: 1.2;
     }
     .subtitulo {
-      font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+      font-size: clamp(0.85rem, 3.5vw, 1rem);
       letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--texto-claro);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .lema {
-      font-size: clamp(1.1rem, 4.5vw, 1.4rem);
+      font-size: clamp(1rem, 4.5vw, 1.2rem);
       font-weight: 700;
       letter-spacing: 1px;
       color: var(--blanco);
@@ -101,26 +102,26 @@
     /* 🔍 BUSCADOR */
     .contenedor-buscador {
       position: relative;
-      z-index: 1;
+      z-index: 10;
       width: 100%;
       max-width: 580px;
-      margin-bottom: 30px;
-      margin-top: 10px;
+      margin-bottom: 24px;
+      margin-top: 8px;
     }
     .barra-busqueda {
       display: flex;
       align-items: center;
       background: var(--blanco);
       border-radius: 50px;
-      padding: 6px 6px 6px 20px;
+      padding: 5px 5px 5px 16px;
       box-shadow: 0 6px 20px rgba(46,168,224,0.25);
     }
     .barra-busqueda input {
       flex: 1;
       border: none;
       outline: none;
-      font-size: 1.05rem;
-      padding: 12px 10px;
+      font-size: 1rem;
+      padding: 10px 8px;
       color: var(--azul-fondo);
       background: transparent;
     }
@@ -129,8 +130,8 @@
       background: linear-gradient(135deg, var(--celeste), var(--azul-medio));
       border: none;
       border-radius: 50%;
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -138,26 +139,27 @@
       transition: all 0.3s ease;
       flex-shrink: 0;
     }
-    .boton-buscar:hover { transform: scale(1.08); }
-    .icono-lupa { font-size: 20px; color: var(--blanco); }
+    .icono-lupa { font-size: 18px; color: var(--blanco); }
 
     .sugerencias {
       background: var(--blanco);
       border-radius: 12px;
-      margin-top: 8px;
-      max-height: 260px;
+      margin-top: 6px;
+      max-height: 240px;
       overflow-y: auto;
       box-shadow: 0 6px 18px var(--sombra);
       position: absolute;
       width: 100%;
-      z-index: 10;
+      z-index: 9999;
     }
     .sugerencia-item {
-      padding: 12px 20px;
+      padding: 12px 16px;
       color: var(--azul-fondo);
       cursor: pointer;
       transition: background 0.2s;
+      border-bottom: 1px solid #eee;
     }
+    .sugerencia-item:last-child { border-bottom: none; }
     .sugerencia-item:hover { background: #E8F4FC; }
 
     /* 📢 ANUNCIOS */
@@ -169,145 +171,169 @@
       background: rgba(14, 58, 112, 0.4);
       border: 2px solid rgba(46,168,224,0.25);
       border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
     }
     .seccion-anuncios h3 {
       color: var(--celeste);
-      font-size: 1rem;
-      margin-bottom: 12px;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
       border-bottom: 1px solid rgba(46,168,224,0.2);
       padding-bottom: 6px;
     }
     .espacio-anuncios {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
     }
     .anuncio-vacio {
       background: rgba(255,255,255,0.06);
       border: 2px dashed rgba(46,168,224,0.35);
       border-radius: 10px;
-      padding: 20px;
+      padding: 14px;
       text-align: center;
       color: var(--texto-claro);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     .boton-mapa {
       background: linear-gradient(135deg, var(--celeste), var(--azul-resaltado));
       color: var(--blanco);
       border: none;
-      padding: 14px 36px;
+      padding: 13px 30px;
       border-radius: 50px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 5px 18px rgba(46,168,224,0.3);
       transition: all 0.3s ease;
-      margin-top: 10px;
+      margin-top: 6px;
+      width: 100%;
+      max-width: 320px;
     }
-    .boton-mapa:hover { transform: translateY(-3px); }
+    .boton-mapa:active { transform: translateY(-2px); }
 
     /* ================================================== */
-    /* 🗺️ SECCIÓN DEL MAPA */
+    /* 🗺️ SECCIÓN DEL MAPA — AJUSTADO PARA CELULAR */
     /* ================================================== */
     .seccion-mapa {
       width: 100%;
-      padding: 0;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: var(--azul-fondo);
+      z-index: 100;
     }
     .encabezado-mapa {
       background: linear-gradient(180deg, var(--azul-medio) 0%, var(--azul-fondo) 100%);
-      padding: 10px 20px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 3px solid var(--celeste);
+      flex-shrink: 0;
     }
     .boton-volver {
       background: transparent;
       color: var(--celeste);
       border: 2px solid var(--celeste);
-      padding: 8px 16px;
+      padding: 6px 12px;
       border-radius: 8px;
       font-weight: 600;
+      font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s;
     }
-    .boton-volver:hover { background: var(--celeste); color: var(--blanco); }
+    .boton-volver:active { background: var(--celeste); color: var(--blanco); }
+
+    .encabezado-mapa h2 {
+      font-size: 0.95rem;
+      color: #BFE3FF;
+      text-align: center;
+      flex: 1;
+      padding: 0 8px;
+    }
 
     .controls {
-      background: rgba(10, 42, 84, 0.9);
-      padding: 10px 20px;
+      background: rgba(10, 42, 84, 0.95);
+      padding: 8px 10px;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
       border-bottom: 2px solid var(--celeste);
+      flex-shrink: 0;
     }
-    .controls label { font-size: 0.9rem; font-weight: 600; color: var(--texto-claro); }
+    .controls label { font-size: 0.85rem; font-weight: 600; color: var(--texto-claro); }
     select, button {
-      padding: 8px 12px;
+      padding: 7px 10px;
       border-radius: 8px;
       border: none;
       font-weight: 600;
       cursor: pointer;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
     }
-    select { background: rgba(255,255,255,0.95); color: var(--azul-fondo); }
+    select { background: rgba(255,255,255,0.95); color: var(--azul-fondo); flex: 1; min-width: 140px; }
+    #btnVerTodos { background: var(--celeste); color: white; white-space: nowrap; }
 
-    #map { flex: 1; width: 100%; min-height: 400px; }
+    #map { flex: 1; width: 100%; min-height: 0; }
 
     /* ================================================== */
-    /* 📍 PANEL DE NAVEGACIÓN — RUTA, DISTANCIA, TIEMPO */
+    /* 📍 PANEL DE RUTA — BOTONES VISIBLES SIN DESLIZAR */
     /* ================================================== */
     .panel-ruta {
       background: linear-gradient(180deg, var(--azul-medio), var(--azul-fondo));
       border-top: 3px solid var(--verde-ruta);
-      padding: 14px 18px;
+      padding: 10px 12px;
       box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
+      flex-shrink: 0;
+      max-height: 40vh;
+      overflow-y: auto;
     }
     .panel-ruta.activo { border-top-color: var(--naranja); }
 
     .info-ruta {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 8px;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .dato-ruta {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: rgba(255,255,255,0.08);
-      padding: 8px 14px;
+      padding: 6px 10px;
       border-radius: 8px;
+      font-size: 0.9rem;
     }
-    .dato-ruta strong { font-size: 1.1rem; color: var(--celeste); }
-    .dato-ruta span { font-size: 0.9rem; color: var(--texto-claro); }
+    .dato-ruta strong { font-size: 1rem; color: var(--celeste); }
+    .dato-ruta span { font-size: 0.85rem; color: var(--texto-claro); }
 
     .botones-navegacion {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
     .btn-ruta {
       flex: 1;
-      min-width: 130px;
-      padding: 10px 14px;
+      min-width: 105px;
+      padding: 10px 8px;
       border: none;
       border-radius: 8px;
       font-weight: 700;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
+      text-align: center;
     }
     .btn-como-llegar {
       background: linear-gradient(135deg, var(--celeste), var(--azul-resaltado));
@@ -321,15 +347,15 @@
       background: linear-gradient(135deg, #7B61FF, #5540CC);
       color: white;
     }
-    .btn-ruta:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .btn-ruta:active { transform: scale(0.97); }
 
     .mensaje-ruta {
-      margin-top: 10px;
-      padding: 10px 14px;
+      margin-top: 8px;
+      padding: 8px 10px;
       background: rgba(0,200,83,0.1);
       border-left: 3px solid var(--verde-ruta);
       border-radius: 6px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #C8F7D8;
     }
     .mensaje-ruta.error {
@@ -341,18 +367,19 @@
     /* LEYENDA */
     .leyenda {
       background: rgba(3,18,36,0.95);
-      padding: 10px 20px;
+      padding: 8px 12px;
       border-top: 2px solid var(--celeste);
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 10px;
+      flex-shrink: 0;
     }
-    .leyenda span { display: flex; align-items: center; gap: 6px; }
+    .leyenda span { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; }
     .punto {
-      width: 17px; height: 17px;
+      width: 14px; height: 14px;
       border-radius: 50%;
-      border: 3px solid #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      border: 2px solid #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
     }
     .r4 { background: #FF5722; }
     .r6 { background: #4CAF50; }
@@ -360,6 +387,33 @@
     .r9 { background: #9C27B0; }
 
     .oculto { display: none !important; }
+
+    /* ================================================== */
+    /* 📱 AJUSTE DE VENTANAS EMERGENTES DEL MAPA */
+    /* ================================================== */
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      max-width: 300px !important;
+      width: 300px !important;
+    }
+    .leaflet-popup-content {
+      margin: 10px 12px !important;
+      font-size: 0.9rem !important;
+      line-height: 1.4 !important;
+    }
+    .leaflet-popup-content h4 {
+      font-size: 0.95rem !important;
+      margin: 0 0 6px 0 !important;
+      padding-bottom: 4px !important;
+    }
+    .leaflet-popup-content p {
+      margin: 3px 0 !important;
+      font-size: 0.85rem !important;
+    }
+    .leaflet-container a.leaflet-popup-close-button {
+      font-size: 20px !important;
+      padding: 4px 8px !important;
+    }
   </style>
 </head>
 <body>
@@ -407,14 +461,14 @@
 <div id="seccionMapa" class="seccion-mapa oculto">
   <div class="encabezado-mapa">
     <button class="boton-volver" id="btnVolver">← Volver</button>
-    <h2 style="font-size:1.1rem; color:#BFE3FF;">UBIKTUCOLEYA! — Mapa y Rutas</h2>
-    <div style="width:80px;"></div>
+    <h2>UBIKTUCOLEYA! — Mapa y Rutas</h2>
+    <div style="width:60px;"></div>
   </div>
 
   <div class="controls">
-    <label>Filtrar por Red:</label>
+    <label>Red:</label>
     <select id="filtroRed">
-      <option value="todas">🔴 Todas las Redes</option>
+      <option value="todas">🔴 Todas</option>
       <option value="4">🟠 Red N° 04</option>
       <option value="6">🟢 Red N° 06</option>
       <option value="8">🟡 Red N° 08</option>
@@ -425,16 +479,16 @@
 
   <div id="map"></div>
 
-  <!-- 📍 PANEL DE RUTA Y NAVEGACIÓN -->
+  <!-- 📍 PANEL DE RUTA — SIEMPRE VISIBLE SIN DESLIZAR -->
   <div id="panelRuta" class="panel-ruta oculto">
     <div class="info-ruta">
-      <div class="dato-ruta">📍 <strong id="distanciaValor">—</strong> <span>distancia</span></div>
-      <div class="dato-ruta">⏱️ <strong id="tiempoValor">—</strong> <span>aprox.</span></div>
+      <div class="dato-ruta">📍 <strong id="distanciaValor">—</strong> <span>km</span></div>
+      <div class="dato-ruta">⏱️ <strong id="tiempoValor">—</strong> <span>min</span></div>
       <div class="dato-ruta">🏫 <span id="colegioDestino">—</span></div>
     </div>
     <div class="botones-navegacion">
-      <button class="btn-ruta btn-como-llegar" id="btnComoLlegar">📍 ¿Cómo acercarse?</button>
-      <button class="btn-ruta btn-comenzar" id="btnComenzar">▶️ Comenzar ruta</button>
+      <button class="btn-ruta btn-como-llegar" id="btnComoLlegar">📍 ¿Cómo llegar?</button>
+      <button class="btn-ruta btn-comenzar" id="btnComenzar">▶️ Ruta</button>
       <button class="btn-ruta btn-compartir" id="btnCompartir">🔗 Compartir</button>
     </div>
     <div id="mensajeRuta" class="mensaje-ruta oculto"></div>
@@ -563,10 +617,9 @@ function buscarYAbrirColegio(colegio) {
 function mostrarPanelRuta(colegio) {
   panelRuta.classList.remove('oculto');
   panelRuta.classList.remove('activo');
-  document.getElementById('colegioDestino').textContent = colegio.nombre.substring(0, 25) + '...';
+  document.getElementById('colegioDestino').textContent = colegio.nombre.substring(0, 22) + '...';
   mensajeRuta.classList.add('oculto');
 
-  // Intentar obtener ubicación del usuario
   if (navigator.geolocation) {
     mostrarMensaje('🔍 Buscando tu ubicación...', false);
     navigator.geolocation.getCurrentPosition(
@@ -575,13 +628,13 @@ function mostrarPanelRuta(colegio) {
         calcularRuta(ubicacionUsuario, colegio);
       },
       (error) => {
-        mostrarMensaje('ℹ️ No se pudo obtener tu ubicación. Presiona "¿Cómo acercarse?" para abrir en Google Maps.', false);
+        mostrarMensaje('ℹ️ Ubicación no disponible. Usa los botones para abrir en Google Maps.', false);
         ubicacionUsuario = null;
       },
       { timeout: 8000, maximumAge: 60000 }
     );
   } else {
-    mostrarMensaje('⚠️ Tu navegador no permite ubicación. Usa los botones para abrir en Google Maps.', true);
+    mostrarMensaje('⚠️ Tu navegador no permite ubicación.', true);
     ubicacionUsuario = null;
   }
 }
@@ -590,28 +643,23 @@ function mostrarPanelRuta(colegio) {
 // 📐 CALCULAR DISTANCIA Y TIEMPO ESTIMADO
 // ==================================================
 function calcularRuta(origen, destino) {
-  // Fórmula de Haversine — distancia en línea recta
   const R = 6371;
   const dLat = (destino.lat - origen.lat) * Math.PI / 180;
   const dLng = (destino.lng - origen.lng) * Math.PI / 180;
   const a = Math.sin(dLat/2) ** 2 + Math.cos(origen.lat * Math.PI / 180) * Math.cos(destino.lat * Math.PI / 180) * Math.sin(dLng/2) ** 2;
   const distanciaKm = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-  // Estimar tiempo: caminando ~4 km/h, en auto ~30 km/h (zona urbana)
-  const tiempoMinutos = Math.round((distanciaKm / 30) * 60); // auto
+  const tiempoMinutos = Math.round((distanciaKm / 30) * 60);
   const tiempoCaminando = Math.round((distanciaKm / 4) * 60);
 
-  // Mostrar datos
-  document.getElementById('distanciaValor').textContent = distanciaKm.toFixed(2) + ' km';
-  document.getElementById('tiempoValor').textContent = tiempoMinutos + ' min (auto) / ' + tiempoCaminando + ' min a pie';
+  document.getElementById('distanciaValor').textContent = distanciaKm.toFixed(2);
+  document.getElementById('tiempoValor').textContent = tiempoMinutos + '/' + tiempoCaminando;
 
-  // Dibujar línea aproximada en el mapa
   if (rutaDibujada) map.removeLayer(rutaDibujada);
   rutaDibujada = L.polyline([[origen.lat, origen.lng], [destino.lat, destino.lng]], {
     color: '#00C853', weight: 4, opacity: 0.8, dashArray: '10, 10'
   }).addTo(map);
 
-  // Marcar ubicación del usuario
   L.marker([origen.lat, origen.lng], {
     icon: L.divIcon({
       className: 'mi-ubicacion',
@@ -621,21 +669,18 @@ function calcularRuta(origen, destino) {
   }).addTo(map).bindPopup('<b>Tu ubicación</b>');
 
   panelRuta.classList.add('activo');
-  mostrarMensaje('✅ Ubicación encontrada. Ruta calculada de forma aproximada.', false);
+  mostrarMensaje('✅ Ubicación encontrada. Ruta aproximada calculada.', false);
 }
 
 // ==================================================
 // 🔘 BOTONES DE NAVEGACIÓN
 // ==================================================
-
-// ¿Cómo acercarse? → Abre Google Maps con la ruta
 document.getElementById('btnComoLlegar').addEventListener('click', () => {
   if (!colegioDestino) return;
   const url = `https://www.google.com/maps/search/?api=1&query=${colegioDestino.lat},${colegioDestino.lng}`;
   window.open(url, '_blank');
 });
 
-// Comenzar ruta → Abre Google Maps con indicaciones desde mi ubicación
 document.getElementById('btnComenzar').addEventListener('click', () => {
   if (!colegioDestino) return;
   let url;
@@ -647,13 +692,12 @@ document.getElementById('btnComenzar').addEventListener('click', () => {
   window.open(url, '_blank');
 });
 
-// Compartir → Copiar enlace al portapapeles
 document.getElementById('btnCompartir').addEventListener('click', () => {
   if (!colegioDestino) return;
   const enlace = `https://www.google.com/maps/search/?api=1&query=${colegioDestino.lat},${colegioDestino.lng}`;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(enlace).then(() => {
-      mostrarMensaje('✅ ¡Enlace copiado! Puedes pegarlo en WhatsApp o redes.', false);
+      mostrarMensaje('✅ ¡Enlace copiado!', false);
     }).catch(() => {
       mostrarMensaje(enlace, false);
     });
@@ -662,9 +706,6 @@ document.getElementById('btnCompartir').addEventListener('click', () => {
   }
 });
 
-// ==================================================
-// 🛠️ FUNCIONES AUXILIARES
-// ==================================================
 function mostrarMensaje(texto, esError) {
   mensajeRuta.textContent = texto;
   mensajeRuta.classList.remove('oculto', 'error');
@@ -697,7 +738,7 @@ function inicializarMapa() {
 }
 
 // ==================================================
-// 📍 DIBUJAR MARCADORES — BIRRETE + CASITA POR NIVEL
+// 📍 DIBUJAR MARCADORES — SIN BOTÓN "VER RUTA"
 // ==================================================
 function dibujarMarcadores(redFiltro) {
   marcadores.forEach(m => map.removeLayer(m));
@@ -707,8 +748,6 @@ function dibujarMarcadores(redFiltro) {
     if (redFiltro !== 'todas' && c.red !== parseInt(redFiltro)) return;
 
     const color = colores[c.red];
-
-    // Determinar si es inicial (1 piso) o primaria/secundaria (2 pisos)
     const nivel = c.niveles.toLowerCase();
     const esInicial = nivel.includes('inicial') || nivel.includes('cuna jardín');
 
@@ -719,22 +758,28 @@ function dibujarMarcadores(redFiltro) {
       iconAnchor: [17, 40]
     });
 
-    let contenido = `<div style="width:260px;">
-      <h4 style="margin:4px 0 8px 0; color:${color}; font-size:1.15rem; border-bottom:2px solid ${color}33; padding-bottom:6px;">${c.nombre}</h4>
-      <p><b>Red N° ${c.red}</b> · ${c.zona}</p>
+    // ✅ VENTANA DE INFORMACIÓN — MÁS COMPACTA Y SIN BOTÓN "VER RUTA"
+    let contenido = `<div style="width:270px; font-size:0.85rem; line-height:1.4;">
+      <h4 style="margin:0 0 6px 0; color:${color}; font-size:0.95rem; border-bottom:2px solid ${color}33; padding-bottom:4px;">${c.nombre}</h4>
+      <p><b>Red:</b> N°${c.red} · ${c.zona}</p>
       <p><b>Nivel:</b> ${c.niveles}</p>
-      <p><b>Dirección:</b> ${c.referencia}</p>
+      <p><b>Direc:</b> ${c.referencia}</p>
       <p><b>Turnos:</b> ${c.turnos}</p>
-      <p><b>Requisitos:</b> ${c.requisitos}</p>`;
-    if (c.foto) contenido += `<p style="color:#2EA8E0; font-size:0.9rem;">📷 Foto disponible</p>`;
-    contenido += `<p style="font-size:0.75rem; color:#666; margin-top:8px;">📍 ${c.lat}, ${c.lng}</p>
-      <button onclick="buscarYAbrirColegio(colegios.find(x=>x.id===${c.id}))" style="margin-top:6px; padding:6px 12px; background:#2EA8E0; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">📍 Ver ruta</button>
+      <p style="font-size:0.78rem; color:#888; margin-top:4px;">📍 ${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}</p>
     </div>`;
 
     const marcador = L.marker([c.lat, c.lng], {icon: icono})
       .addTo(map)
-      .bindPopup(contenido);
+      .bindPopup(contenido, { maxWidth: 280, minWidth: 260, autoPan: true });
+    
     marcador.colegioId = c.id;
+    marcador.on('click', () => {
+      colegioDestino = c;
+      document.getElementById('colegioDestino').textContent = c.nombre.substring(0, 22) + '...';
+      panelRuta.classList.remove('oculto');
+      mostrarPanelRuta(c);
+    });
+    
     marcadores.push(marcador);
   });
 }
@@ -744,40 +789,12 @@ function dibujarMarcadores(redFiltro) {
 // ==================================================
 function crearIconoColegio(color, esInicial) {
   if (esInicial) {
-    // Casita de 1 piso dentro de birrete
     return `
       <svg width="34" height="40" viewBox="0 0 34 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Base del pin -->
         <path d="M17 0C7.6 0 0 7.6 0 17c0 6.5 5.5 13.5 15.5 21.5a2 2 0 0 0 3 0C28.5 30.5 34 23.5 34 17 34 7.6 26.4 0 17 0z" fill="${color}" stroke="#fff" stroke-width="2"/>
-        <!-- Birrete -->
         <rect x="7" y="4" width="20" height="5" rx="1" fill="#fff" opacity="0.95"/>
         <path d="M7 4l10-3 10 3H7z" fill="#fff" opacity="0.95"/>
-        <!-- Casita 1 piso -->
         <path d="M17 10l-6 4v5h12v-5l-6-4z" fill="#fff" opacity="0.95"/>
         <rect x="14" y="16" width="6" height="5" rx="1" fill="${color}"/>
         <rect x="11" y="12" width="3" height="3" rx="0.5" fill="${color}"/>
         <rect x="20" y="12" width="3" height="3" rx="0.5" fill="${color}"/>
-      </svg>
-    `;
-  } else {
-    // Casita de 2 pisos dentro de birrete
-    return `
-      <svg width="34" height="40" viewBox="0 0 34 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Base del pin -->
-        <path d="M17 0C7.6 0 0 7.6 0 17c0 6.5 5.5 13.5 15.5 21.5a2 2 0 0 0 3 0C28.5 30.5 34 23.5 34 17 34 7.6 26.4 0 17 0z" fill="${color}" stroke="#fff" stroke-width="2"/>
-        <!-- Birrete -->
-        <rect x="7" y="4" width="20" height="5" rx="1" fill="#fff" opacity="0.95"/>
-        <path d="M7 4l10-3 10 3H7z" fill="#fff" opacity="0.95"/>
-        <!-- Casita 2 pisos -->
-        <path d="M17 10l-7 4v7h14v-7l-7-4z" fill="#fff" opacity="0.95"/>
-        <rect x="13" y="12" width="8" height="9" rx="1" fill="${color}"/>
-        <rect x="14" y="19" width="6" height="3" rx="0.5" fill="#fff" opacity="0.9"/>
-        <rect x="11" y="13" width="3" height="3" rx="0.5" fill="${color}"/>
-        <rect x="20" y="13" width="3" height="3" rx="0.5" fill="${color}"/>
-      </svg>
-    `;
-  }
-}
-</script>
-</body>
-</html>
