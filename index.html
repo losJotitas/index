@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    /* 🌙 COLORES — AZUL NOCHE PROFUNDO */
     :root {
       --azul-fondo: #031224;
       --azul-medio: #0A2A54;
@@ -31,9 +30,6 @@
       overflow-x: hidden;
     }
 
-    /* ================================================== */
-    /* 🏠 FACHADA DE INICIO */
-    /* ================================================== */
     .fachada {
       width: 100%;
       min-height: 100vh;
@@ -99,7 +95,6 @@
       line-height: 1.3;
     }
 
-    /* 🔍 BUSCADOR */
     .contenedor-buscador {
       position: relative;
       z-index: 10;
@@ -162,7 +157,6 @@
     .sugerencia-item:last-child { border-bottom: none; }
     .sugerencia-item:hover { background: #E8F4FC; }
 
-    /* 📢 ANUNCIOS */
     .seccion-anuncios {
       position: relative;
       z-index: 1;
@@ -213,9 +207,6 @@
     }
     .boton-mapa:active { transform: translateY(-2px); }
 
-    /* ================================================== */
-    /* 🗺️ SECCIÓN DEL MAPA — AJUSTADO PARA CELULAR */
-    /* ================================================== */
     .seccion-mapa {
       width: 100%;
       height: 100vh;
@@ -281,9 +272,6 @@
 
     #map { flex: 1; width: 100%; min-height: 0; }
 
-    /* ================================================== */
-    /* 📍 PANEL DE RUTA — BOTONES VISIBLES SIN DESLIZAR */
-    /* ================================================== */
     .panel-ruta {
       background: linear-gradient(180deg, var(--azul-medio), var(--azul-fondo));
       border-top: 3px solid var(--verde-ruta);
@@ -364,7 +352,6 @@
       color: #FFD6D6;
     }
 
-    /* LEYENDA */
     .leyenda {
       background: rgba(3,18,36,0.95);
       padding: 8px 12px;
@@ -388,9 +375,6 @@
 
     .oculto { display: none !important; }
 
-    /* ================================================== */
-    /* 📱 AJUSTE DE VENTANAS EMERGENTES DEL MAPA */
-    /* ================================================== */
     .leaflet-popup-content-wrapper {
       border-radius: 12px;
       max-width: 300px !important;
@@ -418,9 +402,6 @@
 </head>
 <body>
 
-<!-- ================================================== -->
-<!-- 🏠 FACHADA DE INICIO -->
-<!-- ================================================== -->
 <div id="fachada" class="fachada">
   <div class="seccion-presentacion">
     <svg class="logo-grande" viewBox="0 0 120 80" fill="#ffffff">
@@ -455,9 +436,6 @@
   <button class="boton-mapa" id="btnIrMapa">🗺️ Ver todos los colegios</button>
 </div>
 
-<!-- ================================================== -->
-<!-- 🗺️ SECCIÓN MAPA + NAVEGACIÓN -->
-<!-- ================================================== -->
 <div id="seccionMapa" class="seccion-mapa oculto">
   <div class="encabezado-mapa">
     <button class="boton-volver" id="btnVolver">← Volver</button>
@@ -479,7 +457,6 @@
 
   <div id="map"></div>
 
-  <!-- 📍 PANEL DE RUTA — SIEMPRE VISIBLE SIN DESLIZAR -->
   <div id="panelRuta" class="panel-ruta oculto">
     <div class="info-ruta">
       <div class="dato-ruta">📍 <strong id="distanciaValor">—</strong> <span>km</span></div>
@@ -504,9 +481,6 @@
 </div>
 
 <script>
-// ==================================================
-// 📋 LISTA DE COLEGIOS
-// ==================================================
 const colegios = [
   { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg" },
   { id: 2, nombre: "I.E.I N° 108", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.846319, lng: -77.135186, referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/108.jpeg" },
@@ -528,9 +502,6 @@ const colegios = [
 
 const colores = { 4: '#FF5722', 6: '#4CAF50', 8: '#FFC107', 9: '#9C27B0' };
 
-// ==================================================
-// 🔍 VARIABLES GLOBALES
-// ==================================================
 let map, marcadores = [];
 let colegioDestino = null;
 let ubicacionUsuario = null;
@@ -543,9 +514,6 @@ const sugerencias = document.getElementById('sugerencias');
 const panelRuta = document.getElementById('panelRuta');
 const mensajeRuta = document.getElementById('mensajeRuta');
 
-// ==================================================
-// 📱 NAVEGACIÓN ENTRE PANTALLAS
-// ==================================================
 document.getElementById('btnIrMapa').addEventListener('click', () => {
   fachada.classList.add('oculto');
   seccionMapa.classList.remove('oculto');
@@ -560,9 +528,6 @@ document.getElementById('btnVolver').addEventListener('click', () => {
   window.scrollTo(0, 0);
 });
 
-// ==================================================
-// 🔍 BUSCADOR
-// ==================================================
 buscador.addEventListener('input', (e) => {
   const texto = e.target.value.trim().toLowerCase();
   sugerencias.innerHTML = '';
@@ -592,9 +557,6 @@ buscador.addEventListener('keydown', (e) => {
   }
 });
 
-// ==================================================
-// 🎯 ABRIR COLEGIO Y MOSTRAR PANEL DE RUTA
-// ==================================================
 function buscarYAbrirColegio(colegio) {
   colegioDestino = colegio;
   buscador.value = colegio.nombre;
@@ -611,9 +573,6 @@ function buscarYAbrirColegio(colegio) {
   window.scrollTo(0, 0);
 }
 
-// ==================================================
-// 📍 MOSTRAR PANEL DE RUTA Y CALCULAR DATOS
-// ==================================================
 function mostrarPanelRuta(colegio) {
   panelRuta.classList.remove('oculto');
   panelRuta.classList.remove('activo');
@@ -639,9 +598,6 @@ function mostrarPanelRuta(colegio) {
   }
 }
 
-// ==================================================
-// 📐 CALCULAR DISTANCIA Y TIEMPO ESTIMADO
-// ==================================================
 function calcularRuta(origen, destino) {
   const R = 6371;
   const dLat = (destino.lat - origen.lat) * Math.PI / 180;
@@ -669,12 +625,9 @@ function calcularRuta(origen, destino) {
   }).addTo(map).bindPopup('<b>Tu ubicación</b>');
 
   panelRuta.classList.add('activo');
-  mostrarMensaje('✅ Ubicación encontrada. Ruta aproximada calculada.', false);
+  mostrarMensaje('✅ Ubicación encontrada. Ruta calculada de forma aproximada.', false);
 }
 
-// ==================================================
-// 🔘 BOTONES DE NAVEGACIÓN
-// ==================================================
 document.getElementById('btnComoLlegar').addEventListener('click', () => {
   if (!colegioDestino) return;
   const url = `https://www.google.com/maps/search/?api=1&query=${colegioDestino.lat},${colegioDestino.lng}`;
@@ -712,9 +665,6 @@ function mostrarMensaje(texto, esError) {
   if (esError) mensajeRuta.classList.add('error');
 }
 
-// ==================================================
-// 🗺️ INICIALIZAR MAPA
-// ==================================================
 function inicializarMapa() {
   map = L.map('map').setView([-11.868, -77.125], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
@@ -737,9 +687,6 @@ function inicializarMapa() {
   });
 }
 
-// ==================================================
-// 📍 DIBUJAR MARCADORES — SIN BOTÓN "VER RUTA"
-// ==================================================
 function dibujarMarcadores(redFiltro) {
   marcadores.forEach(m => map.removeLayer(m));
   marcadores = [];
@@ -758,7 +705,6 @@ function dibujarMarcadores(redFiltro) {
       iconAnchor: [17, 40]
     });
 
-    // ✅ VENTANA DE INFORMACIÓN — MÁS COMPACTA Y SIN BOTÓN "VER RUTA"
     let contenido = `<div style="width:270px; font-size:0.85rem; line-height:1.4;">
       <h4 style="margin:0 0 6px 0; color:${color}; font-size:0.95rem; border-bottom:2px solid ${color}33; padding-bottom:4px;">${c.nombre}</h4>
       <p><b>Red:</b> N°${c.red} · ${c.zona}</p>
@@ -784,9 +730,6 @@ function dibujarMarcadores(redFiltro) {
   });
 }
 
-// ==================================================
-// 🎨 FUNCIÓN PARA CREAR ICONO: BIRRETE + CASITA
-// ==================================================
 function crearIconoColegio(color, esInicial) {
   if (esInicial) {
     return `
@@ -798,3 +741,22 @@ function crearIconoColegio(color, esInicial) {
         <rect x="14" y="16" width="6" height="5" rx="1" fill="${color}"/>
         <rect x="11" y="12" width="3" height="3" rx="0.5" fill="${color}"/>
         <rect x="20" y="12" width="3" height="3" rx="0.5" fill="${color}"/>
+      </svg>
+    `;
+  } else {
+    return `
+      <svg width="34" height="40" viewBox="0 0 34 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17 0C7.6 0 0 7.6 0 17c0 6.5 5.5 13.5 15.5 21.5a2 2 0 0 0 3 0C28.5 30.5 34 23.5 34 17 34 7.6 26.4 0 17 0z" fill="${color}" stroke="#fff" stroke-width="2"/>
+        <rect x="6" y="3" width="22" height="6" rx="1" fill="#fff" opacity="0.95"/>
+        <path d="M6 3l11-3 11 3H6z" fill="#fff" opacity="0.95"/>
+        <path d="M17 9l-7 5v6h14v-6l-7-5z" fill="#fff" opacity="0.95"/>
+        <rect x="13" y="17" width="8" height="6" rx="1" fill="${color}"/>
+        <rect x="9" y="12" width="4" height="4" rx="0.5" fill="${color}"/>
+        <rect x="21" y="12" width="4" height="4" rx="0.5" fill="${color}"/>
+      </svg>
+    `;
+  }
+}
+</script>
+</body>
+</html>
