@@ -32,6 +32,40 @@
       overflow-x: hidden;
     }
 
+    /* === SELLOS DE PROPIEDAD SEMI-TRANSPARENTES === */
+    .sello-jdah {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.45);
+      background: rgba(46, 168, 224, 0.15);
+      padding: 5px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(4px);
+    }
+    .sello-jotitas {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 1000;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.45);
+      background: rgba(46, 168, 224, 0.15);
+      padding: 5px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(4px);
+    }
+
     .fachada {
       width: 100%;
       min-height: 100vh;
@@ -63,6 +97,7 @@
       margin-bottom: 18px;
       width: 100%;
       max-width: 520px;
+      margin-top: 40px;
     }
     .logo-grande {
       width: 100px;
@@ -488,58 +523,64 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.92);
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.88);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      z-index: 3000;
       padding: 20px;
+      box-sizing: border-box;
     }
     .contenido-modal-foto {
-      max-width: 90%;
+      position: relative;
+      max-width: 90vw;
       max-height: 85vh;
+      background: #fff;
       border-radius: 12px;
       overflow: hidden;
-      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     }
     .contenido-modal-foto img {
       width: 100%;
       height: auto;
       max-height: 85vh;
       object-fit: contain;
+      display: block;
     }
     .btn-cerrar-foto {
       position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(0,0,0,0.6);
-      color: white;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
       border: none;
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       font-size: 18px;
       cursor: pointer;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+    .btn-cerrar-foto:hover {
+      background: rgba(0, 0, 0, 0.85);
+    }
     .sin-foto {
-      width: 300px;
-      height: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #2EA8E0, #0A2A54);
-      color: white;
-      border-radius: 12px;
+      padding: 40px 30px;
+      text-align: center;
+      color: #666;
     }
   </style>
 </head>
 <body>
+
+  <!-- SELLOS DE PROPIEDAD -->
+  <span class="sello-jdah">JDAH</span>
+  <span class="sello-jotitas">LOS JOTITAS</span>
 
 <div id="fachada" class="fachada">
   <div class="seccion-presentacion">
@@ -659,6 +700,9 @@ const colores = {
   9: '#3F51B5'
 };
 
+// =============================================
+// 🔵 BASE DE DATOS COMPLETA DE COLEGIOS
+// =============================================
 const colegios = [
   { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg", calificacion: 0 },
   { id: 2, nombre: "I.E.I N° 108", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.846319, lng: -77.135186, referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/108.jpeg", calificacion: 0 },
@@ -677,8 +721,7 @@ const colegios = [
   { id: 15, nombre: "I.E N° 5091 Hijos de Grau", red: 9, zona: "Angamos", niveles: "Primaria", lat: -11.8863777, lng: -77.1324341, referencia: "MZ O S/N Hijos del Almirante Miguel Grau — III Sector Angamos", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5091_Hijos_de_Grau.jpeg", calificacion: 0 },
   { id: 16, nombre: "Coprodeli La Providencia Virgen de Chapí", red: 9, zona: "Angamos", niveles: "Cuna Jardín", lat: -11.8853088, lng: -77.1333501, referencia: "AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/Coprodeli_virgen_de_Chapi.jpeg", calificacion: 0 }
 ];
-
-let map, marcadores = [];
+  let map, marcadores = [];
 let colegioDestino = null;
 let ubicacionUsuario = null;
 let rutaDibujada = null;
@@ -829,14 +872,13 @@ document.getElementById('btnVerFotoFachada').addEventListener('click', () => {
 function abrirModalFoto(colegio) {
   const modal = document.createElement('div');
   modal.className = 'modal-foto';
-  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
 
   let contenido = '';
-  if (colegio.foto && colegio.foto !== '') {
+  if (colegio.foto && colegio.foto.trim() !== '') {
     contenido = `
       <div class="contenido-modal-foto">
-       <button class="btn-cerrar-foto" onclick="this.closest('.modal-foto').remove()">✕</button>
-        <img src="${colegio.foto}" alt="Foto de fachada de ${colegio.nombre}" onerror="this.parentElement.innerHTML='<div class=\'sin-foto\'><h4>📷 Sin foto disponible</h4><p>Próximamente agregaremos la imagen</p></div>'">
+        <button class="btn-cerrar-foto" onclick="this.closest('.modal-foto').remove()">✕</button>
+        <img src="${colegio.foto}" alt="Foto de fachada de ${colegio.nombre}" onerror="this.parentElement.parentElement.innerHTML='<div class=\\'contenido-modal-foto\\'><button class=\\'btn-cerrar-foto\\' onclick=\\'this.closest(\\'.modal-foto\\').remove()\\'>✕</button><div class=\\'sin-foto\\'><h4>📷 Sin foto disponible</h4><p>Próximamente agregaremos la imagen</p></div></div>'">
       </div>
     `;
   } else {
@@ -850,8 +892,13 @@ function abrirModalFoto(colegio) {
       </div>
     `;
   }
+
   modal.innerHTML = contenido;
   document.body.appendChild(modal);
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) modal.remove();
+  });
 }
 
 function mostrarMensaje(texto, esError = false) {
@@ -911,7 +958,8 @@ function cargarMarcadores(lista) {
     marcadores.push(marcador);
   });
 }
-  function crearPopup(colegio) {
+
+function crearPopup(colegio) {
   const calificacionActual = calificacionesGuardadas[colegio.id] || colegio.calificacion;
   const estrellasHTML = generarEstrellas(colegio.id, calificacionActual);
 
@@ -979,7 +1027,6 @@ function obtenerClaseCalificacion(cantidad) {
   return '';
 }
 
-// Cierra etiquetas abiertas
 </script>
 </body>
 </html>
