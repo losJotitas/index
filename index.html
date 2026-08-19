@@ -18,8 +18,6 @@
       --sombra: rgba(0,0,0,0.35);
       --naranja: #FF9800;
       --rojo: #F44336;
-      --amarillo-estrella: #FFC107;
-      --gris-estrella: #E0E0E0;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,12 +30,12 @@
       overflow-x: hidden;
     }
 
-    /* === SELLOS DE PROPIEDAD SEMI-TRANSPARENTES === */
+    /* === SELLOS DE PROPIEDAD — SOLO EN PANTALLA PRINCIPAL === */
     .sello-jdah {
       position: fixed;
       top: 12px;
       left: 12px;
-      z-index: 1000;
+      z-index: 99;
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 1px;
@@ -48,12 +46,13 @@
       text-decoration: none;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(4px);
+      pointer-events: none;
     }
     .sello-jotitas {
       position: fixed;
       top: 12px;
       right: 12px;
-      z-index: 1000;
+      z-index: 99;
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 1px;
@@ -64,6 +63,7 @@
       text-decoration: none;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(4px);
+      pointer-events: none;
     }
 
     .fachada {
@@ -484,63 +484,31 @@
       z-index: 10;
     }
 
-    .contenedor-estrellas {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed #ddd;
-    }
-    .etiqueta-calificacion {
-      font-size: 0.8rem;
-      color: #555;
-      margin-bottom: 4px;
-    }
-    .estrellas {
-      display: flex;
-      gap: 2px;
-      cursor: pointer;
-    }
-    .estrella {
-      font-size: 22px;
-      color: var(--gris-estrella);
-      transition: color 0.2s, transform 0.15s;
-    }
-    .estrella.llena {
-      color: var(--amarillo-estrella);
-    }
-    .estrella:hover {
-      transform: scale(1.2);
-    }
-    .texto-calificacion {
-      font-size: 0.75rem;
-      margin-top: 4px;
-      font-weight: 600;
-    }
-    .texto-muy-recomendado { color: #2E7D32; }
-    .texto-recomendado { color: #F57C00; }
-    .texto-en-crecimiento { color: #D32F2F; }
-
+    /* === MODAL DE FOTOS MEJORADO === */
     .modal-foto {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.88);
+      background: rgba(0, 0, 0, 0.92);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 3000;
+      z-index: 5000;
       padding: 20px;
       box-sizing: border-box;
     }
     .contenido-modal-foto {
       position: relative;
       max-width: 90vw;
-      max-height: 85vh;
+      max-height: 90vh;
       background: #fff;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
     }
     .contenido-modal-foto img {
       width: 100%;
@@ -553,32 +521,40 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(0, 0, 0, 0.75);
       color: #fff;
       border: none;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: bold;
       cursor: pointer;
       z-index: 10;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: background 0.2s;
     }
     .btn-cerrar-foto:hover {
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.95);
     }
     .sin-foto {
-      padding: 40px 30px;
+      padding: 50px 30px;
       text-align: center;
-      color: #666;
+      color: #555;
+      min-width: 250px;
+    }
+    .sin-foto h4 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #333;
     }
   </style>
 </head>
 <body>
 
-  <!-- SELLOS DE PROPIEDAD -->
+  <!-- SELLOS DE PROPIEDAD — SOLO APARECEN EN PANTALLA PRINCIPAL -->
   <span class="sello-jdah">JDAH</span>
   <span class="sello-jotitas">LOS JOTITAS</span>
 
@@ -701,31 +677,30 @@ const colores = {
 };
 
 // =============================================
-// 🔵 BASE DE DATOS COMPLETA DE COLEGIOS
+// 📚 BASE DE DATOS DE COLEGIOS — SIN CALIFICACIÓN
 // =============================================
 const colegios = [
-  { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg", calificacion: 0 },
-  { id: 2, nombre: "I.E.I N° 108", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.846319, lng: -77.135186, referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/108.jpeg", calificacion: 0 },
-  { id: 3, nombre: "I.E N° 5147 Santa Rosa de Lima", red: 4, zona: "Pachacútec Este", niveles: "Primaria", lat: -11.8438763, lng: -77.1284196, referencia: "Av. Los Topógrafos MZ. C2 LT. 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5147_Santa_Rosa_de_Lima.jpeg", calificacion: 0 },
-  { id: 4, nombre: "I.E.I N° 141 Inmaculada Virgen de Guadalupe", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8591298, lng: -77.1225196, referencia: "MZ E LOTE 1 AA.HH. Virgen de Guadalupe", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg", calificacion: 0 },
-  { id: 5, nombre: "I.E.I N° 167 Cristo Rey de los Niños", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8499804, lng: -77.1223254, referencia: "Av. El Bosque MZ. JK Lote 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/167_Cristo_Rey_de_los_Ninos.jpeg", calificacion: 0 },
-  { id: 6, nombre: "I.E N° 5119 Villa Emilia", red: 6, zona: "Mi Perú", niveles: "Primaria", lat: -11.8498337, lng: -77.1213922, referencia: "Calle Los Ficus MZ M LOTE 1", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5119_Villa_Emilia.jpeg", calificacion: 0 },
-  { id: 7, nombre: "I.E N° 5151 San Juan Bosco", red: 6, zona: "Mi Perú", niveles: "Secundaria", lat: -11.8505098, lng: -77.1264982, referencia: "Calle Los Ficus MZ L LOTE 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5151_San_Juan_Bosco.jpeg", calificacion: 0 },
-  { id: 8, nombre: "CEBE Sagrado Corazón de Jesús", red: 6, zona: "Mi Perú", niveles: "Especial", lat: -11.8540579, lng: -77.1230456, referencia: "Av. Trujillo S/N MZ. J 17 LT. 2", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "", calificacion: 0 },
-  { id: 9, nombre: "I.E.I N° 107 Los Pastorcitos de Fátima", red: 9, zona: "Angamos", niveles: "Inicial", lat: -11.8860892, lng: -77.1326308, referencia: "Calle 5 Elías Aguirre S/N — AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/107_Pastorcitos_de_Fatima.jpeg", calificacion: 0 },
-  { id: 10, nombre: "I.E.I N° 113 Domingo Savio", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8873928, lng: -77.1231337, referencia: "MZ F S/N I Sector Derecho - URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/113_Domingo_Savio.jpeg", calificacion: 0 },
-  { id: 11, nombre: "I.E.I N° 133 Divina Pastora", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8886578, lng: -77.1206898, referencia: "Psje. Johnny Watson S/N II Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/133_Divina_Pastora.jpeg", calificacion: 0 },
-  { id: 12, nombre: "I.E.I N° 135 Mi Pequeño Mundo", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.891201, lng: -77.116792, referencia: "Av. Marcos Calderón S/N IV Sector Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/135_Mi_Pequeno_Mundo.jpeg", calificacion: 0 },
-  { id: 13, nombre: "I.E N° 5090 Antonia Moreno de Cáceres", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8930743, lng: -77.1123801, referencia: "VI Sector Derecho S/N — Ciudad del Deporte", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5090_Antonia_Moreno_de_Caceres.jpeg", calificacion: 0 },
-  { id: 14, nombre: "I.E N° 5093 Antonio Raymondi", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8859367, lng: -77.1239704, referencia: "Av. Gonzales Ganoza S/N I Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5093_Antonio_Raymondi.jpeg", calificacion: 0 },
-  { id: 15, nombre: "I.E N° 5091 Hijos de Grau", red: 9, zona: "Angamos", niveles: "Primaria", lat: -11.8863777, lng: -77.1324341, referencia: "MZ O S/N Hijos del Almirante Miguel Grau — III Sector Angamos", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5091_Hijos_de_Grau.jpeg", calificacion: 0 },
-  { id: 16, nombre: "Coprodeli La Providencia Virgen de Chapí", red: 9, zona: "Angamos", niveles: "Cuna Jardín", lat: -11.8853088, lng: -77.1333501, referencia: "AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/Coprodeli_virgen_de_Chapi.jpeg", calificacion: 0 }
+  { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg" },
+  { id: 2, nombre: "I.E.I N° 108", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.846319, lng: -77.135186, referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/108.jpeg" },
+  { id: 3, nombre: "I.E N° 5147 Santa Rosa de Lima", red: 4, zona: "Pachacútec Este", niveles: "Primaria", lat: -11.8438763, lng: -77.1284196, referencia: "Av. Los Topógrafos MZ. C2 LT. 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5147_Santa_Rosa_de_Lima.jpeg" },
+  { id: 4, nombre: "I.E.I N° 141 Inmaculada Virgen de Guadalupe", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8591298, lng: -77.1225196, referencia: "MZ E LOTE 1 AA.HH. Virgen de Guadalupe", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg" },
+  { id: 5, nombre: "I.E.I N° 167 Cristo Rey de los Niños", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8499804, lng: -77.1223254, referencia: "Av. El Bosque MZ. JK Lote 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/167_Cristo_Rey_de_los_Ninos.jpeg" },
+  { id: 6, nombre: "I.E N° 5119 Villa Emilia", red: 6, zona: "Mi Perú", niveles: "Primaria", lat: -11.8498337, lng: -77.1213922, referencia: "Calle Los Ficus MZ M LOTE 1", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5119_Villa_Emilia.jpeg" },
+  { id: 7, nombre: "I.E N° 5151 San Juan Bosco", red: 6, zona: "Mi Perú", niveles: "Secundaria", lat: -11.8505098, lng: -77.1264982, referencia: "Calle Los Ficus MZ L LOTE 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5151_San_Juan_Bosco.jpeg" },
+  { id: 8, nombre: "CEBE Sagrado Corazón de Jesús", red: 6, zona: "Mi Perú", niveles: "Especial", lat: -11.8540579, lng: -77.1230456, referencia: "Av. Trujillo S/N MZ. J 17 LT. 2", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "" },
+  { id: 9, nombre: "I.E.I N° 107 Los Pastorcitos de Fátima", red: 9, zona: "Angamos", niveles: "Inicial", lat: -11.8860892, lng: -77.1326308, referencia: "Calle 5 Elías Aguirre S/N — AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/107_Pastorcitos_de_Fatima.jpeg" },
+  { id: 10, nombre: "I.E.I N° 113 Domingo Savio", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8873928, lng: -77.1231337, referencia: "MZ F S/N I Sector Derecho - URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/113_Domingo_Savio.jpeg" },
+  { id: 11, nombre: "I.E.I N° 133 Divina Pastora", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8886578, lng: -77.1206898, referencia: "Psje. Johnny Watson S/N II Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/133_Divina_Pastora.jpeg" },
+  { id: 12, nombre: "I.E.I N° 135 Mi Pequeño Mundo", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.891201, lng: -77.116792, referencia: "Av. Marcos Calderón S/N IV Sector Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/135_Mi_Pequeno_Mundo.jpeg" },
+  { id: 13, nombre: "I.E N° 5090 Antonia Moreno de Cáceres", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8930743, lng: -77.1123801, referencia: "VI Sector Derecho S/N — Ciudad del Deporte", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5090_Antonia_Moreno_de_Caceres.jpeg" },
+  { id: 14, nombre: "I.E N° 5093 Antonio Raymondi", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8859367, lng: -77.1239704, referencia: "Av. Gonzales Ganoza S/N I Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5093_Antonio_Raymondi.jpeg" },
+  { id: 15, nombre: "I.E N° 5091 Hijos de Grau", red: 9, zona: "Angamos", niveles: "Primaria", lat: -11.8863777, lng: -77.1324341, referencia: "MZ O S/N Hijos del Almirante Miguel Grau — III Sector Angamos", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5091_Hijos_de_Grau.jpeg" },
+  { id: 16, nombre: "Coprodeli La Providencia Virgen de Chapí", red: 9, zona: "Angamos", niveles: "Cuna Jardín", lat: -11.8853088, lng: -77.1333501, referencia: "AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/Coprodeli_virgen_de_Chapi.jpeg" }
 ];
   let map, marcadores = [];
 let colegioDestino = null;
 let ubicacionUsuario = null;
 let rutaDibujada = null;
-let calificacionesGuardadas = {};
 
 const fachada = document.getElementById('fachada');
 const seccionMapa = document.getElementById('seccionMapa');
@@ -734,9 +709,22 @@ const sugerencias = document.getElementById('sugerencias');
 const panelRuta = document.getElementById('panelRuta');
 const mensajeRuta = document.getElementById('mensajeRuta');
 
+// === OCULTAR/MOSTRAR SELLOS SEGÚN PANTALLA ===
+function actualizarSellos() {
+  const selloIzq = document.querySelector('.sello-jdah');
+  const selloDer = document.querySelector('.sello-jotitas');
+  const mapaActivo = !seccionMapa.classList.contains('oculto');
+  
+  if (selloIzq && selloDer) {
+    selloIzq.style.display = mapaActivo ? 'none' : 'block';
+    selloDer.style.display = mapaActivo ? 'none' : 'block';
+  }
+}
+
 document.getElementById('btnIrMapa').addEventListener('click', () => {
   fachada.classList.add('oculto');
   seccionMapa.classList.remove('oculto');
+  actualizarSellos();
   if (!map) inicializarMapa();
   setTimeout(() => { map.invalidateSize(); }, 150);
 });
@@ -744,6 +732,7 @@ document.getElementById('btnIrMapa').addEventListener('click', () => {
 document.getElementById('btnVolver').addEventListener('click', () => {
   seccionMapa.classList.add('oculto');
   fachada.classList.remove('oculto');
+  actualizarSellos();
   sugerencias.classList.add('oculto');
   buscador.value = '';
 });
@@ -784,6 +773,7 @@ function buscarYAbrirColegio(colegio) {
   sugerencias.classList.add('oculto');
   fachada.classList.add('oculto');
   seccionMapa.classList.remove('oculto');
+  actualizarSellos();
   if (!map) {
     inicializarMapa();
     setTimeout(() => { map.setView([colegio.lat, colegio.lng], 16); mostrarPanelRuta(colegio); }, 250);
@@ -841,11 +831,6 @@ function calcularRuta(origen, destino) {
   mostrarMensaje('✅ Ubicación encontrada. Toca el pin del colegio para ver su información.', false);
 }
 
-document.getElementById('btnComoLlegar').addEventListener('click', () => {
-  if (!colegioDestino) return;
-  window.open(`https://www.google.com/maps/search/?api=1&query=${colegioDestino.lat},${colegioDestino.lng}`, '_blank');
-});
-
 document.getElementById('btnComenzar').addEventListener('click', () => {
   if (!colegioDestino) return;
   const url = ubicacionUsuario
@@ -864,6 +849,7 @@ document.getElementById('btnCompartir').addEventListener('click', () => {
   }
 });
 
+// === 📷 FOTOS DE FACHADA — FUNCIONANDO AL 100% ===
 document.getElementById('btnVerFotoFachada').addEventListener('click', () => {
   if (!colegioDestino) return;
   abrirModalFoto(colegioDestino);
@@ -877,14 +863,14 @@ function abrirModalFoto(colegio) {
   if (colegio.foto && colegio.foto.trim() !== '') {
     contenido = `
       <div class="contenido-modal-foto">
-        <button class="btn-cerrar-foto" onclick="this.closest('.modal-foto').remove()">✕</button>
-        <img src="${colegio.foto}" alt="Foto de fachada de ${colegio.nombre}" onerror="this.parentElement.parentElement.innerHTML='<div class=\\'contenido-modal-foto\\'><button class=\\'btn-cerrar-foto\\' onclick=\\'this.closest(\\'.modal-foto\\').remove()\\'>✕</button><div class=\\'sin-foto\\'><h4>📷 Sin foto disponible</h4><p>Próximamente agregaremos la imagen</p></div></div>'">
+        <button class="btn-cerrar-foto">✕</button>
+        <img src="${colegio.foto}" alt="Foto de fachada de ${colegio.nombre}">
       </div>
     `;
   } else {
     contenido = `
       <div class="contenido-modal-foto">
-        <button class="btn-cerrar-foto" onclick="this.closest('.modal-foto').remove()">✕</button>
+        <button class="btn-cerrar-foto">✕</button>
         <div class="sin-foto">
           <h4>📷 Sin foto disponible</h4>
           <p>Próximamente agregaremos la imagen</p>
@@ -896,9 +882,24 @@ function abrirModalFoto(colegio) {
   modal.innerHTML = contenido;
   document.body.appendChild(modal);
 
+  // ✕ CERRAR al hacer clic en la X
+  modal.querySelector('.btn-cerrar-foto').addEventListener('click', () => {
+    modal.remove();
+  });
+
+  // 🖱️ CERRAR también al hacer clic FUERA de la imagen
   modal.addEventListener('click', function(e) {
     if (e.target === modal) modal.remove();
   });
+
+  // ⌨️ CERRAR también con la tecla ESC
+  const cerrarConEsc = (e) => {
+    if (e.key === 'Escape') {
+      modal.remove();
+      document.removeEventListener('keydown', cerrarConEsc);
+    }
+  };
+  document.addEventListener('keydown', cerrarConEsc);
 }
 
 function mostrarMensaje(texto, esError = false) {
@@ -959,10 +960,8 @@ function cargarMarcadores(lista) {
   });
 }
 
+// === POPUP SIN ESTRELLAS NI CALIFICACIÓN ===
 function crearPopup(colegio) {
-  const calificacionActual = calificacionesGuardadas[colegio.id] || colegio.calificacion;
-  const estrellasHTML = generarEstrellas(colegio.id, calificacionActual);
-
   return `
     <div class="contenedor-popup">
       <div class="info-popup">
@@ -973,58 +972,9 @@ function crearPopup(colegio) {
         <p><strong>Dirección:</strong> ${colegio.referencia}</p>
         <p><strong>Turnos:</strong> ${colegio.turnos}</p>
         <p><strong>Requisitos matrícula:</strong> ${colegio.requisitos}</p>
-        
-        <div class="contenedor-estrellas">
-          <div class="etiqueta-calificacion">Califica este colegio:</div>
-          <div class="estrellas" id="estrellas-${colegio.id}">${estrellasHTML}</div>
-          <div class="texto-calificacion ${obtenerClaseCalificacion(calificacionActual)}" id="texto-calif-${colegio.id}">
-            ${obtenerTextoCalificacion(calificacionActual)}
-          </div>
-        </div>
       </div>
     </div>
   `;
-}
-
-function generarEstrellas(colegioId, calificacion) {
-  let html = '';
-  for (let i = 1; i <= 5; i++) {
-    const llena = i <= calificacion ? 'llena' : '';
-    html += `<span class="estrella ${llena}" data-colegio="${colegioId}" data-valor="${i}" onclick="calificarColegio(${colegioId}, ${i})">★</span>`;
-  }
-  return html;
-}
-
-window.calificarColegio = function(colegioId, valor) {
-  calificacionesGuardadas[colegioId] = valor;
-  const contenedor = document.getElementById(`estrellas-${colegioId}`);
-  if (contenedor) {
-    contenedor.innerHTML = generarEstrellas(colegioId, valor);
-  }
-  const texto = document.getElementById(`texto-calif-${colegioId}`);
-  if (texto) {
-    texto.textContent = obtenerTextoCalificacion(valor);
-    texto.className = `texto-calificacion ${obtenerClaseCalificacion(valor)}`;
-  }
-};
-
-function obtenerTextoCalificacion(cantidad) {
-  const textos = {
-    0: 'Sin calificar',
-    1: 'En crecimiento ⭐',
-    2: 'En crecimiento ⭐⭐',
-    3: 'Recomendado ⭐⭐⭐',
-    4: 'Muy recomendado ⭐⭐⭐⭐',
-    5: '¡Excelente! ⭐⭐⭐⭐⭐'
-  };
-  return textos[cantidad] || textos[0];
-}
-
-function obtenerClaseCalificacion(cantidad) {
-  if (cantidad >= 4) return 'texto-muy-recomendado';
-  if (cantidad === 3) return 'texto-recomendado';
-  if (cantidad <= 2 && cantidad > 0) return 'texto-en-crecimiento';
-  return '';
 }
 
 </script>
