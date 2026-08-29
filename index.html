@@ -3,385 +3,188 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
+  <title>Directorio de Colegios - Mapa Interactivo</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-    body { background-color: #06223F; color: #fff; }
-
-    /* ========== PANTALLA PRINCIPAL ========== */
-    .pantalla-principal {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background: linear-gradient(135deg, #06223F 0%, #0B3C73 100%);
-      display: flex; flex-direction: column; align-items: center; z-index: 1000;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; }
+    #map { width: 100%; height: 100vh; }
+    .leyenda {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      font-size: 13px;
+      line-height: 1.5;
     }
-    .pantalla-principal.oculta { opacity: 0; transform: translateY(-100%); pointer-events: none; }
-
-    .logo-contenedor { margin-top: 6vh; text-align: center; }
-    .logo-circulo {
-      width: 140px; height: 140px; border-radius: 50%;
-      background: linear-gradient(145deg, #FFD700, #FFA500);
-      display: flex; align-items: center; justify-content: center; margin: 0 auto;
-      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+    .leyenda h4 { margin-bottom: 8px; font-size: 14px; }
+    .popup-content { min-width: 300px; }
+    .popup-content h3 { font-size: 15px; margin-bottom: 6px; color: #222; }
+    .popup-content p { font-size: 13px; margin: 3px 0; }
+    .codigo { background: #f5f5f5; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-weight: bold; }
+    .vacantes { margin-top: 8px; padding-top: 6px; border-top: 1px solid #eee; font-size: 12px; }
+    .aviso {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      color: #856404;
+      padding: 10px 16px;
+      border-radius: 6px;
+      z-index: 1000;
+      display: none;
     }
-    .logo-texto { font-size: 60px; }
-    h1 {
-      margin-top: 20px; font-size: 28px; color: #FFD700;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-    .lema { font-size: 14px; color: #B0D0F0; margin-top: 6px; }
-
-    .buscador-contenedor {
-      margin-top: 30px; width: 90%; max-width: 450px; position: relative;
-    }
-    .buscador {
-      width: 100%; padding: 14px 18px 14px 48px; border-radius: 50px; border: none;
-      font-size: 16px; background: rgba(255,255,255,0.95); color: #06223F;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2); outline: none;
-    }
-    .lupa {
-      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-      font-size: 20px; color: #06223F;
-    }
-    .sugerencias {
-      position: absolute; top: 52px; left: 0; right: 0;
-      background: rgba(255,255,255,0.98); border-radius: 12px;
-      max-height: 300px; overflow-y: auto; z-index: 10; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-    }
-    .sugerencia {
-      padding: 12px 18px; color: #06223F; cursor: pointer; border-bottom: 1px solid #eee;
-    }
-    .sugerencia:hover { background: #E8F0FC; }
-
-    .redes-filtro {
-      margin-top: 25px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-      width: 90%; max-width: 500px;
-    }
-    .boton-red {
-      padding: 8px 14px; border-radius: 20px; border: 1px solid #FFD700;
-      background: rgba(255,215,0,0.15); color: #FFD700; font-size: 13px; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .boton-red.activo { background: #FFD700; color: #06223F; font-weight: bold; }
-
-    .anuncios-lado-izq {
-      position: absolute; left: 10px; top: 220px; width: 28%;
-      background: rgba(255,255,255,0.08); border-radius: 10px; padding: 10px;
-      font-size: 11px; color: #B0D0F0; max-height: 40vh; overflow-y: auto;
-    }
-    .boton-ver-todos {
-      position: absolute; right: 15px; top: 220px; width: 26%;
-      padding: 12px; border-radius: 10px; border: none;
-      background: linear-gradient(135deg, #FFD700, #FFA500); color: #06223F;
-      font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(255,215,0,0.3);
-    }
-
-    .sello-jdah { position: absolute; top: 10px; left: 12px; font-size: 13px; color: rgba(255,255,255,0.35); font-weight: bold; }
-    .sello-jotitas { position: absolute; top: 10px; right: 12px; font-size: 13px; color: rgba(255,255,255,0.35); font-weight: bold; }
-
-    /* ========== PANTALLA MAPA ========== */
-    .pantalla-mapa {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      display: none; flex-direction: column; z-index: 500;
-    }
-    .cabecera-mapa {
-      padding: 10px 15px; background: #06223F; display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-    .boton-volver {
-      background: #FFD700; color: #06223F; border: none; padding: 8px 14px;
-      border-radius: 6px; font-weight: bold; cursor: pointer;
-    }
-    .titulo-mapa { font-size: 16px; color: #FFD700; }
-    #mapa { flex: 1; }
-
-    /* ========== VENTANA INFORMACIÓN ========== */
-    .ventana-info {
-      position: fixed; bottom: 0; left: 0; right: 0; max-height: 55vh;
-      background: rgba(6, 34, 63, 0.96); border-top-left-radius: 18px; border-top-right-radius: 18px;
-      padding: 18px; transform: translateY(100%); transition: transform 0.3s ease;
-      overflow-y: auto; z-index: 600; border: 1px solid rgba(255,215,0,0.3);
-    }
-    .ventana-info.mostrar { transform: translateY(0); }
-    .cerrar-ventana {
-      float: right; background: #FFD700; color: #06223F; border: none;
-      width: 28px; height: 28px; border-radius: 50%; font-weight: bold; cursor: pointer;
-      font-size: 16px; line-height: 28px; text-align: center;
-    }
-    .info-nombre { font-size: 17px; color: #FFD700; font-weight: bold; margin-bottom: 8px; }
-    .info-dato { font-size: 13px; margin-bottom: 4px; color: #E0E8F0; }
-    .info-etiqueta { color: #FFD700; font-weight: bold; }
-    .contenedor-foto { margin-top: 10px; position: relative; }
-    .foto-colegio { width: 100%; border-radius: 10px; display: none; }
-    .cerrar-foto {
-      position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.6); color: #fff;
-      border: none; width: 28px; height: 28px; border-radius: 50%; font-size: 18px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-    }
-    .botones-ruta { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-    .boton-ruta {
-      padding: 9px 14px; border-radius: 8px; border: none; font-size: 13px;
-      font-weight: bold; cursor: pointer; flex: 1; min-width: 100px;
-    }
-    .boton-como-llegar { background: #FFD700; color: #06223F; }
-    .boton-iniciar { background: #28C76F; color: #fff; }
-    .boton-compartir { background: #0091FF; color: #fff; }
-
-    /* Marcador personalizado */
-    .marcador-pin { background: #FFD700; border: 3px solid #fff; border-radius: 50%; }
-    .marcador-seleccionado { background: #FF1493; border: 3px solid #fff; border-radius: 50%; }
   </style>
 </head>
 <body>
 
-<!-- ==================================================
-     PANTALLA PRINCIPAL
-     ================================================== -->
-<div class="pantalla-principal" id="pantallaPrincipal">
-  <div class="sello-jdah">JDAH</div>
-  <div class="sello-jotitas">LOS JOTITAS</div>
+  <div id="aviso" class="aviso"></div>
+  <div id="map"></div>
 
-  <div class="logo-contenedor">
-    <div class="logo-circulo"><span class="logo-texto">🎓</span></div>
-    <h1>UBIKTUCOLEYA!</h1>
-    <p class="lema">Encuentra tu colegio, encuentra el camino</p>
-  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-  <div class="buscador-contenedor">
-    <span class="lupa">🔍</span>
-    <input type="text" class="buscador" id="buscador" placeholder="Escribe el nombre del colegio...">
-    <div class="sugerencias" id="sugerencias"></div>
-  </div>
+  <script>
+    // ========== CONFIGURACIÓN ==========
+    const ARCHIVO_DATOS = "datos-colegios.csv";
+    const LAT_CENTRO = -12.0464;
+    const LON_CENTRO = -77.0428;
+    const ZOOM_INICIAL = 11;
 
-  <div class="redes-filtro" id="redesFiltro">
-    <button class="boton-red activo" data-red="TODAS">TODAS</button>
-    <button class="boton-red" data-red="RED N° 01">Red N° 01</button>
-  </div>
+    // Colores por Red
+    const COLORES_RED = {
+      "01": "#d32f2f",
+      "02": "#c2185b",
+      "03": "#7b1fa2",
+      "04": "#303f9f",
+      "05": "#1976d2",
+      "06": "#00897b",
+      "07": "#388e3c",
+      "08": "#f57c00",
+      "09": "#424242"
+    };
 
-  <div class="anuncios-lado-izq">
-    <strong>📢 Comunicados</strong><br>
-    • Matrícula abierta 2026<br>
-    • Reunión de padres: 30 ago<br>
-    • Entrega de notas: 15 sep
-  </div>
+    // ========== INICIAR MAPA ==========
+    const map = L.map('map').setView([LAT_CENTRO, LON_CENTRO], ZOOM_INICIAL);
 
-  <button class="boton-ver-todos" id="btnVerTodos">📋 Ver todos los colegios</button>
-</div>
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-<!-- ==================================================
-     PANTALLA DEL MAPA
-     ================================================== -->
-<div class="pantalla-mapa" id="pantallaMapa">
-  <div class="cabecera-mapa">
-    <button class="boton-volver" id="btnVolver">← Volver</button>
-    <span class="titulo-mapa">UBIKTUCOLEYA! - Mapa de ubicaciones</span>
-  </div>
-  <div id="mapa"></div>
-</div>
+    function mostrarAviso(mensaje, tiempo = 6000) {
+      const aviso = document.getElementById('aviso');
+      aviso.textContent = mensaje;
+      aviso.style.display = 'block';
+      setTimeout(() => aviso.style.display = 'none', tiempo);
+    }
 
-<!-- ==================================================
-     VENTANA DE INFORMACIÓN
-     ================================================== -->
-<div class="ventana-info" id="ventanaInfo">
-  <button class="cerrar-ventana" id="btnCerrarInfo">×</button>
-  <h3 class="info-nombre" id="infoNombre"></h3>
-  <p class="info-dato"><span class="info-etiqueta">Red y Zona:</span> <span id="infoRed"></span></p>
-  <p class="info-dato"><span class="info-etiqueta">Nivel:</span> <span id="infoNivel"></span></p>
-  <p class="info-dato"><span class="info-etiqueta">Dirección:</span> <span id="infoDireccion"></span></p>
-  <p class="info-dato"><span class="info-etiqueta">Turno:</span> <span id="infoTurno"></span></p>
-  <p class="info-dato"><span class="info-etiqueta">Talleres / JEC:</span> <span id="infoTaller"></span></p>
-  <p class="info-dato"><span class="info-etiqueta">Requisitos de matrícula:</span> <span id="infoRequisitos"></span></p>
+    function crearMarcadorColor(color) {
+      return L.divIcon({
+        html: `<div style="background:${color};width:14px;height:14px;border-radius:50%;border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.3);"></div>`,
+        className: "",
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
+      });
+    }
 
-  <div class="contenedor-foto" id="contenedorFoto" style="display:none;">
-    <button class="cerrar-foto" id="btnCerrarFoto">×</button>
-    <img src="" alt="Foto fachada" class="foto-colegio" id="fotoColegio" style="display:block;">
-  </div>
+    // ========== CARGAR DATOS ==========
+    fetch(ARCHIVO_DATOS)
+      .then(respuesta => {
+        if (!respuesta.ok) throw new Error(`No se encontró: ${ARCHIVO_DATOS}`);
+        return respuesta.text();
+      })
+      .then(textoCSV => {
+        const resultado = Papa.parse(textoCSV, {
+          header: true,
+          skipEmptyLines: true,
+          delimiter: ","
+        });
 
-  <div class="botones-ruta">
-    <button class="boton-ruta boton-como-llegar" id="btnComoLlegar">🧭 Cómo acercarse</button>
-    <button class="boton-ruta boton-iniciar" id="btnIniciarRuta">▶ Comenzar ruta</button>
-    <button class="boton-ruta boton-compartir" id="btnCompartir">🔗 Compartir</button>
-  </div>
-</div>
+        const filas = resultado.data;
+        if (filas.length === 0) {
+          mostrarAviso("⚠️ Archivo vacío o formato incorrecto.");
+          return;
+        }
 
-<!-- ==================================================
-     BASE DE DATOS DE COLEGIOS
-     ================================================== -->
-<script>
-const colegios = [
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N°121 ANGELITOS DE PACHACÚTEC",nivel:"INICIAL",direccion:"MZ I 2 SECTOR A PACHACÚTEC (ALTURA DE POSTA MÉDICA)",lat:-11.830639,lng:-77.160028,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del estudiante y representante, partida de nacimiento original, certificado de estudios, 2 fotos tamaño carnet, copia de recibo de luz o agua",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N°123 VIRGEN DE LA ASUNCIÓN",nivel:"INICIAL",direccion:"MZ. N1 LOTE 7 SECTOR E PACHACÚTEC",lat:-11.836133,lng:-77.158953,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de vacunación, 2 fotos carnet, copia de recibo de suministro",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 125 DIVINO NIÑO JESÚS",nivel:"INICIAL",direccion:"MZ. 4 LOTE 1 PARCELA K PACHACÚTEC",lat:-11.847733,lng:-77.128308,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, ficha única de matrícula, certificado de salud, 2 fotos",foto:"fotos/125_Divino_Nino_Jesus.jpeg"},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 142",nivel:"INICIAL",direccion:"MZ D 8 LT. 1 GRUPO RESIDENCIAL B-4 SECTOR B PACHACÚTEC (ANTES DE LLEGAR AL PARADERO 41)",lat:-11.830639,lng:-77.164167,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, constancia de haber culminado el grado anterior, 2 fotos",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 154 RAYITO DE LUZ",nivel:"INICIAL",direccion:"MZ S LOT. 1 AAHH JAIME YOSHIYAMA PACHACÚTEC",lat:-11.834208,lng:-77.153944,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de vacunación, 2 fotos carnet",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 157",nivel:"INICIAL",direccion:"MZ. K LT. 01 AAHH VIRGEN DEL PILAR PACHACÚTEC",lat:-11.852300,lng:-77.130900,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de estudios, 2 fotos, copia de recibo",foto:"fotos/157.jpeg"},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 162",nivel:"INICIAL",direccion:"MZA. M LTE. 1 PARCELA GARCÍA RONCEROS 1 PACHACÚTEC",lat:-11.846439,lng:-77.158025,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, constancia de grado anterior, 2 fotos carnet",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 169",nivel:"INICIAL",direccion:"MZ C LT 1 SECTOR D BARRIO IX, LA UNIÓN - PACHACÚTEC",lat:-11.845617,lng:-77.151675,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de salud, 2 fotos",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 176",nivel:"INICIAL",direccion:"MZ M LT 1-B SECTOR E GRUPO RESIDENCIAL 2 - PESQUERO PACHACÚTEC",lat:-11.838119,lng:-77.155025,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, ficha de matrícula, 2 fotos carnet",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5128 SAGRADO CORAZÓN DE MARÍA",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ 1 LT. 02 SECTOR E PACHACÚTEC",lat:-11.835164,lng:-77.159244,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI (2 copias), partida de nacimiento original, certificado de estudios completos, constancia de conducta, 2 fotos carnet, copia de recibo de servicio",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5144 DIVINO CRISTO DE LAS ALTURAS",nivel:"INICIAL / PRIMARIA",direccion:"PARCELA I - MZ. H AAHH. LOS PRÓCERES PACHACÚTEC",lat:-11.829033,lng:-77.171572,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de vacunación, constancia de grado, 2 fotos",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5152",nivel:"PRIMARIA / SECUNDARIA",direccion:"TECHO PROPIO MZ 1A LT. 1 ALT. I.E. 5128",lat:-11.837723,lng:-77.168942,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de estudios, 2 fotos carnet, copia de recibo",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5154 SANTIAGO ANTÚNEZ DE MAYOLO",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ A12 LOTE 1 SECTOR A GRUPO RESIDENCIAL A1 PACHACÚTEC",lat:-11.827484,lng:-77.162154,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI (2 copias), partida de nacimiento, certificado de estudios, constancia de conducta, 2 fotos",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5156 ELÍAS AGUIRRE ROMERO",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ 4G LT. 8 SECTOR FRENTE COMEDOR - CACHITO PACHACÚTEC",lat:-11.847139,lng:-77.158473,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de estudios completos, 2 fotos carnet",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"COPRODELI SAN FRANCISCO SOLANO",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"MZ J2 SECTOR E PACHACÚTEC",lat:-11.835803,lng:-77.160617,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de estudios, 2 fotos, copia de recibo",foto:""},
-  {red:"RED N° 01 - PACHACÚTEC OESTE",zona:"PACHACÚTEC OESTE",nombre:"COPRODELI SAN MARTÍN",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"SECTOR B PACHACÚTEC",lat:-11.831708,lng:-77.158506,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI, partida de nacimiento, certificado de vacunación, certificado de estudios, 2 fotos",foto:""}
-];
-</script>
+        // Verificar columnas OBLIGATORIAS
+        const columnas = Object.keys(filas[0]);
+        const necesarias = ["Latitud", "Longitud", "Institucion Educativa", "CodigoAcceso"];
+        const faltantes = necesarias.filter(c => !columnas.includes(c));
+        
+        if (faltantes.length > 0) {
+          mostrarAviso(`⚠️ Faltan columnas: ${faltantes.join(", ")}. Verifica encabezados.`);
+          console.log("Columnas encontradas:", columnas);
+          return;
+        }
 
-<!-- ==================================================
-     LÓGICA DEL PROYECTO
-     ================================================== -->
-<script>
-let mapa;
-let marcadores = [];
-let colegioSeleccionado = null;
-let filtroActivo = "TODAS";
+        let contadorMarcadores = 0;
 
-const pantallaPrincipal = document.getElementById('pantallaPrincipal');
-const pantallaMapa = document.getElementById('pantallaMapa');
-const buscador = document.getElementById('buscador');
-const sugerencias = document.getElementById('sugerencias');
-const ventanaInfo = document.getElementById('ventanaInfo');
+        filas.forEach(fila => {
+          // Coordenadas — convierte coma a punto automáticamente
+          const lat = parseFloat((fila["Latitud"] || "").toString().trim().replace(",", "."));
+          const lon = parseFloat((fila["Longitud"] || "").toString().trim().replace(",", "."));
 
-// Inicializar mapa
-function inicializarMapa() {
-  mapa = L.map('mapa').setView([-11.84, -77.15], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(mapa);
-  mapa.attributionControl.setPosition('bottomright');
-}
+          if (isNaN(lat) || isNaN(lon) || lat === 0 || lon === 0) {
+            console.warn("Coordenadas inválidas:", fila["Institucion Educativa"]);
+            return;
+          }
 
-// Crear marcador personalizado
-function crearMarcador(colegio) {
-  const icono = L.divIcon({
-    className: '',
-    html: `<div style="width:16px;height:16px;border-radius:50%;background:#FFD700;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.4);"></div>`,
-    iconSize: [16, 16],
-    iconAnchor: [8, 8]
-  });
-  const marcador = L.marker([colegio.lat, colegio.lng], { icon: icono }).addTo(mapa);
-  marcador.colegio = colegio;
-  marcador.on('click', () => mostrarInformacion(colegio));
-  return marcador;
-}
+          const red = (fila["Red"] || "").toString().trim();
+          const color = COLORES_RED[red] || "#888888";
 
-// Cargar todos los marcadores según filtro
-function cargarMarcadores() {
-  marcadores.forEach(m => mapa.removeLayer(m));
-  marcadores = [];
-  const lista = filtroActivo === "TODAS"
-    ? colegios
-    : colegios.filter(c => c.red.startsWith(filtroActivo));
-  lista.forEach(c => marcadores.push(crearMarcador(c)));
-}
+          // Contenido completo con TODAS tus columnas
+          const contenido = `
+            <div class="popup-content">
+              <h3>${fila["Institucion Educativa"] || "Sin nombre"}</h3>
+              <p><strong>Red:</strong> ${red || "—"}</p>
+              <p><strong>Código:</strong> <span class="codigo">${fila["CodigoAcceso"] || "—"}</span></p>
+              <p><strong>Dirección:</strong> ${fila["Direccion"] || "—"}</p>
+              <p><strong>Niveles:</strong> ${fila["Niveles"] || "—"}</p>
+              <p><strong>Turnos:</strong> ${fila["Turnos"] || "—"}</p>
+              <p><strong>Requisitos:</strong> ${fila["Requisitos"] || "—"}</p>
+              <div class="vacantes">
+                <p><strong>Vacantes Inicial:</strong><br>${fila["VacantesInicial"] || "—"}</p>
+                <p><strong>Primaria:</strong><br>${fila["VacantesPrimaria"] || "—"}</p>
+                <p><strong>Secundaria:</strong><br>${fila["VacantesSecundaria"] || "—"}</p>
+                <p><em>Última actualización: ${fila["UltimaActualizacion"] || "Sin fecha"}</em></p>
+              </div>
+            </div>
+          `;
 
-// Mostrar información del colegio
-function mostrarInformacion(colegio) {
-  colegioSeleccionado = colegio;
-  document.getElementById('infoNombre').textContent = colegio.nombre;
-  document.getElementById('infoRed').textContent = colegio.red + ' · ' + colegio.zona;
-  document.getElementById('infoNivel').textContent = colegio.nivel;
-  document.getElementById('infoDireccion').textContent = colegio.direccion;
-  document.getElementById('infoTurno').textContent = colegio.turno;
-  document.getElementById('infoTaller').textContent = colegio.taller;
-  document.getElementById('infoRequisitos').textContent = colegio.requisitos;
+          L.marker([lat, lon], { icon: crearMarcadorColor(color) })
+            .addTo(map)
+            .bindPopup(contenido);
 
-  const contenedorFoto = document.getElementById('contenedorFoto');
-  const etiquetaFoto = document.getElementById('fotoColegio');
-  if (colegio.foto && colegio.foto !== "") {
-    etiquetaFoto.src = colegio.foto;
-    etiquetaFoto.onload = () => { etiquetaFoto.style.display = 'block'; contenedorFoto.style.display = 'block'; };
-    etiquetaFoto.onerror = () => { contenedorFoto.style.display = 'none'; };
-  } else {
-    contenedorFoto.style.display = 'none';
-  }
+          contadorMarcadores++;
+        });
 
-  ventanaInfo.classList.add('mostrar');
-}
+        if (contadorMarcadores === 0) {
+          mostrarAviso("❌ No se pudo colocar ningún marcador. Revisa Latitud y Longitud.");
+        } else {
+          mostrarAviso(`✅ Cargados ${contadorMarcadores} colegios en el mapa`, 4000);
+        }
 
-// Buscar colegio
-buscador.addEventListener('input', (e) => {
-  const busqueda = e.target.value.trim().toLowerCase();
-  sugerencias.innerHTML = '';
-  ventanaInfo.classList.remove('mostrar');
-  if (busqueda.length < 2) return;
-  const coinciden = colegios.filter(c => c.nombre.toLowerCase().includes(busqueda));
-  coinciden.forEach(c => {
-    const div = document.createElement('div');
-    div.className = 'sugerencia';
-    div.textContent = c.nombre;
-    div.addEventListener('click', () => {
-      sugerencias.innerHTML = '';
-      buscador.value = c.nombre;
-      pantallaPrincipal.classList.add('oculta');
-      pantallaMapa.style.display = 'flex';
-      setTimeout(() => {
-        if (!mapa) inicializarMapa();
-        mapa.setView([c.lat, c.lng], 16);
-        cargarMarcadores();
-        setTimeout(() => mostrarInformacion(c), 300);
-      }, 100);
-    });
-    sugerencias.appendChild(div);
-  });
-});
+      })
+      .catch(error => {
+        mostrarAviso("❌ Error: " + error.message);
+        console.error(error);
+      });
 
-// Botón volver
-document.getElementById('btnVolver').addEventListener('click', () => {
-  pantallaPrincipal.classList.remove('oculta');
-  pantallaMapa.style.display = 'none';
-  ventanaInfo.classList.remove('mostrar');
-  buscador.value = '';
-  sugerencias.innerHTML = '';
-  colegioSeleccionado = null;
-});
+    // ========== LEYENDA ==========
+    const leyenda = L.control({ position: "bottomright" });
+    leyenda.onAdd = function () {
+      const div = L.DomUtil.create("div", "leyenda");
+      div.innerHTML = `
+        <h4>🔴 Red 01 &nbsp; 🔵 Red 04 &nbsp; 🟢 Red 07<br>
+        🩷 Red 02 &nbsp; 🟦 Red 05 &nbsp; 🟠 Red 08<br>
+        🟣 Red 03 &nbsp; 🩵 Red 06 &nbsp; ⚫ Red 09</h4>
+      `;
+      return div;
+    };
+    leyenda.addTo(map);
 
-// Cerrar ventana información
-document.getElementById('btnCerrarInfo').addEventListener('click', () => {
-  ventanaInfo.classList.remove('mostrar');
-});
-
-// Cerrar foto
-document.getElementById('btnCerrarFoto').addEventListener('click', () => {
-  document.getElementById('fotoColegio').style.display = 'none';
-});
-
-// Botones de ruta
-document.getElementById('btnComoLlegar').addEventListener('click', () => {
-  if (!colegioSeleccionado) return;
-  window.open(`https://www.google.com/maps/dir/?api=1&destination=${colegioSeleccionado.lat},${colegioSeleccionado.lng}`, '_blank');
-});
-document.getElementById('btnIniciarRuta').addEventListener('click', () => {
-  if (!colegioSeleccionado) return;
-  window.open(`https://www.google.com/maps/dir/?api=1&destination=${colegioSeleccionado.lat},${colegioSeleccionado.lng}`, '_blank');
-});
-document.getElementById('btnCompartir').addEventListener('click', () => {
-  if (!colegioSeleccionado) return;
-  const enlace = `https://www.google.com/maps/search/?api=1&query=${colegioSeleccionado.lat},${colegioSeleccionado.lng}`;
-  if (navigator.share) navigator.share({ title: colegioSeleccionado.nombre, url: enlace });
-  else navigator.clipboard.writeText(enlace).then(() => alert('Enlace copiado al portapapeles'));
-});
-
-// Filtro por red
-document.querySelectorAll('.boton-red').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.boton-red').forEach(b => b.classList.remove('activo'));
-    btn.classList.add('activo');
-    filtroActivo = btn.dataset.red;
-    if (pantallaMapa.style.display === 'flex') cargarMarcadores();
-  });
-});
-
-// Ver todos los colegios
-document.getElementById('btnVerTodos').addEventListener('click', () => {
-  pantallaPrincipal.classList.add('oculta');
-  pantallaMapa.style.display = 'flex';
-  setTimeout(() => { if (!mapa) inicializarMapa(); cargarMarcadores(); mapa.setView([-11.84, -77.15], 13); }, 100);
-});
-</script>
-
+  </script>
 </body>
 </html>
