@@ -1,1 +1,255 @@
-7dd0a3565e9d3754d48d8ddee36d3551e61483d4
+--sombra: rgba(0,0,0,0.35);
+--naranja: #FF9800;
+--rojo: #F44336;
+      --fucsia-seleccion: #E91E63;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+@@ -30,7 +31,6 @@
+overflow-x: hidden;
+}
+
+    /* === SELLOS DE PROPIEDAD — SOLO EN PANTALLA PRINCIPAL === */
+.sello-jdah {
+position: fixed;
+top: 12px;
+@@ -484,7 +484,6 @@
+z-index: 10;
+}
+
+    /* === MODAL DE FOTOS MEJORADO === */
+.modal-foto {
+position: fixed;
+top: 0;
+@@ -554,7 +553,6 @@
+</head>
+<body>
+
+  <!-- SELLOS DE PROPIEDAD — SOLO APARECEN EN PANTALLA PRINCIPAL -->
+<span class="sello-jdah">JDAH</span>
+<span class="sello-jotitas">LOS JOTITAS</span>
+
+@@ -676,31 +674,33 @@ <h2>UBIKTUCOLEYA! — Mapa y Rutas</h2>
+9: '#3F51B5'
+};
+
+// =============================================
+// 📚 BASE DE DATOS DE COLEGIOS — SIN CALIFICACIÓN
+// =============================================
+const colorSeleccion = '#E91E63';
+
+const colegios = [
+  { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "MZ N2 LOTE 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg" },
+  { id: 1, nombre: "I.E.I N° 125 Divino Niño Jesús", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.843456, lng: -77.128518, referencia: "Av. Los Topógrafos MZ. C2 LT. 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/125_Divino_Nino_Jesus.jpeg" },
+{ id: 2, nombre: "I.E.I N° 108", red: 4, zona: "Pachacútec Este", niveles: "Inicial", lat: -11.846319, lng: -77.135186, referencia: "MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/108.jpeg" },
+{ id: 3, nombre: "I.E N° 5147 Santa Rosa de Lima", red: 4, zona: "Pachacútec Este", niveles: "Primaria", lat: -11.8438763, lng: -77.1284196, referencia: "Av. Los Topógrafos MZ. C2 LT. 1 AA.HH. María Jesús Espinoza", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5147_Santa_Rosa_de_Lima.jpeg" },
+{ id: 4, nombre: "I.E.I N° 141 Inmaculada Virgen de Guadalupe", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8591298, lng: -77.1225196, referencia: "MZ E LOTE 1 AA.HH. Virgen de Guadalupe", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg" },
+{ id: 5, nombre: "I.E.I N° 167 Cristo Rey de los Niños", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.8499804, lng: -77.1223254, referencia: "Av. El Bosque MZ. JK Lote 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/167_Cristo_Rey_de_los_Ninos.jpeg" },
+{ id: 6, nombre: "I.E N° 5119 Villa Emilia", red: 6, zona: "Mi Perú", niveles: "Primaria", lat: -11.8498337, lng: -77.1213922, referencia: "Calle Los Ficus MZ M LOTE 1", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5119_Villa_Emilia.jpeg" },
+{ id: 7, nombre: "I.E N° 5151 San Juan Bosco", red: 6, zona: "Mi Perú", niveles: "Secundaria", lat: -11.8505098, lng: -77.1264982, referencia: "Calle Los Ficus MZ L LOTE 1 AA.HH. Villa Emilia", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5151_San_Juan_Bosco.jpeg" },
+  { id: 8, nombre: "CEBE Sagrado Corazón de Jesús", red: 6, zona: "Mi Perú", niveles: "Especial", lat: -11.8540579, lng: -77.1230456, referencia: "Av. Trujillo S/N MZ. J 17 LT. 2", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "" },
+  { id: 9, nombre: "I.E.I N° 107 Los Pastorcitos de Fátima", red: 9, zona: "Angamos", niveles: "Inicial", lat: -11.8860892, lng: -77.1326308, referencia: "Calle 5 Elías Aguirre S/N — AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/107_Pastorcitos_de_Fatima.jpeg" },
+  { id: 10, nombre: "I.E.I N° 113 Domingo Savio", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8873928, lng: -77.1231337, referencia: "MZ F S/N I Sector Derecho - URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/113_Domingo_Savio.jpeg" },
+  { id: 11, nombre: "I.E.I N° 133 Divina Pastora", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8886578, lng: -77.1206898, referencia: "Psje. Johnny Watson S/N II Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/133_Divina_Pastora.jpeg" },
+  { id: 12, nombre: "I.E.I N° 135 Mi Pequeño Mundo", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.891201, lng: -77.116792, referencia: "Av. Marcos Calderón S/N IV Sector Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/135_Mi_Pequeno_Mundo.jpeg" },
+  { id: 13, nombre: "I.E N° 5090 Antonia Moreno de Cáceres", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8930743, lng: -77.1123801, referencia: "VI Sector Derecho S/N — Ciudad del Deporte", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5090_Antonia_Moreno_de_Caceres.jpeg" },
+  { id: 14, nombre: "I.E N° 5093 Antonio Raymondi", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8859367, lng: -77.1239704, referencia: "Av. Gonzales Ganoza S/N I Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5093_Antonio_Raymondi.jpeg" },
+  { id: 15, nombre: "I.E N° 5091 Hijos de Grau", red: 9, zona: "Angamos", niveles: "Primaria", lat: -11.8863777, lng: -77.1324341, referencia: "MZ O S/N Hijos del Almirante Miguel Grau — III Sector Angamos", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5091_Hijos_de_Grau.jpeg" },
+  { id: 16, nombre: "Coprodeli La Providencia Virgen de Chapí", red: 9, zona: "Angamos", niveles: "Cuna Jardín", lat: -11.8853088, lng: -77.1333501, referencia: "AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/Coprodeli_virgen_de_Chapi.jpeg" }
+  { id: 8, nombre: "I.E.I N° 157", red: 6, zona: "Mi Perú", niveles: "Inicial", lat: -11.854000, lng: -77.123000, referencia: "Mi Perú", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/157.jpeg" },
+  { id: 9, nombre: "CEBE Sagrado Corazón de Jesús", red: 6, zona: "Mi Perú", niveles: "Especial", lat: -11.8540579, lng: -77.1230456, referencia: "Av. Trujillo S/N MZ. J 17 LT. 2", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "" },
+  { id: 10, nombre: "I.E.I N° 107 Los Pastorcitos de Fátima", red: 9, zona: "Angamos", niveles: "Inicial", lat: -11.8860892, lng: -77.1326308, referencia: "Calle 5 Elías Aguirre S/N — AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/107_Los_Pastorcitos_de_Fatima.jpeg" },
+  { id: 11, nombre: "I.E.I N° 113 Domingo Savio", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8873928, lng: -77.1231337, referencia: "MZ F S/N I Sector Derecho - URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/113_Domingo_Savio.jpeg" },
+  { id: 12, nombre: "I.E.I N° 133 Divina Pastora", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.8886578, lng: -77.1206898, referencia: "Psje. Johnny Watson S/N II Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/133_Divina_Pastora.jpeg" },
+  { id: 13, nombre: "I.E.I N° 135 Mi Pequeño Mundo", red: 8, zona: "AMC", niveles: "Inicial", lat: -11.891201, lng: -77.116792, referencia: "Av. Marcos Calderón S/N IV Sector Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED", foto: "fotos/135_Mi_Pequeno_Mundo.jpeg" },
+  { id: 14, nombre: "I.E N° 5090 Antonia Moreno de Cáceres", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8930743, lng: -77.1123801, referencia: "VI Sector Derecho S/N — Ciudad del Deporte", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5090_Antonia_Moreno_de_Caceres.jpeg" },
+  { id: 15, nombre: "I.E N° 5093 Antonio Raymondi", red: 8, zona: "AMC", niveles: "Primaria / Secundaria", lat: -11.8859367, lng: -77.1239704, referencia: "Av. Gonzales Ganoza S/N I Sector URB. Antonia Moreno de Cáceres", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5093_Antonio_Raymondi.jpeg" },
+  { id: 16, nombre: "I.E N° 5091 Hijos de Grau", red: 9, zona: "Angamos", niveles: "Primaria", lat: -11.8863777, lng: -77.1324341, referencia: "MZ O S/N Hijos del Almirante Miguel Grau — III Sector Angamos", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/5091_Hijos_de_Grau.jpeg" },
+  { id: 17, nombre: "Coprodeli La Providencia Virgen de Chapí", red: 9, zona: "Angamos", niveles: "Cuna Jardín", lat: -11.8853088, lng: -77.1333501, referencia: "AA.HH. Hijos de Grau", turnos: "Mañana / Tarde", requisitos: "DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE", foto: "fotos/Coprodeli_Virgen_de_Chapi.jpeg" }
+];
+let map, marcadores = [];
+let colegioDestino = null;
+let ubicacionUsuario = null;
+let rutaDibujada = null;
+let marcadorSeleccionado = null;
+let iconoNormal, iconoSeleccion;
+
+const fachada = document.getElementById('fachada');
+const seccionMapa = document.getElementById('seccionMapa');
+@@ -709,12 +709,10 @@ <h2>UBIKTUCOLEYA! — Mapa y Rutas</h2>
+const panelRuta = document.getElementById('panelRuta');
+const mensajeRuta = document.getElementById('mensajeRuta');
+
+// === OCULTAR/MOSTRAR SELLOS SEGÚN PANTALLA ===
+function actualizarSellos() {
+const selloIzq = document.querySelector('.sello-jdah');
+const selloDer = document.querySelector('.sello-jotitas');
+const mapaActivo = !seccionMapa.classList.contains('oculto');
+  
+if (selloIzq && selloDer) {
+selloIzq.style.display = mapaActivo ? 'none' : 'block';
+selloDer.style.display = mapaActivo ? 'none' : 'block';
+@@ -767,25 +765,63 @@ <h2>UBIKTUCOLEYA! — Mapa y Rutas</h2>
+}
+});
+
+function crearIcono(colegio, esSeleccion = false) {
+  const color = esSeleccion ? colorSeleccion : colores[colegio.red];
+  const tamaño = esSeleccion ? [34, 34] : [28, 28];
+  const anillo = esSeleccion ? '4px solid #fff' : '3px solid #fff';
+  const sombra = esSeleccion ? '0 0 12px rgba(233,30,99,0.7)' : '0 2px 6px rgba(0,0,0,0.4)';
+  const fuente = esSeleccion ? 'bold 13px Segoe UI' : 'bold 11px Segoe UI';
+  
+  return L.divIcon({
+    className: esSeleccion ? 'icono-colegio-seleccionado' : 'icono-colegio-normal',
+    html: `<div style="width:${tamaño[0]}px;height:${tamaño[1]}px;background:${color};border-radius:50%;border:${anillo};box-shadow:${sombra};display:flex;align-items:center;justify-content:center;color:white;font:${fuente};">${colegio.red}</div>`,
+    iconSize: tamaño,
+    iconAnchor: [tamaño[0]/2, tamaño[1]/2]
+  });
+}
+
+function buscarYAbrirColegio(colegio) {
+colegioDestino = colegio;
+buscador.value = colegio.nombre;
+sugerencias.classList.add('oculto');
+fachada.classList.add('oculto');
+seccionMapa.classList.remove('oculto');
+actualizarSellos();
+
+if (!map) {
+inicializarMapa();
+    setTimeout(() => { map.setView([colegio.lat, colegio.lng], 16); mostrarPanelRuta(colegio); }, 250);
+    setTimeout(() => {
+      map.setView([colegio.lat, colegio.lng], 17);
+      setTimeout(() => resaltarMarcador(colegio), 300);
+      mostrarPanelRuta(colegio);
+    }, 250);
+} else {
+    setTimeout(() => { map.invalidateSize(); map.setView([colegio.lat, colegio.lng], 16); mostrarPanelRuta(colegio); }, 150);
+    setTimeout(() => {
+      map.invalidateSize();
+      map.setView([colegio.lat, colegio.lng], 17);
+      setTimeout(() => resaltarMarcador(colegio), 300);
+      mostrarPanelRuta(colegio);
+    }, 150);
+  }
+}
+
+function resaltarMarcador(colegio) {
+  if (marcadorSeleccionado) {
+    const colegioAnterior = marcadorSeleccionado.colegioRef;
+    marcadorSeleccionado.setIcon(crearIcono(colegioAnterior, false));
+  }
+  const marcadorEncontrado = marcadores.find(m => m.colegioRef.id === colegio.id);
+  if (marcadorEncontrado) {
+    marcadorEncontrado.setIcon(crearIcono(colegio, true));
+    marcadorSeleccionado = marcadorEncontrado;
+    marcadorEncontrado.openPopup();
+}
+}
+
+function mostrarPanelRuta(colegio) {
+panelRuta.classList.remove('oculto');
+panelRuta.classList.remove('activo');
+  document.getElementById('colegioDestino').textContent = colegio.nombre.substring(0, 22) + '...';
+  document.getElementById('colegioDestino').textContent = colegio.nombre.substring(0, 28) + '...';
+mensajeRuta.classList.add('oculto');
+if (navigator.geolocation) {
+mostrarMensaje('🔍 Buscando tu ubicación...', false);
+@@ -807,30 +843,35 @@ <h2>UBIKTUCOLEYA! — Mapa y Rutas</h2>
+}
+
+function calcularRuta(origen, destino) {
+ const lat1 = origen.lat, lng1 = origen.lng;
+  const lat2 = destino.lat, lng2 = destino.lng;
+
+const R = 6371;
+  const dLat = (destino.lat - origen.lat) * Math.PI / 180;
+  const dLng = (destino.lng - origen.lng) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(origen.lat*Math.PI/180)*Math.cos(destino.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+  const distanciaKm = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const tiempoMinutos = Math.round((distanciaKm / 30) * 60);
+  const tiempoCaminando = Math.round((distanciaKm / 4) * 60);
+  document.getElementById('distanciaValor').textContent = distanciaKm.toFixed(2);
+  document.getElementById('tiempoValor').textContent = tiempoMinutos + '/' + tiempoCaminando;
+  if (rutaDibujada) map.removeLayer(rutaDibujada);
+  rutaDibujada = L.polyline([[origen.lat, origen.lng], [destino.lat, destino.lng]], {
+    color: '#00C853', weight: 4, opacity: 0.8, dashArray: '10, 10'
+  }).addTo(map);
+  L.marker([origen.lat, origen.lng], {
+    icon: L.divIcon({
+      className: 'mi-ubicacion',
+      html: '<div style="width:24px;height:24px;background:#2EA8E0;border-radius:50%;border:3px solid white;box-shadow:0 0 10px rgba(46,168,224,0.6);"></div>',
+      iconSize: [24,24], iconAnchor: [12,12]
+    })
+  }).addTo(map).bindPopup('<b>Tu ubicación</b>');
+  panelRuta.classList.add('activo');
+  mostrarMensaje('✅ Ubicación encontrada. Toca el pin del colegio para ver su información.', false);
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * Math.PI / 180) *
+            Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distancia = (R * c).toFixed(2);
+
+  const velocidad = 40;
+  const tiempoMin = Math.round((distancia / velocidad) * 60);
+
+  document.getElementById('distanciaValor').textContent = distancia;
+  document.getElementById('tiempoValor').textContent = tiempoMin;
+  mostrarMensaje('✅ Ubicación obtenida correctamente', false);
+}
+
+document.getElementById('btnComoLlegar').addEventListener('click', () => {
+  if (!colegioDestino) return;
+  const url = ubicacionUsuario
+    ? `https://www.google.com/maps/dir/${ubicacionUsuario.lat},${ubicacionUsuario.lng}/${colegioDestino.lat},${colegioDestino.lng}`
+    : `https://www.google.com/maps/dir/?api=1&destination=${colegioDestino.lat},${colegioDestino.lng}`;
+  window.open(url, '_blank');
+});
+
+document.getElementById('btnComenzar').addEventListener('click', () => {
+if (!colegioDestino) return;
+const url = ubicacionUsuario
+@@ -920,6 +961,7 @@ <h4>📷 Sin foto disponible</h4>
+const valor = e.target.value;
+marcadores.forEach(m => map.removeLayer(m));
+marcadores = [];
+    marcadorSeleccionado = null;
+if (valor === 'todas') {
+cargarMarcadores(colegios);
+} else {
+@@ -932,27 +974,25 @@ <h4>📷 Sin foto disponible</h4>
+document.getElementById('filtroRed').value = 'todas';
+marcadores.forEach(m => map.removeLayer(m));
+marcadores = [];
+    marcadorSeleccionado = null;
+cargarMarcadores(colegios);
+map.setView([-11.865, -77.125], 13);
+});
+}
+
+function cargarMarcadores(lista) {
+lista.forEach(colegio => {
+    const color = colores[colegio.red];
+    const icono = L.divIcon({
+      className: 'icono-colegio',
+      html: `<div style="width:28px;height:28px;background:${color};border-radius:50%;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:11px;">${colegio.red}</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+    const icono = crearIcono(colegio, false);
+
+const marcador = L.marker([colegio.lat, colegio.lng], { icon: icono })
+.addTo(map)
+.bindPopup(crearPopup(colegio));
+
+    marcador.colegioRef = colegio;
+
+marcador.on('click', () => {
+colegioDestino = colegio;
+      resaltarMarcador(colegio);
+mostrarPanelRuta(colegio);
+});
