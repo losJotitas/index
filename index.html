@@ -4,28 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
-  <!-- Motor de Mapas Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: 0; box-sizing: border-box; }
     body { margin: 0; padding: 0; background-color: #06223F; font-family: 'Segoe UI', sans-serif; color: #ffffff; height: 100vh; overflow: hidden; }
 
-    /* ====== PANTALLA PRINCIPAL ====== */
-    #pantallaPrincipal {
+    /* ===== SELLOS SOLO PANTALLA 1 ===== */
+    .sello { position: absolute; font-size: 14px; font-weight: bold; color: rgba(255,255,255,0.25); pointer-events: none; z-index: 1001; }
+    .sello-izq { top: 12px; left: 12px; }
+    .sello-der { top: 12px; right: 12px; }
+
+    /* ===== PANTALLA 1 — FACHADA PRINCIPAL ===== */
+    #pantalla1 {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(135deg, #06223F 0%, #0B3D73 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 1000; transition: opacity 0.6s ease;
+      z-index: 1000; transition: opacity 0.5s ease;
     }
-    .sello { position: absolute; font-size: 14px; font-weight: bold; color: rgba(255,255,255,0.25); pointer-events: none; }
-    .sello-izq { top: 15px; left: 15px; }
-    .sello-der { top: 15px; right: 15px; }
-    .logo-container { text-align: center; margin-bottom: 25px; }
-    .logo-icon { font-size: 72px; margin-bottom: 10px; }
-    .titulo { font-size: 42px; font-weight: bold; color: #FFD700; text-shadow: 2px 2px 4px rgba(0,0,0,0.4); }
-    .subtitulo { font-size: 18px; color: #B0D4F1; margin-top: 8px; font-style: italic; }
-    .buscador-container { width: 90%; max-width: 480px; margin: 20px auto; position: relative; z-index: 1002; }
+    .logo-container { text-align: center; margin-bottom: 20px; }
+    .logo-icon { font-size: 64px; margin-bottom: 8px; }
+    .titulo { font-size: 36px; font-weight: bold; color: #FFD700; text-shadow: 2px 2px 4px rgba(0,0,0,0.4); }
+    .subtitulo { font-size: 16px; color: #B0D4F1; margin-top: 6px; font-style: italic; }
+
+    /* COMUNICADOS EN MAYÚSCULA */
+    .comunicados {
+      position: absolute; left: : absolute; left: 15px; top: 110px; width: 230px;
+      background: rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;
+    }
+    .comunicados h3 { font-size: 14px; font-weight: bold; color: #FFD700; margin-bottom: 8px; text-transform: UPPERCASE; }
+    .comunicado-item { font-size: 12px; color: #E0EFFE; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); text-transform: UPPERCASE; }
+
+    /* BOTÓN VER TODOS */
+    .caja-ver-todos {
+      position: absolute; right: 15px; top: 110px;
+      background: rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;
+    }
+    .btn-ver-todos {
+      background: #2A76E8; color: white; border: none; padding: 12px 18px;
+      border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; width: 100%;
+    }
+
+    /* BUSCADOR */
+    .buscador-container { width: 90%; max-width: 460px; margin: 20px auto; position: relative; z-index: 1002; margin-top: 220px; }
     .input-busqueda {
       width: 100%; padding: 14px 14px 14px 48px; font-size: 16px; border-radius: 30px;
       border: 2px solid #2A76E8; background: rgba(255,255,255,0.95); color: #06223F; outline: none;
@@ -35,234 +56,359 @@
     .sugerencias {
       position: absolute; top: 100%; left: 0; width: 100%; background: white;
       border-radius: 0 0 16px 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      max-height: 320px; overflow-y: auto; z-index: 1003; display: none;
+      max-height: 300px; overflow-y: auto; z-index: 1003; display: none;
     }
     .sugerencia-item {
       padding: 12px 16px; color: #06223F; cursor: pointer; border-bottom: 1px solid #eee;
       transition: background 0.2s;
     }
     .sugerencia-item:hover { background: #E0EFFE; }
-    .anuncios-lado {
-      position: absolute; left: 15px; top: 120px; width: 220px;
-      background: rgba(255,255,255,0.08); border-radius: 12px; padding: 12px;
-    }
-    .anuncios-titulo { font-size: 14px; font-weight: bold; color: #FFD700; margin-bottom: 8px; }
-    .anuncio-item { font-size: 12px; color: #E0EFFE; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .ver-todos-lado {
-      position: absolute; right: 15px; top: 120px; background: rgba(255,255,255,0.08);
-      border-radius: 12px; padding: 12px; cursor: pointer; color: #FFD700; font-size: 14px; font-weight: bold;
-    }
-    .boton-ver-todos {
-      background: #2A76E8; color: white; border: none; padding: 10px 16px; border-radius: 8px;
-      cursor: pointer; font-weight: bold; width: 100%;
-    }
 
-    /* ====== MAPA ====== */
-    #mapaContainer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 500; }
+    /* ===== PANTALLA 2 — MAPA ===== */
+    #pantalla2 { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 500; }
     #mapa { width: 100%; height: 100%; }
-    .boton-regresar {
+    .btn-regresar {
       position: absolute; top: 12px; left: 12px; z-index: 600;
-      background: #2A76E8; color: white; border: none; padding: 10px 16px;
+      background: #2A76E8; color: white; border: none; padding: 10px 14px;
       border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
     .filtros-redes {
-      position: absolute; top: 12px; left: 80px; z-index: 600; display: flex; gap: 6px; flex-wrap: wrap; max-width: calc(100% - 100px);
+      position: absolute; top: 12px; left: 90px; z-index: 600; display: flex; gap: 5px; flex-wrap: wrap; max-width: calc(100% - 100px);
     }
     .boton-red {
-      background: rgba(6,34,63,0.85); color: white; border: 1px solid #2A76E8;
-      padding: 6px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; white-space: nowrap;
+      background: rgba(6,34,63,0.85); color: white; border: 1px solid;
+      padding: 6px 7px; border-radius: 6px; font-size: 10.5px; cursor: pointer; white-space: nowrap;
     }
-    .boton-red.activo { background: #FFD700; color: #06223F; font-weight: bold; }
+    .boton-red.activo { font-weight: bold; }
 
-    /* ====== VENTANA INFORMACIÓN ====== */
+    /* ===== VENTANA INFORMACIÓN ===== */
     .ventana-info {
-      position: fixed; bottom: 0; left: 0; width: 100%; max-height: 60vh; background: rgba(6,34,63,0.96);
-      border-radius: 20px 20px 0 0; padding: 20px; z-index: 700; display: none;
+      position: fixed; bottom: 0; left: 0; width: 100%; max-height: 65vh; background: rgba(6,34,63,0.96);
+      border-radius: 20px 20px 0 0; padding: 20px; z-index: 800; display: none;
       overflow-y: auto; box-shadow: 0 -5px 25px rgba(0,0,0,0.4);
     }
     .btn-cerrar {
-      position: absolute; top: 12px; right: 16px; font-size: 24px; color: #FFD700;
+      position: absolute; top: 10px; right: 14px; font-size: 24px; color: #FFD700;
       cursor: pointer; font-weight: bold; line-height: 1;
     }
-    .info-nombre { font-size: 18px; font-weight: bold; color: #FFD700; margin-bottom: 10px; padding-right: 24px; }
-    .info-fila { font-size: 14px; margin-bottom: 6px; color: #E0EFFE; }
+    .info-nombre { font-size: 17px; font-weight: bold; color: #FFD700; margin-bottom: 10px; padding-right: 24px; }
+    .info-fila { font-size: 14px; margin-bottom: 5px; color: #E0EFFE; }
     .info-etiqueta { color: #87CEFA; font-weight: 600; }
-    .contenedor-foto { margin: 12px 0; text-align: center; position: relative; }
-    .foto-colegio { max-width: 100%; max-height: 300px; border-radius: 10px; border: 3px solid #2A76E8; display: none; }
-    .btn-cerrar-foto {
-      position: absolute; top: 6px; right: calc(50% - 140px); background: rgba(6,34,63,0.85);
-      color: #FFD700; border: none; width: 28px; height: 28px; border-radius: 50%;
-      font-size: 18px; font-weight: bold; cursor: pointer; line-height: 1;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .boton-ruta {
-      margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;
-    }
-    .btn-mapa, .btn-como-llegar {
-      padding: 10px 14px; border-radius: 8px; font-weight: bold; border: none;
-      cursor: pointer; font-size: 14px; text-decoration: none; text-align: center; flex: 1; min-width: 130px;
+
+    /* BOTONES INFORMACIÓN */
+    .contenedor-botones { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+    .fila-botones { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-info {
+      padding: 10px 12px; border-radius: 8px; font-weight: bold; border: none;
+      cursor: pointer; font-size: 13px; text-decoration: none; text-align: center; flex: 1; min-width: 120px;
     }
     .btn-mapa { background: #FFD700; color: #06223F; }
-    .btn-como-llegar { background: #2A76E8; color: white; }
+    .btn-llegar { background: #2A76E8; color: white; }
+    .btn-foto { background: #28A745; color: white; }
+    .btn-vacante { background: #DC3545; color: white; width: 100%; }
 
-    /* Responsive */
+    /* FOTO AMPLIADA */
+    .foto-ampliada {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.92); display: none;
+      align-items: center; justify-content: center; z-index: 900;
+    }
+    .foto-ampliada img { max-width: 90%; max-height: 85%; border-radius: 10px; border: 3px solid #FFD700; }
+    .btn-cerrar-foto {
+      position: absolute; top: 15px; right: 20px; font-size: 32px; color: #FFD700;
+      cursor: pointer; font-weight: bold;
+    }
+
+    /* ===== PANTALLA 3 — VACANTES ===== */
+    #pantalla3 {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #06223F 0%, #0B3D73 100%);
+      z-index: 950; display: none; padding: 20px; overflow-y: auto;
+    }
+    .btn-cerrar-pantalla3 {
+      position: absolute; top: 12px; right: 16px; font-size: 26px; color: #FFD700;
+      cursor: pointer; font-weight: bold;
+    }
+    .pantalla3-titulo { font-size: 20px; font-weight: bold; color: #FFD700; margin-top: 30px; margin-bottom: 20px; text-align: center; }
+    .vacante-colegio { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .vacante-nombre { font-weight: bold; color: #87CEFA; margin-bottom: 8px; }
+    .vacante-dato { font-size: 14px; color: #E0EFFE; margin-bottom: 4px; }
+    .proximamente { color: #FFD700; font-style: italic; text-align: center; margin-top: 40px; }
+
+    /* ===== RESPONSIVO PARA CELULAR ===== */
     @media (max-width: 768px) {
-      .anuncios-lado, .ver-todos-lado { position: relative; left: auto; right: auto; top: auto; width: 90%; margin: 8px auto; }
-      .titulo { font-size: 30px; }
-      .logo-icon { font-size: 54px; }
+      .comunicados, .caja-ver-todos { position: relative; left: auto; right: auto; top: auto; width: 90%; margin: 8px auto; }
+      .buscador-container { margin-top: 20px; }
       .filtros-redes { top: 60px; left: 8px; }
-      .boton-regresar { top: 12px; left: 8px; }
+      .btn-regresar { top: 12px; left: 8px; }
+      .fila-botones { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-<!-- ====== PANTALLA PRINCIPAL ====== -->
-<div id="pantallaPrincipal">
+<!-- ===== PANTALLA 1 — FACHADA PRINCIPAL ===== -->
+<div id="pantalla1">
   <div class="sello sello-izq">JDAH</div>
   <div class="sello sello-der">LOS JOTITAS</div>
 
   <div class="logo-container">
     <div class="logo-icon">🎓</div>
     <h1 class="titulo">UBIKTUCOLEYA!</h1>
-    <p class="subtitulo">Tu Cole a un Mapa de Distancia — Ventanilla & Mi Perú</p>
+    <p class="subtitulo">TU COLE A UN MAPA DE DISTANCIA — VENTANILLA & MI PERÚ</p>
+  </div>
+
+  <div class="comunicados">
+    <h3>📢 COMUNICADOS</h3>
+    <div class="comunicado-item">✅ MATRÍCULA 2027 ABIERTA — REVISA LOS REQUISITOS ANTES DE ACERCARTE</div>
+    <div class="comunicado-item">🗺️ UBICA TU COLEGIO EN EL MAPA CON UN CLIC</div>
+    <div class="comunicado-item">📸 LAS FOTOS SE IRÁN AGREGANDO PROGRESIVAMENTE</div>
+  </div>
+
+  <div class="caja-ver-todos">
+    <button class="btn-ver-todos" onclick="mostrarMapaCompleto()">📍 VER TODOS LOS COLEGIOS EN EL MAPA</button>
   </div>
 
   <div class="buscador-container">
     <span class="icono-lupa">🔍</span>
-    <input type="text" id="buscador" class="input-busqueda" placeholder="Escribe el número o nombre del colegio...">
+    <input type="text" id="buscador" class="input-busqueda" placeholder="ESCRIBE EL NÚMERO O NOMBRE DEL COLEGIO...">
     <div id="sugerencias" class="sugerencias"></div>
-  </div>
-
-  <div class="anuncios-lado">
-    <div class="anuncios-titulo">📢 Comunicados</div>
-    <div class="anuncio-item">✅ Matrícula 2027 abierta — Recuerda requisitos antes de acercarte</div>
-    <div class="anuncio-item">🗺️ Ubica tu colegio en el mapa con un clic</div>
-    <div class="anuncio-item">📸 Las fotos se irán agregando progresivamente</div>
-  </div>
-
-  <div class="ver-todos-lado">
-    <button class="boton-ver-todos" onclick="mostrarMapaCompleto()">📍 Ver todos los colegios en el mapa</button>
   </div>
 </div>
 
-<!-- ====== MAPA ====== -->
-<div id="mapaContainer">
-  <button class="boton-regresar" onclick="regresarInicio()">⬅️ Volver</button>
-  <div class="filtros-redes" id="filtrosRedes">
-    <button class="boton-red activo" data-red="TODOS">TODOS</button>
-    <button class="boton-red" data-red="RED N.° 01">Red N°1 Oeste</button>
-    <button class="boton-red" data-red="RED N.° 02">Red N°2 Sur</button>
-    <button class="boton-red" data-red="RED N.° 03">Red N°3 Norte</button>
-    <button class="boton-red" data-red="RED N.° 04">Red N°4 Este</button>
-    <button class="boton-red" data-red="RED N.° 05">Red N°5 Reyes</button>
-    <button class="boton-red" data-red="RED N.° 06">Red N°6 Mi Perú</button>
-    <button class="boton-red" data-red="RED N.° 07">Red N°7 Satélite</button>
-    <button class="boton-red" data-red="RED N.° 08">Red N°8 AMC</button>
-    <button class="boton-red" data-red="RED N.° 09">Red N°9 Angamos</button>
-  </div>
+<!-- ===== PANTALLA 2 — MAPA ===== -->
+<div id="pantalla2">
+  <button class="btn-regresar" onclick="regresarInicio()">⬅️ VOLVER</button>
+  <div class="filtros-redes" id="filtrosRedes"></div>
   <div id="mapa"></div>
 </div>
 
-<!-- ====== VENTANA INFORMACIÓN ====== -->
+<!-- ===== VENTANA INFORMACIÓN ===== -->
 <div id="ventanaInfo" class="ventana-info">
   <span class="btn-cerrar" onclick="cerrarVentanaInfo()">&times;</span>
   <h3 id="infoNombre" class="info-nombre"></h3>
-  <p class="info-fila"><span class="info-etiqueta">Red / Zona:</span> <span id="infoRed"></span></p>
-  <p class="info-fila"><span class="info-etiqueta">Niveles:</span> <span id="infoNivel"></span></p>
-  <p class="info-fila"><span class="info-etiqueta">Dirección:</span> <span id="infoDireccion"></span></p>
-  <p class="info-fila"><span class="info-etiqueta">Turno:</span> <span id="infoTurno"></span></p>
-  <p class="info-fila"><span class="info-etiqueta">Especialidad / Talleres:</span> <span id="infoTaller"></span></p>
-  <p class="info-fila"><span class="info-etiqueta">Requisitos de Matrícula:</span> <span id="infoRequisitos"></span></p>
-  <div class="contenedor-foto" id="contenedorFoto" style="display:none;">
-    <img id="fotoColegio" class="foto-colegio" alt="Fachada del colegio">
-    <button class="btn-cerrar-foto" onclick="cerrarFoto()">&times;</button>
-  </div>
-  <div class="boton-ruta">
-    <a id="btnMapaExterno" class="btn-mapa" href="#" target="_blank">📍 Abrir en Google Maps</a>
-    <a id="btnComoLlegar" class="btn-como-llegar" href="#" target="_blank">🚗 ¿Cómo llegar?</a>
+  <p class="info-fila"><span class="info-etiqueta">RED / ZONA:</span> <span id="infoRed"></span></p>
+  <p class="info-fila"><span class="info-etiqueta">NIVELES:</span> <span id="infoNivel"></span></p>
+  <p class="info-fila"><span class="info-etiqueta">DIRECCIÓN:</span> <span id="infoDireccion"></span></p>
+  <p class="info-fila"><span class="info-etiqueta">TURNOS:</span> <span id="infoTurno"></span></p>
+  <p class="info-fila"><span class="info-etiqueta">TALLER / ESPECIALIDAD:</span> <span id="infoTaller"></span></p>
+  <p class="info-fila"><span class="info-etiqueta">REQUISITOS DE MATRÍCULA:</span> <span id="infoRequisitos"></span></p>
+
+  <div class="contenedor-botones">
+    <div class="fila-botones">
+      <a id="btnMapaExterno" class="btn-info btn-mapa" href="#" target="_blank">📍 ABRIR EN GOOGLE MAPS</a>
+      <a id="btnComoLlegar" class="btn-info btn-llegar" href="#" target="_blank">🚗 ¿CÓMO LLEGAR?</a>
+    </div>
+    <div class="fila-botones">
+      <button id="btnFoto" class="btn-info btn-foto" onclick="mostrarFoto()">📸 FOTO DE COLEGIO</button>
+    </div>
+    <button class="btn-info btn-vacante" onclick="abrirPantallaVacantes()">📋 VACANTES</button>
   </div>
 </div>
+
+<!-- FOTO AMPLIADA -->
+<div id="fotoAmpliada" class="foto-ampliada" onclick="cerrarFoto()">
+  <span class="btn-cerrar-foto">&times;</span>
+  <img id="imagenFoto" src="" alt="Fachada del colegio">
+</div>
+
+<!-- ===== PANTALLA 3 — VACANTES ===== -->
+<div id="pantalla3">
+  <span class="btn-cerrar-pantalla3" onclick="cerrarPantallaVacantes()">&times;</span>
+  <h2 class="pantalla3-titulo">📋 VACANTES POR GRADOS</h2>
+  <div id="contenidoVacantes"></div>
+  <p class="proximamente">⚠️ INFORMACIÓN POR GRADOS EN ELABORACIÓN — PRÓXIMAMENTE DISPONIBLE</p>
+</div>
 <script>
-// ====== BASE DE DATOS COMPLETA ACTUALIZADA ======
-const colegios = [
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N°121 ANGELITOS DE PACHACÚTEC",nivel:"INICIAL",direccion:"MZ I 2 SECTOR A PACHACUTEC (ALTURA DE POSTA MÉDICA)",lat:-11.830639,lng:-77.160028,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N°123 VIRGEN DE LA ASUNCIÓN",nivel:"INICIAL",direccion:"MZ. N1 LOTE 7 SECTOR E PACHACÚTEC",lat:-11.836133,lng:-77.158953,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 142",nivel:"INICIAL",direccion:"MZ D 8 LT. 1 GRUPO RESIDENCIAL B-4 SECTOR B PACHACUTEC (ANTES DE LLEGAR AL PARADERO 41)",lat:-11.830639,lng:-77.164167,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 150",nivel:"INICIAL",direccion:"TECHO PROPIO (PROYECTO EL MIRADOR) MZ 1A LT. 1 PACHACUTEC",lat:-11.837389,lng:-77.169064,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 154 RAYITO DE LUZ",nivel:"INICIAL",direccion:"MZ S LOT. 1 AAHH JAIME YOSHIYAMA PACHACUTEC",lat:-11.834208,lng:-77.153944,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 157",nivel:"INICIAL",direccion:"MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL",lat:-11.846497,lng:-77.135158,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:"fotos/157.jpeg"},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5128 SAGRADO CORAZÓN DE MARÍA",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ 1 LT. 02 SECTOR E PACHACÚTEC",lat:-11.835164,lng:-77.159244,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5144 DIVINO CRISTO DE LAS ALTURAS",nivel:"INICIAL / PRIMARIA",direccion:"PARCELA I - MZ. H - AA.HH. LOS PROCERES PACHACUTEC",lat:-11.829033,lng:-77.171572,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
+// ===== COLORES POR RED — NO SE REPETEN =====
+const coloresRed = {
+  "RED N° 1 - PACHACÚTEC OESTE": "#FF6B6B",
+  "RED N° 2 - PACHACÚTEC SUR": "#4ECDC4",
+  "RED N° 3 - PACHACÚTEC NORTE": "#FFD93D",
+  "RED N° 4 - PACHACÚTEC ESTE": "#6BCB77",
+  "RED N° 5 - VILLA LOS REYES": "#4D96FF",
+  "RED N° 6 - MI PERÚ": "#9B59B6",
+  "RED N° 7 - SATÉLITE": "#FF9F43",
+  "RED N° 8 - ANTONIA MORENO DE CÁCERES": "#17A589",
+  "RED N° 9 - ANGAMOS": "#E74C3C"
+};
 
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I N°125 DIVINO NIÑO JESÚS",nivel:"INICIAL",direccion:"MZ N2 LOTE 1 AA.HH. MARIA JESUS ESPINOZA PACHACUTEC",lat:-11.843456,lng:-77.128518,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:"fotos/125.jpeg"},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I N°129",nivel:"INICIAL",direccion:"AV HUANCAPUNCO MZ G LOTE 2 ASOC. CONSTRUCCIÓN CIVIL PACHACUTEC",lat:-11.848592,lng:-77.139908,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E N° 5117 JORGE PORTOCARRERO REBAZA",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"AV. FRANCISCO BOLOGNESI Nº 421 URB. MESA REDONDA PACHACUTEC",lat:-11.844428,lng:-77.147233,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
+// ===== BASE DE DATOS COMPLETA — DESDE FILA 5 HASTA 150 =====
+const colegios = 
+    {red:"RED N° 2 - PACHACÚTEC SUR",zona:"PACHACÚTEC SUR",nombre:"I.E N°5149 SAN JUAN BAUTISTA",nivel:"SECUNDARIA",direccion:"MZ G LOTE 1 BARRIO XIII PACHACÚTEC",lat:-11.847653,lng:-77.140194,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 2 - PACHACÚTEC SUR",zona:"PACHACÚTEC SUR",nombre:"I.E N°5150",nivel:"SECUNDARIA",direccion:"CERRO CACHITO PACHACÚTEC",lat:-11.852064,lng:-77.149803,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 2 - PACHACÚTEC SUR",zona:"PACHACÚTEC SUR",nombre:"FE Y ALEGRÍA N°76",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"MZ O LT. 1 AA.HH. LOS ÁLAMOS PACHACÚTEC",lat:-11.847811,lng:-77.146619,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
 
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 120 LAS CASUARINAS",nivel:"INICIAL",direccion:"MZ R1 LOTE 3 SECTOR C - GRUPO RESIDENCIAL C4 - PACHACUTEC",lat:-11.831333,lng:-77.143958,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E N° 5124 LIBERTADOR SIMÓN BOLÍVAR HIROSHIMA",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. CABO BLANCO S/N MZ P LTE 01-C AAHH HIROSHIMA PACHACUTEC",lat:-11.834067,lng:-77.140403,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
+  // ========== RED N° 3 - PACHACÚTEC NORTE ==========
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N°120 LAS CASUARINAS",nivel:"INICIAL",direccion:"MZ R1 LOTE 3 SECTOR C GRUPO RESIDENCIAL C4 PACHACÚTEC",lat:-11.833333,lng:-77.149358,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N°122 CARITAS FELICES",nivel:"INICIAL",direccion:"CALLE SECTOR D S/N MZ P2 PACHACÚTEC",lat:-11.832783,lng:-77.147533,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N°139",nivel:"INICIAL",direccion:"MZ S LT. 10-31-30 ZONA II LOS CEDROS PACHACÚTEC",lat:-11.836117,lng:-77.134986,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N°151 MI HOGAR",nivel:"INICIAL",direccion:"MZ Q LT. 1-4 AA.HH. CHAVÍN DE HUANTAR SECTOR C PACHACÚTEC",lat:-11.825469,lng:-77.139006,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N°152",nivel:"INICIAL",direccion:"MZ H5 LT. 14 GRUPO RESIDENCIAL C-1 SECTOR C 06 DE DICIEMBRE PACHACÚTEC",lat:-11.826692,lng:-77.146736,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N°155 SAN MIGUEL ARCÁNGEL",nivel:"INICIAL",direccion:"MZ 12 LT. 1 GRUPO RESIDENCIAL A2 SECTOR A PACHACÚTEC",lat:-11.827369,lng:-77.156252,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N°160",nivel:"INICIAL",direccion:"MZ LT. 10 GRUPO RESIDENCIAL 1 SECTOR G BARRIO XIV PACHACÚTEC",lat:-11.836281,lng:-77.142061,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N°166 WARMA KUYAY",nivel:"INICIAL",direccion:"MZ W-1 LOTE 4 SECTOR GRUPO RESIDENCIAL A-4 PACHACÚTEC",lat:-11.829036,lng:-77.151242,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E N°5124 LIBERTADOR SIMÓN BOLÍVAR",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. CABO BLANCO S/N MZ P1E-01-C AA.HH. HIROSHIMA PACHACÚTEC",lat:-11.834067,lng:-77.140403,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E N°5125 LAS CASUARINAS",nivel:"PRIMARIA / SECUNDARIA",direccion:"JR. LAS VIOLETAS MZ A LT. 1 AA.HH. LAS CASUARINAS PACHACÚTEC",lat:-11.831817,lng:-77.139258,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E N°5129 VENCEDORES DE PACHACÚTEC",nivel:"PRIMARIA",direccion:"AV. 22 MZ P SECTOR D COSTADO RENIEC PACHACÚTEC",lat:-11.831883,lng:-77.148031,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"I.E N°5130",nivel:"INICIAL / PRIMARIA",direccion:"MZ L M SECTOR A PACHACÚTEC",lat:-11.829272,lng:-77.155003,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 3 - PACHACÚTEC NORTE",zona:"PACHACÚTEC NORTE",nombre:"CEBE HELEN KELLER",nivel:"ESPECIAL",direccion:"AV F SECTOR D GRUPO D-1 Z.I. S/N PACHACÚTEC",lat:-11.832117,lng:-77.147533,turno:"MAÑANA / TARDE",taller:"",requisitos:"REQUISITOS ESPECIALES CEBE",foto:""},
 
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 140",nivel:"INICIAL",direccion:"MZ. F LT. 10 AA.HH. EL GOLFO - AV. EMAUS Y SAMARIA PACHACUTEC",lat:-11.837025,lng:-77.118925,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5127 MÁRTIR JOSÉ OLAYA",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ G LOTE 1 AAHH JOSE OLAYA PACHACUTEC",lat:-11.838786,lng:-77.123669,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
+  // ========== RED N° 4 - PACHACÚTEC ESTE ==========
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"PRITE ANNE SULLIVAN",nivel:"INICIAL / PRIMARIA",direccion:"MZ2 LT. 1 SECTOR D PACHACÚTEC",lat:-11.834244,lng:-77.156239,turno:"MAÑANA / TARDE",taller:"",requisitos:"REQUISITOS ESPECIALES PRITE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°125 DIVINO NIÑO JESÚS",nivel:"INICIAL",direccion:"MZ N2 LOTE 1 AA.HH. MARÍA ESPINOSA PACHACÚTEC",lat:-11.843456,lng:-77.128518,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°128 NIÑO JESÚS DE PRAGA",nivel:"INICIAL",direccion:"MZ K LOTE 1 AA.HH. HÉROES DEL CENEPAC PACHACÚTEC",lat:-11.846228,lng:-77.129117,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°140",nivel:"INICIAL",direccion:"MZ F LT. 10 AA.HH. EL GOLFO - AV. ESMERALDA Y SAMARIA PACHACÚTEC",lat:-11.837025,lng:-77.118925,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°144 JOSÉ OLAYA BALANDRA",nivel:"INICIAL",direccion:"MZ O1 LOTE 1 PACHACÚTEC",lat:-11.841081,lng:-77.125255,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°147 SANTA VIRGEN DE GUADALUPE",nivel:"INICIAL",direccion:"MZ B LT. 1 SECTOR G BARRIO 15 AA.HH. GUADALUPE PACHACÚTEC",lat:-11.84245,lng:-77.139739,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°148",nivel:"INICIAL",direccion:"MZ C LT. 11 GRUPO RESIDENCIAL 1A AA.HH. 07 PACHACÚTEC",lat:-11.846469,lng:-77.128164,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°157",nivel:"INICIAL",direccion:"MZ S LT. 1 SECTOR H BARRIO XVI MERCADO CENTRAL PACHACÚTEC",lat:-11.846497,lng:-77.135158,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:"fotos/157.jpeg"},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°164 MI BUEN JESÚS",nivel:"INICIAL",direccion:"MZ B LT. 1-2 PARCELA 1 PACHACÚTEC",lat:-11.846208,lng:-77.123867,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°171",nivel:"INICIAL",direccion:"MZ F LOTE 12-13 AA.HH. CUEVA DE LOS TALLOS PACHACÚTEC",lat:-11.839769,lng:-77.120508,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°175",nivel:"INICIAL",direccion:"MZ R LT. 14 AA.HH. LOS OLIVOS DE LA PAZ PACHACÚTEC",lat:-11.830003,lng:-77.131303,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°177",nivel:"INICIAL",direccion:"MZ G2 LT. 31 DE DICIEMBRE PACHACÚTEC",lat:-11.839161,lng:-77.130139,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E N°5116 DIVINO CREADOR",nivel:"PRIMARIA",direccion:"CALLE EP NEISSER LLACSA S/N MZ H LT. 1 SECTOR H BARRIO XVI PACHACÚTEC",lat:-11.845265,lng:-77.126006,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E N°5122 JOSÉ ANDRÉS RAZURÍ ESTEVEZ",nivel:"SECUNDARIA",direccion:"JR. LOS ECOLÓGICOS SECTOR EQUIPAMIENTO MZ S/N PACHACÚTEC",lat:-11.846876,lng:-77.130328,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E N°5127 SANTIAGO ANTÚNEZ DE MAYOLO",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ G LOTE 1 AA.HH. JOSÉ OLAYA PACHACÚTEC",lat:-11.838786,lng:-77.123669,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E N°5140 POTRERO DE LA REP. COLOMBIANA DR. ÁLVARO URIBE VÉLEZ",nivel:"PRIMARIA",direccion:"MZ G LOTE 1 BARRIO 15 AA.HH. COSMOVISIÓN PACHACÚTEC",lat:-11.845736,lng:-77.137664,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E N°5141",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ K LOTE 4 AA.HH. NUEVO PROGRESO PACHACÚTEC",lat:-11.837858,lng:-77.124028,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E N°5142 VIRGEN DE GUADALUPE",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ C LT. 1 BARRIO XV GRUPO RESIDENCIAL 2 PACHACÚTEC",lat:-11.842794,lng:-77.139522,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E N°5147 SANTA ROSA DE LIMA",nivel:"PRIMARIA",direccion:"AV. LOS TOPÓGRAFOS MZ C2 MZ A1 JOSÉ MARÍA ARGUEDAS PACHACÚTEC",lat:-11.843833,lng:-77.128411,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"I.E N°5148 BRISAS DE PACHACÚTEC",nivel:"SECUNDARIA",direccion:"MZ S/N PACHACÚTEC",lat:-11.842608,lng:-77.123867,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 4 - PACHACÚTEC ESTE",zona:"PACHACÚTEC ESTE",nombre:"FE Y ALEGRÍA N°59",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"CALLE NICARAGUA MZ G-1 LT. 1-A S/N PACHACÚTEC",lat:-11.842267,lng:-77.128467,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
 
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 83 AMIGOS DE JESÚS",nivel:"INICIAL",direccion:"CALLE SECTOR D MZ. P LT. 2 GRUPO RESIDENCIAL D2",lat:-11.829886,lng:-77.120264,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E N° 3089 LOS ÁNGELES",nivel:"PRIMARIA / SECUNDARIA",direccion:"P. NORTE S/N LOS ANGELES",lat:-11.831786,lng:-77.116861,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
+  // ========== RED N° 5 - VILLA LOS REYES ==========
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°83 AMIGOS DE JESÚS",nivel:"INICIAL",direccion:"CALLE SECTOR D MZ D LT. 2 PROGRAMA RESIDENCIAL DZ",lat:-11.829896,lng:-77.120264,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°99 CORAZÓN DE MARÍA",nivel:"INICIAL",direccion:"CALLE 23 II SECTOR MZ E S/N VILLA LOS REYES",lat:-11.829608,lng:-77.125052,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°110 SANTA MARGARITA",nivel:"INICIAL",direccion:"CALLE 5 MZ 2 LT. 2 SANTA MARGARITA",lat:-11.824056,lng:-77.126592,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°114 CORAZÓN DE JESÚS",nivel:"INICIAL",direccion:"JR. LOS ALISOS MZ D S/N SIN LT. FELIPE DE LAS CASAS",lat:-11.824742,lng:-77.131637,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°130 VIDA Y ALEGRÍA",nivel:"INICIAL",direccion:"AV. ARQUITECTOS S/N LAS LOMAS",lat:-11.82095,lng:-77.138119,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°146 RAYITOS DE SOL",nivel:"INICIAL",direccion:"UR. LOS ÁLAMOS MZ J LOTE 17 AA.HH. KEIKO SOFÍA I ETAPA VENTANILLA NORTE",lat:-11.827222,lng:-77.134914,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°174",nivel:"INICIAL",direccion:"MZ E LT. 1 LOS CEDROS VILLA LOS REYES",lat:-11.830003,lng:-77.131303,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°178 ANGELITOS DE MARÍA",nivel:"INICIAL",direccion:"LT. C AA.HH. HIJOS DE VILLA LOS REYES",lat:-11.833494,lng:-77.134903,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°179 JESÚS MI BUEN AMIGO",nivel:"INICIAL",direccion:"S/N VILLA LOS REYES",lat:-11.832331,lng:-77.135657,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E.I N°380 LOS ÁNGELES",nivel:"INICIAL",direccion:"P. NORTE S/N LOS ÁNGELES VILLA LOS REYES",lat:-11.833383,lng:-77.116667,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°3089 LOS ÁNGELES",nivel:"PRIMARIA / SECUNDARIA",direccion:"P. NORTE S/N LOS ÁNGELES VILLA LOS REYES",lat:-11.831786,lng:-77.116861,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°3720",nivel:"SECUNDARIA",direccion:"CALLE 25 S/N ALT. KM 37 1/2 PANAMERICANA NORTE VILLA LOS REYES",lat:-11.829261,lng:-77.126641,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5101 FE Y ALEGRÍA N°76",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"MZ A LT. 18-20 AA.HH. VILLA LOS REYES",lat:-11.832775,lng:-77.125344,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5136",nivel:"PRIMARIA / SECUNDARIA",direccion:"JR. LAS AGUILAS MZ F S/N ALT. A-43 JOSÉ LUIS BUSTAMANTE Y RIVERO",lat:-11.824849,lng:-77.136117,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5137",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. ARQUITECTOS S/N LAS LOMAS VILLA LOS REYES",lat:-11.821322,lng:-77.138092,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"CETPRO SANTA MARÍA",nivel:"TÉCNICO PRODUCTIVO",direccion:"MZ U1 LT. 8 AA.HH. KEIKO SOFÍA VILLA LOS REYES",lat:-11.827769,lng:-77.131183,turno:"MAÑANA / TARDE",taller:"TALLERES",requisitos:"REQUISITOS CETPRO",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5077 JOSÉ FAUSTINO SÁNCHEZ CARRIÓN",nivel:"SECUNDARIA",direccion:"CALLE 3 KM. 37 SECTOR 1 PANAMERICANA NORTE",lat:-11.830731,lng:-77.122239,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5087 SANTA MARGARITA",nivel:"PRIMARIA",direccion:"KM 37 1/2 PANAMERICANA NORTE VILLA LOS REYES",lat:-11.823492,lng:-77.127408,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5094 NACIONES UNIDAS",nivel:"PRIMARIA",direccion:"AV. PERÚ S/N AA.HH. SAN MARTÍN VILLA LOS REYES",lat:-11.826753,lng:-77.129261,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5120 JOSÉ CARLOS MARIÁTEGUI",nivel:"PRIMARIA",direccion:"MZ A LT. 18-20 AA.HH. VILLA LOS REYES",lat:-11.832775,lng:-77.125344,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5121 PEDRO PAULET",nivel:"PRIMARIA",direccion:"JR. LAS ÁGUILAS MZ F S/N ALT. A-43 JOSÉ LUIS BUSTAMANTE Y RIVERO",lat:-11.824849,lng:-77.136117,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"I.E N°5123 FRANCISCO DE GOYA",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. ARQUITECTOS S/N LAS LOMAS VILLA LOS REYES",lat:-11.821322,lng:-77.138092,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"LA ESCUELA HOGAR COMUNIDAD SAGRADA FAMILIA",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"MZ U1 LT. 8 AA.HH. KEIKO SOFÍA VILLA LOS REYES",lat:-11.827769,lng:-77.131183,turno:"MAÑANA / TARDE",taller:"",requisitos:"REQUISITOS ESPECIALES",foto:""},
+  {red:"RED N° 5 - VILLA LOS REYES",zona:"VILLA LOS REYES",nombre:"FE Y ALEGRÍA N°43 LA SALLE",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"AV. LOS CEREZOS S/N VILLA LOS REYES",lat:-11.824566,lng:-77.130356,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
 
-  {red:"RED N.° 06",zona:"MI PERÚ",nombre:"I.E.I N° 101 MI PERÚ",nivel:"INICIAL",direccion:"MZ. A LT. 1 SECTOR A - MI PERÚ",lat:-11.866667,lng:-77.141667,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 06",zona:"MI PERÚ",nombre:"I.E N° 3090 MI PERÚ",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. PRINCIPAL S/N - MI PERÚ",lat:-11.865556,lng:-77.140556,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
+  // ========== RED N° 6 - MI PERÚ ==========
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E.I N°124 VILLA DEL MAR",nivel:"INICIAL",direccion:"MZ O LT. 1 AA.HH. VILLA DEL MAR MI PERÚ",lat:-11.849633,lng:-77.181956,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E.I N°141 INMACULADA CONCEPCIÓN DE GUADALUPE",nivel:"INICIAL",direccion:"MZ E LOTE 1 AA.HH. VIRGEN DE GUADALUPE MI PERÚ",lat:-11.852939,lng:-77.122506,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E.I N°159 REGGIO EMILIA",nivel:"INICIAL",direccion:"MZ F 17 LT. 2 MI PERÚ",lat:-11.856417,lng:-77.119194,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E.I N°161",nivel:"INICIAL",direccion:"AV. AREQUIPA S/N MZ 17 LT. 04 MI PERÚ",lat:-11.857819,lng:-77.126372,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E.I N°167 CRISTO REY DE LOS NIÑOS",nivel:"INICIAL",direccion:"AV. EL BOSQUE MZ. JK LOTE 1 AA.HH. VILLA EMILIA MI PERÚ",lat:-11.849786,lng:-77.122369,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E.I FERMÍN ÁVILA",nivel:"INICIAL",direccion:"AV. HUAURA MZ. G LT. 7 - MI PERÚ",lat:-11.855058,lng:-77.123719,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E N°5098 KUMAMOTO",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. CUZCO S/N CON AV. VICTOR RAÚL HAYA DE LA TORRE S/N MI PERÚ",lat:-11.856092,lng:-77.127658,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E N°5119 VILLA EL MAR",nivel:"PRIMARIA",direccion:"CALLE LOS FÍSICOS MZ 1 LT. 1 MI PERÚ",lat:-11.852497,lng:-77.122133,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E N°5130-2",nivel:"INICIAL / PRIMARIA",direccion:"MZ L MZ 1 MI PERÚ",lat:-11.852786,lng:-77.118847,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E N°5130-4 CHAVINILLO",nivel:"INICIAL / PRIMARIA",direccion:"MZ T. 1 CHAVINILLO - MI PERÚ",lat:-11.846794,lng:-77.115708,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E N°5135 LA SALLE",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. VILLA - MZ. B LT. 01 AA.HH. VILLA EL SOL - MI PERÚ",lat:-11.854139,lng:-77.119861,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+   {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E N°5157",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ. F-17 LT. 02 SECTOR 02 - MI PERÚ",lat:-11.856417,lng:-77.119194,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
+  {red:"RED N° 6 - MI PERÚ",zona:"MI PERÚ",nombre:"I.E N°3090",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. EL BOSQUE MZ. JK LOTE 1 AA.HH. VILLA EMILIA - MI PERÚ",lat:-11.849786,lng:-77.122369,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
 
-  {red:"RED N.° 07",zona:"SATÉLITE",nombre:"I.E.I N° 105",nivel:"INICIAL",direccion:"MZ. 1 LT. 1 - SATÉLITE",lat:-11.855000,lng:-77.128333,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 07",zona:"SATÉLITE",nombre:"I.E N° 3091 SATÉLITE",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. PRINCIPAL S/N - SATÉLITE",lat:-11.854444,lng:-77.127778,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
+  // ========== RED N° 7 - SATÉLITE ==========
+  {red:"RED N° 7 - SATÉLITE",zona:"SATÉLITE",nombre:"I.E.I N°105",nivel:"INICIAL",direccion:"MZ. H LT. 1 - AA.HH. SATÉLITE - VENTANILLA",lat:-11.894444,lng:-77.145278,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 7 - SATÉLITE",zona:"SATÉLITE",nombre:"I.E.I N°106",nivel:"INICIAL",direccion:"MZ. K LT. 1 - AA.HH. SATÉLITE - VENTANILLA",lat:-11.895278,lng:-77.144722,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 7 - SATÉLITE",zona:"SATÉLITE",nombre:"I.E N°3091",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ. H LT. 1 - AA.HH. SATÉLITE - VENTANILLA",lat:-11.894444,lng:-77.145278,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
 
-  {red:"RED N.° 08",zona:"AMC",nombre:"I.E.I N° 107",nivel:"INICIAL",direccion:"MZ. A LT. 1 - AMC",lat:-11.870000,lng:-77.150000,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 08",zona:"AMC",nombre:"I.E N° 3092 AMC",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. PRINCIPAL S/N - AMC",lat:-11.869444,lng:-77.149444,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
+  // ========== RED N° 8 - ANTONIA MORENO DE CÁCERES ==========
+  {red:"RED N° 8 - ANTONIA MORENO DE CÁCERES",zona:"ANTONIA MORENO DE CÁCERES",nombre:"I.E.I N°133 DIVINA PASTORA",nivel:"INICIAL",direccion:"PSJE. JHONNY WATSON S/N 2 SECTOR URB. ANTONIA MORENO DE CÁCERES",lat:-11.888647,lng:-77.120436,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 8 - ANTONIA MORENO DE CÁCERES",zona:"ANTONIA MORENO DE CÁCERES",nombre:"I.E.I N°135 MI PEQUEÑO MUNDO",nivel:"INICIAL",direccion:"AV. MARCOS CALDERÓN S/N IV SECTOR ANTONIA MORENO DE CÁCERES",lat:-11.891164,lng:-77.116642,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 8 - ANTONIA MORENO DE CÁCERES",zona:"ANTONIA MORENO DE CÁCERES",nombre:"I.E N°3092",nivel:"PRIMARIA / SECUNDARIA",direccion:"URB. ANTONIA MORENO DE CÁCERES",lat:-11.890000,lng:-77.118000,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""},
 
-  {red:"RED N.° 09",zona:"ANGAMOS",nombre:"I.E.I N° 108",nivel:"INICIAL",direccion:"MZ. A LT. 1 - ANGAMOS",lat:-11.880000,lng:-77.160000,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 09",zona:"ANGAMOS",nombre:"I.E N° 3093 ANGAMOS",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. PRINCIPAL S/N - ANGAMOS",lat:-11.879444,lng:-77.159444,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""}
+  // ========== RED N° 9 - ANGAMOS ==========
+  {red:"RED N° 9 - ANGAMOS",zona:"ANGAMOS",nombre:"I.E.I N°108",nivel:"INICIAL",direccion:"AA.HH. ANGAMOS - VENTANILLA",lat:-11.885000,lng:-77.130000,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"COPIA DE ACTA DE NACIMIENTO + COPIA DE DNI DEL NIÑO(A) + COPIA DE DNI DE LOS PADRES O APODERADO + VACUNAS CRED",foto:""},
+  {red:"RED N° 9 - ANGAMOS",zona:"ANGAMOS",nombre:"I.E N°3093",nivel:"PRIMARIA / SECUNDARIA",direccion:"AA.HH. ANGAMOS - VENTANILLA",lat:-11.885000,lng:-77.130000,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 COPIAS) + DNI APODERADO (1 COPIA) + FUM SIAGIE",foto:""}
 ];
-  // ====== VARIABLES GLOBALES ======
+
+// ===== VARIABLES GLOBALES =====
 let mapa;
 let marcadores = [];
-let marcadorSeleccionado = null;
+let colegioSeleccionado = null;
 let filtroActivo = "TODOS";
-let iconoNormal, iconoSeleccionado;
 
-// ====== INICIALIZACIÓN ======
+// ===== INICIALIZACIÓN =====
 document.addEventListener("DOMContentLoaded", function() {
-  inicializarBuscador();
-  inicializarBotonesRedes();
+  generarBotonesRed();
+  configurarBuscador();
 });
 
-// ====== BUSCADOR MEJORADO: BUSCA POR NÚMERO O POR NOMBRE ======
-function inicializarBuscador() {
-  const buscador = document.getElementById("buscador");
+// ===== GENERAR BOTONES DE FILTRO POR RED =====
+function generarBotonesRed() {
+  const contenedor = document.getElementById("filtrosRedes");
+  const redesUnicas = [...new Set(colegios.map(c => c.red))];
+  
+  const btnTodos = document.createElement("button");
+  btnTodos.className = "boton-red activo";
+  btnTodos.style.background = "#06223F";
+  btnTodos.style.borderColor = "#FFD700";
+  btnTodos.style.color = "#FFD700";
+  btnTodos.textContent = "TODOS";
+  btnTodos.onclick = () => filtrarRed("TODOS");
+  contenedor.appendChild(btnTodos);
+
+  redesUnicas.forEach(red => {
+    const btn = document.createElement("button");
+    btn.className = "boton-red";
+    btn.style.background = coloresRed[red] + "33";
+    btn.style.borderColor = coloresRed[red];
+    btn.style.color = coloresRed[red];
+    btn.textContent = red.replace("RED N° ", "").replace(" - PACHACÚTEC OESTE", "").replace(" - PACHACÚTEC SUR", "").replace(" - PACHACÚTEC NORTE", "").replace(" - PACHACÚTEC ESTE", "").replace(" - VILLA LOS REYES", "").replace(" - MI PERÚ", "").replace(" - SATÉLITE", "").replace(" - ANTONIA MORENO DE CÁCERES", "").replace(" - ANGAMOS", "");
+    btn.title = red;
+    btn.onclick = () => filtrarRed(red);
+    contenedor.appendChild(btn);
+  });
+}
+
+// ===== FILTRAR POR RED =====
+function filtrarRed(redNombre) {
+  filtroActivo = redNombre;
+  document.querySelectorAll(".boton-red").forEach(b => b.classList.remove("activo"));
+  event.target.classList.add("activo");
+  actualizarMarcadores();
+}
+
+// ===== CONFIGURAR BUSCADOR =====
+function configurarBuscador() {
+  const input = document.getElementById("buscador");
   const sugerencias = document.getElementById("sugerencias");
 
-  buscador.addEventListener("input", function() {
-    const texto = this.value.trim().toUpperCase();
+  input.addEventListener("input", function() {
+    const busqueda = this.value.trim().toUpperCase();
     sugerencias.innerHTML = "";
-
-    if (texto.length === 0) {
+    
+    if (busqueda.length < 1) {
       sugerencias.style.display = "none";
       return;
     }
 
-    // Busca por número contenido en el nombre O por nombre
-    const coinciden = colegios.filter(c => {
-      const nombreCompleto = c.nombre.toUpperCase();
-      return nombreCompleto.includes(texto);
-    });
+    const coinciden = colegios.filter(c => 
+      c.nombre.toUpperCase().includes(busqueda) || 
+      c.nombre.replace(/[^0-9]/g, "").includes(busqueda.replace(/[^0-9]/g, ""))
+    ).slice(0, 10);
 
     if (coinciden.length > 0) {
       sugerencias.style.display = "block";
-      coinciden.forEach(colegio => {
+      coinciden.forEach(c => {
         const item = document.createElement("div");
         item.className = "sugerencia-item";
-        item.textContent = colegio.nombre;
+        item.textContent = c.nombre;
         item.onclick = () => {
-          buscador.value = colegio.nombre;
+          input.value = c.nombre;
           sugerencias.style.display = "none";
-          irAColegio(colegio);
+          ubicarColegioEnMapa(c);
         };
         sugerencias.appendChild(item);
       });
@@ -271,172 +417,138 @@ function inicializarBuscador() {
     }
   });
 
-  // Cerrar sugerencias al hacer clic fuera
-  document.addEventListener("click", e => {
-    if (!buscador.contains(e.target) && !sugerencias.contains(e.target)) {
-      sugerencias.style.display = "none";
-    }
+  input.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") sugerencias.style.display = "none";
   });
 }
 
-// ====== IR A COLEGIO DESDE BÚSQUEDA ======
-function irAColegio(colegio) {
-  document.getElementById("pantallaPrincipal").style.opacity = "0";
-  setTimeout(() => {
-    document.getElementById("pantallaPrincipal").style.display = "none";
-    document.getElementById("mapaContainer").style.display = "block";
-    if (!mapa) inicializarMapa();
-
-    mapa.setView([colegio.lat, colegio.lng], 17);
-
-    marcadores.forEach(m => {
-      if (m.colegio.nombre === colegio.nombre) {
-        m.setIcon(iconoSeleccionado);
-        marcadorSeleccionado = m;
-        m.openPopup();
-      } else {
-        m.setIcon(iconoNormal);
-      }
-    });
-
-    mostrarVentanaInfo(colegio);
-  }, 600);
-}
-
-// ====== INICIALIZAR MAPA ======
-function inicializarMapa() {
-  mapa = L.map("mapa").setView([-11.840, -77.150], 13);
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap contributors"
-  }).addTo(mapa);
-
-  iconoNormal = L.icon({
-    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
-    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-
-  iconoSeleccionado = L.icon({
-    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-magenta.png",
-    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-
+// ===== MOSTRAR MAPA COMPLETO =====
+function mostrarMapaCompleto() {
+  document.getElementById("pantalla1").style.display = "none";
+  document.getElementById("pantalla2").style.display = "block";
+  
+  if (!mapa) {
+    mapa = L.map("mapa").setView([-11.850, -77.145], 13);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap"
+    }).addTo(mapa);
+  }
+  
+  setTimeout(() => mapa.invalidateSize(), 100);
   actualizarMarcadores();
-
-  mapa.on("click", () => {
-    if (marcadorSeleccionado) {
-      marcadorSeleccionado.setIcon(iconoNormal);
-      marcadorSeleccionado = null;
-    }
-    cerrarVentanaInfo();
-  });
 }
 
-// ====== ACTUALIZAR MARCADORES ======
+// ===== ACTUALIZAR MARCADORES EN EL MAPA =====
 function actualizarMarcadores() {
   marcadores.forEach(m => mapa.removeLayer(m));
   marcadores = [];
 
-  const filtrados = filtroActivo === "TODOS"
-    ? colegios
+  const colegiosMostrar = filtroActivo === "TODOS" 
+    ? colegios 
     : colegios.filter(c => c.red === filtroActivo);
 
-  filtrados.forEach(colegio => {
-    const marcador = L.marker([colegio.lat, colegio.lng], { icon: iconoNormal }).addTo(mapa);
-    marcador.colegio = colegio;
-
-    marcador.on("click", () => {
-      if (marcadorSeleccionado) marcadorSeleccionado.setIcon(iconoNormal);
-      marcador.setIcon(iconoSeleccionado);
-      marcadorSeleccionado = marcador;
-      mostrarVentanaInfo(colegio);
+  colegiosMostrar.forEach(c => {
+    const color = coloresRed[c.red] || "#2A76E8";
+    const esSeleccionado = colegioSeleccionado && colegioSeleccionado.nombre === c.nombre;
+    
+    const icono = L.divIcon({
+      html: `<div style="background:${esSeleccionado ? '#FF00FF' : color};width:24px;height:24px;border-radius:50%;border:3px solid ${esSeleccionado ? '#FFD700' : '#fff'};box-shadow:0 2px 6px rgba(0,0,0,0.4);"></div>`,
+      className: "",
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
     });
 
+    const marcador = L.marker([c.lat, c.lng], {icon: icono}).addTo(mapa);
+    marcador.on("click", () => mostrarInformacion(c));
     marcadores.push(marcador);
   });
 }
 
-// ====== MOSTRAR VENTANA DE INFORMACIÓN ======
-function mostrarVentanaInfo(colegio) {
-  document.getElementById("infoNombre").textContent = colegio.nombre;
-  document.getElementById("infoRed").textContent = colegio.red + " — " + colegio.zona;
-  document.getElementById("infoNivel").textContent = colegio.nivel;
-  document.getElementById("infoDireccion").textContent = colegio.direccion;
-  document.getElementById("infoTurno").textContent = colegio.turno;
-  document.getElementById("infoTaller").textContent = colegio.taller || "No especificado";
-  document.getElementById("infoRequisitos").textContent = colegio.requisitos;
+// ===== UBICAR COLEGIO SELECCIONADO DESDE EL BUSCADOR =====
+function ubicarColegioEnMapa(colegio) {
+  colegioSeleccionado = colegio;
+  mostrarMapaCompleto();
+  mapa.setView([colegio.lat, colegio.lng], 16);
+  setTimeout(() => {
+    actualizarMarcadores();
+    mostrarInformacion(colegio);
+  }, 300);
+}
 
-  const contenedorFoto = document.getElementById("contenedorFoto");
-  const foto = document.getElementById("fotoColegio");
-  if (colegio.foto && colegio.foto !== "") {
-    foto.src = colegio.foto;
-    foto.style.display = "block";
-    contenedorFoto.style.display = "block";
-  } else {
-    foto.style.display = "none";
-    contenedorFoto.style.display = "none";
-  }
+// ===== MOSTRAR VENTANA DE INFORMACIÓN =====
+function mostrarInformacion(c) {
+  colegioSeleccionado = c;
+  actualizarMarcadores();
 
-  const gmLink = `https://www.google.com/maps/search/?api=1&query=${colegio.lat},${colegio.lng}`;
+  document.getElementById("infoNombre").textContent = c.nombre;
+  document.getElementById("infoRed").textContent = c.red + " | " + c.zona;
+  document.getElementById("infoNivel").textContent = c.nivel;
+  document.getElementById("infoDireccion").textContent = c.direccion;
+  document.getElementById("infoTurno").textContent = c.turno;
+  document.getElementById("infoTaller").textContent = c.taller || "NO APLICA";
+  document.getElementById("infoRequisitos").textContent = c.requisitos;
+
+  const gmLink = `https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}`;
   document.getElementById("btnMapaExterno").href = gmLink;
-  document.getElementById("btnComoLlegar").href = gmLink;
+  document.getElementById("btnComoLlegar").href = `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}`;
 
+  window.colegioActual = c;
   document.getElementById("ventanaInfo").style.display = "block";
 }
 
-// ====== CERRAR VENTANA ======
+// ===== CERRAR VENTANA DE INFORMACIÓN =====
 function cerrarVentanaInfo() {
   document.getElementById("ventanaInfo").style.display = "none";
-  if (marcadorSeleccionado) {
-    marcadorSeleccionado.setIcon(iconoNormal);
-    marcadorSeleccionado = null;
+}
+
+// ===== MOSTRAR FOTO DEL COLEGIO =====
+function mostrarFoto() {
+  const c = window.colegioActual;
+  if (c && c.foto) {
+    document.getElementById("imagenFoto").src = c.foto;
+    document.getElementById("fotoAmpliada").style.display = "flex";
+  } else {
+    alert("📸 Foto de fachada pendiente de agregar");
   }
 }
 
-// ====== CERRAR FOTO ======
+// ===== CERRAR FOTO AMPLIADA =====
 function cerrarFoto() {
-  document.getElementById("fotoColegio").style.display = "none";
+  document.getElementById("fotoAmpliada").style.display = "none";
+  document.getElementById("imagenFoto").src = "";
 }
 
-// ====== FILTROS POR RED ======
-function inicializarBotonesRedes() {
-  document.querySelectorAll(".boton-red").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".boton-red").forEach(b => b.classList.remove("activo"));
-      btn.classList.add("activo");
-      filtroActivo = btn.dataset.red;
-      if (mapa) actualizarMarcadores();
-    });
-  });
+// ===== ABRIR PANTALLA DE VACANTES =====
+function abrirPantallaVacantes() {
+  const c = window.colegioActual;
+  if (c) {
+    document.getElementById("contenidoVacantes").innerHTML = `
+      <div class="vacante-colegio">
+        <h3 class="vacante-nombre">${c.nombre}</h3>
+        <p class="vacante-dato"><strong>RED / ZONA:</strong> ${c.red} | ${c.zona}</p>
+        <p class="vacante-dato"><strong>NIVELES:</strong> ${c.nivel}</p>
+        <p class="vacante-dato"><strong>DIRECCIÓN:</strong> ${c.direccion}</p>
+        <p class="vacante-dato"><strong>TURNOS:</strong> ${c.turno}</p>
+        <hr style="border:1px solid rgba(255,255,255,0.15);margin:10px 0;">
+        <p class="vacante-dato">✅ <strong>NIVEL INICIAL:</strong> Por determinar</p>
+        <p class="vacante-dato">✅ <strong>NIVEL PRIMARIA:</strong> Por determinar</p>
+        <p class="vacante-dato">✅ <strong>NIVEL SECUNDARIA:</strong> Por determinar</p>
+      </div>
+    `;
+  }
+  document.getElementById("pantalla3").style.display = "block";
 }
 
-// ====== VER TODOS LOS COLEGIOS EN EL MAPA ======
-function mostrarMapaCompleto() {
-  document.getElementById("pantallaPrincipal").style.opacity = "0";
-  setTimeout(() => {
-    document.getElementById("pantallaPrincipal").style.display = "none";
-    document.getElementById("mapaContainer").style.display = "block";
-    if (!mapa) inicializarMapa();
-    mapa.setView([-11.840, -77.150], 13);
-  }, 600);
+// ===== CERRAR PANTALLA DE VACANTES =====
+function cerrarPantallaVacantes() {
+  document.getElementById("pantalla3").style.display = "none";
 }
 
-// ====== REGRESAR A INICIO ======
+// ===== REGRESAR A PANTALLA PRINCIPAL =====
 function regresarInicio() {
-  document.getElementById("mapaContainer").style.display = "none";
+  document.getElementById("pantalla2").style.display = "none";
   document.getElementById("ventanaInfo").style.display = "none";
-  document.getElementById("pantallaPrincipal").style.display = "flex";
-  document.getElementById("pantallaPrincipal").style.opacity = "1";
-  document.getElementById("buscador").value = "";
-  document.getElementById("sugerencias").style.display = "none";
+  colegioSeleccionado = null;
 }
 </script>
 </body>
