@@ -25,7 +25,7 @@
     .logo-icon { font-size: 72px; margin-bottom: 10px; }
     .titulo { font-size: 42px; font-weight: bold; color: #FFD700; text-shadow: 2px 2px 4px rgba(0,0,0,0.4); }
     .subtitulo { font-size: 18px; color: #B0D4F1; margin-top: 8px; font-style: italic; }
-    .buscador-container { width: 90%; max-width: 480px; margin: 20px auto; position: relative; }
+    .buscador-container { width: 90%; max-width: 480px; margin: 20px auto; position: relative; z-index: 1002; }
     .input-busqueda {
       width: 100%; padding: 14px 14px 14px 48px; font-size: 16px; border-radius: 30px;
       border: 2px solid #2A76E8; background: rgba(255,255,255,0.95); color: #06223F; outline: none;
@@ -35,7 +35,7 @@
     .sugerencias {
       position: absolute; top: 100%; left: 0; width: 100%; background: white;
       border-radius: 0 0 16px 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      max-height: 320px; overflow-y: auto; z-index: 1001; display: none;
+      max-height: 320px; overflow-y: auto; z-index: 1003; display: none;
     }
     .sugerencia-item {
       padding: 12px 16px; color: #06223F; cursor: pointer; border-bottom: 1px solid #eee;
@@ -88,7 +88,7 @@
     .info-fila { font-size: 14px; margin-bottom: 6px; color: #E0EFFE; }
     .info-etiqueta { color: #87CEFA; font-weight: 600; }
     .contenedor-foto { margin: 12px 0; text-align: center; position: relative; }
-    .foto-colegio { max-width: 100%; border-radius: 10px; border: 3px solid #2A76E8; display: none; }
+    .foto-colegio { max-width: 100%; max-height: 300px; border-radius: 10px; border: 3px solid #2A76E8; display: none; }
     .btn-cerrar-foto {
       position: absolute; top: 6px; right: calc(50% - 140px); background: rgba(6,34,63,0.85);
       color: #FFD700; border: none; width: 28px; height: 28px; border-radius: 50%;
@@ -108,7 +108,6 @@
     /* Responsive */
     @media (max-width: 768px) {
       .anuncios-lado, .ver-todos-lado { position: relative; left: auto; right: auto; top: auto; width: 90%; margin: 8px auto; }
-      .anuncios-container { display: flex; flex-direction: column; }
       .titulo { font-size: 30px; }
       .logo-icon { font-size: 54px; }
       .filtros-redes { top: 60px; left: 8px; }
@@ -131,7 +130,7 @@
 
   <div class="buscador-container">
     <span class="icono-lupa">🔍</span>
-    <input type="text" id="buscador" class="input-busqueda" placeholder="Escribe el nombre del colegio...">
+    <input type="text" id="buscador" class="input-busqueda" placeholder="Escribe el número o nombre del colegio...">
     <div id="sugerencias" class="sugerencias"></div>
   </div>
 
@@ -184,102 +183,35 @@
     <a id="btnComoLlegar" class="btn-como-llegar" href="#" target="_blank">🚗 ¿Cómo llegar?</a>
   </div>
 </div>
-
 <script>
 // ====== BASE DE DATOS COMPLETA ACTUALIZADA ======
-const colegios = 
-  "I.E.I N° 169",nivel:"INICIAL",direccion:"Mz C LT 1 SECTOR D BARRIO IX, LA UNIÓN - PACHACUTEC",lat:-11.845617,lng:-77.151675,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 176",nivel:"INICIAL",direccion:"Mz M LT 1-B SECTOR E GRUPO RESIDENCIAL 2 - PESQUERO PACHACUTEC",lat:-11.838119,lng:-77.155025,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
+const colegios = [
+  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N°121 ANGELITOS DE PACHACÚTEC",nivel:"INICIAL",direccion:"MZ I 2 SECTOR A PACHACUTEC (ALTURA DE POSTA MÉDICA)",lat:-11.830639,lng:-77.160028,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
+  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N°123 VIRGEN DE LA ASUNCIÓN",nivel:"INICIAL",direccion:"MZ. N1 LOTE 7 SECTOR E PACHACÚTEC",lat:-11.836133,lng:-77.158953,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
+  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 142",nivel:"INICIAL",direccion:"MZ D 8 LT. 1 GRUPO RESIDENCIAL B-4 SECTOR B PACHACUTEC (ANTES DE LLEGAR AL PARADERO 41)",lat:-11.830639,lng:-77.164167,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
+  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 150",nivel:"INICIAL",direccion:"TECHO PROPIO (PROYECTO EL MIRADOR) MZ 1A LT. 1 PACHACUTEC",lat:-11.837389,lng:-77.169064,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
+  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 154 RAYITO DE LUZ",nivel:"INICIAL",direccion:"MZ S LOT. 1 AAHH JAIME YOSHIYAMA PACHACUTEC",lat:-11.834208,lng:-77.153944,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
+  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E.I N° 157",nivel:"INICIAL",direccion:"MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL",lat:-11.846497,lng:-77.135158,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:"fotos/157.jpeg"},
   {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5128 SAGRADO CORAZÓN DE MARÍA",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ 1 LT. 02 SECTOR E PACHACÚTEC",lat:-11.835164,lng:-77.159244,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
   {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5144 DIVINO CRISTO DE LAS ALTURAS",nivel:"INICIAL / PRIMARIA",direccion:"PARCELA I - MZ. H - AA.HH. LOS PROCERES PACHACUTEC",lat:-11.829033,lng:-77.171572,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5152",nivel:"PRIMARIA / SECUNDARIA",direccion:"TECHO PROPIO Mz 1A lt. 1 - ALT. I.E. 5128",lat:-11.837723,lng:-77.168942,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5156 SANTIAGO ANTÚNEZ DE MAYOLO",nivel:"PRIMARIA / SECUNDARIA",direccion:"Mz A12 Lote 1 Sector A. GRUPO RESIDENCIAL A1 PACHACUTEC",lat:-11.827484,lng:-77.162154,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"I.E N° 5154 ELÍAS AGUIRRE ROMERO",nivel:"PRIMARIA / SECUNDARIA",direccion:"Mz 4G Lt.8 4 SECTOR FRENTE COMEDOR - CACHITO PACHACUTEC",lat:-11.847139,lng:-77.158473,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"COPRODELI SAN FRANCISCO SOLANO",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"MZ J2 SECTOR E PACHACUTEC",lat:-11.835803,lng:-77.160617,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 01",zona:"PACHACÚTEC OESTE",nombre:"COPRODELI SAN MARTÍN",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"SECTOR B PACHACUTEC",lat:-11.831708,lng:-77.158506,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
 
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I N° 129",nivel:"INICIAL",direccion:"AV HUANCAPUNCO MZ G LOTE 2 ASOC. CONSTRUCCIÓN CIVIL PACHACUTEC",lat:-11.848592,lng:-77.139908,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I 138 SAN CARLOS BORROMEO",nivel:"INICIAL",direccion:"MZ. J LT. 1 - AA.HH. SAN CARLOS PACHACUTEC",lat:-11.845600,lng:-77.142625,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I 145 BALNEARIO",nivel:"INICIAL",direccion:"JR. TRUJILLO MZ. X LT. 1 - II SECTOR BALNEARIO PACHACUTEC",lat:-11.854133,lng:-77.140250,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I 149 LAS SEMILLITAS",nivel:"INICIAL",direccion:"AAHH AVIMAPA MZ N LT 2 (PARADERO S. PEDRO) PACHACUTEC",lat:-11.853328,lng:-77.145467,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I 156",nivel:"INICIAL",direccion:"MZ. 1 LT. 14 SECTOR F, BARRIO XIII, GRUPO RESIDENCIAL 1 PACHACUTEC",lat:-11.843697,lng:-77.142933,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I 158",nivel:"INICIAL",direccion:"GRUPO RESIDENCIAL 4 MZ D LT 1 SECTOR E, BARRIO XI, PACHACUTEC",lat:-11.843200,lng:-77.148728,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I 168",nivel:"INICIAL",direccion:"MZ H LT 1 SECTOR 1 PARCELA J-L, MIRADOR PACHACUTEC",lat:-11.868769,lng:-77.132900,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I 170",nivel:"INICIAL",direccion:"MZ B LOTE 8 SECTOR E PACHACUTEC",lat:-11.839200,lng:-77.146406,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
+  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I N°125 DIVINO NIÑO JESÚS",nivel:"INICIAL",direccion:"MZ N2 LOTE 1 AA.HH. MARIA JESUS ESPINOZA PACHACUTEC",lat:-11.843456,lng:-77.128518,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:"fotos/125.jpeg"},
+  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E.I N°129",nivel:"INICIAL",direccion:"AV HUANCAPUNCO MZ G LOTE 2 ASOC. CONSTRUCCIÓN CIVIL PACHACUTEC",lat:-11.848592,lng:-77.139908,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
   {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E N° 5117 JORGE PORTOCARRERO REBAZA",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"AV. FRANCISCO BOLOGNESI Nº 421 URB. MESA REDONDA PACHACUTEC",lat:-11.844428,lng:-77.147233,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E N° 5145 BALNEARIO",nivel:"PRIMARIA",direccion:"MZ 1 LTE 1 SECTOR BALNEARIO PACHACUTEC",lat:-11.853186,lng:-77.138969,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E N° 5146 OASIS DE LA MISERICORDIA",nivel:"INICIAL / PRIMARIA",direccion:"MZ U LOTE 01 SECTOR OASIS PACHACUTEC",lat:-11.856639,lng:-77.145306,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E N° 5149 SAN JUAN BAUTISTA",nivel:"SECUNDARIA",direccion:"MZ. G LOTE 1 BARRIO XIII PACHACUTEC",lat:-11.847653,lng:-77.140194,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"I.E N° 5150",nivel:"SECUNDARIA",direccion:"CERRO CACHITO PACHACUTEC",lat:-11.852064,lng:-77.149803,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"FE Y ALEGRÍA N° 76",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"MZ. O LT. 1 AA.HH. LOS ALAMOS PACHACUTEC",lat:-11.847811,lng:-77.146619,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 02",zona:"PACHACÚTEC SUR",nombre:"COPRODELI SANTA MARÍA ASUNTA AL CIELO",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"SECTOR F PACHACUTEC",lat:-11.849606,lng:-77.145772,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
 
   {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 120 LAS CASUARINAS",nivel:"INICIAL",direccion:"MZ R1 LOTE 3 SECTOR C - GRUPO RESIDENCIAL C4 - PACHACUTEC",lat:-11.831333,lng:-77.143958,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 122 CARITAS FELICES",nivel:"INICIAL",direccion:"CALLE SECTOR D S/N MZ P LOTE 2 PACHACUTEC",lat:-11.832783,lng:-77.147533,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 139",nivel:"INICIAL",direccion:"MZ. S LT. 10-11-30-31 ZONA II LOS CEDROS - PACHACUTEC",lat:-11.836117,lng:-77.134986,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 151 MI SEGUNDO HOGAR",nivel:"INICIAL",direccion:"MZ. O LT.1-4 AAHH CHAVIN DE HUANTAR ÁCJACUTEC",lat:-11.825469,lng:-77.139006,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 152",nivel:"INICIAL",direccion:"MZ. H5 LT 14 GRUPO RESIDENCIAL C-1 SECTOR C 06 DE DICIEMBRE PACHACUTEC",lat:-11.826692,lng:-77.146736,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 155 SAN MIGUEL ARCANGEL",nivel:"INICIAL",direccion:"MZ 12 LT. 1 GRUPO RESIDENCIAL A2 , SECTOR A PACHACUTEC",lat:-11.827369,lng:-77.156525,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 160",nivel:"INICIAL",direccion:"MZ L LT. 10 GRUPO RESIDENCIAL 1, SECTOR G,BARRIO XIV PACHACUTEC",lat:-11.836281,lng:-77.142061,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E.I N° 166 WARMA KUYAY",nivel:"INICIAL",direccion:"MZ W-1 LOTE -4 SECTOR GRUPO RES. A-4 PACHACUTEC",lat:-11.829036,lng:-77.151242,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
   {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E N° 5124 LIBERTADOR SIMÓN BOLÍVAR HIROSHIMA",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. CABO BLANCO S/N MZ P LTE 01-C AAHH HIROSHIMA PACHACUTEC",lat:-11.834067,lng:-77.140403,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E N° 5125 CASUARINAS",nivel:"PRIMARIA / SECUNDARIA",direccion:"JR. LAS VIOLETAS MZ. A LT. 1 AA.HH. LAS CASUARINAS PACHACUTEC",lat:-11.831817,lng:-77.139258,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E N° 5129 VENCEDORES DE PACHACÚTEC",nivel:"PRIMARIA",direccion:"AV. 225 MZ. P SECTOR D COSTADO RENIEC PACHACUTEC",lat:-11.831883,lng:-77.148031,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"I.E N° 5130 PACHACUTEC",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ L,M,N SECTOR A PACHACÚTEC",lat:-11.829272,lng:-77.155003,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"COPRODELI SAN JUAN MACÍAS",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"Mz H2 Lt. 2 Sector PACHACUTEC",lat:-11.829928,lng:-77.147533,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"CEBE HELEN KELLER",nivel:"ESPECIAL (INICIAL Y PRIMARIA)",direccion:"AV. F SECTOR D GRUPO D-1 MZ. Z LT. S/N",lat:-11.832117,lng:-77.152758,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"Requisitos Especiales CEBE",foto:""},
-  {red:"RED N.° 03",zona:"PACHACÚTEC NORTE",nombre:"PRITE ANNE SULLIVAN",nivel:"ESPECIAL",direccion:"MZ Z´1 LOTE 1- SECTOR D PACHACUTEC",lat:-11.834244,lng:-77.156239,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"Requisitos Especiales PRITE",foto:""},
 
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 125 DIVINO NIÑO JESÚS",nivel:"INICIAL",direccion:"MZ N2 LOTE 1 AA.HH. MARIA JESUS ESPINOZA PACHACUTEC",lat:-11.843456,lng:-77.128518,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + Vacunas CRED",foto:"fotos/125.jpeg"},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 128 NIÑO JESÚS DE PRAGA",nivel:"INICIAL",direccion:"MZ.K LOTE 1 AAHH HÉROES DEL CENEPA PACHACÚTEC",lat:-11.846228,lng:-77.129117,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
   {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 140",nivel:"INICIAL",direccion:"MZ. F LT. 10 AA.HH. EL GOLFO - AV. EMAUS Y SAMARIA PACHACUTEC",lat:-11.837025,lng:-77.118925,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 144 JOSE OLAYA BALANDRA",nivel:"INICIAL",direccion:"MZ O1 LOTE 1 PACHACUTEC",lat:-11.841081,lng:-77.125225,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 147 SANTÍSIMA VIRGEN DE GUADALUPE",nivel:"INICIAL",direccion:"MZ. B LT. 1 SECTOR G BARRIO 15 AAHH. GUADALUPE PACHACUTEC",lat:-11.842450,lng:-77.139739,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 148 CARITAS FELICES II",nivel:"INICIAL",direccion:"MZ.C LT 11 GRUPO RESIDENCIAL 1a AAHH 07 DE JUNIO",lat:-11.849619,lng:-77.128164,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 157",nivel:"INICIAL",direccion:"MZ. S LT. 1 SECTOR H, BARRIO XVI MERCADO CENTRAL",lat:-11.846497,lng:-77.135158,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:"fotos/157.jpeg"},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 164 MI BUEN JESÚS",nivel:"INICIAL",direccion:"MZ. B LT. 1 - PARCELA PACHACUTEC",lat:-11.846208,lng:-77.123867,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 171",nivel:"INICIAL",direccion:"MZ F Lote 12-13 AA HH CUEVA DE LOS TALLOS PACHACUTEC",lat:-11.839769,lng:-77.120508,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N°175",nivel:"INICIAL",direccion:"Mz R LT 14 AA.HH. LOS OLIVOS DE LA PAZ PACHACUTEC",lat:-11.830003,lng:-77.131300,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E.I N° 177",nivel:"INICIAL",direccion:"Mz G2 LT 1 - 31 DE DICIEMBRE PACHACUTEC",lat:-11.839161,lng:-77.130139,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5116 DIVINO CREADOR",nivel:"PRIMARIA",direccion:"CALLE EP NEISSER LLACSA MZ H LT 1 SECTOR H BARRIO XVI S/N PACHACUTEC",lat:-11.845625,lng:-77.126006,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5122 JOSÉ ANDRÉS RÁZURI ESTÉVEZ",nivel:"PRIMARIA / SECUNDARIA",direccion:"JR. LOS ECOLOGICOS SECTOR EQUIPAMIENTO MZ. D LT. 1 S/N PACHACUTEC",lat:-11.846786,lng:-77.130328,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
   {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5127 MÁRTIR JOSÉ OLAYA",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ G LOTE 1 AAHH JOSE OLAYA PACHACUTEC",lat:-11.838786,lng:-77.123669,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5140 PDTE. DE LA REP. COLOMBIANA DR. ALVARO URIBE VELEZ",nivel:"PRIMARIA",direccion:"MZ G LOTE 1 BARRIO 15 AAHH COSMOVISIÓN PACHACUTEC",lat:-11.845736,lng:-77.137664,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5141 DIVINO MAESTRO",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"MZ K LOTE 4 AAHH NUEVO PROGRESO PACHACUTEC",lat:-11.837858,lng:-77.124028,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5142 VIRGEN DE GUADALUPE",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ. C LT. 1 BARRIO XV GRUPO RESIDENCIAL 2 PACHACUTEC",lat:-11.842794,lng:-77.139522,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5147 SANTA ROSA DE LIMA",nivel:"PRIMARIA",direccion:"AV. LOS TOPOGRAFOS MZ. C2 LT. 1 AAHH MARIA JESUS ESPINOZA PACHACUTEC",lat:-11.843833,lng:-77.128411,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"I.E N° 5148 LAS BRISAS DE PACHACÚTEC",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ B LT 1, INTERÉS SOCIAL PACHACUTEC",lat:-11.846208,lng:-77.123867,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 04",zona:"PACHACÚTEC ESTE",nombre:"FE Y ALEGRÍA N° 59",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"CALLE NICARAGUA MZ. G-1 LT. 1-A S/N PACHACUTEC",lat:-11.842267,lng:-77.134767,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
 
   {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 83 AMIGOS DE JESÚS",nivel:"INICIAL",direccion:"CALLE SECTOR D MZ. P LT. 2 GRUPO RESIDENCIAL D2",lat:-11.829886,lng:-77.120264,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 99 CORAZÓN DE MARÍA",nivel:"INICIAL",direccion:"CALLE 23 II SECTOR MZ. E S/N VILLA LOS REYES",lat:-11.829608,lng:-77.125522,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 110",nivel:"INICIAL",direccion:"CALLE 5 MZ 2 LT 2 SANTA MARGARITA",lat:-11.824056,lng:-77.126992,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 114 CORAZÓN DE JESÚS",nivel:"INICIAL",direccion:"JR. LOS ALISOS MZ. D S/N (ALT. IE FE Y A. 43) AA.HH. LUIS FELIPE DE LAS CASAS",lat:-11.824742,lng:-77.131367,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 130 VIDA Y ALEGRÍA",nivel:"INICIAL",direccion:"AV. ARQUITECTOS S/N LAS LOMAS",lat:-11.820950,lng:-77.138119,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 146 RAYITOS DE SOL",nivel:"INICIAL",direccion:"JR LOS ALAMOS MZ J LOTE 17 AAHH. KEIKO SOFIA I ETAPA VENTANILLA NORTE",lat:-11.827222,lng:-77.134914,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 174",nivel:"INICIAL",direccion:"MZ E LT 1 LOS CEDROS PACHACUTEC",lat:-11.830003,lng:-77.131300,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 178 LOS ANGELITOS DE MARIA",nivel:"INICIAL",direccion:"LT C. AAHH HIJOS DE VILLA LOS REYES",lat:-11.833489,lng:-77.130300,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 179 JESÚS MI AMIGO",nivel:"INICIAL",direccion:"",lat:-11.832331,lng:-77.123567,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I N° 380 LOS ÁNGELES",nivel:"INICIAL",direccion:"P. NORTE S/N LOS ANGELES",lat:-11.833383,lng:-77.116667,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E.I DIVINO NIÑO DE VILLA LOS REYES",nivel:"INICIAL",direccion:"SECTOR 1 MZ. N-1 - VILLA LOS REYES",lat:-11.832450,lng:-77.127131,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
   {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E N° 3089 LOS ÁNGELES",nivel:"PRIMARIA / SECUNDARIA",direccion:"P. NORTE S/N LOS ANGELES",lat:-11.831786,lng:-77.116861,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E VILLA LOS REYES",nivel:"SECUNDARIA",direccion:"CALLE 25 S/N ALT. KM 37 1/2 PANAMERICANA NORTE VILLA LOS REYES",lat:-11.829261,lng:-77.126611,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E N° 3720 NTRA. SRA. DE LA MISERICORDIA",nivel:"PRIMARIA / SECUNDARIA",direccion:"KM. 37.5 PANAMERICANA NORTE PUENTE PIEDRA",lat:-11.825275,lng:-77.123322,turno:"MAÑANA / TARDE",taller
-   :"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E N° 5101 FE Y ALEGRÍA N° 43",nivel:"INICIAL / PRIMARIA / SECUNDARIA",direccion:"JR. LOS ALISOS S/N - AA.HH. LUIS FELIPE DE LAS CASAS",lat:-11.824803,lng:-77.131414,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E N° 5136 SANTA MARÍA DE LOS ÁNGELES",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ. A LT. 1 AA.HH. SANTA MARÍA",lat:-11.827936,lng:-77.117767,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"I.E N° 5137",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. PRINCIPAL S/N - AA.HH. KEIKO SOFÍA",lat:-11.826853,lng:-77.134464,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 05",zona:"VILLA LOS REYES",nombre:"CETPRO VILLA LOS REYES",nivel:"TÉCNICO PRODUCTIVA",direccion:"AV. PRINCIPAL S/N - VILLA LOS REYES",lat:-11.829167,lng:-77.126667,turno:"MAÑANA / TARDE",taller:"Talleres Técnicos",requisitos:"Partida de Nacimiento + DNI (2 copias) + Certificado de Estudios",foto:""},
 
   {red:"RED N.° 06",zona:"MI PERÚ",nombre:"I.E.I N° 101 MI PERÚ",nivel:"INICIAL",direccion:"MZ. A LT. 1 SECTOR A - MI PERÚ",lat:-11.866667,lng:-77.141667,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 06",zona:"MI PERÚ",nombre:"I.E.I N° 102",nivel:"INICIAL",direccion:"MZ. B LT. 1 SECTOR B - MI PERÚ",lat:-11.865000,lng:-77.140000,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 06",zona:"MI PERÚ",nombre:"I.E.I N° 103",nivel:"INICIAL",direccion:"MZ. C LT. 1 SECTOR C - MI PERÚ",lat:-11.863333,lng:-77.138333,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 06",zona:"MI PERÚ",nombre:"I.E.I N° 104",nivel:"INICIAL",direccion:"MZ. D LT. 1 SECTOR D - MI PERÚ",lat:-11.861667,lng:-77.136667,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
   {red:"RED N.° 06",zona:"MI PERÚ",nombre:"I.E N° 3090 MI PERÚ",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. PRINCIPAL S/N - MI PERÚ",lat:-11.865556,lng:-77.140556,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
-  {red:"RED N.° 06",zona:"MI PERÚ",nombre:"I.E N° 5157",nivel:"PRIMARIA / SECUNDARIA",direccion:"MZ. E LT. 1 SECTOR E - MI PERÚ",lat:-11.860000,lng:-77.135000,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
 
   {red:"RED N.° 07",zona:"SATÉLITE",nombre:"I.E.I N° 105",nivel:"INICIAL",direccion:"MZ. 1 LT. 1 - SATÉLITE",lat:-11.855000,lng:-77.128333,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
-  {red:"RED N.° 07",zona:"SATÉLITE",nombre:"I.E.I N° 106",nivel:"INICIAL",direccion:"MZ. 2 LT. 1 - SATÉLITE",lat:-11.853333,lng:-77.126667,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
   {red:"RED N.° 07",zona:"SATÉLITE",nombre:"I.E N° 3091 SATÉLITE",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. PRINCIPAL S/N - SATÉLITE",lat:-11.854444,lng:-77.127778,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""},
 
   {red:"RED N.° 08",zona:"AMC",nombre:"I.E.I N° 107",nivel:"INICIAL",direccion:"MZ. A LT. 1 - AMC",lat:-11.870000,lng:-77.150000,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
@@ -288,12 +220,12 @@ const colegios =
   {red:"RED N.° 09",zona:"ANGAMOS",nombre:"I.E.I N° 108",nivel:"INICIAL",direccion:"MZ. A LT. 1 - ANGAMOS",lat:-11.880000,lng:-77.160000,turno:"MAÑANA / TARDE",taller:"NO APLICA",requisitos:"DNI del Niño o Niña (Copia del DNI vigente) + DNI de los padres o Apoderado (1 copia) + Vacunas CRED + Partida o Acta de Nacimiento",foto:""},
   {red:"RED N.° 09",zona:"ANGAMOS",nombre:"I.E N° 3093 ANGAMOS",nivel:"PRIMARIA / SECUNDARIA",direccion:"AV. PRINCIPAL S/N - ANGAMOS",lat:-11.879444,lng:-77.159444,turno:"MAÑANA / TARDE",taller:"",requisitos:"DNI (2 copias) + DNI Apoderado (1 copia) + FUM SIAGIE",foto:""}
 ];
-
-// ====== VARIABLES GLOBALES ======
+  // ====== VARIABLES GLOBALES ======
 let mapa;
 let marcadores = [];
 let marcadorSeleccionado = null;
 let filtroActivo = "TODOS";
+let iconoNormal, iconoSeleccionado;
 
 // ====== INICIALIZACIÓN ======
 document.addEventListener("DOMContentLoaded", function() {
@@ -301,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function() {
   inicializarBotonesRedes();
 });
 
-// ====== BUSCADOR Y SUGERENCIAS ======
+// ====== BUSCADOR MEJORADO: BUSCA POR NÚMERO O POR NOMBRE ======
 function inicializarBuscador() {
   const buscador = document.getElementById("buscador");
   const sugerencias = document.getElementById("sugerencias");
@@ -315,7 +247,12 @@ function inicializarBuscador() {
       return;
     }
 
-    const coinciden = colegios.filter(c => c.nombre.toUpperCase().includes(texto));
+    // Busca por número contenido en el nombre O por nombre
+    const coinciden = colegios.filter(c => {
+      const nombreCompleto = c.nombre.toUpperCase();
+      return nombreCompleto.includes(texto);
+    });
+
     if (coinciden.length > 0) {
       sugerencias.style.display = "block";
       coinciden.forEach(colegio => {
@@ -344,17 +281,14 @@ function inicializarBuscador() {
 
 // ====== IR A COLEGIO DESDE BÚSQUEDA ======
 function irAColegio(colegio) {
-  // Ocultar pantalla principal
   document.getElementById("pantallaPrincipal").style.opacity = "0";
   setTimeout(() => {
     document.getElementById("pantallaPrincipal").style.display = "none";
     document.getElementById("mapaContainer").style.display = "block";
     if (!mapa) inicializarMapa();
 
-    // Centrar y acercar mapa al colegio
     mapa.setView([colegio.lat, colegio.lng], 17);
 
-    // Cambiar color del pin a fucsia y abrir información
     marcadores.forEach(m => {
       if (m.colegio.nombre === colegio.nombre) {
         m.setIcon(iconoSeleccionado);
@@ -365,7 +299,6 @@ function irAColegio(colegio) {
       }
     });
 
-    // Mostrar ventana con datos
     mostrarVentanaInfo(colegio);
   }, 600);
 }
@@ -374,12 +307,10 @@ function irAColegio(colegio) {
 function inicializarMapa() {
   mapa = L.map("mapa").setView([-11.840, -77.150], 13);
 
-  // Cargar mapa base desde OpenStreetMap
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap contributors"
   }).addTo(mapa);
 
-  // Iconos personalizados
   iconoNormal = L.icon({
     iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
     shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
@@ -398,25 +329,22 @@ function inicializarMapa() {
     shadowSize: [41, 41]
   });
 
-  // Colocar marcadores en el mapa
   actualizarMarcadores();
 
-  // Al hacer clic en el mapa, restablecer colores
   mapa.on("click", () => {
     if (marcadorSeleccionado) {
       marcadorSeleccionado.setIcon(iconoNormal);
       marcadorSeleccionado = null;
     }
+    cerrarVentanaInfo();
   });
 }
 
-// ====== ACTUALIZAR MARCADORES SEGÚN FILTRO ======
+// ====== ACTUALIZAR MARCADORES ======
 function actualizarMarcadores() {
-  // Limpiar marcadores anteriores
   marcadores.forEach(m => mapa.removeLayer(m));
   marcadores = [];
 
-  // Agregar solo los filtrados
   const filtrados = filtroActivo === "TODOS"
     ? colegios
     : colegios.filter(c => c.red === filtroActivo);
@@ -426,12 +354,9 @@ function actualizarMarcadores() {
     marcador.colegio = colegio;
 
     marcador.on("click", () => {
-      // Cambiar color del seleccionado
       if (marcadorSeleccionado) marcadorSeleccionado.setIcon(iconoNormal);
       marcador.setIcon(iconoSeleccionado);
       marcadorSeleccionado = marcador;
-
-      // Mostrar ventana con datos
       mostrarVentanaInfo(colegio);
     });
 
@@ -449,7 +374,6 @@ function mostrarVentanaInfo(colegio) {
   document.getElementById("infoTaller").textContent = colegio.taller || "No especificado";
   document.getElementById("infoRequisitos").textContent = colegio.requisitos;
 
-  // Foto de fachada
   const contenedorFoto = document.getElementById("contenedorFoto");
   const foto = document.getElementById("fotoColegio");
   if (colegio.foto && colegio.foto !== "") {
@@ -461,16 +385,14 @@ function mostrarVentanaInfo(colegio) {
     contenedorFoto.style.display = "none";
   }
 
-  // Enlaces a mapas externos
   const gmLink = `https://www.google.com/maps/search/?api=1&query=${colegio.lat},${colegio.lng}`;
   document.getElementById("btnMapaExterno").href = gmLink;
   document.getElementById("btnComoLlegar").href = gmLink;
 
-  // Mostrar ventana
   document.getElementById("ventanaInfo").style.display = "block";
 }
 
-// ====== CERRAR VENTANA DE INFORMACIÓN ======
+// ====== CERRAR VENTANA ======
 function cerrarVentanaInfo() {
   document.getElementById("ventanaInfo").style.display = "none";
   if (marcadorSeleccionado) {
@@ -496,7 +418,7 @@ function inicializarBotonesRedes() {
   });
 }
 
-// ====== MOSTRAR MAPA COMPLETO DESDE INICIO ======
+// ====== VER TODOS LOS COLEGIOS EN EL MAPA ======
 function mostrarMapaCompleto() {
   document.getElementById("pantallaPrincipal").style.opacity = "0";
   setTimeout(() => {
@@ -507,7 +429,7 @@ function mostrarMapaCompleto() {
   }, 600);
 }
 
-// ====== REGRESAR A PANTALLA PRINCIPAL ======
+// ====== REGRESAR A INICIO ======
 function regresarInicio() {
   document.getElementById("mapaContainer").style.display = "none";
   document.getElementById("ventanaInfo").style.display = "none";
