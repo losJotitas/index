@@ -5,116 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
     <style>
-        /* Estilos Generales */
+        /* Estilos Generales - Fondo Azul Noche */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f4f6f9;
-            color: #333;
+            background-color: #0b132b; /* Azul Noche Profundo */
+            color: #ffffff;
             text-align: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        /* Marcas de agua discretas */
+        /* Marcas de agua discretas ajustadas al fondo azul noche */
         .marca-agua {
             position: absolute;
             top: 10px;
             font-size: 11px;
-            color: #e0e0e0; /* Gris ultra claro casi invisible */
+            color: #1c2d42; /* Plomo tenue casi invisible sobre azul noche */
             font-weight: bold;
             user-select: none;
         }
         .marca-jdah { left: 15px; }
         .marca-jotitas { right: 15px; }
 
-        /* Contenedor del Logo y Títulos */
-        .header-app {
-            margin-top: 30px;
-            margin-bottom: 25px;
-        }
-        .logo-container {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        h1.titulo-app {
-            font-size: 28px;
-            color: #1a365d;
-            margin: 5px 0;
-            font-weight: 800;
-        }
-        h2.subtitulo-app {
-            font-size: 16px;
-            color: #4a5568;
-            margin: 0 0 8px 0;
-            letter-spacing: 1px;
-        }
-        p.lema-app {
-            font-size: 14px;
-            color: #718096;
-            font-style: italic;
-            margin: 0;
-        }
-
-        /* Sección de Búsqueda y Botones */
+        /* Contenedor Principal */
         .main-container {
             max-width: 480px;
             margin: 0 auto;
         }
+
+        /* Logo Compuesto con Atardecer/Alba */
+        .header-app {
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .escena-logo {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 15px auto;
+            border-radius: 50%;
+            /* Resplandor de Alba / Atardecer */
+            background: radial-gradient(circle, #ff9e00 0%, #ff5400 60%, rgba(11, 19, 43, 0) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(255, 158, 0, 0.4);
+        }
+
+        /* Casa de Estudio Grande con Birrete Integrado */
+        .icono-casa-estudio {
+            position: relative;
+            font-size: 80px; /* Casa mucho más grande */
+            line-height: 1;
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
+        }
+
+        .icono-birrete-fachada {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px; /* Birrete dentro de la fachada */
+        }
+
+        /* Tipografía y Textos */
+        h1.titulo-app {
+            font-size: 32px;
+            color: #ffffff;
+            margin: 5px 0;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        h2.subtitulo-app, p.lema-app {
+            font-size: 15px;
+            color: #4cc9f0; /* Azul celeste brillante para destacar en azul noche */
+            margin: 4px 0;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Sección de Búsqueda */
         .input-busqueda {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             font-size: 15px;
-            border: 2px solid #cbd5e0;
-            border-radius: 10px;
+            border: 2px solid #3a506b;
+            border-radius: 12px;
+            background-color: #1c2541;
+            color: #ffffff;
             box-sizing: border-box;
-            margin-bottom: 15px;
+            margin-top: 15px;
+            margin-bottom: 20px;
             outline: none;
+            transition: border-color 0.3s;
         }
+
+        .input-busqueda::placeholder {
+            color: #a0aec0;
+        }
+
         .input-busqueda:focus {
-            border-color: #3182ce;
+            border-color: #4cc9f0;
         }
 
         /* Grupo de Botones de Exploración */
         .grupo-botones {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
+
         .btn-principal {
-            background-color: #2b6cb0;
+            background: linear-gradient(135deg, #3a86ff 0%, #00b4d8 100%);
             color: white;
-            padding: 14px;
+            padding: 16px;
             border: none;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
+            box-shadow: 0 4px 12px rgba(58, 134, 255, 0.3);
+            transition: transform 0.2s;
         }
+
         .btn-secundario {
-            background-color: #2c7a7b;
+            background: linear-gradient(135deg, #7209b7 0%, #4361ee 100%);
             color: white;
-            padding: 14px;
+            padding: 16px;
             border: none;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
+            box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
+            transition: transform 0.2s;
         }
-        .btn-principal:hover { background-color: #2c5282; }
-        .btn-secundario:hover { background-color: #234e52; }
+
+        .btn-principal:active, .btn-secundario:active {
+            transform: scale(0.98);
+        }
 
         /* Banner de Noticias/Anuncios */
         .banner-anuncios {
-            background-color: #ebf8ff;
-            border: 1px solid #bee3f8;
-            border-radius: 10px;
+            background-color: #1c2541;
+            border: 1px solid #3a506b;
+            border-radius: 12px;
             padding: 15px;
             font-size: 13px;
-            color: #2c5282;
+            color: #e2e8f0;
             text-align: center;
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -126,12 +173,18 @@
 
     <div class="main-container">
         
-        <!-- Identidad Corporativa -->
+        <!-- Identidad Corporativa y Logo -->
         <header class="header-app">
-            <div class="logo-container">🏠🎓</div>
+            <div class="escena-logo">
+                <div class="icono-casa-estudio">
+                    🏫
+                    <div class="icono-birrete-fachada">🎓</div>
+                </div>
+            </div>
+            
             <h1 class="titulo-app">UBIKTUCOLEYA!</h1>
             <h2 class="subtitulo-app">VENTANILLA & MI PERÚ</h2>
-            <p class="lema-app">"Tu cole a un mapa de distancia"</p>
+            <p class="lema-app">TU COLE A UN MAPA DE DISTANCIA</p>
         </header>
 
         <!-- Buscador Principal -->
@@ -147,7 +200,7 @@
 
         <!-- Banner de Comunicados y Publicidad -->
         <aside class="banner-anuncios">
-            <strong>📢 Comunicado Oficial:</strong> Revisa el estado de vacantes del proceso de matrícula escolar para el período actual.
+            <strong>📢 Comunicado Oficial:</strong> Consultas de disponibilidad y vacantes escolares actualizadas para Ventanilla, Pachacútec y Mi Perú.
         </aside>
 
     </div>
