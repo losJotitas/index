@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
     <style>
-        /* Estilos Generales - Fondo Azul Noche Elegante */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -15,7 +14,7 @@
             text-align: center;
         }
 
-        /* Marcas de Agua Discretas */
+        /* Marcas de Agua Sutiles */
         .marca-agua {
             position: absolute;
             top: 10px;
@@ -27,32 +26,38 @@
         .marca-jdah { left: 15px; }
         .marca-jotitas { right: 15px; }
 
-        .main-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        .main-container { max-width: 480px; margin: 0 auto; }
 
-        /* Logo de Impacto */
+        /* Contenedor del Logo Institucional */
         .header-app { margin-top: 15px; margin-bottom: 20px; }
+
+        /* Escenario con Atardecer/Alba en Degradado */
         .escena-logo {
             position: relative;
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 10px auto;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 12px auto;
             border-radius: 50%;
             background: radial-gradient(circle, #ff9e00 0%, #ff5400 60%, rgba(11, 19, 43, 0) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 20px rgba(255, 158, 0, 0.4);
+            box-shadow: 0 0 25px rgba(255, 158, 0, 0.4);
+            border: 1px solid rgba(255, 158, 0, 0.2);
         }
-        .icono-casa-estudio { position: relative; font-size: 65px; line-height: 1; }
-        .icono-birrete-fachada { position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); font-size: 22px; }
+
+        /* Vector SVG para Casa de Estudio + Birrete Institucional */
+        .logo-svg {
+            width: 75px;
+            height: 75px;
+            fill: #ffffff;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5));
+        }
 
         h1.titulo-app { font-size: 28px; color: #ffffff; margin: 0; font-weight: 900; letter-spacing: 1px; }
         h2.subtitulo-app, p.lema-app { font-size: 13px; color: #4cc9f0; margin: 3px 0; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Tarjetas de Métricas (Inspirado en la imagen) */
+        /* Métricas para la UGEL */
         .grid-metricas {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -81,11 +86,10 @@
             margin-bottom: 12px;
             outline: none;
         }
-        .input-busqueda::placeholder { color: #a0aec0; }
 
-        /* Filtro por Redes (Píldoras horizontales de la imagen adaptadas a modo oscuro) */
+        /* Filtro de Píldoras por Red */
         .seccion-filtros { text-align: left; margin-bottom: 15px; }
-        .titulo-filtro { font-size: 11px; color: #a0aec0; font-weight: bold; margin-bottom: 8px; display: block; letter-spacing: 0.5px; }
+        .titulo-filtro { font-size: 11px; color: #a0aec0; font-weight: bold; margin-bottom: 8px; display: block; }
         
         .pildoras-container {
             display: flex;
@@ -101,44 +105,21 @@
             border-radius: 20px;
             font-size: 12px;
             white-space: nowrap;
-            cursor: pointer;
         }
-        .pildora.activa {
-            background-color: #3a86ff;
-            border-color: #3a86ff;
-            font-weight: bold;
-        }
+        .pildora.activa { background-color: #3a86ff; border-color: #3a86ff; font-weight: bold; }
 
-        /* Simulación del Mapa Integrado */
-        .mapa-contenedor {
+        .btn-accion-directa {
             width: 100%;
-            height: 220px;
-            background-color: #2b3a4a;
-            border-radius: 12px;
-            border: 1px solid #3a506b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #a0aec0;
-            font-size: 13px;
+            background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
             margin-bottom: 15px;
-            position: relative;
-            overflow: hidden;
         }
-
-        /* Leyenda de Redes por Color */
-        .leyenda-colores {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            background-color: #1c2541;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 11px;
-        }
-        .item-leyenda { display: flex; align-items: center; gap: 4px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
     </style>
 </head>
 <body>
@@ -148,17 +129,24 @@
 
     <div class="main-container">
         
-        <!-- Header / Logo -->
+        <!-- Header con Casa de Estudio Institucional Vectorial -->
         <header class="header-app">
             <div class="escena-logo">
-                <div class="icono-casa-estudio">🏫<div class="icono-birrete-fachada">🎓</div></div>
+                <!-- SVG Casa de Estudios con Columnas + Birrete Integrado -->
+                <svg class="logo-svg" viewBox="0 0 24 24">
+                    <!-- Techo y Fachada de Escuela/Universidad -->
+                    <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" fill="#ffffff"/>
+                    <!-- Birrete Integrado en el Centro -->
+                    <path d="M12 7L16 9.2L12 11.4L8 9.2L12 7Z" fill="#ff9e00"/>
+                </svg>
             </div>
+            
             <h1 class="titulo-app">UBIKTUCOLEYA!</h1>
             <h2 class="subtitulo-app">VENTANILLA & MI PERÚ</h2>
             <p class="lema-app">TU COLE A UN MAPA DE DISTANCIA</p>
         </header>
 
-        <!-- Métricas Institucionales (Transmite solidez profesional) -->
+        <!-- Métricas Institucionales -->
         <div class="grid-metricas">
             <div class="tarjeta-metrica">
                 <div class="numero-metrica">146</div>
@@ -175,11 +163,11 @@
         </div>
 
         <!-- Buscador -->
-        <input type="text" class="input-busqueda" placeholder="🔍 Buscar colegio por nombre...">
+        <input type="text" class="input-busqueda" placeholder="🔍 Buscar por colegio o número...">
 
-        <!-- Filtros Rápidos en Píldoras -->
+        <!-- Filtro Rápido de Redes -->
         <div class="seccion-filtros">
-            <span class="titulo-filtro">FILTRAR POR RED EDUCATIVA</span>
+            <span class="titulo-filtro">FILTRAR POR RED EDUCATIVA (UGEL)</span>
             <div class="pildoras-container">
                 <span class="pildora activa">Todas</span>
                 <span class="pildora">R01</span>
@@ -194,23 +182,8 @@
             </div>
         </div>
 
-        <!-- Mapa Directo -->
-        <div class="mapa-contenedor">
-            🗺️ [Mapa Interactivo con Geolocalización y 146 Pines]
-        </div>
-
-        <!-- Leyenda de Colores (Como en la imagen, pero estilizada) -->
-        <div class="leyenda-colores">
-            <span class="item-leyenda"><span class="dot" style="background:#ff4d4d;"></span> R01</span>
-            <span class="item-leyenda"><span class="dot" style="background:#3399ff;"></span> R02</span>
-            <span class="item-leyenda"><span class="dot" style="background:#00cc66;"></span> R03</span>
-            <span class="item-leyenda"><span class="dot" style="background:#ffcc00;"></span> R04</span>
-            <span class="item-leyenda"><span class="dot" style="background:#9933ff;"></span> R05</span>
-            <span class="item-leyenda"><span class="dot" style="background:#00cccc;"></span> R06</span>
-            <span class="item-leyenda"><span class="dot" style="background:#ff9933;"></span> R07</span>
-            <span class="item-leyenda"><span class="dot" style="background:#333399;"></span> R08</span>
-            <span class="item-leyenda"><span class="dot" style="background:#ff3399;"></span> R09</span>
-        </div>
+        <!-- Botón de Paso a la Pantalla 2 -->
+        <button class="btn-accion-directa">🗺️ Abrir Mapa Interactivo Completo</button>
 
     </div>
 
