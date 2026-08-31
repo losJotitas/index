@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubiktucoleya! - Ventanilla & Mi Perú</title>
+    <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
 
     <!-- Fuentes Web -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Oswald:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Oswald:wght@700&family=Titan+One&display=swap" rel="stylesheet">
 
     <style>
         /* Fondo Azul Marino Profundo */
@@ -62,21 +62,39 @@
             filter: drop-shadow(0px 8px 6px rgba(0, 0, 0, 0.6));
         }
 
-        /* 1. Título Ubiktucoleya! (Primera mayúscula, resto minúsculas) */
+        /* 1. Título UBIKTUCOLEYA! Estilo Bubble Lettering Naranja 3D con Trama */
         h1.titulo-app {
-            font-family: 'Pacifico', cursive;
-            font-size: 36px;
-            color: #ffffff;
-            margin: 5px 0 8px 0;
-            letter-spacing: 1px;
-            text-transform: capitalize;
-            text-shadow: 
-                -2px -2px 0 #000,  
-                 2px -2px 0 #000,
-                -2px  2px 0 #000,
-                 2px  2px 0 #000,
-                 4px  4px 0px #00e5ff,
-                -4px -2px 0px #cddc39;
+            font-family: 'Titan One', cursive;
+            font-size: 32px;
+            margin: 8px 0 10px 0;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            
+            /* Relleno Naranja con Trama de Rayas en la mitad inferior */
+            background: repeating-linear-gradient(
+                -45deg,
+                #f26419 0px,
+                #f26419 3px,
+                #cc4e00 3px,
+                #cc4e00 6px
+            );
+            
+            /* Degradado de luz arriba y entramado abajo */
+            background: linear-gradient(
+                to bottom, 
+                #ff7b00 0%, 
+                #f26419 45%, 
+                #d94e00 46%, 
+                #852e00 100%
+            );
+            
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* Delineado Oscuro y Sombra 3D Proyectada */
+            filter: drop-shadow(2px 2px 0px #000000) 
+                    drop-shadow(-1px -1px 0px #000000)
+                    drop-shadow(3px 4px 2px rgba(0, 0, 0, 0.7));
         }
 
         /* 2. Subtítulo VENTANILLA & MI PERÚ */
@@ -210,33 +228,20 @@
         <!-- Header / Logo -->
         <header class="header-app">
             <div class="escena-logo">
-                <!-- Birrete Realista Negro con Borla Dorado Oscuro y Sombras -->
                 <svg class="birrete-svg" viewBox="0 0 100 100">
-                    <!-- Sombra proyectada del bonete -->
                     <polygon points="50,68 15,48 50,38 85,48" fill="rgba(0,0,0,0.3)"/>
-                    
-                    <!-- Casquete inferior (Base) -->
                     <path d="M 32,52 L 32,68 C 32,76 68,76 68,68 L 68,52 C 60,58 40,58 32,52 Z" fill="#111111"/>
                     <path d="M 35,53 C 42,58 58,58 65,53 L 65,67 C 65,71 35,71 35,67 Z" fill="#222222"/>
-
-                    <!-- Rombo Superior (Tablero del Birrete) -->
                     <polygon points="50,26 92,44 50,60 8,44" fill="#1a1a1a"/>
-                    <!-- Borde/Luz superior del rombo -->
                     <polygon points="50,28 88,44 50,58 12,44" fill="#2d2d2d"/>
-
-                    <!-- Botón Central -->
                     <circle cx="50" cy="43" r="3.5" fill="#b8860b"/>
-
-                    <!-- Borla y Cordon Dorado Oscuro -->
                     <path d="M 50,43 Q 72,45 76,60" fill="none" stroke="#b8860b" stroke-width="2.5" stroke-linecap="round"/>
-                    <!-- Tira colgante -->
                     <polygon points="74,60 78,60 80,78 72,78" fill="#b8860b"/>
-                    <!-- Sombra de la borla -->
                     <polygon points="75,61 77,61 78,76 73,76" fill="#8b6508"/>
                 </svg>
             </div>
             
-            <h1 class="titulo-app">Ubiktucoleya!</h1>
+            <h1 class="titulo-app">UBIKTUCOLEYA!</h1>
             <h2 class="subtitulo-app">VENTANILLA & MI PERÚ</h2>
             <p class="lema-app">Tu cole a un mapa de distancia</p>
         </header>
