@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
+
+    <!-- Importación de Fuentes Web para imitar las imágenes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Oswald:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+
     <style>
-        /* Fondo Azul Marino */
+        /* Fondo Azul Marino Profundo */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -34,29 +40,65 @@
         /* Contenedor del Logo */
         .header-app { margin-top: 10px; margin-bottom: 25px; }
 
-        /* Resplandor de Atardecer Intermedio */
+        /* Círculo Amarillo Yema de Huevo */
         .escena-logo {
             position: relative;
             width: 115px;
             height: 115px;
-            margin: 0 auto 12px auto;
+            margin: 0 auto 15px auto;
             border-radius: 50%;
-            background: radial-gradient(circle, #f77f00 0%, #e63946 65%, rgba(13, 27, 42, 0) 100%);
+            background: radial-gradient(circle, #ffcc00 0%, #ffb700 70%, rgba(13, 27, 42, 0) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 20px rgba(247, 127, 0, 0.35);
+            box-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
+            border: 2px solid #ffd700;
         }
 
         .logo-svg {
             width: 72px;
             height: 72px;
             fill: #ffffff;
-            filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.4));
+            filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.5));
         }
 
-        h1.titulo-app { font-size: 28px; color: #ffffff; margin: 0; font-weight: 900; letter-spacing: 1px; }
-        h2.subtitulo-app, p.lema-app { font-size: 13px; color: #4cc9f0; margin: 4px 0; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+        /* 1. Título UBIKTUCOLEYA! Estilo Lettering Resaltado */
+        h1.titulo-app {
+            font-family: 'Pacifico', cursive;
+            font-size: 34px;
+            color: #ffffff;
+            margin: 5px 0 8px 0;
+            letter-spacing: 1px;
+            /* Efecto de sombra doble imitando el plumón resaltador celeste y amarillo */
+            text-shadow: 
+                -2px -2px 0 #000,  
+                 2px -2px 0 #000,
+                -2px  2px 0 #000,
+                 2px  2px 0 #000,
+                 4px  4px 0px #00e5ff,
+                -4px -2px 0px #cddc39;
+        }
+
+        /* 2. Subtítulo VENTANILLA & MI PERÚ - Fuente Alta, Condensada en Negrita */
+        h2.subtitulo-app {
+            font-family: 'Oswald', 'Impact', sans-serif;
+            font-size: 22px;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* 3. Lema - Fuente Cursiva Elegante */
+        p.lema-app {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 19px;
+            color: #e0e1dd;
+            margin: 4px 0 0 0;
+            font-weight: 600;
+        }
 
         /* Buscador */
         .input-busqueda {
@@ -68,7 +110,7 @@
             background-color: #1b263b;
             color: #ffffff;
             box-sizing: border-box;
-            margin-top: 15px;
+            margin-top: 20px;
             margin-bottom: 20px;
             outline: none;
             transition: border-color 0.3s;
@@ -76,7 +118,7 @@
 
         .input-busqueda:focus { border-color: #4cc9f0; }
 
-        /* Grupo de Botones Principales */
+        /* Botones de Navegación Directa */
         .grupo-botones {
             display: flex;
             flex-direction: column;
@@ -134,8 +176,8 @@
         .toast-notificacion {
             visibility: hidden;
             min-width: 160px;
-            background-color: #e07a5f;
-            color: #fff;
+            background-color: #ffb700;
+            color: #0d1b2a;
             text-align: center;
             border-radius: 20px;
             padding: 10px 20px;
@@ -165,18 +207,18 @@
 
     <div class="main-container">
         
-        <!-- Header / Logo -->
+        <!-- Header / Logo con Amarillo Yema de Huevo y Fuentes Exactas -->
         <header class="header-app">
             <div class="escena-logo">
                 <svg class="logo-svg" viewBox="0 0 24 24">
                     <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" fill="#ffffff"/>
-                    <path d="M12 7L16 9.2L12 11.4L8 9.2L12 7Z" fill="#f77f00"/>
+                    <path d="M12 7L16 9.2L12 11.4L8 9.2L12 7Z" fill="#0d1b2a"/>
                 </svg>
             </div>
             
             <h1 class="titulo-app">UBIKTUCOLEYA!</h1>
             <h2 class="subtitulo-app">VENTANILLA & MI PERÚ</h2>
-            <p class="lema-app">TU COLE A UN MAPA DE DISTANCIA</p>
+            <p class="lema-app">Tu cole a un mapa de distancia</p>
         </header>
 
         <!-- Buscador Principal -->
