@@ -37,7 +37,7 @@
 
         .header-app { margin-top: 10px; margin-bottom: 25px; }
 
-        /* Círculo Amarillo Yema de Huevo Limpio */
+        /* Círculo Amarillo Yema de Huevo */
         .escena-logo {
             position: relative;
             width: 110px;
@@ -57,7 +57,7 @@
             filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
         }
 
-        /* Título Limpio, Moderno y Legible */
+        /* Título Limpio y Legible */
         h1.titulo-app {
             font-size: 30px;
             font-weight: 900;
@@ -77,7 +77,7 @@
             font-weight: 800;
         }
 
-        /* Lema Sutil */
+        /* Lema */
         p.lema-app {
             font-size: 13px;
             color: #d1d5db;
@@ -105,13 +105,14 @@
         .input-busqueda::placeholder { color: #a0aec0; }
         .input-busqueda:focus { border-color: #ffb700; }
 
-        /* Botones Armónicos */
+        /* Grupo de Botones */
         .grupo-botones {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
+        /* Botones Unificados en Azul Eléctrico */
         .btn-opcion {
             width: 100%;
             padding: 15px;
@@ -121,21 +122,10 @@
             cursor: pointer;
             transition: transform 0.2s, opacity 0.2s;
             box-sizing: border-box;
-        }
-
-        /* Botones Principales en Azul Eléctrico Uniforme */
-        .btn-principal {
             background-color: #2563eb;
             color: #ffffff;
             border: none;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        /* Botón Secundario (Particulares) Neutro/Delineado */
-        .btn-secundario {
-            background-color: transparent;
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .btn-opcion:active { transform: scale(0.98); }
@@ -196,9 +186,9 @@
         <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
 
         <div class="grupo-botones">
-            <button class="btn-opcion btn-principal">🌐 Ver Todos los Colegios en el Mapa</button>
-            <button class="btn-opcion btn-principal">🏫 Filtrar por Redes Educativas (1-9)</button>
-            <button class="btn-opcion btn-secundario" onclick="lanzarToast()">🏫 Filtrar Colegios Particulares</button>
+            <button class="btn-opcion">🌐 Ver Todos los Colegios en el Mapa</button>
+            <button class="btn-opcion">🏫 Filtrar por Redes Educativas (1-9)</button>
+            <button class="btn-opcion" onclick="lanzarToast()">🏫 Filtrar por Colegios Particulares</button>
         </div>
 
     </div>
