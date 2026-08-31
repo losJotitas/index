@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
     <style>
+        /* Fondo Azul Marino Profundo */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 15px;
-            background-color: #0b132b;
+            background-color: #0d1b2a;
             color: #ffffff;
             text-align: center;
         }
@@ -19,7 +20,7 @@
             position: absolute;
             top: 10px;
             font-size: 11px;
-            color: #1c2d42;
+            color: #1b263b;
             font-weight: bold;
             user-select: none;
         }
@@ -28,36 +29,34 @@
 
         .main-container { max-width: 480px; margin: 0 auto; }
 
-        /* Contenedor del Logo Institucional */
+        /* Contenedor del Logo */
         .header-app { margin-top: 15px; margin-bottom: 20px; }
 
-        /* Escenario con Atardecer/Alba en Degradado */
+        /* Resplandor de Atardecer Suave (Menos resoplado) */
         .escena-logo {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             margin: 0 auto 12px auto;
             border-radius: 50%;
-            background: radial-gradient(circle, #ff9e00 0%, #ff5400 60%, rgba(11, 19, 43, 0) 100%);
+            background: radial-gradient(circle, #e07a5f 0%, #d4a373 55%, rgba(13, 27, 42, 0) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 25px rgba(255, 158, 0, 0.4);
-            border: 1px solid rgba(255, 158, 0, 0.2);
+            box-shadow: 0 0 15px rgba(224, 122, 95, 0.25);
         }
 
-        /* Vector SVG para Casa de Estudio + Birrete Institucional */
         .logo-svg {
-            width: 75px;
-            height: 75px;
+            width: 70px;
+            height: 70px;
             fill: #ffffff;
-            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5));
+            filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.4));
         }
 
         h1.titulo-app { font-size: 28px; color: #ffffff; margin: 0; font-weight: 900; letter-spacing: 1px; }
         h2.subtitulo-app, p.lema-app { font-size: 13px; color: #4cc9f0; margin: 3px 0; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Métricas para la UGEL */
+        /* Métricas */
         .grid-metricas {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -65,60 +64,79 @@
             margin: 15px 0;
         }
         .tarjeta-metrica {
-            background-color: #1c2541;
-            border: 1px solid #3a506b;
+            background-color: #1b263b;
+            border: 1px solid #415a77;
             border-radius: 10px;
             padding: 8px 4px;
         }
         .numero-metrica { font-size: 18px; font-weight: bold; color: #4cc9f0; }
-        .label-metrica { font-size: 10px; color: #a0aec0; text-transform: uppercase; margin-top: 2px; }
+        .label-metrica { font-size: 10px; color: #e0e1dd; text-transform: uppercase; margin-top: 2px; }
 
         /* Buscador */
         .input-busqueda {
             width: 100%;
-            padding: 12px 15px;
+            padding: 13px 15px;
             font-size: 14px;
-            border: 2px solid #3a506b;
+            border: 2px solid #415a77;
             border-radius: 10px;
-            background-color: #1c2541;
+            background-color: #1b263b;
             color: #ffffff;
             box-sizing: border-box;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             outline: none;
         }
 
-        /* Filtro de Píldoras por Red */
-        .seccion-filtros { text-align: left; margin-bottom: 15px; }
-        .titulo-filtro { font-size: 11px; color: #a0aec0; font-weight: bold; margin-bottom: 8px; display: block; }
-        
-        .pildoras-container {
+        /* Grupo de Botones Principales */
+        .grupo-botones {
             display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 5px;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .pildora {
-            background-color: #1c2541;
-            border: 1px solid #3a506b;
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-        .pildora.activa { background-color: #3a86ff; border-color: #3a86ff; font-weight: bold; }
 
-        .btn-accion-directa {
+        .btn-opcion {
             width: 100%;
-            background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
-            color: white;
             padding: 14px;
             border: none;
             border-radius: 10px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+
+        .btn-mapa { background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%); color: white; }
+        .btn-redes { background: linear-gradient(135deg, #7209b7 0%, #4361ee 100%); color: white; }
+        .btn-particulares { background-color: #1b263b; border: 1px solid #415a77; color: #e0e1dd; }
+
+        .btn-opcion:active { transform: scale(0.98); }
+
+        /* Secciones de Anuncios y Comunicados */
+        .bloque-informacion {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-comunicado {
+            background-color: #1b263b;
+            border-left: 4px solid #4cc9f0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            text-align: left;
+            color: #e0e1dd;
+        }
+
+        .card-publicidad {
+            background-color: #1b263b;
+            border: 1px dashed #415a77;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 11px;
+            color: #778da9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -129,15 +147,12 @@
 
     <div class="main-container">
         
-        <!-- Header con Casa de Estudio Institucional Vectorial -->
+        <!-- Header / Logo -->
         <header class="header-app">
             <div class="escena-logo">
-                <!-- SVG Casa de Estudios con Columnas + Birrete Integrado -->
                 <svg class="logo-svg" viewBox="0 0 24 24">
-                    <!-- Techo y Fachada de Escuela/Universidad -->
                     <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" fill="#ffffff"/>
-                    <!-- Birrete Integrado en el Centro -->
-                    <path d="M12 7L16 9.2L12 11.4L8 9.2L12 7Z" fill="#ff9e00"/>
+                    <path d="M12 7L16 9.2L12 11.4L8 9.2L12 7Z" fill="#e07a5f"/>
                 </svg>
             </div>
             
@@ -146,7 +161,7 @@
             <p class="lema-app">TU COLE A UN MAPA DE DISTANCIA</p>
         </header>
 
-        <!-- Métricas Institucionales -->
+        <!-- Métricas -->
         <div class="grid-metricas">
             <div class="tarjeta-metrica">
                 <div class="numero-metrica">146</div>
@@ -165,27 +180,32 @@
         <!-- Buscador -->
         <input type="text" class="input-busqueda" placeholder="🔍 Buscar por colegio o número...">
 
-        <!-- Filtro Rápido de Redes -->
-        <div class="seccion-filtros">
-            <span class="titulo-filtro">FILTRAR POR RED EDUCATIVA (UGEL)</span>
-            <div class="pildoras-container">
-                <span class="pildora activa">Todas</span>
-                <span class="pildora">R01</span>
-                <span class="pildora">R02</span>
-                <span class="pildora">R03</span>
-                <span class="pildora">R04</span>
-                <span class="pildora">R05</span>
-                <span class="pildora">R06</span>
-                <span class="pildora">R07</span>
-                <span class="pildora">R08</span>
-                <span class="pildora">R09</span>
+        <!-- Botones de Navegación Directa -->
+        <div class="grupo-botones">
+            <button class="btn-opcion btn-mapa">🌐 Ver Todos los Colegios en el Mapa</button>
+            <button class="btn-opcion btn-redes">🏫 Filtrar por Redes Educativas (1-9)</button>
+            <button class="btn-opcion btn-particulares" onclick="mostrarProximamente()">🏫 Colegios Particulares</button>
+        </div>
+
+        <!-- Bloque de Comunicados y Publicidad -->
+        <div class="bloque-informacion">
+            <div class="card-comunicado">
+                <strong style="color: #4cc9f0;">📢 COMUNICADO MATRÍCULA:</strong><br>
+                Consulta el estado actualizado de vacantes escolares para Ventanilla, Pachacútec y Mi Perú.
+            </div>
+
+            <div class="card-publicidad">
+                Espacio Reservado para Anuncios Publicitarios
             </div>
         </div>
 
-        <!-- Botón de Paso a la Pantalla 2 -->
-        <button class="btn-accion-directa">🗺️ Abrir Mapa Interactivo Completo</button>
-
     </div>
+
+    <script>
+        function mostrarProximamente() {
+            alert("Próximamente");
+        }
+    </script>
 
 </body>
 </html>
