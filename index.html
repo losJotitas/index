@@ -5,203 +5,212 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
     <style>
-        /* Estilos Generales - Fondo Azul Noche */
+        /* Estilos Generales - Fondo Azul Noche Elegante */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #0b132b; /* Azul Noche Profundo */
+            padding: 15px;
+            background-color: #0b132b;
             color: #ffffff;
             text-align: center;
-            min-height: 100vh;
-            box-sizing: border-box;
         }
 
-        /* Marcas de agua discretas ajustadas al fondo azul noche */
+        /* Marcas de Agua Discretas */
         .marca-agua {
             position: absolute;
             top: 10px;
             font-size: 11px;
-            color: #1c2d42; /* Plomo tenue casi invisible sobre azul noche */
+            color: #1c2d42;
             font-weight: bold;
             user-select: none;
         }
         .marca-jdah { left: 15px; }
         .marca-jotitas { right: 15px; }
 
-        /* Contenedor Principal */
         .main-container {
-            max-width: 480px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
-        /* Logo Compuesto con Atardecer/Alba */
-        .header-app {
-            margin-top: 20px;
-            margin-bottom: 25px;
-        }
-
+        /* Logo de Impacto */
+        .header-app { margin-top: 15px; margin-bottom: 20px; }
         .escena-logo {
             position: relative;
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 15px auto;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 10px auto;
             border-radius: 50%;
-            /* Resplandor de Alba / Atardecer */
             background: radial-gradient(circle, #ff9e00 0%, #ff5400 60%, rgba(11, 19, 43, 0) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 25px rgba(255, 158, 0, 0.4);
+            box-shadow: 0 0 20px rgba(255, 158, 0, 0.4);
         }
+        .icono-casa-estudio { position: relative; font-size: 65px; line-height: 1; }
+        .icono-birrete-fachada { position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); font-size: 22px; }
 
-        /* Casa de Estudio Grande con Birrete Integrado */
-        .icono-casa-estudio {
-            position: relative;
-            font-size: 80px; /* Casa mucho más grande */
-            line-height: 1;
-            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
+        h1.titulo-app { font-size: 28px; color: #ffffff; margin: 0; font-weight: 900; letter-spacing: 1px; }
+        h2.subtitulo-app, p.lema-app { font-size: 13px; color: #4cc9f0; margin: 3px 0; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* Tarjetas de Métricas (Inspirado en la imagen) */
+        .grid-metricas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 15px 0;
         }
-
-        .icono-birrete-fachada {
-            position: absolute;
-            top: 55%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 28px; /* Birrete dentro de la fachada */
+        .tarjeta-metrica {
+            background-color: #1c2541;
+            border: 1px solid #3a506b;
+            border-radius: 10px;
+            padding: 8px 4px;
         }
+        .numero-metrica { font-size: 18px; font-weight: bold; color: #4cc9f0; }
+        .label-metrica { font-size: 10px; color: #a0aec0; text-transform: uppercase; margin-top: 2px; }
 
-        /* Tipografía y Textos */
-        h1.titulo-app {
-            font-size: 32px;
-            color: #ffffff;
-            margin: 5px 0;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        h2.subtitulo-app, p.lema-app {
-            font-size: 15px;
-            color: #4cc9f0; /* Azul celeste brillante para destacar en azul noche */
-            margin: 4px 0;
-            letter-spacing: 1.2px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        /* Sección de Búsqueda */
+        /* Buscador */
         .input-busqueda {
             width: 100%;
-            padding: 15px;
-            font-size: 15px;
+            padding: 12px 15px;
+            font-size: 14px;
             border: 2px solid #3a506b;
-            border-radius: 12px;
+            border-radius: 10px;
             background-color: #1c2541;
             color: #ffffff;
             box-sizing: border-box;
-            margin-top: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             outline: none;
-            transition: border-color 0.3s;
         }
+        .input-busqueda::placeholder { color: #a0aec0; }
 
-        .input-busqueda::placeholder {
-            color: #a0aec0;
-        }
-
-        .input-busqueda:focus {
-            border-color: #4cc9f0;
-        }
-
-        /* Grupo de Botones de Exploración */
-        .grupo-botones {
+        /* Filtro por Redes (Píldoras horizontales de la imagen adaptadas a modo oscuro) */
+        .seccion-filtros { text-align: left; margin-bottom: 15px; }
+        .titulo-filtro { font-size: 11px; color: #a0aec0; font-weight: bold; margin-bottom: 8px; display: block; letter-spacing: 0.5px; }
+        
+        .pildoras-container {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 5px;
         }
-
-        .btn-principal {
-            background: linear-gradient(135deg, #3a86ff 0%, #00b4d8 100%);
-            color: white;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(58, 134, 255, 0.3);
-            transition: transform 0.2s;
-        }
-
-        .btn-secundario {
-            background: linear-gradient(135deg, #7209b7 0%, #4361ee 100%);
-            color: white;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
-            transition: transform 0.2s;
-        }
-
-        .btn-principal:active, .btn-secundario:active {
-            transform: scale(0.98);
-        }
-
-        /* Banner de Noticias/Anuncios */
-        .banner-anuncios {
+        .pildora {
             background-color: #1c2541;
             border: 1px solid #3a506b;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 13px;
-            color: #e2e8f0;
-            text-align: center;
-            line-height: 1.4;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
         }
+        .pildora.activa {
+            background-color: #3a86ff;
+            border-color: #3a86ff;
+            font-weight: bold;
+        }
+
+        /* Simulación del Mapa Integrado */
+        .mapa-contenedor {
+            width: 100%;
+            height: 220px;
+            background-color: #2b3a4a;
+            border-radius: 12px;
+            border: 1px solid #3a506b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-size: 13px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Leyenda de Redes por Color */
+        .leyenda-colores {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            background-color: #1c2541;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+        .item-leyenda { display: flex; align-items: center; gap: 4px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
     </style>
 </head>
 <body>
 
-    <!-- Marcas de Agua Sutiles -->
     <span class="marca-agua marca-jdah">JDAH</span>
     <span class="marca-agua marca-jotitas">LOS JOTITAS</span>
 
     <div class="main-container">
         
-        <!-- Identidad Corporativa y Logo -->
+        <!-- Header / Logo -->
         <header class="header-app">
             <div class="escena-logo">
-                <div class="icono-casa-estudio">
-                    🏫
-                    <div class="icono-birrete-fachada">🎓</div>
-                </div>
+                <div class="icono-casa-estudio">🏫<div class="icono-birrete-fachada">🎓</div></div>
             </div>
-            
             <h1 class="titulo-app">UBIKTUCOLEYA!</h1>
             <h2 class="subtitulo-app">VENTANILLA & MI PERÚ</h2>
             <p class="lema-app">TU COLE A UN MAPA DE DISTANCIA</p>
         </header>
 
-        <!-- Buscador Principal -->
-        <section>
-            <input type="text" class="input-busqueda" placeholder="🔍 Busca por nombre o número de colegio...">
-        </section>
+        <!-- Métricas Institucionales (Transmite solidez profesional) -->
+        <div class="grid-metricas">
+            <div class="tarjeta-metrica">
+                <div class="numero-metrica">146</div>
+                <div class="label-metrica">Colegios</div>
+            </div>
+            <div class="tarjeta-metrica">
+                <div class="numero-metrica">9</div>
+                <div class="label-metrica">Redes</div>
+            </div>
+            <div class="tarjeta-metrica">
+                <div class="numero-metrica">9</div>
+                <div class="label-metrica">Zonas</div>
+            </div>
+        </div>
 
-        <!-- Botones de Navegación Directa -->
-        <section class="grupo-botones">
-            <button class="btn-principal">🌐 Ver Todos los Colegios</button>
-            <button class="btn-secundario">🏫 Filtrar por Redes Educativas (1-9)</button>
-        </section>
+        <!-- Buscador -->
+        <input type="text" class="input-busqueda" placeholder="🔍 Buscar colegio por nombre...">
 
-        <!-- Banner de Comunicados y Publicidad -->
-        <aside class="banner-anuncios">
-            <strong>📢 Comunicado Oficial:</strong> Consultas de disponibilidad y vacantes escolares actualizadas para Ventanilla, Pachacútec y Mi Perú.
-        </aside>
+        <!-- Filtros Rápidos en Píldoras -->
+        <div class="seccion-filtros">
+            <span class="titulo-filtro">FILTRAR POR RED EDUCATIVA</span>
+            <div class="pildoras-container">
+                <span class="pildora activa">Todas</span>
+                <span class="pildora">R01</span>
+                <span class="pildora">R02</span>
+                <span class="pildora">R03</span>
+                <span class="pildora">R04</span>
+                <span class="pildora">R05</span>
+                <span class="pildora">R06</span>
+                <span class="pildora">R07</span>
+                <span class="pildora">R08</span>
+                <span class="pildora">R09</span>
+            </div>
+        </div>
+
+        <!-- Mapa Directo -->
+        <div class="mapa-contenedor">
+            🗺️ [Mapa Interactivo con Geolocalización y 146 Pines]
+        </div>
+
+        <!-- Leyenda de Colores (Como en la imagen, pero estilizada) -->
+        <div class="leyenda-colores">
+            <span class="item-leyenda"><span class="dot" style="background:#ff4d4d;"></span> R01</span>
+            <span class="item-leyenda"><span class="dot" style="background:#3399ff;"></span> R02</span>
+            <span class="item-leyenda"><span class="dot" style="background:#00cc66;"></span> R03</span>
+            <span class="item-leyenda"><span class="dot" style="background:#ffcc00;"></span> R04</span>
+            <span class="item-leyenda"><span class="dot" style="background:#9933ff;"></span> R05</span>
+            <span class="item-leyenda"><span class="dot" style="background:#00cccc;"></span> R06</span>
+            <span class="item-leyenda"><span class="dot" style="background:#ff9933;"></span> R07</span>
+            <span class="item-leyenda"><span class="dot" style="background:#333399;"></span> R08</span>
+            <span class="item-leyenda"><span class="dot" style="background:#ff3399;"></span> R09</span>
+        </div>
 
     </div>
 
