@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBIKTUCOLEYA! - Ventanilla & Mi Perú</title>
 
-    <!-- Fuentes Web -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Oswald:wght@700&family=Titan+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* Fondo Azulino Moderado y Elegante */
+        /* Fondo Azulino Moderado */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
-            padding: 25px 15px;
+            padding: 30px 15px;
             background-color: #1b3b6f;
             color: #ffffff;
             text-align: center;
@@ -23,135 +22,125 @@
             box-sizing: border-box;
         }
 
-        /* Marcas de Agua Sutiles */
         .marca-agua {
             position: absolute;
             top: 12px;
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.25);
-            font-weight: bold;
+            color: rgba(255, 255, 255, 0.2);
+            font-weight: 800;
             user-select: none;
         }
         .marca-jdah { left: 15px; }
         .marca-jotitas { right: 15px; }
 
-        .main-container { max-width: 440px; margin: 0 auto; }
+        .main-container { max-width: 420px; margin: 0 auto; }
 
-        /* Header / Logo */
-        .header-app { margin-top: 15px; margin-bottom: 25px; }
+        .header-app { margin-top: 10px; margin-bottom: 25px; }
 
-        /* Círculo Amarillo Yema de Huevo */
+        /* Círculo Amarillo Yema de Huevo Limpio */
         .escena-logo {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             margin: 0 auto 15px auto;
             border-radius: 50%;
-            background: radial-gradient(circle, #ffcc00 0%, #ffb700 70%, rgba(27, 59, 111, 0) 100%);
+            background-color: #ffb700;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
-            border: 2px solid #ffd700;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
         }
 
-        /* Birrete Realista SVG con Sombras */
         .birrete-svg {
-            width: 85px;
-            height: 85px;
-            filter: drop-shadow(0px 8px 6px rgba(0, 0, 0, 0.6));
+            width: 75px;
+            height: 75px;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.3));
         }
 
-        /* Título UBIKTUCOLEYA! Estilo Bubble Lettering Naranja 3D */
+        /* Título Limpio, Moderno y Legible */
         h1.titulo-app {
-            font-family: 'Titan One', cursive;
-            font-size: 32px;
-            margin: 8px 0 10px 0;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            
-            background: linear-gradient(
-                to bottom, 
-                #ff7b00 0%, 
-                #f26419 45%, 
-                #d94e00 46%, 
-                #852e00 100%
-            );
-            
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            
-            filter: drop-shadow(2px 2px 0px #000000) 
-                    drop-shadow(-1px -1px 0px #000000)
-                    drop-shadow(3px 4px 2px rgba(0, 0, 0, 0.7));
-        }
-
-        /* Subtítulo VENTANILLA & MI PERÚ */
-        h2.subtitulo-app {
-            font-family: 'Oswald', 'Impact', sans-serif;
-            font-size: 22px;
+            font-size: 30px;
+            font-weight: 900;
             color: #ffffff;
             margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Subtítulo con acento Amarillo Yema */
+        h2.subtitulo-app {
+            font-size: 14px;
+            color: #ffb700;
+            margin: 4px 0 0 0;
             letter-spacing: 2px;
             text-transform: uppercase;
-            font-weight: 700;
+            font-weight: 800;
         }
 
-        /* Lema */
+        /* Lema Sutil */
         p.lema-app {
-            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            color: #d1d5db;
+            margin: 6px 0 0 0;
+            font-weight: 400;
             font-style: italic;
-            font-size: 19px;
-            color: #e0e1dd;
-            margin: 4px 0 0 0;
-            font-weight: 600;
         }
 
-        /* Buscador */
+        /* Buscador Sobrio */
         .input-busqueda {
             width: 100%;
             padding: 15px;
             font-size: 14px;
-            border: 2px solid #2c5282;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
-            background-color: #0f2b48;
+            background-color: rgba(0, 0, 0, 0.2);
             color: #ffffff;
             box-sizing: border-box;
             margin-top: 25px;
             margin-bottom: 20px;
             outline: none;
-            transition: border-color 0.3s;
+            text-align: center;
         }
 
-        .input-busqueda:focus { border-color: #4cc9f0; }
+        .input-busqueda::placeholder { color: #a0aec0; }
+        .input-busqueda:focus { border-color: #ffb700; }
 
-        /* Botones de Navegación Combinados */
+        /* Botones Armónicos */
         .grupo-botones {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
 
         .btn-opcion {
             width: 100%;
-            padding: 16px;
-            border: none;
+            padding: 15px;
             border-radius: 12px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
             transition: transform 0.2s, opacity 0.2s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            box-sizing: border-box;
         }
 
-        /* Paleta Armónica de Botones */
-        .btn-mapa { background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%); color: white; }
-        .btn-redes { background: linear-gradient(135deg, #7209b7 0%, #4361ee 100%); color: white; }
-        .btn-particulares { background: linear-gradient(135deg, #0077b6 0%, #0096c7 100%); color: white; }
+        /* Botones Principales en Azul Eléctrico Uniforme */
+        .btn-principal {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Botón Secundario (Particulares) Neutro/Delineado */
+        .btn-secundario {
+            background-color: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
 
         .btn-opcion:active { transform: scale(0.98); }
 
-        /* Notificación Flotante "Próximamente" Sutil */
+        /* Toast "Próximamente" */
         .toast-notificacion {
             visibility: hidden;
             min-width: 160px;
@@ -166,7 +155,7 @@
             bottom: 30px;
             transform: translateX(-50%);
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 800;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             opacity: 0;
             transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -180,25 +169,22 @@
 </head>
 <body>
 
-    <!-- Marcas de Agua Sutiles -->
     <span class="marca-agua marca-jdah">JDAH</span>
     <span class="marca-agua marca-jotitas">LOS JOTITAS</span>
 
     <div class="main-container">
         
-        <!-- Header / Logo -->
         <header class="header-app">
             <div class="escena-logo">
                 <svg class="birrete-svg" viewBox="0 0 100 100">
-                    <polygon points="50,68 15,48 50,38 85,48" fill="rgba(0,0,0,0.3)"/>
+                    <polygon points="50,68 15,48 50,38 85,48" fill="rgba(0,0,0,0.2)"/>
                     <path d="M 32,52 L 32,68 C 32,76 68,76 68,68 L 68,52 C 60,58 40,58 32,52 Z" fill="#111111"/>
                     <path d="M 35,53 C 42,58 58,58 65,53 L 65,67 C 65,71 35,71 35,67 Z" fill="#222222"/>
                     <polygon points="50,26 92,44 50,60 8,44" fill="#1a1a1a"/>
                     <polygon points="50,28 88,44 50,58 12,44" fill="#2d2d2d"/>
-                    <circle cx="50" cy="43" r="3.5" fill="#b8860b"/>
-                    <path d="M 50,43 Q 72,45 76,60" fill="none" stroke="#b8860b" stroke-width="2.5" stroke-linecap="round"/>
-                    <polygon points="74,60 78,60 80,78 72,78" fill="#b8860b"/>
-                    <polygon points="75,61 77,61 78,76 73,76" fill="#8b6508"/>
+                    <circle cx="50" cy="43" r="3.5" fill="#1b3b6f"/>
+                    <path d="M 50,43 Q 72,45 76,60" fill="none" stroke="#1b3b6f" stroke-width="2.5" stroke-linecap="round"/>
+                    <polygon points="74,60 78,60 80,78 72,78" fill="#1b3b6f"/>
                 </svg>
             </div>
             
@@ -207,19 +193,16 @@
             <p class="lema-app">Tu cole a un mapa de distancia</p>
         </header>
 
-        <!-- Buscador Principal -->
-        <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número de colegio...">
+        <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
 
-        <!-- Botones de Navegación Directa -->
         <div class="grupo-botones">
-            <button class="btn-opcion btn-mapa">🌐 Ver Todos los Colegios en el Mapa</button>
-            <button class="btn-opcion btn-redes">🏫 Filtrar por Redes Educativas (1-9)</button>
-            <button class="btn-opcion btn-particulares" onclick="lanzarToast()">🏫 Filtrar Colegios Particulares</button>
+            <button class="btn-opcion btn-principal">🌐 Ver Todos los Colegios en el Mapa</button>
+            <button class="btn-opcion btn-principal">🏫 Filtrar por Redes Educativas (1-9)</button>
+            <button class="btn-opcion btn-secundario" onclick="lanzarToast()">🏫 Filtrar Colegios Particulares</button>
         </div>
 
     </div>
 
-    <!-- Mensaje Flotante Próximamente -->
     <div id="toast" class="toast-notificacion">Próximamente</div>
 
     <script>
