@@ -11,12 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Oswald:wght@700&family=Titan+One&display=swap" rel="stylesheet">
 
     <style>
-        /* Fondo Azul Marino Profundo */
+        /* Fondo Azulino Moderado y Elegante */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px 15px;
-            background-color: #0d1b2a;
+            padding: 25px 15px;
+            background-color: #1b3b6f;
             color: #ffffff;
             text-align: center;
             min-height: 100vh;
@@ -26,9 +26,9 @@
         /* Marcas de Agua Sutiles */
         .marca-agua {
             position: absolute;
-            top: 10px;
+            top: 12px;
             font-size: 11px;
-            color: #1b263b;
+            color: rgba(255, 255, 255, 0.25);
             font-weight: bold;
             user-select: none;
         }
@@ -38,7 +38,7 @@
         .main-container { max-width: 440px; margin: 0 auto; }
 
         /* Header / Logo */
-        .header-app { margin-top: 10px; margin-bottom: 25px; }
+        .header-app { margin-top: 15px; margin-bottom: 25px; }
 
         /* Círculo Amarillo Yema de Huevo */
         .escena-logo {
@@ -47,7 +47,7 @@
             height: 120px;
             margin: 0 auto 15px auto;
             border-radius: 50%;
-            background: radial-gradient(circle, #ffcc00 0%, #ffb700 70%, rgba(13, 27, 42, 0) 100%);
+            background: radial-gradient(circle, #ffcc00 0%, #ffb700 70%, rgba(27, 59, 111, 0) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -62,7 +62,7 @@
             filter: drop-shadow(0px 8px 6px rgba(0, 0, 0, 0.6));
         }
 
-        /* 1. Título UBIKTUCOLEYA! Estilo Bubble Lettering Naranja 3D con Trama */
+        /* Título UBIKTUCOLEYA! Estilo Bubble Lettering Naranja 3D */
         h1.titulo-app {
             font-family: 'Titan One', cursive;
             font-size: 32px;
@@ -70,16 +70,6 @@
             letter-spacing: 1.5px;
             text-transform: uppercase;
             
-            /* Relleno Naranja con Trama de Rayas en la mitad inferior */
-            background: repeating-linear-gradient(
-                -45deg,
-                #f26419 0px,
-                #f26419 3px,
-                #cc4e00 3px,
-                #cc4e00 6px
-            );
-            
-            /* Degradado de luz arriba y entramado abajo */
             background: linear-gradient(
                 to bottom, 
                 #ff7b00 0%, 
@@ -91,13 +81,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             
-            /* Delineado Oscuro y Sombra 3D Proyectada */
             filter: drop-shadow(2px 2px 0px #000000) 
                     drop-shadow(-1px -1px 0px #000000)
                     drop-shadow(3px 4px 2px rgba(0, 0, 0, 0.7));
         }
 
-        /* 2. Subtítulo VENTANILLA & MI PERÚ */
+        /* Subtítulo VENTANILLA & MI PERÚ */
         h2.subtitulo-app {
             font-family: 'Oswald', 'Impact', sans-serif;
             font-size: 22px;
@@ -108,7 +97,7 @@
             font-weight: 700;
         }
 
-        /* 3. Lema */
+        /* Lema */
         p.lema-app {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -121,14 +110,14 @@
         /* Buscador */
         .input-busqueda {
             width: 100%;
-            padding: 14px 15px;
+            padding: 15px;
             font-size: 14px;
-            border: 2px solid #415a77;
+            border: 2px solid #2c5282;
             border-radius: 12px;
-            background-color: #1b263b;
+            background-color: #0f2b48;
             color: #ffffff;
             box-sizing: border-box;
-            margin-top: 20px;
+            margin-top: 25px;
             margin-bottom: 20px;
             outline: none;
             transition: border-color 0.3s;
@@ -136,61 +125,33 @@
 
         .input-busqueda:focus { border-color: #4cc9f0; }
 
-        /* Botones de Navegación */
+        /* Botones de Navegación Combinados */
         .grupo-botones {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 14px;
         }
 
         .btn-opcion {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: none;
             border-radius: 12px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s, opacity 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
         }
 
+        /* Paleta Armónica de Botones */
         .btn-mapa { background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%); color: white; }
         .btn-redes { background: linear-gradient(135deg, #7209b7 0%, #4361ee 100%); color: white; }
-        .btn-particulares { background-color: #1b263b; border: 1px solid #415a77; color: #e0e1dd; }
+        .btn-particulares { background: linear-gradient(135deg, #0077b6 0%, #0096c7 100%); color: white; }
 
         .btn-opcion:active { transform: scale(0.98); }
 
-        /* Bloque Informativo */
-        .bloque-informacion {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .card-comunicado {
-            background-color: #1b263b;
-            border-left: 4px solid #4cc9f0;
-            border-radius: 10px;
-            padding: 14px;
-            font-size: 12px;
-            text-align: left;
-            color: #e0e1dd;
-            line-height: 1.4;
-        }
-
-        .card-publicidad {
-            background-color: #1b263b;
-            border: 1px dashed #415a77;
-            border-radius: 10px;
-            padding: 18px;
-            font-size: 11px;
-            color: #778da9;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Notificación Flotante "Próximamente" */
+        /* Notificación Flotante "Próximamente" Sutil */
         .toast-notificacion {
             visibility: hidden;
             min-width: 160px;
@@ -254,18 +215,6 @@
             <button class="btn-opcion btn-mapa">🌐 Ver Todos los Colegios en el Mapa</button>
             <button class="btn-opcion btn-redes">🏫 Filtrar por Redes Educativas (1-9)</button>
             <button class="btn-opcion btn-particulares" onclick="lanzarToast()">🏫 Filtrar Colegios Particulares</button>
-        </div>
-
-        <!-- Bloque Informativo y Publicidad -->
-        <div class="bloque-informacion">
-            <div class="card-comunicado">
-                <strong style="color: #4cc9f0;">📢 COMUNICADO MATRÍCULA:</strong><br>
-                Consulta el estado de vacantes actualizado para colegios de Ventanilla, Pachacútec y Mi Perú.
-            </div>
-
-            <div class="card-publicidad">
-                Espacio Reservado para Anuncios Publicitarios
-            </div>
         </div>
 
     </div>
