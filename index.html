@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Tono intermedio exacto (#203756) para fusión invisible */
+    /* Tono de fondo unificado */
     body {
         font-family: 'Montserrat', sans-serif;
         margin: 0;
@@ -22,22 +22,10 @@
         box-sizing: border-box;
     }
 
-    /* MARCAS DE AGUA EN LA PARTE INFERIOR */
-    .marca-agua {
-        position: fixed;
-        bottom: 15px; /* Ubicación en la parte inferior */
-        font-size: 11px;
-        color: #ffffff;
-        opacity: 0.35; /* Efecto transparente de marca de agua */
-        font-weight: 800;
-        user-select: none;
-        pointer-events: none; /* Para no interferir con clicks */
-        z-index: 999;
+    .main-container { 
+        max-width: 420px; 
+        margin: 0 auto; 
     }
-    .marca-jdah { left: 15px; }
-    .marca-jotitas { right: 15px; }
-
-    .main-container { max-width: 420px; margin: 0 auto; }
 
     .header-portada {
         position: relative;
@@ -47,17 +35,17 @@
         background-color: transparent;
     }
 
-    /* Difuminado suave arriba y bordes para integrarlo completamente */
+    /* MÁSCARA CORREGIDA: Difumina únicamente el borde superior (12%) y los laterales */
     .imagen-portada {
         width: 100%;
         height: auto;
         display: block;
         border-radius: 0;
-        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%),
-                            linear-gradient(to bottom, transparent 0%, black 18%);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%),
+                            linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
         -webkit-mask-composite: source-in;
-        mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%),
-                    linear-gradient(to bottom, transparent 0%, black 18%);
+        mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%),
+                    linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
         mask-composite: intersect;
     }
 
@@ -105,7 +93,21 @@
 
     .btn-opcion:active { transform: scale(0.98); }
 
-    /* Toast "Próximamente" (Letras Negras y Fondo Naranja) */
+    /* MARCAS DE AGUA FIJAS ABAJO */
+    .marca-agua {
+        position: fixed;
+        bottom: 12px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.35);
+        font-weight: 800;
+        user-select: none;
+        pointer-events: none;
+        z-index: 999;
+    }
+    .marca-jdah { left: 15px; }
+    .marca-jotitas { right: 15px; }
+
+    /* Toast "Próximamente" (Naranja con texto oscuro) */
     .toast-notificacion {
         visibility: hidden;
         min-width: 160px;
@@ -117,7 +119,7 @@
         position: fixed;
         z-index: 1000;
         left: 50%;
-        bottom: 50px;
+        bottom: 45px;
         transform: translateX(-50%);
         font-size: 13px;
         font-weight: 800;
@@ -133,9 +135,6 @@
 </style>
 </head>
 <body>
-
-    <span class="marca-agua marca-jdah">JDAH</span>
-    <span class="marca-agua marca-jotitas">LOS JOTITAS</span>
 
     <div class="main-container">
         
@@ -153,7 +152,12 @@
 
     </div>
 
+    <!-- Toast oculto de origen -->
     <div id="toast" class="toast-notificacion">Próximamente</div>
+
+    <!-- Marcas al pie del viewport -->
+    <span class="marca-agua marca-jdah">JDAH</span>
+    <span class="marca-agua marca-jotitas">LOS JOTITAS</span>
 
     <script>
         function lanzarToast() {
