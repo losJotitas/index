@@ -10,12 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
    <style>
-    /* Fondo ajustado al tono exacto de integración */
+    /* Azul de fondo más claro (#213856) para igualar el tono de la portada en celular y PC */
     body {
         font-family: 'Montserrat', sans-serif;
         margin: 0;
         padding: 10px 15px 30px 15px;
-        background-color: #1c2d46;
+        background-color: #213856;
         color: #ffffff;
         text-align: center;
         min-height: 100vh;
@@ -44,24 +44,14 @@
         background-color: transparent;
     }
 
-    /* Imagen con fusión horizontal limpia para PC */
+    /* Fusión lateral ultra suave sin afectar arriba ni la pista */
     .imagen-portada {
         width: 100%;
         height: auto;
         display: block;
         border-radius: 0;
-        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-        mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-    }
-
-    /* Ajuste exclusivo para Celulares: suaviza la parte superior sin tocar la pista */
-    @media (max-width: 600px) {
-        .imagen-portada {
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%),
-                                linear-gradient(to bottom, transparent 0%, black 15%, black 100%);
-            -webkit-mask-composite: source-in;
-            mask-composite: intersect;
-        }
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
     }
 
     /* Buscador */
