@@ -11,12 +11,12 @@
 
     <style>
         /* Fondo con el tono azul exacto del centro de la imagen */
-      body {
+     body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 10px 15px 30px 15px;
-    /* Azul aclarado exacto tomado del borde de la portada */
-    background-color: #1a2c47; 
+    /* Tono aclarado exacto para acoplamiento total sin parches */
+    background-color: #1e3252;
     color: #ffffff;
     text-align: center;
     min-height: 100vh;
@@ -46,16 +46,14 @@
             background-color: transparent;
         }
 
-       /* Difuminado sutil en los 4 bordes para fusión total */
+     /* Imagen 100% nítida para recuperar el detalle de la pista */
 .imagen-portada {
     width: 100%;
     height: auto;
     display: block;
     border-radius: 0;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%),
-                        linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
+    -webkit-mask-image: none;
+    mask-image: none;
 }
 
         /* Buscador */
