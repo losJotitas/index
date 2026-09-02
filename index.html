@@ -9,13 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
-   <style>
-    /* Fondo aclarado (#243d5e) para igualar el tono de la imagen al 100% */
+  <style>
+    /* Punto medio exacto de azul para disolver la silueta */
     body {
         font-family: 'Montserrat', sans-serif;
         margin: 0;
         padding: 10px 15px 30px 15px;
-        background-color: #243d5e;
+        background-color: #1d324e;
         color: #ffffff;
         text-align: center;
         min-height: 100vh;
@@ -44,17 +44,17 @@
         background-color: transparent;
     }
 
-    /* Imagen con fusión lateral limpia */
+    /* Transición suave para borrar bordes en celular y PC */
     .imagen-portada {
         width: 100%;
         height: auto;
         display: block;
         border-radius: 0;
-        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-        mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
     }
 
-    /* Buscador Blanco Impecable */
+    /* Buscador Blanco */
     .input-busqueda {
         width: 100%;
         padding: 15px;
