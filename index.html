@@ -10,12 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
    <style>
-    /* Azul de fondo más claro (#213856) para igualar el tono de la portada en celular y PC */
+    /* Fondo aclarado (#243d5e) para igualar el tono de la imagen al 100% */
     body {
         font-family: 'Montserrat', sans-serif;
         margin: 0;
         padding: 10px 15px 30px 15px;
-        background-color: #213856;
+        background-color: #243d5e;
         color: #ffffff;
         text-align: center;
         min-height: 100vh;
@@ -26,7 +26,7 @@
         position: absolute;
         top: 12px;
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.25);
         font-weight: 800;
         user-select: none;
         z-index: 10;
@@ -44,33 +44,35 @@
         background-color: transparent;
     }
 
-    /* Fusión lateral ultra suave sin afectar arriba ni la pista */
+    /* Imagen con fusión lateral limpia */
     .imagen-portada {
         width: 100%;
         height: auto;
         display: block;
         border-radius: 0;
-        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-        mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
     }
 
-    /* Buscador */
+    /* Buscador Blanco Impecable */
     .input-busqueda {
         width: 100%;
         padding: 15px;
         font-size: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.25);
+        font-weight: 600;
+        border: 2px solid #ffffff;
         border-radius: 12px;
-        background-color: rgba(255, 255, 255, 0.08);
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #0f172a;
         box-sizing: border-box;
         margin-bottom: 20px;
         outline: none;
         text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .input-busqueda::placeholder { color: #a0aec0; }
-    .input-busqueda:focus { border-color: #3b82f6; background-color: rgba(255, 255, 255, 0.12); }
+    .input-busqueda::placeholder { color: #64748b; font-weight: 500; }
+    .input-busqueda:focus { border-color: #3b82f6; box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3); }
 
     /* Botones de Navegación */
     .grupo-botones {
