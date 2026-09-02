@@ -11,12 +11,12 @@
 
     <style>
         /* Fondo con el tono azul exacto del centro de la imagen */
-     body {
+    body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 10px 15px 30px 15px;
-    /* Tono aclarado exacto para acoplamiento total sin parches */
-    background-color: #1e3252;
+    /* Color extraído de la zona más clara de los bordes de la imagen */
+    background-color: #203758;
     color: #ffffff;
     text-align: center;
     min-height: 100vh;
@@ -46,14 +46,14 @@
             background-color: transparent;
         }
 
-     /* Imagen 100% nítida para recuperar el detalle de la pista */
+   /* Fusión lateral limpia manteniendo la carretera intacta */
 .imagen-portada {
     width: 100%;
     height: auto;
     display: block;
     border-radius: 0;
-    -webkit-mask-image: none;
-    mask-image: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
 
         /* Buscador */
