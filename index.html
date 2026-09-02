@@ -10,12 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* Fondo con el azul exacto (#07152b) para integrar la portada al 100% */
+        /* Fondo con el tono azul exacto del centro de la imagen */
         body {
             font-family: 'Montserrat', sans-serif;
             margin: 0;
-            padding: 20px 15px 30px 15px;
-            background-color: #07152b;
+            padding: 10px 15px 30px 15px;
+            background-color: #0d1e38;
             color: #ffffff;
             text-align: center;
             min-height: 100vh;
@@ -36,22 +36,24 @@
 
         .main-container { max-width: 420px; margin: 0 auto; }
 
-        /* Contenedor de la Portada perfectamente centrado */
+        /* Contenedor sin marcos ni recortes */
         .header-portada {
             position: relative;
             width: 100%;
             margin-top: 10px;
             margin-bottom: 20px;
-            border-radius: 16px;
-            overflow: hidden;
+            background-color: transparent;
         }
 
-        /* Imagen ajustada para que NINGUNA letra se corte */
+        /* Imagen sin border-radius y con desvanecimiento suave en bordes */
         .imagen-portada {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 16px;
+            border-radius: 0; /* Quita la esquina redondeada marcada */
+            /* Efecto para difuminar sutilmente los bordes con el fondo */
+            -webkit-mask-image: radial-gradient(circle, black 70%, transparent 100%);
+            mask-image: radial-gradient(circle, black 70%, transparent 100%);
         }
 
         /* Buscador */
