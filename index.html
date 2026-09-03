@@ -10,68 +10,85 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Estilo General Moderno y Claro */
+    /* Estructura Base con Imagen de Fondo */
     body {
         font-family: 'Montserrat', sans-serif;
         margin: 0;
-        padding: 10px 15px 40px 15px;
-        background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+        padding: 20px 15px 40px 15px;
+        background-color: #f0f7ff;
+        /* Usa tu nueva imagen como fondo de pantalla */
+        background-image: url('portada.png');
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
         color: #1e293b;
         text-align: center;
         min-height: 100vh;
         box-sizing: border-box;
+        position: relative;
+    }
+
+    /* Capa translúcida para recortar bordes y dar legibilidad a tus botones */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(4px); /* Suaviza los detalles del fondo */
+        z-index: 1;
     }
 
     .main-container { 
         max-width: 420px; 
         margin: 0 auto; 
-    }
-
-    .header-portada {
         position: relative;
-        width: 100%;
-        margin-top: 5px;
-        margin-bottom: 20px;
+        z-index: 2; /* Mantiene la interfaz por encima del fondo */
     }
 
-    /* Imagen Principal con Bordes Redondeados y Sombra Soft */
-    .imagen-portada {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-radius: 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    /* Título Adaptado */
+    .titulo-app {
+        font-size: 24px;
+        font-weight: 900;
+        color: #0284c7;
+        margin-top: 20px;
+        margin-bottom: 5px;
+        text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
     }
 
-    /* Buscador Moderno */
+    .subtitulo-app {
+        font-size: 13px;
+        font-weight: 700;
+        color: #475569;
+        margin-bottom: 35px;
+    }
+
+    /* Buscador Blanco con sombra realzada */
     .input-busqueda {
         width: 100%;
         padding: 16px;
         font-size: 14px;
         font-weight: 600;
-        border: 2px solid #e2e8f0;
+        border: 2px solid #ffffff;
         border-radius: 16px;
-        background-color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.95);
         color: #0f172a;
         box-sizing: border-box;
         margin-bottom: 20px;
         outline: none;
         text-align: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-        transition: all 0.2s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
     }
 
-    .input-busqueda::placeholder { color: #94a3b8; font-weight: 500; }
-    .input-busqueda:focus { 
-        border-color: #0284c7; 
-        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15); 
-    }
+    .input-busqueda::placeholder { color: #64748b; font-weight: 500; }
 
     /* Botones de Navegación */
     .grupo-botones {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
     }
 
     .btn-opcion {
@@ -79,32 +96,30 @@
         padding: 16px;
         border-radius: 16px;
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 800;
         cursor: pointer;
-        transition: transform 0.2s, background-color 0.2s;
+        transition: transform 0.2s;
         box-sizing: border-box;
-        background-color: #0284c7; /* Azul vibrante adaptado al mapa */
+        background-color: #0284c7;
         color: #ffffff;
         border: none;
-        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
+        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
     }
 
     .btn-opcion:active { transform: scale(0.98); }
 
-    /* Botón destacado naranja (como el botón "Ver Colegios" de la imagen) */
     .btn-destacado {
         background: linear-gradient(135deg, #ff7e36 0%, #f97316 100%);
-        box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3);
+        box-shadow: 0 6px 18px rgba(249, 115, 22, 0.4);
     }
 
-    /* Marcas de Agua Discretas */
+    /* Marcas de Agua */
     .marca-agua {
         position: fixed;
         bottom: 12px;
         font-size: 11px;
-        color: #64748b;
-        opacity: 0.5;
-        font-weight: 800;
+        color: #334155;
+        font-weight: 900;
         user-select: none;
         pointer-events: none;
         z-index: 999;
@@ -112,7 +127,7 @@
     .marca-jdah { left: 15px; }
     .marca-jotitas { right: 15px; }
 
-    /* Toast "Próximamente" (Púrpura vibrante como el botón Matrícula) */
+    /* Toast "Próximamente" */
     .toast-notificacion {
         visibility: hidden;
         min-width: 160px;
@@ -143,9 +158,8 @@
 
     <div class="main-container">
         
-        <header class="header-portada">
-            <img src="portada.png" alt="UBIKTUCOLEYA! - Mapa Colegios" class="imagen-portada">
-        </header>
+        <div class="titulo-app">UBIKTUCOLEYA!</div>
+        <div class="subtitulo-app">Ventanilla & Mi Perú</div>
 
         <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
 
@@ -157,10 +171,8 @@
 
     </div>
 
-    <!-- Toast oculto -->
     <div id="toast" class="toast-notificacion">Próximamente</div>
 
-    <!-- Marcas de agua -->
     <span class="marca-agua marca-jdah">JDAH</span>
     <span class="marca-agua marca-jotitas">LOS JOTITAS</span>
 
