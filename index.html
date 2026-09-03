@@ -7,16 +7,16 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Tono de fondo unificado */
+    /* Estilo General Moderno y Claro */
     body {
         font-family: 'Montserrat', sans-serif;
         margin: 0;
-        padding: 10px 15px 30px 15px;
-        background-color: #203756;
-        color: #ffffff;
+        padding: 10px 15px 40px 15px;
+        background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+        color: #1e293b;
         text-align: center;
         min-height: 100vh;
         box-sizing: border-box;
@@ -30,44 +30,42 @@
     .header-portada {
         position: relative;
         width: 100%;
-        margin-top: 10px;
+        margin-top: 5px;
         margin-bottom: 20px;
-        background-color: transparent;
     }
 
-    /* MÁSCARA CORREGIDA: Difumina únicamente el borde superior (12%) y los laterales */
+    /* Imagen Principal con Bordes Redondeados y Sombra Soft */
     .imagen-portada {
         width: 100%;
         height: auto;
         display: block;
-        border-radius: 0;
-        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%),
-                            linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-        -webkit-mask-composite: source-in;
-        mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 100%),
-                    linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-        mask-composite: intersect;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     }
 
-    /* Buscador Blanco */
+    /* Buscador Moderno */
     .input-busqueda {
         width: 100%;
-        padding: 15px;
+        padding: 16px;
         font-size: 14px;
         font-weight: 600;
-        border: 2px solid #ffffff;
-        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
         background-color: #ffffff;
         color: #0f172a;
         box-sizing: border-box;
         margin-bottom: 20px;
         outline: none;
         text-align: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        transition: all 0.2s ease;
     }
 
-    .input-busqueda::placeholder { color: #64748b; font-weight: 500; }
-    .input-busqueda:focus { border-color: #3b82f6; box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3); }
+    .input-busqueda::placeholder { color: #94a3b8; font-weight: 500; }
+    .input-busqueda:focus { 
+        border-color: #0284c7; 
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15); 
+    }
 
     /* Botones de Navegación */
     .grupo-botones {
@@ -78,27 +76,34 @@
 
     .btn-opcion {
         width: 100%;
-        padding: 15px;
-        border-radius: 12px;
+        padding: 16px;
+        border-radius: 16px;
         font-size: 14px;
         font-weight: 700;
         cursor: pointer;
         transition: transform 0.2s, background-color 0.2s;
         box-sizing: border-box;
-        background-color: #1d4ed8;
+        background-color: #0284c7; /* Azul vibrante adaptado al mapa */
         color: #ffffff;
         border: none;
-        box-shadow: 0 4px 14px rgba(29, 78, 216, 0.4);
+        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
     }
 
     .btn-opcion:active { transform: scale(0.98); }
 
-    /* MARCAS DE AGUA FIJAS ABAJO */
+    /* Botón destacado naranja (como el botón "Ver Colegios" de la imagen) */
+    .btn-destacado {
+        background: linear-gradient(135deg, #ff7e36 0%, #f97316 100%);
+        box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3);
+    }
+
+    /* Marcas de Agua Discretas */
     .marca-agua {
         position: fixed;
         bottom: 12px;
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.35);
+        color: #64748b;
+        opacity: 0.5;
         font-weight: 800;
         user-select: none;
         pointer-events: none;
@@ -107,12 +112,12 @@
     .marca-jdah { left: 15px; }
     .marca-jotitas { right: 15px; }
 
-    /* Toast "Próximamente" (Naranja con texto oscuro) */
+    /* Toast "Próximamente" (Púrpura vibrante como el botón Matrícula) */
     .toast-notificacion {
         visibility: hidden;
         min-width: 160px;
-        background-color: #ffb700;
-        color: #0d1b2a;
+        background-color: #8b5cf6;
+        color: #ffffff;
         text-align: center;
         border-radius: 20px;
         padding: 10px 20px;
@@ -123,7 +128,7 @@
         transform: translateX(-50%);
         font-size: 13px;
         font-weight: 800;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
         opacity: 0;
         transition: opacity 0.4s ease, visibility 0.4s ease;
     }
@@ -139,23 +144,23 @@
     <div class="main-container">
         
         <header class="header-portada">
-            <img src="portada.png" alt="UBIKTUCOLEYA!" class="imagen-portada">
+            <img src="portada.png" alt="UBIKTUCOLEYA! - Mapa Colegios" class="imagen-portada">
         </header>
 
         <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
 
         <div class="grupo-botones">
-            <button class="btn-opcion">🌐 Ver Todos los Colegios en el Mapa</button>
+            <button class="btn-opcion btn-destacado">🌐 Ver Todos los Colegios en el Mapa</button>
             <button class="btn-opcion">🏫 Filtrar por Redes Educativas (1-9)</button>
             <button class="btn-opcion" onclick="lanzarToast()">🏫 Filtrar por Colegios Particulares</button>
         </div>
 
     </div>
 
-    <!-- Toast oculto de origen -->
+    <!-- Toast oculto -->
     <div id="toast" class="toast-notificacion">Próximamente</div>
 
-    <!-- Marcas al pie del viewport -->
+    <!-- Marcas de agua -->
     <span class="marca-agua marca-jdah">JDAH</span>
     <span class="marca-agua marca-jotitas">LOS JOTITAS</span>
 
