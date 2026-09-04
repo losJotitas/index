@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Desplazamiento nativo libre para el gesto de actualizar en el celular */
+    /* Desplazamiento nativo libre para el gesto de actualizar */
     html, body {
         margin: 0;
         padding: 0;
@@ -21,7 +21,7 @@
         background-color: #0f172a;
     }
 
-    /* Fondo de pantalla fijo que cubre toda la ventana sin deformar ni agrandar de más */
+    /* Fondo de pantalla fijo */
     .fondo-portada {
         position: fixed;
         top: 0;
@@ -29,18 +29,18 @@
         width: 100vw;
         height: 100vh;
         z-index: 0;
-        pointer-events: none; /* Clave: permite que el dedo deslice la pantalla para actualizar */
+        pointer-events: none; /* Mantiene el gesto táctil de actualizar */
     }
 
     .fondo-portada img {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Llena toda la pantalla de lado a lado */
-        object-position: center top; /* Ancla la parte superior para que el título y el mapache nunca salgan del visor */
+        object-fit: cover;
+        object-position: center 20%; /* Ajuste fino: baja un poco la imagen para que el título y el mapache respiren y no se corten */
         image-rendering: -webkit-optimize-contrast;
     }
 
-    /* Capa oscura sutil para que los botones destaquen sin opacar el fondo */
+    /* Capa de contraste oscura */
     .fondo-portada::after {
         content: '';
         position: absolute;
@@ -48,33 +48,32 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(15, 23, 42, 0.3); 
+        background: rgba(15, 23, 42, 0.4); 
     }
 
-    /* Contenedor principal que organiza los botones sobre la imagen */
+    /* Contenedor principal que centra perfectamente los controles en la pantalla */
     .main-container { 
         position: relative;
         z-index: 2;
         width: 100%;
-        max-width: 440px; 
+        max-width: 420px; 
         min-height: 100vh;
         margin: 0 auto;
-        padding: 24px 16px;
+        padding: 20px 16px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end; /* Ubica los controles abajo para dejar lucir el fondo arriba */
+        justify-content: center; /* Centrados verticalmente como siempre */
         align-items: center;
         box-sizing: border-box;
-        padding-bottom: 45px;
     }
 
-    /* Bloque del Buscador y Botones con un fondo traslúcido elegante */
+    /* Bloque del Buscador y Botones con fondo traslúcido y compacto */
     .bloque-controles {
         width: 100%;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        background: rgba(15, 23, 42, 0.55);
+        background: rgba(15, 23, 42, 0.6);
         padding: 14px;
         border-radius: 20px;
         backdrop-filter: blur(6px);
@@ -85,8 +84,8 @@
     /* Buscador traslúcido */
     .input-busqueda {
         width: 100%;
-        padding: 13px 16px;
-        font-size: 13.5px;
+        padding: 12px 16px;
+        font-size: 13px;
         font-weight: 700;
         border: 1.5px solid rgba(255, 255, 255, 0.7);
         border-radius: 14px;
@@ -115,9 +114,9 @@
     /* Estilo Base para los Botones */
     .btn-opcion {
         width: 100%;
-        padding: 13px 14px;
+        padding: 12px 14px;
         border-radius: 14px;
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 800;
         cursor: pointer;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -152,7 +151,7 @@
 
     .fila-botones-dividida .btn-opcion {
         flex: 1;
-        padding: 12px 6px;
+        padding: 11px 6px;
         font-size: 11px;
         display: flex;
         align-items: center;
@@ -219,12 +218,12 @@
 </head>
 <body>
 
-    <!-- Fondo de pantalla con portada.jpg anclado arriba para proteger el título y el mapache -->
+    <!-- Fondo de pantalla con ajuste de posición focal para mostrar el título y mapache -->
     <div class="fondo-portada">
         <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú">
     </div>
 
-    <!-- Contenido principal interactivo -->
+    <!-- Contenido principal centrado -->
     <div class="main-container">
         <div class="bloque-controles">
             <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
