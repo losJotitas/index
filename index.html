@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Estructura para ajustar todo al alto exacto del celular sin scroll */
+    /* Estructura general */
     html, body {
         height: 100%;
         margin: 0;
@@ -20,7 +20,7 @@
 
     body {
         font-family: 'Montserrat', sans-serif;
-        background: linear-gradient(135deg, #1b0c36 0%, #3a506b 50%, #0f172a 100%);
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #090d16 100%);
         color: #ffffff;
         text-align: center;
         display: flex;
@@ -39,7 +39,7 @@
         align-items: center;
     }
 
-    /* Portada abarcando la pantalla completa de fondo */
+    /* Portada de fondo */
     .header-portada {
         position: absolute;
         top: 0;
@@ -59,10 +59,10 @@
         height: 85%;
         object-fit: contain;
         image-rendering: -webkit-optimize-contrast;
-        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
     }
 
-    /* Capa traslúcida inferior para resaltar los botones sobre el mapa */
+    /* Capa traslúcida elegante para integrar la interfaz */
     .main-container::after {
         content: '';
         position: absolute;
@@ -70,7 +70,7 @@
         left: 0;
         width: 100%;
         height: 60vh;
-        background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.85) 40%, rgba(15, 23, 42, 0.98) 100%);
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.88) 35%, rgba(15, 23, 42, 0.98) 100%);
         z-index: 2;
         pointer-events: none;
     }
@@ -88,13 +88,13 @@
         gap: 10px;
     }
 
-    /* Buscador traslúcido */
+    /* Buscador traslúcido estilizado */
     .input-busqueda {
         width: 100%;
         padding: 13px 16px;
         font-size: 13.5px;
         font-weight: 700;
-        border: 2px solid rgba(255, 255, 255, 0.95);
+        border: 1.5px solid rgba(255, 255, 255, 0.8);
         border-radius: 16px;
         background-color: rgba(255, 255, 255, 0.95);
         color: #0f172a;
@@ -107,11 +107,11 @@
 
     .input-busqueda::placeholder { color: #64748b; font-weight: 600; }
     .input-busqueda:focus { 
-        border-color: #ff7e36; 
-        box-shadow: 0 4px 18px rgba(255, 126, 54, 0.5); 
+        border-color: #f97316; 
+        box-shadow: 0 4px 18px rgba(249, 115, 22, 0.4); 
     }
 
-    /* Botones de Navegación */
+    /* Grupo de Botones */
     .grupo-botones {
         width: 100%;
         display: flex;
@@ -119,6 +119,7 @@
         gap: 9px;
     }
 
+    /* Estilo Base Unificado de Botón */
     .btn-opcion {
         width: 100%;
         padding: 13px 14px;
@@ -126,23 +127,34 @@
         font-size: 13px;
         font-weight: 800;
         cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: all 0.2s ease;
         box-sizing: border-box;
-        background-color: rgba(2, 132, 199, 0.95);
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(8px);
     }
 
     .btn-opcion:active { transform: scale(0.98); }
 
+    /* 1. Botón Principal Destacado (Cálido/Atracción Visual) */
     .btn-destacado {
-        background: linear-gradient(135deg, #ff7300 0%, #f95316 100%);
-        box-shadow: 0 6px 18px rgba(249, 83, 22, 0.5);
+        background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+        color: #ffffff;
+        border: 1px solid rgba(255, 237, 213, 0.4);
+        box-shadow: 0 6px 18px rgba(234, 88, 12, 0.4);
     }
 
-    /* Fila dividida en dos botones de 50% de ancho cada uno */
+    /* 2. Botón Secundario (Azul Marino Profundo - Sobrio y Armónico) */
+    .btn-secundario {
+        background: rgba(30, 41, 59, 0.85);
+        color: #f1f5f9;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-secundario:hover {
+        background: rgba(51, 65, 85, 0.95);
+    }
+
+    /* Fila dividida */
     .fila-botones-dividida {
         display: flex;
         gap: 8px;
@@ -158,28 +170,27 @@
         justify-content: center;
     }
 
-    /* Botón Rojo Conchevino (Izquierda) */
+    /* 3. Botones Divididos (Tonos Azul Acero y Azul Medianoche en Armonía) */
     .btn-estatales {
-        background: linear-gradient(135deg, #700b1b 0%, #4a030f 100%);
-        box-shadow: 0 6px 18px rgba(112, 11, 27, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: #ffffff;
+        background: rgba(15, 23, 42, 0.85);
+        color: #e2e8f0;
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     }
 
-    /* Botón Amarillo Oscuro (Derecha) */
     .btn-particulares {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(30, 58, 138, 0.85);
         color: #ffffff;
+        border: 1px solid rgba(147, 197, 253, 0.35);
+        box-shadow: 0 6px 16px rgba(30, 58, 138, 0.3);
     }
 
-    /* Marcas de Agua integradas */
+    /* Marcas de agua */
     .marca-agua {
         position: fixed;
         bottom: 8px;
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.85);
+        color: rgba(255, 255, 255, 0.7);
         font-weight: 800;
         letter-spacing: 0.5px;
         user-select: none;
@@ -190,12 +201,12 @@
     .marca-jdah { left: 15px; }
     .marca-jotitas { right: 15px; }
 
-    /* Toast "Próximamente" */
+    /* Toast notification */
     .toast-notificacion {
         visibility: hidden;
         min-width: 140px;
-        background-color: #a855f7;
-        color: #ffffff;
+        background-color: #38bdf8;
+        color: #0f172a;
         text-align: center;
         border-radius: 20px;
         padding: 10px 18px;
@@ -206,7 +217,7 @@
         transform: translateX(-50%);
         font-size: 12px;
         font-weight: 800;
-        box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+        box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
         opacity: 0;
         transition: opacity 0.4s ease, visibility 0.4s ease;
     }
@@ -216,7 +227,7 @@
         opacity: 1;
     }
 
-    /* Adaptación para Pantallas Grandes / PC */
+    /* Adaptación para PC */
     @media (min-width: 768px) {
         .bloque-controles {
             top: 58%;
@@ -253,9 +264,8 @@
 
             <div class="grupo-botones">
                 <button class="btn-opcion btn-destacado">🌐 Ver Todos los Colegios en el Mapa</button>
-                <button class="btn-opcion">🏫 Filtrar por Redes Educativas (1-9)</button>
+                <button class="btn-opcion btn-secundario">🏫 Filtrar por Redes Educativas (1-9)</button>
                 
-                <!-- Fila dividida con Colegios Estatales (Izquierda) y Particulares (Derecha) -->
                 <div class="fila-botones-dividida">
                     <button class="btn-opcion btn-estatales">🏫 Colegios Estatales</button>
                     <button class="btn-opcion btn-particulares" onclick="lanzarToast()">🏫 Colegios Particulares</button>
