@@ -21,7 +21,7 @@
         background-color: #0f172a;
     }
 
-    /* Fondo de pantalla fijo */
+    /* Fondo de pantalla ajustado con contain para que la imagen se vea completa y reducida */
     .fondo-portada {
         position: fixed;
         top: 0;
@@ -29,18 +29,21 @@
         width: 100vw;
         height: 100vh;
         z-index: 0;
-        pointer-events: none; /* Mantiene el gesto táctil de actualizar */
+        pointer-events: none; /* Mantiene el gesto táctil de actualizar en el celular */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .fondo-portada img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        object-position: center 20%; /* Ajuste fino: baja un poco la imagen para que el título y el mapache respiren y no se corten */
+        object-fit: contain; /* Muestra toda la imagen entera sin recortar el título ni al mapache */
+        object-position: center;
         image-rendering: -webkit-optimize-contrast;
     }
 
-    /* Capa de contraste oscura */
+    /* Capa de contraste oscura sutil detrás de los controles */
     .fondo-portada::after {
         content: '';
         position: absolute;
@@ -48,10 +51,10 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(15, 23, 42, 0.4); 
+        background: rgba(15, 23, 42, 0.3); 
     }
 
-    /* Contenedor principal que centra perfectamente los controles en la pantalla */
+    /* Contenedor principal que centra perfectamente los controles */
     .main-container { 
         position: relative;
         z-index: 2;
@@ -62,7 +65,7 @@
         padding: 20px 16px;
         display: flex;
         flex-direction: column;
-        justify-content: center; /* Centrados verticalmente como siempre */
+        justify-content: center; /* Centrado verticalmente */
         align-items: center;
         box-sizing: border-box;
     }
@@ -73,11 +76,11 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        background: rgba(15, 23, 42, 0.6);
+        background: rgba(15, 23, 42, 0.65);
         padding: 14px;
         border-radius: 20px;
         backdrop-filter: blur(6px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
@@ -218,7 +221,7 @@
 </head>
 <body>
 
-    <!-- Fondo de pantalla con ajuste de posición focal para mostrar el título y mapache -->
+    <!-- Fondo de pantalla con imagen completa adaptada -->
     <div class="fondo-portada">
         <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú">
     </div>
