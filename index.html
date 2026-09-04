@@ -10,15 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Estructura - Fondo Azul Noche / Slate Medio */
-    html, body {
+    /* Permite el gesto táctil de recargar (Pull-to-refresh) en celulares */
+    html {
         height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
+        overscroll-behavior-y: contain; /* Activa el gesto de recargar nativo */
     }
 
     body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
         font-family: 'Montserrat', sans-serif;
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
         color: #ffffff;
@@ -119,7 +120,7 @@
         gap: 9px;
     }
 
-    /* Estilo Base para Relieve, Brillo Satinado y Definición */
+    /* Estilo Base para Relieve y Definición */
     .btn-opcion {
         width: 100%;
         padding: 13px 14px;
@@ -137,14 +138,14 @@
 
     .btn-opcion:active { transform: scale(0.98); }
 
-    /* 1. Ver Todos los Colegios: Ámbar Cálido Vibante pero Elegante */
+    /* 1. Ver Todos los Colegios: Ámbar Cálido */
     .btn-ambar {
         background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
         color: #ffffff;
         box-shadow: 0 6px 18px rgba(217, 119, 6, 0.4);
     }
 
-    /* 2. Redes Educativas: Azul Cobalto Medio */
+    /* 2. Redes Educativas: Azul Cobalto */
     .btn-cobalto {
         background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
         color: #ffffff;
@@ -174,14 +175,14 @@
         box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
     }
 
-    /* 4. Colegios Particulares: Púrpura Violeta Equilibrado */
+    /* 4. Colegios Particulares: Púrpura Violeta */
     .btn-violeta {
         background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
         color: #ffffff;
         box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
     }
 
-    /* Marcas de agua legibles */
+    /* Marcas de agua */
     .marca-agua {
         position: fixed;
         bottom: 8px;
