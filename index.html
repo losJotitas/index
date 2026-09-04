@@ -18,11 +18,10 @@
         min-height: 100vh;
         font-family: 'Montserrat', sans-serif;
         color: #ffffff;
-        text-align: center;
-        background-color: #0f172a; /* Fondo base de respaldo */
+        background-color: #0f172a;
     }
 
-    /* Fondo fijo adaptado para que la imagen no se corte en los laterales */
+    /* Fondo fijo expandido para cubrir toda la pantalla en PC y celular */
     .fondo-portada {
         position: fixed;
         top: 0;
@@ -30,30 +29,37 @@
         width: 100vw;
         height: 100vh;
         z-index: 0;
-        pointer-events: none; /* Permite que los gestos de actualización traspasen la capa */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #0f172a; /* Color que rellena los espacios vacíos si la proporción varía */
+        pointer-events: none; /* Permite que el gesto de actualizar traspase la capa */
     }
 
     .fondo-portada img {
         width: 100%;
         height: 100%;
-        object-fit: contain; /* Ajusta la imagen completa sin recortar los laterales ni el título */
+        object-fit: cover; /* Llena toda la pantalla de lado a lado sin dejar franjas */
         object-position: center;
         image-rendering: -webkit-optimize-contrast;
     }
 
-    /* Contenedor principal interactivo */
+    /* Capa de contraste para que los botones destaquen sobre la imagen */
+    .fondo-portada::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.35); 
+    }
+
+    /* Contenedor principal centrado */
     .main-container { 
         position: relative;
         z-index: 2;
         width: 100%;
-        max-width: 420px; 
+        max-width: 480px; 
         min-height: 100vh;
         margin: 0 auto;
-        padding: 40px 0;
+        padding: 30px 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -63,18 +69,18 @@
 
     /* Bloque del Buscador y Botones */
     .bloque-controles {
-        width: 90%;
-        max-width: 380px;
+        width: 100%;
+        max-width: 400px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
     }
 
     /* Buscador traslúcido */
     .input-busqueda {
         width: 100%;
-        padding: 13px 16px;
-        font-size: 13.5px;
+        padding: 14px 16px;
+        font-size: 14px;
         font-weight: 700;
         border: 1.5px solid rgba(255, 255, 255, 0.7);
         border-radius: 16px;
@@ -98,15 +104,15 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 9px;
+        gap: 10px;
     }
 
     /* Estilo Base para Relieve y Definición */
     .btn-opcion {
         width: 100%;
-        padding: 13px 14px;
+        padding: 14px 16px;
         border-radius: 16px;
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 800;
         cursor: pointer;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -136,14 +142,14 @@
     /* Fila dividida */
     .fila-botones-dividida {
         display: flex;
-        gap: 8px;
+        gap: 9px;
         width: 100%;
     }
 
     .fila-botones-dividida .btn-opcion {
         flex: 1;
-        padding: 12px 8px;
-        font-size: 11.5px;
+        padding: 13px 10px;
+        font-size: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -163,21 +169,21 @@
         box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
     }
 
-    /* Marcas de agua */
+    /* Marcas de agua restauradas en las esquinas inferiores */
     .marca-agua {
         position: fixed;
-        bottom: 8px;
-        font-size: 10px;
-        color: rgba(255, 255, 255, 0.85);
+        bottom: 12px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.9);
         font-weight: 800;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.8px;
         user-select: none;
         pointer-events: none;
         z-index: 999;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
     }
-    .marca-jdah { left: 15px; }
-    .marca-jotitas { right: 15px; }
+    .marca-jdah { left: 20px; }
+    .marca-jotitas { right: 20px; }
 
     /* Toast notification */
     .toast-notificacion {
@@ -205,37 +211,30 @@
         opacity: 1;
     }
 
-    /* Adaptación para PC */
+    /* Ajustes específicos para PC o pantallas grandes */
     @media (min-width: 768px) {
         .bloque-controles {
-            max-width: 420px;
+            max-width: 440px;
         }
-
-        .input-busqueda {
-            padding: 15px;
-            font-size: 14px;
-        }
-
         .btn-opcion {
-            padding: 15px;
-            font-size: 14px;
+            font-size: 14.5px;
+            padding: 16px;
         }
-
         .fila-botones-dividida .btn-opcion {
             font-size: 13px;
-            padding: 14px 10px;
+            padding: 15px 10px;
         }
     }
 </style>
 </head>
 <body>
 
-    <!-- Fondo de pantalla completo con ajuste proporcional (contain) -->
+    <!-- Fondo expandido para cubrir toda la pantalla en PC y móviles -->
     <div class="fondo-portada">
-        <img src="portada.png" alt="MAPACHE - Ventanilla & Mi Perú">
+        <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú">
     </div>
 
-    <!-- Contenido interactivo flotando por encima -->
+    <!-- Contenido principal centrado -->
     <div class="main-container">
         <div class="bloque-controles">
             <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
@@ -255,7 +254,7 @@
     <!-- Toast oculto -->
     <div id="toast" class="toast-notificacion">Próximamente</div>
 
-    <!-- Marcas de agua -->
+    <!-- Marcas de agua institucionales -->
     <span class="marca-agua marca-jdah">JDAH</span>
     <span class="marca-agua marca-jotitas">LOS JOTITAS</span>
 
