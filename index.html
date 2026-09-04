@@ -15,7 +15,7 @@
         height: 100%;
         margin: 0;
         padding: 0;
-        overflow: hidden; /* Evita desplazamientos innecesarios */
+        overflow: hidden;
     }
 
     body {
@@ -56,7 +56,7 @@
 
     .imagen-portada {
         width: 100%;
-        height: 85%; /* Mantiene la mitad superior para ilustrar el mapa, título y Mapache */
+        height: 85%;
         object-fit: contain;
         image-rendering: -webkit-optimize-contrast;
         filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
@@ -75,10 +75,10 @@
         pointer-events: none;
     }
 
-    /* Bloque del Buscador y Botones Centrados a la Mitad Exacta de Pantalla */
+    /* Bloque del Buscador y Botones Centrados */
     .bloque-controles {
         position: absolute;
-        top: 62%; /* Ubicación vertical centrada hacia la mitad de la pantalla */
+        top: 62%;
         transform: translateY(-50%);
         width: 90%;
         max-width: 380px;
@@ -142,6 +142,38 @@
         box-shadow: 0 6px 18px rgba(249, 83, 22, 0.5);
     }
 
+    /* Fila dividida en dos botones de 50% de ancho cada uno */
+    .fila-botones-dividida {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .fila-botones-dividida .btn-opcion {
+        flex: 1;
+        padding: 12px 8px;
+        font-size: 11.5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Botón Rojo Conchevino (Izquierda) */
+    .btn-estatales {
+        background: linear-gradient(135deg, #700b1b 0%, #4a030f 100%);
+        box-shadow: 0 6px 18px rgba(112, 11, 27, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+    }
+
+    /* Botón Amarillo Oscuro (Derecha) */
+    .btn-particulares {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+    }
+
     /* Marcas de Agua integradas */
     .marca-agua {
         position: fixed;
@@ -200,6 +232,11 @@
             padding: 15px;
             font-size: 14px;
         }
+
+        .fila-botones-dividida .btn-opcion {
+            font-size: 13px;
+            padding: 14px 10px;
+        }
     }
 </style>
 </head>
@@ -217,7 +254,12 @@
             <div class="grupo-botones">
                 <button class="btn-opcion btn-destacado">🌐 Ver Todos los Colegios en el Mapa</button>
                 <button class="btn-opcion">🏫 Filtrar por Redes Educativas (1-9)</button>
-                <button class="btn-opcion" onclick="lanzarToast()">🏫 Filtrar por Colegios Particulares</button>
+                
+                <!-- Fila dividida con Colegios Estatales (Izquierda) y Particulares (Derecha) -->
+                <div class="fila-botones-dividida">
+                    <button class="btn-opcion btn-estatales">🏫 Colegios Estatales</button>
+                    <button class="btn-opcion btn-particulares" onclick="lanzarToast()">🏫 Colegios Particulares</button>
+                </div>
             </div>
         </div>
 
