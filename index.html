@@ -10,57 +10,75 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Fondo con degradado profundo en tonos morado/azul para máximo contraste */
+    /* Configuración de Pantalla Completa para Celular */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
     body {
         font-family: 'Montserrat', sans-serif;
-        margin: 0;
-        padding: 15px 15px 40px 15px;
-        background: linear-gradient(135deg, #2b1055 0%, #7597de 100%);
+        background: linear-gradient(135deg, #1b0c36 0%, #4a6fa5 100%);
         background-attachment: fixed;
         color: #ffffff;
         text-align: center;
-        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 10px 12px 30px 12px;
         box-sizing: border-box;
     }
 
     .main-container { 
-        max-width: 420px; 
-        margin: 0 auto; 
-    }
-
-    .header-portada {
-        position: relative;
         width: 100%;
-        margin-top: 5px;
-        margin-bottom: 20px;
+        max-width: 440px; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    /* Imagen de Portada resaltada con marco suave y sombra de elevación */
+    /* Contenedor de Portada para ocupar el máximo espacio visible */
+    .header-portada {
+        width: 100%;
+        height: 68vh; /* Ocupa el 68% de la altura total de la pantalla */
+        max-height: 520px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    /* Imagen optimizada para máxima nitidez sin pixelado */
     .imagen-portada {
         width: 100%;
-        height: auto;
-        display: block;
-        border-radius: 24px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        height: 100%;
+        object-fit: contain; /* Garantiza que todo el texto y mapa entren completos sin recortarse */
+        border-radius: 20px;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+        /* Renderizado nítido */
+        image-rendering: -webkit-optimize-contrast;
     }
 
-    /* Buscador traslúcido estilizado con contraste */
+    /* Buscador traslúcido */
     .input-busqueda {
         width: 100%;
-        padding: 16px;
+        padding: 15px;
         font-size: 14px;
         font-weight: 600;
         border: 2px solid rgba(255, 255, 255, 0.8);
-        border-radius: 18px;
+        border-radius: 16px;
         background-color: rgba(255, 255, 255, 0.95);
         color: #0f172a;
         box-sizing: border-box;
-        margin-bottom: 20px;
+        margin-bottom: 14px;
         outline: none;
         text-align: center;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        transition: all 0.2s ease;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     }
 
     .input-busqueda::placeholder { color: #64748b; font-weight: 500; }
@@ -69,41 +87,41 @@
         box-shadow: 0 4px 20px rgba(255, 126, 54, 0.4); 
     }
 
-    /* Botones de Navegación con alto contraste */
+    /* Botones de Navegación Compactos */
     .grupo-botones {
+        width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 10px;
     }
 
     .btn-opcion {
         width: 100%;
-        padding: 16px;
-        border-radius: 18px;
-        font-size: 14px;
+        padding: 14px;
+        border-radius: 16px;
+        font-size: 13.5px;
         font-weight: 800;
         cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
+        transition: transform 0.2s;
         box-sizing: border-box;
         background-color: #0284c7;
         color: #ffffff;
         border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
+        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
     }
 
     .btn-opcion:active { transform: scale(0.98); }
 
-    /* Botón Destacado en Naranja Neón / Cálido */
     .btn-destacado {
         background: linear-gradient(135deg, #ff7300 0%, #f95316 100%);
-        box-shadow: 0 8px 22px rgba(249, 83, 22, 0.5);
+        box-shadow: 0 6px 18px rgba(249, 83, 22, 0.5);
     }
 
-    /* Marcas de Agua visibles en fondo oscuro */
+    /* Marcas de Agua */
     .marca-agua {
         position: fixed;
-        bottom: 12px;
-        font-size: 11px;
+        bottom: 8px;
+        font-size: 10.5px;
         color: rgba(255, 255, 255, 0.7);
         font-weight: 800;
         letter-spacing: 0.5px;
@@ -111,8 +129,8 @@
         pointer-events: none;
         z-index: 999;
     }
-    .marca-jdah { left: 15px; }
-    .marca-jotitas { right: 15px; }
+    .marca-jdah { left: 12px; }
+    .marca-jotitas { right: 12px; }
 
     /* Toast "Próximamente" */
     .toast-notificacion {
@@ -126,7 +144,7 @@
         position: fixed;
         z-index: 1000;
         left: 50%;
-        bottom: 45px;
+        bottom: 40px;
         transform: translateX(-50%);
         font-size: 13px;
         font-weight: 800;
