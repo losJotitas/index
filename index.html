@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Estilos globales con desplazamiento nativo habilitado */
+    /* Desplazamiento nativo 100% libre para el gesto de actualizar */
     html, body {
         margin: 0;
         padding: 0;
@@ -26,37 +26,38 @@
         width: 100%;
         max-width: 420px; 
         margin: 0 auto;
-        padding: 20px 0 40px 0;
+        padding: 15px 0 45px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         box-sizing: border-box;
     }
 
-    /* Header de Portada */
+    /* Header de Portada Ampliado */
     .header-portada {
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-top: 10px;
         box-sizing: border-box;
+        padding: 0 10px;
     }
 
     .imagen-portada {
         width: 100%;
-        max-height: 380px;
+        max-width: 400px; /* Aquí controlas qué tan grande se ve el ancho máximo */
+        height: auto;
+        max-height: 520px; /* Incrementado para que la portada luzca más grande y legible */
         object-fit: contain;
         image-rendering: -webkit-optimize-contrast;
-        filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.5));
+        filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.6));
     }
 
-    /* Bloque del Buscador y Botones */
+    /* Bloque del Buscador y Botones (Con margen fluido) */
     .bloque-controles {
         width: 90%;
         max-width: 380px;
-        margin-top: -30px;
-        z-index: 10;
+        margin-top: 15px; /* Espacio natural fluido debajo de la imagen grande */
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -201,7 +202,6 @@
     @media (min-width: 768px) {
         .bloque-controles {
             max-width: 420px;
-            margin-top: -40px;
         }
 
         .input-busqueda {
