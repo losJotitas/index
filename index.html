@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Configuración para imagen a pantalla completa (Full Screen) */
+    /* Configuración Global */
     html, body {
         height: 100%;
         margin: 0;
@@ -20,24 +20,23 @@
 
     body {
         font-family: 'Montserrat', sans-serif;
-        /* La imagen de portada abarca TODA la pantalla */
+        background-color: #0f172a;
         background-image: url('portada.jpg');
-        background-size: cover;
+        background-size: contain; /* En celular la imagen completa encaja sin recortarse */
         background-position: center top;
         background-repeat: no-repeat;
-        background-attachment: fixed;
         color: #ffffff;
         text-align: center;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end; /* Alinea los controles hacia el centro-inferior de forma natural */
+        justify-content: flex-end;
         align-items: center;
-        padding: 20px 16px 35px 16px;
+        padding: 15px 15px 25px 15px;
         box-sizing: border-box;
         position: relative;
     }
 
-    /* Máscara suave para asegurar legibilidad manteniendo nitidez */
+    /* Degradado sutil en la parte inferior para dar legibilidad a los botones */
     body::before {
         content: '';
         position: fixed;
@@ -45,60 +44,60 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(15, 23, 42, 0.45) 70%, rgba(15, 23, 42, 0.75) 100%);
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(15, 23, 42, 0.75) 75%, rgba(15, 23, 42, 0.95) 100%);
         z-index: 1;
         pointer-events: none;
     }
 
-    /* Contenedor Interactivo Centrado */
+    /* Contenedor principal de controles */
     .main-container { 
         width: 100%;
-        max-width: 400px; 
+        max-width: 380px; 
         display: flex;
         flex-direction: column;
         align-items: center;
         position: relative;
         z-index: 2;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
-    /* Buscador traslúcido estilizado al centro */
+    /* Buscador traslúcido y compacto */
     .input-busqueda {
         width: 100%;
-        padding: 16px;
-        font-size: 14px;
+        padding: 12px 16px;
+        font-size: 13px;
         font-weight: 700;
         border: 2px solid rgba(255, 255, 255, 0.9);
-        border-radius: 18px;
+        border-radius: 14px;
         background-color: rgba(255, 255, 255, 0.95);
         color: #0f172a;
         box-sizing: border-box;
-        margin-bottom: 14px;
+        margin-bottom: 10px;
         outline: none;
         text-align: center;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(8px);
     }
 
     .input-busqueda::placeholder { color: #64748b; font-weight: 600; }
     .input-busqueda:focus { 
         border-color: #ff7e36; 
-        box-shadow: 0 4px 20px rgba(255, 126, 54, 0.5); 
+        box-shadow: 0 4px 16px rgba(255, 126, 54, 0.5); 
     }
 
-    /* Botones Agrupados al Centro/Alineados */
+    /* Botones de Navegación Compactos */
     .grupo-botones {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 8px;
     }
 
     .btn-opcion {
         width: 100%;
-        padding: 15px;
-        border-radius: 18px;
-        font-size: 14px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 12.5px;
         font-weight: 800;
         cursor: pointer;
         transition: transform 0.2s, box-shadow 0.2s;
@@ -106,7 +105,7 @@
         background-color: rgba(2, 132, 199, 0.95);
         color: #ffffff;
         border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
         backdrop-filter: blur(4px);
     }
 
@@ -114,40 +113,40 @@
 
     .btn-destacado {
         background: linear-gradient(135deg, #ff7300 0%, #f95316 100%);
-        box-shadow: 0 8px 22px rgba(249, 83, 22, 0.5);
+        box-shadow: 0 6px 18px rgba(249, 83, 22, 0.5);
     }
 
     /* Marcas de Agua integradas */
     .marca-agua {
         position: fixed;
-        bottom: 10px;
-        font-size: 11px;
+        bottom: 8px;
+        font-size: 10px;
         color: rgba(255, 255, 255, 0.85);
         font-weight: 800;
         letter-spacing: 0.5px;
         user-select: none;
         pointer-events: none;
         z-index: 999;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
-    .marca-jdah { left: 15px; }
-    .marca-jotitas { right: 15px; }
+    .marca-jdah { left: 12px; }
+    .marca-jotitas { right: 12px; }
 
     /* Toast "Próximamente" */
     .toast-notificacion {
         visibility: hidden;
-        min-width: 160px;
+        min-width: 140px;
         background-color: #a855f7;
         color: #ffffff;
         text-align: center;
         border-radius: 20px;
-        padding: 12px 24px;
+        padding: 10px 18px;
         position: fixed;
         z-index: 1000;
         left: 50%;
-        bottom: 50px;
+        bottom: 40px;
         transform: translateX(-50%);
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 800;
         box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
         opacity: 0;
@@ -157,6 +156,36 @@
     .toast-notificacion.visible {
         visibility: visible;
         opacity: 1;
+    }
+
+    /* AJUSTES ESPECÍFICOS PARA COMPUTADORA / PANTALLAS GRANDES */
+    @media (min-width: 768px) {
+        body {
+            background-size: cover;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .main-container {
+            max-width: 420px;
+            margin-top: 150px;
+        }
+
+        .input-busqueda {
+            padding: 16px;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .grupo-botones {
+            gap: 12px;
+        }
+
+        .btn-opcion {
+            padding: 15px;
+            font-size: 14px;
+            border-radius: 18px;
+        }
     }
 </style>
 </head>
