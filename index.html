@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Configuración de Pantalla Completa para Celular */
+    /* Configuración para imagen a pantalla completa (Full Screen) */
     html, body {
         height: 100%;
         margin: 0;
@@ -20,117 +20,118 @@
 
     body {
         font-family: 'Montserrat', sans-serif;
-        background: linear-gradient(135deg, #1b0c36 0%, #4a6fa5 100%);
+        /* La imagen de portada abarca TODA la pantalla */
+        background-image: url('portada.jpg');
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
         background-attachment: fixed;
         color: #ffffff;
         text-align: center;
         display: flex;
         flex-direction: column;
+        justify-content: flex-end; /* Alinea los controles hacia el centro-inferior de forma natural */
         align-items: center;
-        justify-content: flex-start;
-        padding: 10px 12px 30px 12px;
+        padding: 20px 16px 35px 16px;
         box-sizing: border-box;
-    }
-
-    .main-container { 
-        width: 100%;
-        max-width: 440px; 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    /* Contenedor de Portada para ocupar el máximo espacio visible */
-    .header-portada {
-        width: 100%;
-        height: 68vh; /* Ocupa el 68% de la altura total de la pantalla */
-        max-height: 520px;
-        margin-top: 5px;
-        margin-bottom: 15px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         position: relative;
     }
 
-    /* Imagen optimizada para máxima nitidez sin pixelado */
-    .imagen-portada {
-        width: 100%;
-        height: 100%;
-        object-fit: contain; /* Garantiza que todo el texto y mapa entren completos sin recortarse */
-        border-radius: 20px;
-        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
-        /* Renderizado nítido */
-        image-rendering: -webkit-optimize-contrast;
+    /* Máscara suave para asegurar legibilidad manteniendo nitidez */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(15, 23, 42, 0.45) 70%, rgba(15, 23, 42, 0.75) 100%);
+        z-index: 1;
+        pointer-events: none;
     }
 
-    /* Buscador traslúcido */
+    /* Contenedor Interactivo Centrado */
+    .main-container { 
+        width: 100%;
+        max-width: 400px; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 20px;
+    }
+
+    /* Buscador traslúcido estilizado al centro */
     .input-busqueda {
         width: 100%;
-        padding: 15px;
+        padding: 16px;
         font-size: 14px;
-        font-weight: 600;
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        border-radius: 16px;
+        font-weight: 700;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        border-radius: 18px;
         background-color: rgba(255, 255, 255, 0.95);
         color: #0f172a;
         box-sizing: border-box;
         margin-bottom: 14px;
         outline: none;
         text-align: center;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
     }
 
-    .input-busqueda::placeholder { color: #64748b; font-weight: 500; }
+    .input-busqueda::placeholder { color: #64748b; font-weight: 600; }
     .input-busqueda:focus { 
         border-color: #ff7e36; 
-        box-shadow: 0 4px 20px rgba(255, 126, 54, 0.4); 
+        box-shadow: 0 4px 20px rgba(255, 126, 54, 0.5); 
     }
 
-    /* Botones de Navegación Compactos */
+    /* Botones Agrupados al Centro/Alineados */
     .grupo-botones {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
     }
 
     .btn-opcion {
         width: 100%;
-        padding: 14px;
-        border-radius: 16px;
-        font-size: 13.5px;
+        padding: 15px;
+        border-radius: 18px;
+        font-size: 14px;
         font-weight: 800;
         cursor: pointer;
-        transition: transform 0.2s;
+        transition: transform 0.2s, box-shadow 0.2s;
         box-sizing: border-box;
-        background-color: #0284c7;
+        background-color: rgba(2, 132, 199, 0.95);
         color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(4px);
     }
 
     .btn-opcion:active { transform: scale(0.98); }
 
     .btn-destacado {
         background: linear-gradient(135deg, #ff7300 0%, #f95316 100%);
-        box-shadow: 0 6px 18px rgba(249, 83, 22, 0.5);
+        box-shadow: 0 8px 22px rgba(249, 83, 22, 0.5);
     }
 
-    /* Marcas de Agua */
+    /* Marcas de Agua integradas */
     .marca-agua {
         position: fixed;
-        bottom: 8px;
-        font-size: 10.5px;
-        color: rgba(255, 255, 255, 0.7);
+        bottom: 10px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.85);
         font-weight: 800;
         letter-spacing: 0.5px;
         user-select: none;
         pointer-events: none;
         z-index: 999;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
     }
-    .marca-jdah { left: 12px; }
-    .marca-jotitas { right: 12px; }
+    .marca-jdah { left: 15px; }
+    .marca-jotitas { right: 15px; }
 
     /* Toast "Próximamente" */
     .toast-notificacion {
@@ -140,11 +141,11 @@
         color: #ffffff;
         text-align: center;
         border-radius: 20px;
-        padding: 10px 20px;
+        padding: 12px 24px;
         position: fixed;
         z-index: 1000;
         left: 50%;
-        bottom: 40px;
+        bottom: 50px;
         transform: translateX(-50%);
         font-size: 13px;
         font-weight: 800;
@@ -163,10 +164,6 @@
 
     <div class="main-container">
         
-        <header class="header-portada">
-            <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú" class="imagen-portada">
-        </header>
-
         <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
 
         <div class="grupo-botones">
