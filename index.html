@@ -10,13 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Estilo Claro, Moderno e Infantil/Escolar */
+    /* Fondo con degradado profundo en tonos morado/azul para máximo contraste */
     body {
         font-family: 'Montserrat', sans-serif;
         margin: 0;
-        padding: 10px 15px 40px 15px;
-        background: linear-gradient(180deg, #eef6ff 0%, #ffffff 100%);
-        color: #1e293b;
+        padding: 15px 15px 40px 15px;
+        background: linear-gradient(135deg, #2b1055 0%, #7597de 100%);
+        background-attachment: fixed;
+        color: #ffffff;
         text-align: center;
         min-height: 100vh;
         box-sizing: border-box;
@@ -34,77 +35,78 @@
         margin-bottom: 20px;
     }
 
-    /* Imagen de Portada principal (portada.jpg) */
+    /* Imagen de Portada resaltada con marco suave y sombra de elevación */
     .imagen-portada {
         width: 100%;
         height: auto;
         display: block;
-        border-radius: 20px;
-        box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12);
+        border-radius: 24px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        border: 2px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Buscador Blanco */
+    /* Buscador traslúcido estilizado con contraste */
     .input-busqueda {
         width: 100%;
         padding: 16px;
         font-size: 14px;
         font-weight: 600;
-        border: 2px solid #e2e8f0;
-        border-radius: 16px;
-        background-color: #ffffff;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        border-radius: 18px;
+        background-color: rgba(255, 255, 255, 0.95);
         color: #0f172a;
         box-sizing: border-box;
         margin-bottom: 20px;
         outline: none;
         text-align: center;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         transition: all 0.2s ease;
     }
 
-    .input-busqueda::placeholder { color: #94a3b8; font-weight: 500; }
+    .input-busqueda::placeholder { color: #64748b; font-weight: 500; }
     .input-busqueda:focus { 
-        border-color: #0284c7; 
-        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.2); 
+        border-color: #ff7e36; 
+        box-shadow: 0 4px 20px rgba(255, 126, 54, 0.4); 
     }
 
-    /* Botones de Navegación */
+    /* Botones de Navegación con alto contraste */
     .grupo-botones {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
     }
 
     .btn-opcion {
         width: 100%;
         padding: 16px;
-        border-radius: 16px;
+        border-radius: 18px;
         font-size: 14px;
         font-weight: 800;
         cursor: pointer;
-        transition: transform 0.2s;
+        transition: transform 0.2s, box-shadow 0.2s;
         box-sizing: border-box;
         background-color: #0284c7;
         color: #ffffff;
-        border: none;
-        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.4);
     }
 
     .btn-opcion:active { transform: scale(0.98); }
 
-    /* Botón Destacado Naranja */
+    /* Botón Destacado en Naranja Neón / Cálido */
     .btn-destacado {
-        background: linear-gradient(135deg, #ff7e36 0%, #f97316 100%);
-        box-shadow: 0 6px 16px rgba(249, 115, 22, 0.35);
+        background: linear-gradient(135deg, #ff7300 0%, #f95316 100%);
+        box-shadow: 0 8px 22px rgba(249, 83, 22, 0.5);
     }
 
-    /* Marcas de Agua Discretas */
+    /* Marcas de Agua visibles en fondo oscuro */
     .marca-agua {
         position: fixed;
         bottom: 12px;
         font-size: 11px;
-        color: #64748b;
-        opacity: 0.6;
+        color: rgba(255, 255, 255, 0.7);
         font-weight: 800;
+        letter-spacing: 0.5px;
         user-select: none;
         pointer-events: none;
         z-index: 999;
@@ -116,7 +118,7 @@
     .toast-notificacion {
         visibility: hidden;
         min-width: 160px;
-        background-color: #8b5cf6;
+        background-color: #a855f7;
         color: #ffffff;
         text-align: center;
         border-radius: 20px;
@@ -128,7 +130,7 @@
         transform: translateX(-50%);
         font-size: 13px;
         font-weight: 800;
-        box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+        box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
         opacity: 0;
         transition: opacity 0.4s ease, visibility 0.4s ease;
     }
