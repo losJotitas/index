@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Estructura Limpia e Iluminada */
+    /* Estructura - Fondo Azul Noche / Slate Medio */
     html, body {
         height: 100%;
         margin: 0;
@@ -20,8 +20,8 @@
 
     body {
         font-family: 'Montserrat', sans-serif;
-        background: linear-gradient(135deg, #e0f2fe 0%, #f1f5f9 50%, #e0e7ff 100%);
-        color: #0f172a;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        color: #ffffff;
         text-align: center;
         display: flex;
         justify-content: center;
@@ -39,7 +39,7 @@
         align-items: center;
     }
 
-    /* Portada en la parte superior sobre fondo claro */
+    /* Portada de fondo */
     .header-portada {
         position: absolute;
         top: 0;
@@ -50,7 +50,7 @@
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        padding-top: 8px;
+        padding-top: 10px;
         box-sizing: border-box;
     }
 
@@ -59,10 +59,10 @@
         height: 85%;
         object-fit: contain;
         image-rendering: -webkit-optimize-contrast;
-        filter: drop-shadow(0 8px 20px rgba(15, 23, 42, 0.15));
+        filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.5));
     }
 
-    /* Difuminado suave e iluminado hacia la base para lectura fácil */
+    /* Capa de degradado medio elegante para resaltar controles */
     .main-container::after {
         content: '';
         position: absolute;
@@ -70,7 +70,7 @@
         left: 0;
         width: 100%;
         height: 60vh;
-        background: linear-gradient(180deg, rgba(241, 245, 249, 0) 0%, rgba(241, 245, 249, 0.85) 35%, rgba(241, 245, 249, 0.98) 100%);
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.82) 35%, rgba(15, 23, 42, 0.96) 100%);
         z-index: 2;
         pointer-events: none;
     }
@@ -88,27 +88,27 @@
         gap: 10px;
     }
 
-    /* Buscador traslúcido en cristal blanco limpio */
+    /* Buscador traslúcido en cristal satinado */
     .input-busqueda {
         width: 100%;
         padding: 13px 16px;
         font-size: 13.5px;
         font-weight: 700;
-        border: 2px solid #ffffff;
+        border: 1.5px solid rgba(255, 255, 255, 0.7);
         border-radius: 16px;
         background-color: rgba(255, 255, 255, 0.92);
         color: #0f172a;
         box-sizing: border-box;
         outline: none;
         text-align: center;
-        box-shadow: 0 8px 20px rgba(148, 163, 184, 0.25);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(8px);
     }
 
     .input-busqueda::placeholder { color: #64748b; font-weight: 600; }
     .input-busqueda:focus { 
-        border-color: #3b82f6; 
-        box-shadow: 0 4px 18px rgba(59, 130, 246, 0.3); 
+        border-color: #f59e0b; 
+        box-shadow: 0 4px 18px rgba(245, 158, 11, 0.4); 
     }
 
     /* Grupo de Botones */
@@ -119,7 +119,7 @@
         gap: 9px;
     }
 
-    /* Estilo Base de Botones Vivos y Cristalinos */
+    /* Estilo Base para Relieve, Brillo Satinado y Definición */
     .btn-opcion {
         width: 100%;
         padding: 13px 14px;
@@ -129,25 +129,26 @@
         cursor: pointer;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         box-sizing: border-box;
-        border: 1.5px solid rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.25);
         backdrop-filter: blur(6px);
-        letter-spacing: 0.2px;
+        letter-spacing: 0.3px;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
 
     .btn-opcion:active { transform: scale(0.98); }
 
-    /* 1. Ver Todos los Colegios: Naranja Coral Cálido (Destacado y Amigable) */
-    .btn-coral {
-        background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+    /* 1. Ver Todos los Colegios: Ámbar Cálido Vibante pero Elegante */
+    .btn-ambar {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
         color: #ffffff;
-        box-shadow: 0 6px 18px rgba(255, 126, 95, 0.35);
+        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.4);
     }
 
-    /* 2. Redes Educativas: Azul Ciel Claro (Fresco y Profesional) */
-    .btn-ciel {
-        background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    /* 2. Redes Educativas: Azul Cobalto Medio */
+    .btn-cobalto {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
         color: #ffffff;
-        box-shadow: 0 6px 18px rgba(56, 189, 248, 0.35);
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
     }
 
     /* Fila dividida */
@@ -166,32 +167,32 @@
         justify-content: center;
     }
 
-    /* 3. Colegios Estatales: Verde Menta Claro (Limpio e Institucional) */
-    .btn-menta {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    /* 3. Colegios Estatales: Verde Esmeralda Vivo */
+    .btn-esmeralda-vivo {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
         color: #ffffff;
-        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+        box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
     }
 
-    /* 4. Colegios Particulares: Púrpura Lavanda / Fucsia Suave */
-    .btn-lavanda {
-        background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+    /* 4. Colegios Particulares: Púrpura Violeta Equilibrado */
+    .btn-violeta {
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
         color: #ffffff;
-        box-shadow: 0 6px 18px rgba(168, 85, 247, 0.35);
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
     }
 
-    /* Marcas de agua legibles sobre fondo claro */
+    /* Marcas de agua legibles */
     .marca-agua {
         position: fixed;
         bottom: 8px;
         font-size: 10px;
-        color: #475569;
+        color: rgba(255, 255, 255, 0.85);
         font-weight: 800;
         letter-spacing: 0.5px;
         user-select: none;
         pointer-events: none;
         z-index: 999;
-        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
     .marca-jdah { left: 15px; }
     .marca-jotitas { right: 15px; }
@@ -200,7 +201,7 @@
     .toast-notificacion {
         visibility: hidden;
         min-width: 140px;
-        background-color: #0f172a;
+        background-color: #a855f7;
         color: #ffffff;
         text-align: center;
         border-radius: 20px;
@@ -212,7 +213,7 @@
         transform: translateX(-50%);
         font-size: 12px;
         font-weight: 800;
-        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.3);
+        box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
         opacity: 0;
         transition: opacity 0.4s ease, visibility 0.4s ease;
     }
@@ -258,12 +259,12 @@
             <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
 
             <div class="grupo-botones">
-                <button class="btn-opcion btn-coral">🌐 Ver Todos los Colegios en el Mapa</button>
-                <button class="btn-opcion btn-ciel">🏫 Filtrar por Redes Educativas (1-9)</button>
+                <button class="btn-opcion btn-ambar">🌐 Ver Todos los Colegios en el Mapa</button>
+                <button class="btn-opcion btn-cobalto">🏫 Filtrar por Redes Educativas (1-9)</button>
                 
                 <div class="fila-botones-dividida">
-                    <button class="btn-opcion btn-menta">🏫 Colegios Estatales</button>
-                    <button class="btn-opcion btn-lavanda" onclick="lanzarToast()">🏫 Colegios Particulares</button>
+                    <button class="btn-opcion btn-esmeralda-vivo">🏫 Colegios Estatales</button>
+                    <button class="btn-opcion btn-violeta" onclick="lanzarToast()">🏫 Colegios Particulares</button>
                 </div>
             </div>
         </div>
