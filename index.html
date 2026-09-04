@@ -10,9 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Configuración Global Responsive */
+    /* Estructura para abarcar el 100% de la pantalla */
     html, body {
-        min-height: 100vh;
+        height: 100%;
         margin: 0;
         padding: 0;
         overflow-x: hidden;
@@ -21,72 +21,81 @@
     body {
         font-family: 'Montserrat', sans-serif;
         background: linear-gradient(135deg, #1b0c36 0%, #3a506b 50%, #0f172a 100%);
-        background-attachment: fixed;
         color: #ffffff;
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding: 10px 14px 25px 14px;
+        padding: 8px 12px 20px 12px;
         box-sizing: border-box;
     }
 
-    /* Contenedor Adaptable */
     .main-container { 
         width: 100%;
-        max-width: 420px; 
+        max-width: 440px; 
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-between;
     }
 
-    /* Contenedor de Portada Adaptativo (Ajusta la imagen sin salirse) */
+    /* Portada Grande: Ocupa el 62% del alto de la pantalla */
     .header-portada {
         width: 100%;
-        height: 48vh; /* Ocupa hasta la mitad de la pantalla para dar paso a los botones */
-        max-height: 380px;
-        margin-top: 5px;
-        margin-bottom: 12px;
+        height: 62vh;
+        max-height: 500px;
+        margin-top: 4px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    /* Imagen totalmente proporcional: No se recorta, no se pixela y muestra todo */
+    /* La imagen escala al máximo sin salirse ni distorsionarse */
     .imagen-portada {
         width: 100%;
         height: 100%;
         object-fit: contain;
-        border-radius: 18px;
-        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.4));
+        border-radius: 20px;
+        filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
         image-rendering: -webkit-optimize-contrast;
     }
 
-    /* Buscador Elevar / Centrado */
+    /* Bloque de Controles Elevado (Sube hacia la portada con margen negativo) */
+    .bloque-controles {
+        width: 100%;
+        margin-top: -35px; /* Subimos el buscador y botones sobre la base de la portada */
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Buscador traslúcido elevado */
     .input-busqueda {
         width: 100%;
         padding: 12px 16px;
         font-size: 13.5px;
         font-weight: 700;
-        border: 2px solid rgba(255, 255, 255, 0.9);
-        border-radius: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
         background-color: rgba(255, 255, 255, 0.95);
         color: #0f172a;
         box-sizing: border-box;
-        margin-bottom: 10px;
         outline: none;
         text-align: center;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(8px);
     }
 
     .input-busqueda::placeholder { color: #64748b; font-weight: 600; }
     .input-busqueda:focus { 
         border-color: #ff7e36; 
-        box-shadow: 0 4px 16px rgba(255, 126, 54, 0.5); 
+        box-shadow: 0 4px 18px rgba(255, 126, 54, 0.5); 
     }
 
-    /* Botones Elevados y Visibles al Centro */
+    /* Botones Elevados y Visibles */
     .grupo-botones {
         width: 100%;
         display: flex;
@@ -97,16 +106,17 @@
     .btn-opcion {
         width: 100%;
         padding: 12px 14px;
-        border-radius: 14px;
+        border-radius: 15px;
         font-size: 13px;
         font-weight: 800;
         cursor: pointer;
         transition: transform 0.2s, box-shadow 0.2s;
         box-sizing: border-box;
-        background-color: #0284c7;
+        background-color: rgba(2, 132, 199, 0.95);
         color: #ffffff;
         border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
     }
 
     .btn-opcion:active { transform: scale(0.98); }
@@ -119,9 +129,9 @@
     /* Marcas de Agua integradas */
     .marca-agua {
         position: fixed;
-        bottom: 8px;
+        bottom: 6px;
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.85);
         font-weight: 800;
         letter-spacing: 0.5px;
         user-select: none;
@@ -158,20 +168,24 @@
         opacity: 1;
     }
 
-    /* Ajuste para PC / Pantallas grandes */
+    /* Adaptación para PC / Pantallas Grandes */
     @media (min-width: 768px) {
         body {
             justify-content: center;
-            padding: 20px;
-        }
-
-        .header-portada {
-            height: 42vh;
-            max-height: 420px;
         }
 
         .main-container {
-            max-width: 440px;
+            max-width: 460px;
+            height: auto;
+        }
+
+        .header-portada {
+            height: 52vh;
+            max-height: 460px;
+        }
+
+        .bloque-controles {
+            margin-top: -40px;
         }
 
         .input-busqueda {
@@ -194,12 +208,14 @@
             <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú" class="imagen-portada">
         </header>
 
-        <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
+        <div class="bloque-controles">
+            <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
 
-        <div class="grupo-botones">
-            <button class="btn-opcion btn-destacado">🌐 Ver Todos los Colegios en el Mapa</button>
-            <button class="btn-opcion">🏫 Filtrar por Redes Educativas (1-9)</button>
-            <button class="btn-opcion" onclick="lanzarToast()">🏫 Filtrar por Colegios Particulares</button>
+            <div class="grupo-botones">
+                <button class="btn-opcion btn-destacado">🌐 Ver Todos los Colegios en el Mapa</button>
+                <button class="btn-opcion">🏫 Filtrar por Redes Educativas (1-9)</button>
+                <button class="btn-opcion" onclick="lanzarToast()">🏫 Filtrar por Colegios Particulares</button>
+            </div>
         </div>
 
     </div>
