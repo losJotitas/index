@@ -10,12 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Estructura para abarcar el 100% de la pantalla */
+    /* Estructura para ajustar todo al alto exacto del celular sin scroll */
     html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-        overflow-x: hidden;
+        overflow: hidden; /* Evita desplazamientos innecesarios */
     }
 
     body {
@@ -24,58 +24,74 @@
         color: #ffffff;
         text-align: center;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        justify-content: flex-start;
-        padding: 8px 12px 20px 12px;
-        box-sizing: border-box;
+        position: relative;
     }
 
     .main-container { 
         width: 100%;
-        max-width: 440px; 
+        max-width: 420px; 
         height: 100vh;
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-between;
     }
 
-    /* Portada Grande: Ocupa el 62% del alto de la pantalla */
+    /* Portada abarcando la pantalla completa de fondo */
     .header-portada {
-        width: 100%;
-        height: 62vh;
-        max-height: 500px;
-        margin-top: 4px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* La imagen escala al máximo sin salirse ni distorsionarse */
-    .imagen-portada {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        object-fit: contain;
-        border-radius: 20px;
-        filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
-        image-rendering: -webkit-optimize-contrast;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 10px;
+        box-sizing: border-box;
     }
 
-    /* Bloque de Controles Elevado (Sube hacia la portada con margen negativo) */
-    .bloque-controles {
+    .imagen-portada {
         width: 100%;
-        margin-top: -35px; /* Subimos el buscador y botones sobre la base de la portada */
+        height: 85%; /* Mantiene la mitad superior para ilustrar el mapa, título y Mapache */
+        object-fit: contain;
+        image-rendering: -webkit-optimize-contrast;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+    }
+
+    /* Capa traslúcida inferior para resaltar los botones sobre el mapa */
+    .main-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60vh;
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.85) 40%, rgba(15, 23, 42, 0.98) 100%);
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    /* Bloque del Buscador y Botones Centrados a la Mitad Exacta de Pantalla */
+    .bloque-controles {
+        position: absolute;
+        top: 62%; /* Ubicación vertical centrada hacia la mitad de la pantalla */
+        transform: translateY(-50%);
+        width: 90%;
+        max-width: 380px;
         z-index: 10;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
     }
 
-    /* Buscador traslúcido elevado */
+    /* Buscador traslúcido */
     .input-busqueda {
         width: 100%;
-        padding: 12px 16px;
+        padding: 13px 16px;
         font-size: 13.5px;
         font-weight: 700;
         border: 2px solid rgba(255, 255, 255, 0.95);
@@ -85,7 +101,7 @@
         box-sizing: border-box;
         outline: none;
         text-align: center;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(8px);
     }
 
@@ -95,18 +111,18 @@
         box-shadow: 0 4px 18px rgba(255, 126, 54, 0.5); 
     }
 
-    /* Botones Elevados y Visibles */
+    /* Botones de Navegación */
     .grupo-botones {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 9px;
     }
 
     .btn-opcion {
         width: 100%;
-        padding: 12px 14px;
-        border-radius: 15px;
+        padding: 13px 14px;
+        border-radius: 16px;
         font-size: 13px;
         font-weight: 800;
         cursor: pointer;
@@ -115,7 +131,7 @@
         background-color: rgba(2, 132, 199, 0.95);
         color: #ffffff;
         border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(4px);
     }
 
@@ -129,7 +145,7 @@
     /* Marcas de Agua integradas */
     .marca-agua {
         position: fixed;
-        bottom: 6px;
+        bottom: 8px;
         font-size: 10px;
         color: rgba(255, 255, 255, 0.85);
         font-weight: 800;
@@ -139,8 +155,8 @@
         z-index: 999;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
-    .marca-jdah { left: 12px; }
-    .marca-jotitas { right: 12px; }
+    .marca-jdah { left: 15px; }
+    .marca-jotitas { right: 15px; }
 
     /* Toast "Próximamente" */
     .toast-notificacion {
@@ -168,33 +184,20 @@
         opacity: 1;
     }
 
-    /* Adaptación para PC / Pantallas Grandes */
+    /* Adaptación para Pantallas Grandes / PC */
     @media (min-width: 768px) {
-        body {
-            justify-content: center;
-        }
-
-        .main-container {
-            max-width: 460px;
-            height: auto;
-        }
-
-        .header-portada {
-            height: 52vh;
-            max-height: 460px;
-        }
-
         .bloque-controles {
-            margin-top: -40px;
+            top: 58%;
+            max-width: 420px;
         }
 
         .input-busqueda {
-            padding: 14px;
+            padding: 15px;
             font-size: 14px;
         }
 
         .btn-opcion {
-            padding: 14px;
+            padding: 15px;
             font-size: 14px;
         }
     }
