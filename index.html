@@ -159,7 +159,7 @@
             flex: 1; 
         }
 
-        /* 6. Widget Flotante de Mapachito (Asistente Amigable Mejorado) */
+        /* 6. Widget Flotante de Mapachito (Asistente con carita profesional extraída de tu imagen) */
         .mapachito-flotante {
             position: absolute;
             bottom: 25px;
@@ -169,7 +169,8 @@
             align-items: flex-end;
             gap: 12px;
             cursor: pointer;
-            animation: flotarMapache 3s infinite ease-in-out;
+            /* Animación más dinámica de salto */
+            animation: saltoDivertido 2.5s infinite ease-in-out;
         }
 
         .mensaje-mapachito {
@@ -198,7 +199,7 @@
             border-left: 10px solid #ffffff;
         }
 
-        /* Avatar flotante más grande y con brillo */
+        /* Avatar flotante con la carita adorable extraída de tu imagen */
         .avatar-mapachito {
             width: 65px;
             height: 65px;
@@ -206,20 +207,36 @@
             border-radius: 50%;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0,0,0,0.7);
-            background: radial-gradient(circle, #729b79 0%, #574837 100%); /* Tono verde suave de fondo */
+            /* Gradiente de fondo que combina con el diseño */
+            background: radial-gradient(circle, #38bdf8 0%, #0f172a 100%);
             transition: transform 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .avatar-mapachito img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ajuste para que la carita se vea completa sin recortar el rostro principal */
+            padding: 4px;
+            /* Pequeño brillo sutil para el efecto de ternura */
+            filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
         }
 
         .mapachito-flotante:hover .avatar-mapachito {
-            transform: scale(1.1);
+            transform: scale(1.15) rotate(5deg);
         }
 
-        @keyframes flotarMapache {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        /* Animación de rebote / salto divertido */
+        @keyframes saltoDivertido {
+            0%, 100% { transform: translateY(0); animation-timing-function: ease-out; }
+            50% { transform: translateY(-25px); animation-timing-function: ease-in; }
+            60% { transform: translateY(-15px); }
+            75% { transform: translateY(-20px); }
         }
 
-        /* 7. Ventana Modal Emergente para Colegios Particulares */
+        /* 7. Ventana Modal Emergente para Colegios Particulares (manteniendo el mapache de cuerpo entero de alta calidad) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -290,7 +307,7 @@
             height: 140px;
             margin-bottom: 16px;
             animation: jumpRaccoon 0.8s infinite alternate ease-in-out;
-            filter: drop-drop-shadow(0 8px 10px rgba(0,0,0,0.6));
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.6));
         }
 
         @keyframes jumpRaccoon {
@@ -372,19 +389,6 @@
         </div>
     </div>
 
-    <!-- WIDGET FLOTANTE DE MAPACHITO (Rediseñado para ser adorable y profesional) -->
+    <!-- WIDGET FLOTANTE DE MAPACHITO (Rediseñado con la carita real de tu imagen) -->
     <div class="mapachito-flotante" onclick="mostrarAvisoMapachito()">
-        <div class="mensaje-mapachito">¡Hola! Soy Mapachito 🦝 ¿Buscabas colegio?</div>
-        <div class="avatar-mapachito">
-            <!-- Rostro SVG rediseñado para ser tierno y adorable (Kawaii) -->
-            <svg viewBox="0 0 120 120" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                <!-- Orejas grandes y suaves -->
-                <circle cx="25" cy="25" r="20" fill="#574837"/>
-                <circle cx="25" cy="25" r="12" fill="#f5f5f4"/>
-                <circle cx="95" cy="25" r="20" fill="#574837"/>
-                <circle cx="95" cy="25" r="12" fill="#f5f5f4"/>
-                
-                <!-- Cabeza con degradado suave -->
-                <defs>
-                    <radialGradient id="faceGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                        <stop offset="80%" stop-color="#8
+        <div class="mensaje-mapachito">¡
