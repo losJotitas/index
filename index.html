@@ -21,8 +21,8 @@
         background-color: #0f172a;
     }
 
-    /* Fondo de pantalla fijo que utiliza object-fit: contain para mostrar toda la imagen 
-       (el título, el mapache y los objetos de los costados) sin recortes en ningún formato */
+    /* Fondo de pantalla fijo que cubre toda la pantalla usando object-fit: cover 
+       para eliminar por completo las franjas vacías del fondo azul en celular y PC */
     .fondo-portada {
         position: fixed;
         top: 0;
@@ -31,21 +31,28 @@
         height: 100vh;
         z-index: 0;
         pointer-events: none; /* Clave absoluta para no bloquear el refresh táctil */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #0f172a;
     }
 
     .fondo-portada img {
         width: 100%;
         height: 100%;
-        object-fit: contain; /* Garantiza que la proporción 4:5 se ajuste completa sin recortar bordes */
+        object-fit: cover; /* Estira y expande la imagen cubriendo totalmente la pantalla sin dejar espacios vacíos */
         object-position: center;
         image-rendering: -webkit-optimize-contrast;
     }
 
-    /* Contenedor principal que centra perfectamente los botones sobre el área central del mapa */
+    /* Capa de contraste oscura sutil para que los botones destaquen sobre la imagen */
+    .fondo-portada::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.35); 
+    }
+
+    /* Contenedor principal que centra perfectamente los botones en la pantalla */
     .main-container { 
         position: relative;
         z-index: 2;
@@ -212,7 +219,7 @@
 </head>
 <body>
 
-    <!-- Fondo de pantalla fijo con la nueva portada.jpg en formato contain -->
+    <!-- Fondo de pantalla fijo con object-fit: cover para eliminar el fondo azul por completo -->
     <div class="fondo-portada">
         <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú">
     </div>
