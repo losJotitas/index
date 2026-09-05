@@ -161,7 +161,7 @@
             flex: 1; 
         }
 
-        /* 6. Estilos de la ventana emergente tipo Historieta / Cómic con el Mapache de la nueva character sheet ("Salto de Alegría") */
+        /* 6. Estilos de la ventana emergente tipo Historieta con Mapache ilustrado por código (SVG) en ambos formatos */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -169,7 +169,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.65);
+            background: rgba(0, 0, 0, 0.7);
             z-index: 999;
             justify-content: center;
             align-items: center;
@@ -178,81 +178,75 @@
 
         .modal-content-comic {
             background: rgba(15, 23, 42, 0.95);
-            padding: 26px 20px;
+            padding: 24px 20px;
             border-radius: 24px;
-            border: 2px solid rgba(56, 189, 248, 0.4);
+            border: 2px solid rgba(56, 189, 248, 0.5);
             text-align: center;
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.7);
-            max-width: 280px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.8);
+            max-width: 290px;
             width: 85%;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Bocadillo de pensamiento */
+        /* Bocadillo de pensamiento saliendo de la cabeza del mapache */
         .thought-bubble {
             position: relative;
             background: #ffffff;
             color: #0f172a;
-            padding: 12px 20px;
-            border-radius: 20px;
+            padding: 10px 18px;
+            border-radius: 18px;
             font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 18px;
+            font-size: 15px;
+            margin-bottom: 14px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            width: 100%;
+            width: 85%;
             box-sizing: border-box;
+            animation: floatBubble 1.5s infinite ease-in-out;
         }
 
-        /* Círculos del pensamiento del cómic que apuntan al mapache saltando */
+        /* Bolitas del pensamiento que conectan con el mapache de cuerpo entero */
         .thought-bubble::before {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: #ffffff;
             border-radius: 50%;
         }
         .thought-bubble::after {
             content: '';
             position: absolute;
-            bottom: -18px;
+            bottom: -15px;
             left: 50%;
-            transform: translateX(-50%) translateX(-6px);
-            width: 7px;
-            height: 7px;
+            transform: translateX(-50%) translateX(-4px);
+            width: 6px;
+            height: 6px;
             background: #ffffff;
             border-radius: 50%;
         }
 
-        /* Contenedor circular enfocado exactamente en el mapache de "Salto de Alegría" (segunda fila, segundo sticker) */
-        .raccoon-image-container {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid #38bdf8;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            animation: bounceRaccoon 1.5s infinite ease-in-out;
-            background-color: #ffffff;
-        }
-
-        .raccoon-real-img {
-            width: 240%;
-            height: 240%;
-            object-fit: cover;
-            /* Coordenadas ajustadas para centrar el sticker de "Salto de Alegría" de la nueva imagen */
-            object-position: 39% 78%; 
-        }
-
-        @keyframes bounceRaccoon {
+        @keyframes floatBubble {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Contenedor del mapa / diseño vectorial de cuerpo entero del mapache saltando */
+        .raccoon-svg-container {
+            width: 120px;
+            height: 140px;
+            margin-bottom: 16px;
+            animation: jumpRaccoon 0.8s infinite alternate ease-in-out;
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.6));
+        }
+
+        @keyframes jumpRaccoon {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-8px) scale(1.03); }
         }
 
         .modal-btn {
@@ -310,7 +304,7 @@
 </head>
 <body>
 
-    <!-- Fondo de pantalla con las dos imágenes adaptativas -->
+    <!-- Fondo de pantalla adaptativo -->
     <div class="fondo-portada">
         <img src="portada-celular.jpg" alt="Portada Celular" class="img-celular">
         <img src="portada-pc.jpg" alt="Portada PC" class="img-pc">
@@ -329,16 +323,73 @@
         </div>
     </div>
 
-    <!-- Ventana emergente tipo cómic con el mapache "Salto de Alegría" de la nueva character sheet -->
+    <!-- Ventana emergente con el mapache de cuerpo entero y saltando de alegría -->
     <div id="modalAviso" class="modal-overlay" onclick="cerrarAviso()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
+            <!-- Pensamiento saliendo de la cabeza -->
             <div class="thought-bubble">
-                Próximamente
+                ¡Próximamente!
             </div>
-            <div class="raccoon-image-container">
-                <img src="Gemini_Generated_Image_aym7g8aym7g8aym7.jpg" alt="Mapache Salto de Alegría" class="raccoon-real-img">
+            
+            <!-- Mapache ilustrado de cuerpo entero, saltando con mochila y brazos abiertos -->
+            <div class="raccoon-svg-container">
+                <svg viewBox="0 0 200 220" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Mochila escolar azul con detalles -->
+                    <rect x="75" y="105" width="50" height="60" rx="12" fill="#2563eb"/>
+                    <rect x="90" y="115" width="20" height="25" rx="6" fill="#1e40af"/>
+                    <circle cx="100" cy="148" r="4" fill="#fbbf24"/>
+
+                    <!-- Cuerpo completo del mapache (Pancita y torso) -->
+                    <ellipse cx="100" cy="135" rx="35" ry="42" fill="#8c7865"/>
+                    <ellipse cx="100" cy="140" rx="22" ry="30" fill="#f5f5f4"/>
+
+                    <!-- Patas traseras (Saltando hacia arriba) -->
+                    <ellipse cx="75" cy="180" rx="12" ry="18" fill="#574837" transform="rotate(-15 75 180)"/>
+                    <ellipse cx="125" cy="180" rx="12" ry="18" fill="#574837" transform="rotate(15 125 180)"/>
+                    <!-- Huellas de las patitas -->
+                    <ellipse cx="73" cy="190" rx="7" ry="5" fill="#a89f91"/>
+                    <ellipse cx="127" cy="190" rx="7" ry="5" fill="#a89f91"/>
+
+                    <!-- Brazos abiertos de alegría -->
+                    <path d="M 70 115 Q 45 100 40 85 C 38 78 48 76 52 83 C 62 95 72 110 75 118 Z" fill="#8c7865"/>
+                    <path d="M 130 115 Q 155 100 160 85 C 162 78 152 76 148 83 C 138 95 128 110 125 118 Z" fill="#8c7865"/>
+
+                    <!-- Cabeza del mapache -->
+                    <circle cx="100" cy="85" r="42" fill="#8c7865"/>
+                    
+                    <!-- Orejas -->
+                    <polygon points="68,58 52,30 78,48" fill="#574837"/>
+                    <polygon points="69,56 58,36 75,47" fill="#f5f5f4"/>
+                    <polygon points="132,58 148,30 122,48" fill="#574837"/>
+                    <polygon points="131,56 142,36 125,47" fill="#f5f5f4"/>
+
+                    <!-- Antifaz característico -->
+                    <path d="M 62 75 Q 80 95 100 82 Q 120 95 138 75 C 145 100 115 115 100 110 C 85 115 55 100 62 75 Z" fill="#362922"/>
+
+                    <!-- Ojos brillantes de felicidad -->
+                    <circle cx="82" cy="83" r="7" fill="#ffffff"/>
+                    <circle cx="83" cy="82" r="3" fill="#0f172a"/>
+                    <circle cx="118" cy="83" r="7" fill="#ffffff"/>
+                    <circle cx="117" cy="82" r="3" fill="#0f172a"/>
+                    <!-- Brillo en los ojos -->
+                    <circle cx="85" cy="80" r="1.5" fill="#ffffff"/>
+                    <circle cx="119" cy="80" r="1.5" fill="#ffffff"/>
+
+                    <!-- Hocico -->
+                    <ellipse cx="100" cy="97" rx="12" ry="9" fill="#f5f5f4"/>
+                    <ellipse cx="100" cy="94" rx="5" ry="3" fill="#1c1917"/>
+
+                    <!-- Sonrisa grande y alegre -->
+                    <path d="M 90 102 Q 100 112 110 102" fill="none" stroke="#1c1917" stroke-width="3" stroke-linecap="round"/>
+
+                    <!-- Rayas en la cola que asoma por detrás -->
+                    <path d="M 125 155 Q 155 160 165 140 C 170 130 160 120 150 130" fill="none" stroke="#574837" stroke-width="14" stroke-linecap="round"/>
+                    <path d="M 137 148 Q 152 152 158 140" fill="none" stroke="#f5f5f4" stroke-width="5" stroke-linecap="round"/>
+                </svg>
             </div>
-            <button class="modal-btn" onclick="cerrarAviso()">Aceptar</button></div>
+
+            <button class="modal-btn" onclick="cerrarAviso()">Aceptar</button>
+        </div>
     </div>
 
     <script>
