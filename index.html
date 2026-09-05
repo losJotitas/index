@@ -46,7 +46,6 @@
             object-position: center; 
         }
 
-        /* Ajustado al 100% de ancho y sin margen lateral para eliminar las franjas azules en PC */
         .img-pc {
             display: none;
             width: 100%;       
@@ -162,7 +161,7 @@
             flex: 1; 
         }
 
-        /* 6. Estilos de la ventana emergente tipo Historieta / Cómic con el Mapache recortado de la portada */
+        /* 6. Estilos de la ventana emergente tipo Historieta / Cómic con el Mapache de la nueva character sheet ("Salto de Alegría") */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -206,7 +205,7 @@
             box-sizing: border-box;
         }
 
-        /* Círculos del pensamiento del cómic que apuntan al mapache */
+        /* Círculos del pensamiento del cómic que apuntan al mapache saltando */
         .thought-bubble::before {
             content: '';
             position: absolute;
@@ -230,10 +229,10 @@
             border-radius: 50%;
         }
 
-        /* Contenedor circular enfocado exactamente en el mapache derecho de la portada */
+        /* Contenedor circular enfocado exactamente en el mapache de "Salto de Alegría" (segunda fila, segundo sticker) */
         .raccoon-image-container {
-            width: 85px;
-            height: 85px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid #38bdf8;
@@ -244,11 +243,11 @@
         }
 
         .raccoon-real-img {
-            width: 310%;
-            height: 310%;
+            width: 240%;
+            height: 240%;
             object-fit: cover;
-            /* Coordenadas precisas para enfocar al mapache de la derecha al finalizar el título */
-            object-position: 78% 18%; 
+            /* Coordenadas ajustadas para centrar el sticker de "Salto de Alegría" de la nueva imagen */
+            object-position: 39% 78%; 
         }
 
         @keyframes bounceRaccoon {
@@ -330,17 +329,16 @@
         </div>
     </div>
 
-    <!-- Ventana emergente tipo cómic con la imagen recortada del mapache derecho -->
+    <!-- Ventana emergente tipo cómic con el mapache "Salto de Alegría" de la nueva character sheet -->
     <div id="modalAviso" class="modal-overlay" onclick="cerrarAviso()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div class="thought-bubble">
                 Próximamente
             </div>
             <div class="raccoon-image-container">
-                <img src="portada-celular.jpg" alt="Mapache" class="raccoon-real-img">
+                <img src="Gemini_Generated_Image_aym7g8aym7g8aym7.jpg" alt="Mapache Salto de Alegría" class="raccoon-real-img">
             </div>
-            <button class="modal-btn" onclick="cerrarAviso()">Aceptar</button>
-        </div>
+            <button class="modal-btn" onclick="cerrarAviso()">Aceptar</button></div>
     </div>
 
     <script>
