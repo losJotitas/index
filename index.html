@@ -75,55 +75,69 @@
             overflow: hidden;
         }
 
-        /* 5. Bloque del Buscador y Botones */
+        /* 5. Bloque del Buscador y Botones con diseño y color mejorado */
         .bloque-controles {
             width: 90%;                    
             max-width: 340px;              
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            background: rgba(15, 23, 42, 0.7);
-            padding: 14px;
-            border-radius: 20px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            gap: 12px;
+            background: rgba(15, 23, 42, 0.85); /* Fondo semitransparente más profundo */
+            padding: 16px;
+            border-radius: 22px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(56, 189, 248, 0.3); /* Borde sutil con tono azulado */
             box-sizing: border-box;
         }
 
-        /* Estilos base garantizados para inputs y botones oscuros */
         .input-busqueda {
             width: 100%;
             padding: 14px 16px;
             background-color: #ffffff;
             color: #0f172a;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 14px;
             box-sizing: border-box;
             outline: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
         }
 
+        /* Botones con colores vibrantes y atractivos */
         .btn-opcion {
             width: 100%;
             padding: 14px 16px;
-            background-color: #1e293b; /* Color oscuro profesional */
-            color: #ffffff;            /* Texto blanco forzado */
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
+            background: linear-gradient(135deg, #1e40af, #2563eb); /* Degradado azul atractivo */
+            color: #ffffff;            
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
             font-size: 14px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
             cursor: pointer;
             box-sizing: border-box;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
             text-align: center;
             text-decoration: none;
             display: inline-block;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .btn-opcion:hover {
-            background-color: #334155;
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            transform: translateY(-1px);
+        }
+
+        /* Variante de color para colegios particulares */
+        .btn-particular {
+            background: linear-gradient(135deg, #334155, #475569); /* Tono grisáceo/azulado distinguible */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-particular:hover {
+            background: linear-gradient(135deg, #475569, #64748b);
         }
 
         .fila-botones-dividida {
@@ -133,10 +147,59 @@
         }
 
         .fila-botones-dividida .btn-opcion {
-            flex: 1; /* Distribuye equitativamente el espacio en la fila */
+            flex: 1; 
         }
 
-        /* 6. Adaptación para Computadora / PC (Pantallas mayores a 768px) */
+        /* 6. Estilos para la ventana emergente personalizada ("Próximamente sin texto extra") */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: #1e293b;
+            padding: 24px 32px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            max-width: 280px;
+            width: 85%;
+        }
+
+        .modal-content h3 {
+            margin: 0 0 12px 0;
+            color: #38bdf8;
+            font-size: 18px;
+        }
+
+        .modal-content p {
+            margin: 0 0 20px 0;
+            color: #f8fafc;
+            font-size: 15px;
+        }
+
+        .modal-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* 7. Adaptación para Computadora / PC (Pantallas mayores a 768px) */
         @media (min-width: 769px) {
             .img-celular {
                 display: none;
@@ -148,9 +211,9 @@
             .bloque-controles {
                 width: 100%;
                 max-width: 520px;          
-                padding: 22px;             
-                gap: 14px;
-                border-radius: 24px;
+                padding: 24px;             
+                gap: 16px;
+                border-radius: 26px;
             }
 
             .input-busqueda {
@@ -188,10 +251,28 @@
             <button class="btn-opcion">Filtrar por Redes Educativas (1-9)</button>
             <div class="fila-botones-dividida">
                 <button class="btn-opcion">Colegios Estatales</button>
-                <button class="btn-opcion" onclick="alert('Próximamente');">Colegios Particulares</button>
+                <button class="btn-opcion btn-particular" onclick="mostrarAviso();">Colegios Particulares</button>
             </div>
         </div>
     </div>
+
+    <!-- Ventana emergente personalizada para el mensaje limpio de "Próximamente" -->
+    <div id="modalAviso" class="modal-overlay" onclick="cerrarAviso()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>MAPACHE</h3>
+            <p>Próximamente</p>
+            <button class="modal-btn" onclick="cerrarAviso()">Aceptar</button>
+        </div>
+    </div>
+
+    <script>
+        function mostrarAviso() {
+            document.getElementById('modalAviso').style.display = 'flex';
+        }
+        function cerrarAviso() {
+            document.getElementById('modalAviso').style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>
