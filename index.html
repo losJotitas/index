@@ -35,9 +35,6 @@
             z-index: 0;
             pointer-events: none; 
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .img-celular {
@@ -54,8 +51,8 @@
             display: none;
             width: 100%;       
             height: 100%;
-            object-fit: contain; /* Mantiene la proporción exacta para que nunca se corte el título ni la imagen */
-            background-color: #0f172a;
+            object-fit: cover; /* Llena toda la pantalla eliminando las franjas azules de los lados */
+            object-position: center top; /* Ancla la parte superior para que el título nunca se corte */
         }
 
         /* 3. Contenedor principal para celular por defecto */
@@ -264,21 +261,21 @@
             transform: scale(1.05);
         }
 
-        /* 6. Adaptación específica para PC (Botones más anchos, subidos y sin tapar el libro/lápiz) */
+        /* 6. Adaptación específica para PC (Paneles anchos y subidos para liberar el libro/lápiz) */
         @media (min-width: 769px) {
             .img-celular { display: none; }
             .img-pc { display: block; }
 
             .main-container {
                 max-width: 900px;
-                /* Subimos el contenedor para que quede libre del libro y el lápiz de abajo */
+                /* Subimos más el contenedor principal para que los botones queden libres del cuaderno y lápiz */
                 justify-content: center; 
-                padding-top: 130px; 
+                padding-top: 80px; 
             }
 
             .bloque-controles {
                 width: 100%;
-                /* Alargamos el ancho del panel para que los botones sean más amplios */
+                /* Mantiene el ancho amplio y cómodo para PC */
                 max-width: 520px;          
                 padding: 22px 26px;             
                 gap: 14px;
