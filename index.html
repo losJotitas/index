@@ -75,19 +75,19 @@
             overflow: hidden;
         }
 
-        /* 5. Bloque del Buscador y Botones con diseño y color mejorado */
+        /* 5. Bloque del Buscador y Botones */
         .bloque-controles {
             width: 90%;                    
             max-width: 340px;              
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: rgba(15, 23, 42, 0.85); /* Fondo semitransparente más profundo */
+            background: rgba(15, 23, 42, 0.85); 
             padding: 16px;
             border-radius: 22px;
             backdrop-filter: blur(8px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(56, 189, 248, 0.3); /* Borde sutil con tono azulado */
+            border: 2px solid rgba(56, 189, 248, 0.3); 
             box-sizing: border-box;
         }
 
@@ -103,15 +103,15 @@
             outline: none;
             font-family: 'Montserrat', sans-serif;
             font-weight: 500;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
         }
 
-        /* Botones con colores vibrantes y atractivos */
+        /* Estilo base para los botones */
         .btn-opcion {
             width: 100%;
             padding: 14px 16px;
-            background: linear-gradient(135deg, #1e40af, #2563eb); /* Degradado azul atractivo */
             color: #ffffff;            
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 14px;
             font-size: 14px;
             font-family: 'Montserrat', sans-serif;
@@ -122,22 +122,33 @@
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .btn-opcion:hover {
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
             transform: translateY(-1px);
+            filter: brightness(1.08);
         }
 
-        /* Variante de color para colegios particulares */
-        .btn-particular {
-            background: linear-gradient(135deg, #334155, #475569); /* Tono grisáceo/azulado distinguible */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        /* Colores exactos personalizados por botón según tu imagen */
+        .btn-verde {
+            background-color: #729b79; /* Verde suave del segundo elemento */
+            box-shadow: 0 0 12px rgba(114, 155, 121, 0.4);
         }
 
-        .btn-particular:hover {
-            background: linear-gradient(135deg, #475569, #64748b);
+        .btn-azul {
+            background-color: #7b8db9; /* Azul lila del tercer elemento */
+            box-shadow: 0 0 12px rgba(123, 141, 185, 0.4);
+        }
+
+        .btn-estatales {
+            background-color: #d18b6d; /* Naranja terracota del cuarto elemento */
+            box-shadow: 0 0 12px rgba(209, 139, 109, 0.4);
+        }
+
+        .btn-particulares {
+            background-color: #a8a697; /* Gris arena/verdoso del quinto elemento */
+            color: #1e293b;            /* Texto oscuro para mejor contraste en este tono claro */
+            box-shadow: 0 0 12px rgba(168, 166, 151, 0.4);
         }
 
         .fila-botones-dividida {
@@ -150,7 +161,7 @@
             flex: 1; 
         }
 
-        /* 6. Estilos para la ventana emergente personalizada ("Próximamente sin texto extra") */
+        /* 6. Estilos para la ventana emergente ("Próximamente") */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -247,11 +258,11 @@
     <div class="main-container">
         <div class="bloque-controles">
             <input type="text" class="input-busqueda" placeholder="Buscar por nombre o número...">
-            <button class="btn-opcion">Ver Todos los Colegios en el Mapa</button>
-            <button class="btn-opcion">Filtrar por Redes Educativas (1-9)</button>
+            <button class="btn-opcion btn-verde">Ver Todos los Colegios en el Mapa</button>
+            <button class="btn-opcion btn-azul">Filtrar por Redes Educativas (1-9)</button>
             <div class="fila-botones-dividida">
-                <button class="btn-opcion">Colegios Estatales</button>
-                <button class="btn-opcion btn-particular" onclick="mostrarAviso();">Colegios Particulares</button>
+                <button class="btn-opcion btn-estatales">Colegios Estatales</button>
+                <button class="btn-opcion btn-particulares" onclick="mostrarAviso();">Colegios Particulares</button>
             </div>
         </div>
     </div>
