@@ -129,7 +129,7 @@
             filter: brightness(1.08);
         }
 
-        /* Colores exactos personalizados por botón */
+        /* Colores personalizados por botón */
         .btn-verde {
             background-color: #729b79; 
             box-shadow: 0 0 12px rgba(114, 155, 121, 0.4);
@@ -161,7 +161,7 @@
             flex: 1; 
         }
 
-        /* 6. Estilos de la ventana emergente tipo Historieta / Cómic */
+        /* 6. Estilos de la ventana emergente tipo Historieta con el Mapache real */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -205,7 +205,7 @@
             box-sizing: border-box;
         }
 
-        /* Círculos del pensamiento del cómic que apuntan al mapache */
+        /* Círculos del pensamiento del cómic que apuntan al mapache real */
         .thought-bubble::before {
             content: '';
             position: absolute;
@@ -229,10 +229,25 @@
             border-radius: 50%;
         }
 
-        .raccoon-avatar {
-            font-size: 52px;
-            margin-bottom: 15px;
+        /* Contenedor circular para la imagen real del mapache extraída de la portada */
+        .raccoon-image-container {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #38bdf8;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             animation: bounceRaccoon 1.5s infinite ease-in-out;
+            background-color: #ffffff;
+        }
+
+        .raccoon-real-img {
+            width: 280%;
+            height: 280%;
+            object-fit: cover;
+            /* Coordenadas para enfocar exactamente al mapache que aparece en la esquina superior de tu portada */
+            object-position: 82% 24%; 
         }
 
         @keyframes bounceRaccoon {
@@ -314,13 +329,15 @@
         </div>
     </div>
 
-    <!-- Ventana emergente tipo cómic con el mapache y el pensamiento -->
+    <!-- Ventana emergente tipo cómic con la foto real del mapache de la portada -->
     <div id="modalAviso" class="modal-overlay" onclick="cerrarAviso()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div class="thought-bubble">
                 Próximamente
             </div>
-            <div class="raccoon-avatar">🦝</div>
+            <div class="raccoon-image-container">
+                <img src="portada-celular.jpg" alt="Mapache" class="raccoon-real-img">
+            </div>
             <button class="modal-btn" onclick="cerrarAviso()">Aceptar</button>
         </div>
     </div>
