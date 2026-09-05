@@ -33,11 +33,10 @@
         overflow: hidden;
     }
 
-    /* Estilos comunes para ambas imágenes de portada */
+   /* Estilos comunes para ambas imágenes de portada */
     .fondo-portada img {
         width: 100%;
         height: 100%;
-        object-fit: contain; /* Muestra la imagen completa sin recortes ni distorsiones */
         object-position: center;
         image-rendering: -webkit-optimize-contrast;
         position: absolute;
@@ -47,15 +46,17 @@
 
     /* CONTROL INTELIGENTE DE IMÁGENES: */
 
-    /* Por defecto ocultamos la de PC y mostramos la de Celular */
+    /* Por defecto ocultamos la de PC y mostramos la de Celular (con contain para que se vea íntegra en móvil) */
     .img-pc {
         display: none;
+        object-fit: cover; /* Cubre toda la pantalla de la PC sin franjas azules a los lados */
     }
     .img-celular {
         display: block;
+        object-fit: contain; 
     }
 
-    /* Cuando la pantalla sea de PC (mayor a 768px), cambiamos la visibilidad */
+    /* Cuando la pantalla sea de PC (mayor a 768px), mostramos la de PC en modo cobertura total */
     @media (min-width: 769px) {
         .img-celular {
             display: none;
