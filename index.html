@@ -40,22 +40,22 @@
         image-rendering: -webkit-optimize-contrast;
     }
 
-    /* Ajuste específico para CELULARES: Estira ligeramente de arriba a abajo un 15% (altura al 115%) */
+    /* Ajuste fino para CELULARES: Estira verticalmente un 8% (altura al 108%) */
     @media (max-width: 768px) {
         .fondo-portada img {
             width: 100%;
-            height: 115%;
-            object-fit: fill; /* Permite aplicar el estiramiento vertical exacto pedido */
+            height: 108%;
+            object-fit: fill; 
         }
     }
 
-    /* Ajuste específico para PC: Estira de izquierda a derecha un 30% (ancho al 130%) */
+    /* Ajuste fino para PC: Estira horizontalmente un 20% (ancho al 120%) con centrado simétrico */
     @media (min-width: 769px) {
         .fondo-portada img {
-            width: 130%;
+            width: 120%;
             height: 100%;
-            object-fit: fill; /* Permite aplicar el estiramiento horizontal exacto pedido */
-            margin-left: -15%; /* Centra la imagen estirada de forma simétrica */
+            object-fit: fill; 
+            margin-left: -10%; 
         }
     }
 
@@ -237,7 +237,7 @@
 </head>
 <body>
 
-    <!-- Fondo de pantalla fijo con los porcentajes de estiramiento solicitados -->
+    <!-- Fondo de pantalla fijo con los porcentajes de estiramiento afinados (8% vertical y 20% horizontal) -->
     <div class="fondo-portada">
         <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú">
     </div>
