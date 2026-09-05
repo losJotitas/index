@@ -44,17 +44,17 @@
         left: 0;
     }
 
-    /* CONTROL INTELIGENTE DE IMÁGENES: */
+   /* CONTROL INTELIGENTE DE IMÁGENES: */
 
-    /* Celular: Usamos fill con altura al 100% estirada para que abarque perfectamente de extremo a extremo sin dejar franjas */
+    /* Celular: Usamos contain para que la imagen se muestre COMPLETA sin recortarse, respetando sus proporciones */
     .img-celular {
         display: block;
         width: 100%;
         height: 100%;
-        object-fit: fill; 
+        object-fit: contain; /* Mantiene toda la imagen visible, sin cortes ni deformaciones */
     }
 
-    /* PC: Ancho del 98% con centrado simétrico y fill para evitar espacios */
+    /* PC: Mantenemos los ajustes anteriores para PC */
     .img-pc {
         display: none;
         width: 98%;       
