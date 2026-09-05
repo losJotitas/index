@@ -21,8 +21,9 @@
         background-color: #0f172a;
     }
 
-    /* Fondo de pantalla fijo que cubre toda la pantalla usando object-fit: cover 
-       para eliminar por completo las franjas vacías del fondo azul en celular y PC */
+    /* Fondo de pantalla inteligente: usa object-fit: contain para mostrar toda la imagen completa 
+       sin recortes, asegurando que el mapache, el título y los elementos laterales se vean siempre. 
+       El fondo azul nativo actúa como marco elegante en pantallas muy anchas o alargadas. */
     .fondo-portada {
         position: fixed;
         top: 0;
@@ -31,12 +32,15 @@
         height: 100vh;
         z-index: 0;
         pointer-events: none; /* Clave absoluta para no bloquear el refresh táctil */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .fondo-portada img {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Estira y expande la imagen cubriendo totalmente la pantalla sin dejar espacios vacíos */
+        object-fit: contain; /* Mantiene toda la proporción de la imagen 1080x1350 intacta */
         object-position: center;
         image-rendering: -webkit-optimize-contrast;
     }
@@ -49,15 +53,15 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(15, 23, 42, 0.35); 
+        background: rgba(15, 23, 42, 0.25); 
     }
 
-    /* Contenedor principal que centra perfectamente los botones en la pantalla */
+    /* Contenedor principal que centra perfectamente los botones sobre el centro del mapa */
     .main-container { 
         position: relative;
         z-index: 2;
         width: 100%;
-        max-width: 400px; 
+        max-width: 390px; 
         min-height: 100vh;
         margin: 0 auto;
         padding: 20px 16px;
@@ -74,7 +78,7 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        background: rgba(15, 23, 42, 0.65);
+        background: rgba(15, 23, 42, 0.7);
         padding: 14px;
         border-radius: 20px;
         backdrop-filter: blur(6px);
@@ -219,7 +223,7 @@
 </head>
 <body>
 
-    <!-- Fondo de pantalla fijo con object-fit: cover para eliminar el fondo azul por completo -->
+    <!-- Fondo de pantalla fijo con portada.jpg completa y sin recortes -->
     <div class="fondo-portada">
         <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú">
     </div>
