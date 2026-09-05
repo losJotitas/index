@@ -11,7 +11,7 @@
 
 <style>
     /* Desplazamiento nativo libre para conservar el gesto táctil de actualizar en celulares */
-   html, body {
+  html, body {
         margin: 0;
         padding: 0;
         width: 100vw;
@@ -20,8 +20,8 @@
         font-family: 'Montserrat', sans-serif;
         color: #ffffff;
         background-color: #0f172a;
-        overflow: hidden;
-        overscroll-behavior-y: auto; /* Permite el gesto táctil de refresh nativo en la parte superior */
+        overflow-y: auto;          /* Permite el contexto necesario para el gesto superior */
+        overscroll-behavior-y: auto; /* Activa el pull-to-refresh nativo del navegador */
     }
 
     /* Contenedor del fondo de pantalla fijo */
