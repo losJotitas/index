@@ -129,7 +129,7 @@
             filter: brightness(1.08);
         }
 
-        /* Colores personalizados por botón */
+        /* Colores exactos personalizados por botón */
         .btn-verde {
             background-color: #729b79; 
             box-shadow: 0 0 12px rgba(114, 155, 121, 0.4);
@@ -161,7 +161,7 @@
             flex: 1; 
         }
 
-        /* 6. Estilos de la ventana emergente tipo Historieta con el Mapache derecho */
+        /* 6. Estilos de la ventana emergente tipo Historieta / Cómic */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -229,25 +229,10 @@
             border-radius: 50%;
         }
 
-        /* Contenedor circular para enfocar exactamente al mapache de la derecha */
-        .raccoon-image-container {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid #38bdf8;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        .raccoon-avatar {
+            font-size: 52px;
+            margin-bottom: 15px;
             animation: bounceRaccoon 1.5s infinite ease-in-out;
-            background-color: #ffffff;
-        }
-
-        .raccoon-real-img {
-            width: 310%;
-            height: 310%;
-            object-fit: cover;
-            /* Coordenadas corregidas para enfocar al mapache del lado derecho (junto al semáforo) */
-            object-position: 78% 18%; 
         }
 
         @keyframes bounceRaccoon {
@@ -329,15 +314,13 @@
         </div>
     </div>
 
-    <!-- Ventana emergente tipo cómic con el mapache derecho -->
+    <!-- Ventana emergente tipo cómic con el mapache y el pensamiento -->
     <div id="modalAviso" class="modal-overlay" onclick="cerrarAviso()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div class="thought-bubble">
                 Próximamente
             </div>
-            <div class="raccoon-image-container">
-                <img src="portada-celular.jpg" alt="Mapache" class="raccoon-real-img">
-            </div>
+            <div class="raccoon-avatar">🦝</div>
             <button class="modal-btn" onclick="cerrarAviso()">Aceptar</button>
         </div>
     </div>
