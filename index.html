@@ -11,7 +11,7 @@
 
 <style>
     /* Desplazamiento nativo libre para conservar el gesto táctil de actualizar en celulares */
-    html, body {
+   html, body {
         margin: 0;
         padding: 0;
         width: 100vw;
@@ -21,7 +21,7 @@
         color: #ffffff;
         background-color: #0f172a;
         overflow: hidden;
-        position: fixed;
+        overscroll-behavior-y: auto; /* Permite el gesto táctil de refresh nativo en la parte superior */
     }
 
     /* Contenedor del fondo de pantalla fijo */
