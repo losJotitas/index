@@ -51,8 +51,10 @@
             display: none;
             width: 100%;       
             height: 100%;
-            object-fit: cover; /* Llena toda la pantalla eliminando las franjas azules de los lados */
-            object-position: center top; /* Ancla la parte superior para que el título nunca se corte */
+            object-fit: fill; /* Llena toda la pantalla de PC estirando de forma exacta para ver título y objetos inferiores */
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         /* 3. Contenedor principal para celular por defecto */
@@ -251,7 +253,7 @@
             padding: 10px 24px;
             border-radius: 12px;
             font-weight: 600;
-            cursor: pointer;
+ear            cursor: pointer;
             font-family: 'Montserrat', sans-serif;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
             transition: transform 0.2s;
@@ -261,30 +263,31 @@
             transform: scale(1.05);
         }
 
-        /* 6. Adaptación específica para PC (Paneles anchos y subidos para liberar el libro/lápiz) */
+        /* 6. Adaptación específica para PC (Ajuste milimétrico de posición y espacio libre) */
         @media (min-width: 769px) {
             .img-celular { display: none; }
             .img-pc { display: block; }
 
             .main-container {
-                max-width: 900px;
-                /* Subimos más el contenedor principal para que los botones queden libres del cuaderno y lápiz */
-                justify-content: center; 
-                padding-top: 80px; 
+                max-width: 1000px;
+                /* Posicionamiento exacto: empujamos ligeramente hacia abajo el panel 
+                   para que quede totalmente libre debajo del lema y encima del cuaderno/lápiz */
+                justify-content: flex-start;
+                padding-top: 145px; 
             }
 
             .bloque-controles {
                 width: 100%;
-                /* Mantiene el ancho amplio y cómodo para PC */
-                max-width: 520px;          
-                padding: 22px 26px;             
-                gap: 14px;
-                border-radius: 24px;
+                /* Ancho óptimo y elegante para los botones en PC */
+                max-width: 480px;          
+                padding: 20px 24px;             
+                gap: 12px;
+                border-radius: 22px;
             }
 
             .input-busqueda, .btn-opcion {
-                padding: 14px 20px;        
-                font-size: 15px;           
+                padding: 13px 18px;        
+                font-size: 14px;           
                 border-radius: 14px;
             }
         }
