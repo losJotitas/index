@@ -51,7 +51,7 @@
             display: none;
             width: 100%;       
             height: 100%;
-            object-fit: fill; /* Llena toda la pantalla de PC estirando de forma exacta para ver título y objetos inferiores */
+            object-fit: fill; 
             position: absolute;
             top: 0;
             left: 0;
@@ -253,7 +253,7 @@
             padding: 10px 24px;
             border-radius: 12px;
             font-weight: 600;
-ear            cursor: pointer;
+            cursor: pointer;
             font-family: 'Montserrat', sans-serif;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
             transition: transform 0.2s;
@@ -263,22 +263,20 @@ ear            cursor: pointer;
             transform: scale(1.05);
         }
 
-        /* 6. Adaptación específica para PC (Ajuste milimétrico de posición y espacio libre) */
+        /* 6. Adaptación específica para PC (Centrado exacto en pantalla) */
         @media (min-width: 769px) {
             .img-celular { display: none; }
             .img-pc { display: block; }
 
             .main-container {
                 max-width: 1000px;
-                /* Posicionamiento exacto: empujamos ligeramente hacia abajo el panel 
-                   para que quede totalmente libre debajo del lema y encima del cuaderno/lápiz */
-                justify-content: flex-start;
-                padding-top: 145px; 
+                /* Centrado perfecto vertical y horizontalmente en PC */
+                justify-content: center;
+                padding-top: 50px; 
             }
 
             .bloque-controles {
                 width: 100%;
-                /* Ancho óptimo y elegante para los botones en PC */
                 max-width: 480px;          
                 padding: 20px 24px;             
                 gap: 12px;
