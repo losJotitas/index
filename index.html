@@ -2,315 +2,156 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MAPACHE - Ventanilla & Mi Perú</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. Configuración general y soporte de refresh nativo */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
+            background-color: #0f172a;
+            overflow-y: auto;          
+            overscroll-behavior-y: auto; 
+        }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+        /* 2. Contenedor del fondo de pantalla fijo */
+        .fondo-portada {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            z-index: 0;
+            pointer-events: none; 
+            overflow: hidden;
+        }
 
-<style>
-    /* Desplazamiento nativo libre para conservar el gesto táctil de actualizar en celulares */
-  html, body {
-        margin: 0;
-        padding: 0;
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        font-family: 'Montserrat', sans-serif;
-        color: #ffffff;
-        background-color: #0f172a;
-        overflow-y: auto;          /* Permite el contexto necesario para el gesto superior */
-        overscroll-behavior-y: auto; /* Activa el pull-to-refresh nativo del navegador */
-    }
-
-    /* Contenedor del fondo de pantalla fijo */
-    .fondo-portada {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        z-index: 0;
-        pointer-events: none; 
-        overflow: hidden;
-    }
-
-    /* Estilos comunes para ambas imágenes de portada */
-    .fondo-portada img {
-        width: 100%;
-        height: 100%;
-        object-position: center;
-        image-rendering: -webkit-optimize-contrast;
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-
-  /* CONTROL INTELIGENTE DE IMÁGENES: */
-
- /* Celular: Altura al 82% con desplazamiento superior para liberar el área inferior drásticamente */
-    .img-celular {
-        display: block;
-        width: 100%;
-        height: 82%; 
-        object-fit: fill; 
-        position: absolute;
-        top: 2%; 
-        left: 0;
-        object-position: center; 
-    }
-    /* PC: Mantenemos los ajustes perfectos para PC */
-    .img-pc {
-        display: none;
-        width: 98%;       
-        height: 100%;
-        object-fit: fill; 
-        margin-left: 1%;  
-    }
-
-    /* Cuando la pantalla sea de PC (mayor a 768px), mostramos la de PC y ocultamos la de celular */
-    @media (min-width: 769px) {
+        /* 3. Control inteligente de imágenes de fondo */
         .img-celular {
-            display: none;
-        }
-        .img-pc {
             display: block;
+            width: 100%;
+            height: 82%; 
+            object-fit: fill; 
+            position: absolute;
+            top: 2%; 
+            left: 0;
+            object-position: center; 
         }
-    }
 
-    /* Capa de contraste oscura sutil para que los botones destaquen sobre la imagen */
-    .fondo-portada::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(15, 23, 42, 0.25); 
-        z-index: 1;
-    }
+        .img-pc {
+            display: none;
+            width: 98%;       
+            height: 100%;
+            object-fit: fill; 
+            margin-left: 1%;  
+        }
 
-    /* Asegurar que las imágenes estén por debajo de la capa de contraste */
-    .fondo-portada img {
-        z-index: 0;
-    }
+        /* 4. Contenedor principal estático y centrado */
+        .main-container { 
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            z-index: 2;
+            max-width: 390px; 
+            margin: 0 auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
 
-    /* Contenedor principal que centra perfectamente los botones en el centro de la pantalla */
-   .main-container { 
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        z-index: 2;
-        max-width: 390px; 
-        margin: 0 auto;
-        padding: 20px 16px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        box-sizing: border-box;
-        overflow: hidden;
-    }
+        /* 5. Bloque del Buscador y Botones (Con márgenes laterales elegantes en celular) */
+        .bloque-controles {
+            width: 90%;                    
+            max-width: 340px;              
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            padding: 14px;
+            border-radius: 20px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
 
-    /* Bloque del Buscador y Botones con diseño traslúcido y elegante */
-    .bloque-controles {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        background: rgba(15, 23, 42, 0.7);
-        padding: 14px;
-        border-radius: 20px;
-        backdrop-filter: blur(6px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-    }
+        .input-busqueda, .btn-opcion {
+            width: 100%;
+            box-sizing: border-box;
+        }
 
-    /* Buscador traslúcido */
-    .input-busqueda {
-        width: 100%;
-        padding: 12px 16px;
-        font-size: 13px;
-        font-weight: 700;
-        border: 1.5px solid rgba(255, 255, 255, 0.7);
-        border-radius: 14px;
-        background-color: rgba(255, 255, 255, 0.95);
-        color: #0f172a;
-        box-sizing: border-box;
-        outline: none;
-        text-align: center;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
+        /* 6. Adaptación para Computadora / PC (Pantallas mayores a 768px) */
+        @media (min-width: 769px) {
+            .img-celular {
+                display: none;
+            }
+            .img-pc {
+                display: block;
+            }
 
-    .input-busqueda::placeholder { color: #64748b; font-weight: 600; }
-    .input-busqueda:focus { 
-        border-color: #f59e0b; 
-        box-shadow: 0 4px 18px rgba(245, 158, 11, 0.4); 
-    }
+            .bloque-controles {
+                width: 100%;
+                max-width: 520px;          
+                padding: 22px;             
+                gap: 14px;
+                border-radius: 24px;
+            }
 
-    /* Grupo de Botones */
-    .grupo-botones {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
+            .input-busqueda {
+                padding: 16px 20px;
+                font-size: 15px;           
+                border-radius: 16px;
+            }
 
-    /* Estilo Base para los Botones */
-    .btn-opcion {
-        width: 100%;
-        padding: 12px 14px;
-        border-radius: 14px;
-        font-size: 12.5px;
-        font-weight: 800;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        box-sizing: border-box;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        letter-spacing: 0.3px;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-    }
+            .btn-opcion {
+                padding: 16px 20px;        
+                font-size: 15px;           
+                border-radius: 16px;
+            }
 
-    .btn-opcion:active { transform: scale(0.98); }
-
-    /* 1. Ver Todos los Colegios: Ámbar Cálido */
-    .btn-ambar {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-        color: #ffffff;
-        box-shadow: 0 6px 18px rgba(217, 119, 6, 0.4);
-    }
-
-    /* 2. Redes Educativas: Azul Cobalto */
-    .btn-cobalto {
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-        color: #ffffff;
-        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
-    }
-
-    /* Fila dividida */
-    .fila-botones-dividida {
-        display: flex;
-        gap: 8px;
-        width: 100%;
-    }
-
-    .fila-botones-dividida .btn-opcion {
-        flex: 1;
-        padding: 11px 6px;
-        font-size: 11px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-
-    /* 3. Colegios Estatales: Verde Esmeralda Vivo */
-    .btn-esmeralda-vivo {
-        background: linear-gradient(135deg, #059669 0%, #047857 100%);
-        color: #ffffff;
-        box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
-    }
-
-    /* 4. Colegios Particulares: Púrpura Violeta */
-    .btn-violeta {
-        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-        color: #ffffff;
-        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
-    }
-
-    /* Marcas de agua institucionales */
-    .marca-agua {
-        position: fixed;
-        bottom: 10px;
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 800;
-        letter-spacing: 0.8px;
-        user-select: none;
-        pointer-events: none;
-        z-index: 999;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
-    }
-    .marca-jdah { left: 16px; }
-    .marca-jotitas { right: 16px; }
-
-    /* Toast notification */
-    .toast-notificacion {
-        visibility: hidden;
-        min-width: 140px;
-        background-color: #a855f7;
-        color: #ffffff;
-        text-align: center;
-        border-radius: 20px;
-        padding: 10px 18px;
-        position: fixed;
-        z-index: 1000;
-        left: 50%;
-        bottom: 40px;
-        transform: translateX(-50%);
-        font-size: 12px;
-        font-weight: 800;
-        box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
-        opacity: 0;
-        transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
-
-    .toast-notificacion.visible {
-        visibility: visible;
-        opacity: 1;
-    }
-</style>
+            .fila-botones-dividida .btn-opcion {
+                padding: 15px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Fondo de pantalla con ambas opciones de imágenes independientes -->
+    <!-- Fondo de pantalla con las dos imágenes adaptativas -->
     <div class="fondo-portada">
-        <!-- Imagen diseñada exclusivamente para celulares -->
-        <img src="portada-celular.jpg" class="img-celular" alt="MAPACHE Móvil">
-        
-        <!-- Imagen diseñada exclusivamente para computadoras -->
-        <img src="portada-pc.jpg" class="img-pc" alt="MAPACHE PC">
+        <img src="portada-celular.jpg" alt="Portada Celular" class="img-celular">
+        <img src="portada-pc.jpg" alt="Portada PC" class="img-pc">
     </div>
 
-    <!-- Contenido principal centrado perfectamente -->
+    <!-- Contenedor principal de la interfaz y botones -->
     <div class="main-container">
         <div class="bloque-controles">
-            <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
-
-            <div class="grupo-botones">
-                <button class="btn-opcion btn-ambar">🌐 Ver Todos los Colegios en el Mapa</button>
-                <button class="btn-opcion btn-cobalto">🏫 Filtrar por Redes Educativas (1-9)</button>
-                
-                <div class="fila-botones-dividida">
-                    <button class="btn-opcion btn-esmeralda-vivo">🏫 Colegios Estatales</button>
-                    <button class="btn-opcion btn-violeta" onclick="lanzarToast()">🏫 Colegios Particulares</button>
-                </div>
+            <!-- Aquí van tus elementos de búsqueda y botones actuales -->
+            <input type="text" class="input-busqueda" placeholder="Buscar por nombre o número...">
+            <button class="btn-opcion">Ver Todos los Colegios en el Mapa</button>
+            <button class="btn-opcion">Filtrar por Redes Educativas (1-9)</button>
+            <div class="fila-botones-dividida" style="display: flex; gap: 8px; width: 100%;">
+                <button class="btn-opcion">Colegios Estatales</button>
+                <button class="btn-opcion">Colegios Particulares</button>
             </div>
         </div>
     </div>
-
-    <!-- Toast oculto -->
-    <div id="toast" class="toast-notificacion">Próximamente</div>
-
-    <!-- Marcas de agua institucionales -->
-    <span class="marca-agua marca-jdah">JDAH</span>
-    <span class="marca-agua marca-jotitas">LOS JOTITAS</span>
-
-    <script>
-        function lanzarToast() {
-            var toast = document.getElementById("toast");
-            toast.classList.add("visible");
-            setTimeout(function(){ 
-                toast.classList.remove("visible"); 
-            }, 2500);
-        }
-    </script>
 
 </body>
 </html>
