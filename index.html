@@ -161,7 +161,7 @@
             flex: 1; 
         }
 
-        /* 5. Ventana Modal Universal para Mapachito */
+        /* 5. Ventana Modal Universal para Mapachito (Sólida y sin efecto fantasma) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -169,25 +169,30 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(11, 19, 36, 0.90); /* Fondo oscuro sólido */
             z-index: 999;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(5px);
         }
 
         .modal-content-comic {
-            background: rgba(15, 23, 42, 0.95);
+            background: #1e293b; /* Caja sólida azul marino institucional */
             padding: 24px 20px;
             border-radius: 24px;
-            border: 2px solid rgba(56, 189, 248, 0.5);
+            border: 3px solid #38bdf8; 
             text-align: center;
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
             max-width: 290px;
             width: 85%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            animation: entradaSolida 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes entradaSolida {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .thought-bubble {
@@ -199,7 +204,7 @@
             font-weight: 700;
             font-size: 15px;
             margin-bottom: 14px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
             width: 85%;
             box-sizing: border-box;
         }
@@ -231,7 +236,7 @@
             width: 140px;
             height: 160px;
             margin-bottom: 16px;
-            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.6));
+            filter: drop-shadow(0 6px 8px rgba(0,0,0,0.5));
         }
 
         .modal-btn {
@@ -285,16 +290,11 @@
         <div class="bloque-controles">
             <input type="text" class="input-busqueda" placeholder="Buscar por nombre o número...">
             
-            <!-- Botón de Mapa (Usa estado 'olfateando' / buscando info) -->
             <button class="btn-opcion btn-verde" onclick="abrirModalMapachito('olfateando')">Ver Todos los Colegios en el Mapa</button>
-            
-            <!-- Botón de Redes (Usa estado 'pensando') -->
             <button class="btn-opcion btn-azul" onclick="abrirModalMapachito('pensando')">Filtrar por Redes Educativas (1-9)</button>
             
             <div class="fila-botones-dividida">
-                <!-- Estatales (Usa estado 'feliz') -->
                 <button class="btn-opcion btn-estatales" onclick="abrirModalMapachito('feliz')">Colegios Estatales</button>
-                <!-- Particulares (Usa estado 'sorprendido' para avisar que pronto estará disponible) -->
                 <button class="btn-opcion btn-particulares" onclick="abrirModalMapachito('sorprendido')">Colegios Particulares</button>
             </div>
         </div>
@@ -322,18 +322,16 @@
         </div>
     </div>
 
-<script>
+    <!-- Lógica de JavaScript -->
+    <script>
         const modalEl = document.getElementById('modalMapachito');
         const textoEl = document.getElementById('textoMapachito');
         const animacionEl = document.getElementById('animacionLottie');
         
-        // --- NUEVO: Variables para el temporizador de inactividad ---
         let tiempoInactividad;
-        const SEGUNDOS_PARA_DORMIR = 30; // Puedes cambiar este número (30 segundos)
+        const SEGUNDOS_PARA_DORMIR = 30; // Se duerme si pasa 30 segundos sin actividad
 
-        // Función central para manejar tus 6 estados de ánimo
         function abrirModalMapachito(estado) {
-            // --- NUEVO: Al abrir manualmente, reseteamos el temporizador de inactividad ---
             reiniciarTemporizadorInactividad();
 
             let archivoJson = '';
@@ -374,8 +372,6 @@
             textoEl.innerText = textoMensaje;
             modalEl.style.display = 'flex';
 
-            // --- NUEVO: Si entra en estado durmiendo, desactivamos el temporizador interno
-            // para que no se despierte solo por el movimiento del modal ---
             if(estado === 'durmiendo') {
                 pararTemporizadorInactividad();
             }
@@ -383,26 +379,17 @@
 
         function cerrarModalMapachito() {
             modalEl.style.display = 'none';
-            // --- NUEVO: Al cerrar (despertar), reiniciamos el contador ---
             reiniciarTemporizadorInactividad();
         }
 
-        // --- NUEVAS FUNCIONES DE INACTIVIDAD ---
-
-        // Esta función se ejecuta cuando el usuario NO hace nada
         function irAEstadoDurmiente() {
-            // Solo se duerme si la app NO está mostrando ya un modal (para no interrumpir una búsqueda)
             if (modalEl.style.display === 'none') {
                 abrirModalMapachito('durmiendo');
             }
         }
 
-        // Esta función resetea el contador
         function reiniciarTemporizadorInactividad() {
-            // 1. Limpiamos el tiempo anterior
             clearTimeout(tiempoInactividad);
-            
-            // 2. Configuramos el nuevo tiempo (multiplicamos por 1000 para pasar a milisegundos)
             tiempoInactividad = setTimeout(irAEstadoDurmiente, SEGUNDOS_PARA_DORMIR * 1000);
         }
 
@@ -410,17 +397,14 @@
             clearTimeout(tiempoInactividad);
         }
 
-        // --- NUEVO: Detectar actividad del usuario ---
-        // Eventos que reinician el contador (mouse, teclado, tacto móvil)
+        // Activación inicial y control de inactividad
         window.onload = function() {
-            // Mapachito saluda al inicio
             abrirModalMapachito('saludando');
 
-            // Iniciamos la detección de actividad
             window.addEventListener('mousemove', reiniciarTemporizadorInactividad);
-            window.addEventListener('mousedown', reiniciarTemporizadorInactividad); // clic
-            window.addEventListener('keypress', reiniciarTemporizadorInactividad); // teclado
-            window.addEventListener('touchstart', reiniciarTemporizadorInactividad); // pantalla táctil
+            window.addEventListener('mousedown', reiniciarTemporizadorInactividad);
+            window.addEventListener('keypress', reiniciarTemporizadorInactividad);
+            window.addEventListener('touchstart', reiniciarTemporizadorInactividad);
         };
     </script>
 
