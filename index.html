@@ -46,16 +46,16 @@
 
   /* CONTROL INTELIGENTE DE IMÁGENES: */
 
-  /* Celular: Altura al 90% para asegurar que todo el contenido inferior baje y se vea completo */
+  /* Celular: Altura al 90% para liberar por completo el espacio inferior y evitar recortes */
     .img-celular {
         display: block;
         width: 100%;
         height: 90%; 
         object-fit: fill; 
         position: absolute;
-        top: 0;
+        top: 5%; /* Centrado vertical para distribuir el espacio arriba y abajo */
         left: 0;
-        object-position: center top; 
+        object-position: center; 
     }
     /* PC: Mantenemos los ajustes perfectos para PC */
     .img-pc {
