@@ -24,7 +24,7 @@
             overscroll-behavior-y: auto; 
         }
 
-        /* 2. Fondo de pantalla fijo adaptado para mostrar marcas de agua completas */
+        /* 2. Fondo de pantalla fijo */
         .fondo-portada {
             position: fixed;
             top: 0;
@@ -35,13 +35,16 @@
             z-index: 0;
             pointer-events: none; 
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .img-celular {
             display: block;
             width: 100%;
             height: 100%; 
-            object-fit: cover; /* Cambiado a cover para no deformar y mostrar abajo las marcas */
+            object-fit: cover; 
             position: absolute;
             top: 0; 
             left: 0;
@@ -51,7 +54,8 @@
             display: none;
             width: 100%;       
             height: 100%;
-            object-fit: cover; /* Muestra toda la interfaz de PC con JDAH y LOS JOTITAS abajo */
+            object-fit: contain; /* Mantiene la proporción exacta para que nunca se corte el título ni la imagen */
+            background-color: #0f172a;
         }
 
         /* 3. Contenedor principal para celular por defecto */
@@ -229,14 +233,13 @@
             border-radius: 50%;
         }
 
-        /* Contenedor del Lottie con fondo blanco sólido para eliminar cualquier efecto translúcido/fantasma */
         .raccoon-lottie-container {
             width: 140px;
             height: 160px;
             margin-bottom: 16px;
-            background: #ffffff; /* Fondo sólido blanco que elimina la transparencia y el halo */
-            border-radius: 16px;  /* Bordes redondeados limpios */
-            border: 2px solid #cbd5e1; /* Borde sutil para darle presencia */
+            background: #ffffff; 
+            border-radius: 16px;  
+            border: 2px solid #cbd5e1; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -261,30 +264,30 @@
             transform: scale(1.05);
         }
 
-        /* 6. Adaptación específica para PC (Soluciona que los botones tapaban el lema) */
+        /* 6. Adaptación específica para PC (Botones más anchos, subidos y sin tapar el libro/lápiz) */
         @media (min-width: 769px) {
             .img-celular { display: none; }
             .img-pc { display: block; }
 
             .main-container {
-                max-width: 800px;
-                /* Desplazamos el contenedor de los botones hacia abajo para que queden 
-                   exactamente en el centro de la pista de la PC, debajo de "Rastrea, Encuentra, Matricula" */
-                justify-content: flex-end; 
-                padding-bottom: 110px; /* Margen inferior exacto para no tapar el lema ni las marcas de agua */
+                max-width: 900px;
+                /* Subimos el contenedor para que quede libre del libro y el lápiz de abajo */
+                justify-content: center; 
+                padding-top: 130px; 
             }
 
             .bloque-controles {
                 width: 100%;
-                max-width: 440px;          
-                padding: 22px;             
+                /* Alargamos el ancho del panel para que los botones sean más amplios */
+                max-width: 520px;          
+                padding: 22px 26px;             
                 gap: 14px;
                 border-radius: 24px;
             }
 
             .input-busqueda, .btn-opcion {
-                padding: 14px 18px;        
-                font-size: 14px;           
+                padding: 14px 20px;        
+                font-size: 15px;           
                 border-radius: 14px;
             }
         }
@@ -403,7 +406,7 @@
 
         function reiniciarTemporizadorInactividad() {
             clearTimeout(tiempoInactividad);
-            tiempoInactividad = setTimeout(irAEstadoDurmiente, SEGUNDOS_PARA_DORNIR = SEGUNDOS_PARA_DORMIR * 1000);
+            tiempoInactividad = setTimeout(irAEstadoDurmiente, SEGUNDOS_PARA_DORMIR * 1000);
         }
 
         function pararTemporizadorInactividad() {
