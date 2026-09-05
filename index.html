@@ -44,17 +44,18 @@
         left: 0;
     }
 
-   /* CONTROL INTELIGENTE DE IMÁGENES: */
+  /* CONTROL INTELIGENTE DE IMÁGENES: */
 
-    /* Celular: Usamos contain para que la imagen se muestre COMPLETA sin recortarse, respetando sus proporciones */
+    /* Celular: Altura al 103% para cubrir el borde superior azul sin deformar ni cortar la parte inferior */
     .img-celular {
         display: block;
         width: 100%;
-        height: 100%;
-        object-fit: contain; /* Mantiene toda la imagen visible, sin cortes ni deformaciones */
+        height: 103%; 
+        object-fit: fill; 
+        object-position: center 48%; 
     }
 
-    /* PC: Mantenemos los ajustes anteriores para PC */
+    /* PC: Mantenemos los ajustes perfectos para PC */
     .img-pc {
         display: none;
         width: 98%;       
