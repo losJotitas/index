@@ -21,9 +21,7 @@
         background-color: #0f172a;
     }
 
-    /* Fondo de pantalla inteligente: usa object-fit: contain para mostrar toda la imagen completa 
-       sin recortes, asegurando que el mapache, el título y los elementos laterales se vean siempre. 
-       El fondo azul nativo actúa como marco elegante en pantallas muy anchas o alargadas. */
+    /* Contenedor del fondo de pantalla fijo */
     .fondo-portada {
         position: fixed;
         top: 0;
@@ -32,17 +30,33 @@
         height: 100vh;
         z-index: 0;
         pointer-events: none; /* Clave absoluta para no bloquear el refresh táctil */
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        overflow: hidden;
     }
 
     .fondo-portada img {
         width: 100%;
         height: 100%;
-        object-fit: contain; /* Mantiene toda la proporción de la imagen 1080x1350 intacta */
         object-position: center;
         image-rendering: -webkit-optimize-contrast;
+    }
+
+    /* Ajuste específico para CELULARES: Estira ligeramente de arriba a abajo un 15% (altura al 115%) */
+    @media (max-width: 768px) {
+        .fondo-portada img {
+            width: 100%;
+            height: 115%;
+            object-fit: fill; /* Permite aplicar el estiramiento vertical exacto pedido */
+        }
+    }
+
+    /* Ajuste específico para PC: Estira de izquierda a derecha un 30% (ancho al 130%) */
+    @media (min-width: 769px) {
+        .fondo-portada img {
+            width: 130%;
+            height: 100%;
+            object-fit: fill; /* Permite aplicar el estiramiento horizontal exacto pedido */
+            margin-left: -15%; /* Centra la imagen estirada de forma simétrica */
+        }
     }
 
     /* Capa de contraste oscura sutil para que los botones destaquen sobre la imagen */
@@ -56,7 +70,7 @@
         background: rgba(15, 23, 42, 0.25); 
     }
 
-    /* Contenedor principal que centra perfectamente los botones sobre el centro del mapa */
+    /* Contenedor principal que centra perfectamente los botones en el centro de la pantalla */
     .main-container { 
         position: relative;
         z-index: 2;
@@ -223,7 +237,7 @@
 </head>
 <body>
 
-    <!-- Fondo de pantalla fijo con portada.jpg completa y sin recortes -->
+    <!-- Fondo de pantalla fijo con los porcentajes de estiramiento solicitados -->
     <div class="fondo-portada">
         <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú">
     </div>
