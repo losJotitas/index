@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     
     <style>
-        /* 1. Configuración general y soporte de refresh nativo */
+        /* 1. Configuración general */
         html, body {
             margin: 0;
             padding: 0;
@@ -24,9 +24,9 @@
             overscroll-behavior-y: auto; 
         }
 
-        /* 2. Contenedor del fondo de pantalla fijo */
+        /* 2. Fondo de pantalla fijo adaptado para mostrar marcas de agua completas */
         .fondo-portada {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
@@ -41,22 +41,20 @@
             display: block;
             width: 100%;
             height: 100%; 
-            object-fit: fill; 
+            object-fit: cover; /* Cambiado a cover para no deformar y mostrar abajo las marcas */
             position: absolute;
             top: 0; 
             left: 0;
-            object-position: center; 
         }
 
         .img-pc {
             display: none;
             width: 100%;       
             height: 100%;
-            object-fit: fill; 
-            margin-left: 0;  
+            object-fit: cover; /* Muestra toda la interfaz de PC con JDAH y LOS JOTITAS abajo */
         }
 
-        /* 3. Contenedor principal estático y centrado */
+        /* 3. Contenedor principal para celular por defecto */
         .main-container { 
             position: absolute;
             top: 0;
@@ -74,7 +72,6 @@
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
-            overflow: hidden;
         }
 
         /* 4. Bloque del Buscador y Botones */
@@ -84,10 +81,10 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: rgba(15, 23, 42, 0.85); 
+            background: rgba(15, 23, 42, 0.88); 
             padding: 16px;
             border-radius: 22px;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(6px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
             border: 2px solid rgba(56, 189, 248, 0.3); 
             box-sizing: border-box;
@@ -161,7 +158,7 @@
             flex: 1; 
         }
 
-        /* 5. Ventana Modal Universal para Mapachito (Sólida y sin efecto fantasma) */
+        /* 5. Ventana Modal Universal (Sólida, sin rastros de fantasma) */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -169,14 +166,14 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(11, 19, 36, 0.90); /* Fondo oscuro sólido */
+            background: rgba(11, 19, 36, 0.92); 
             z-index: 999;
             justify-content: center;
             align-items: center;
         }
 
         .modal-content-comic {
-            background: #1e293b; /* Caja sólida azul marino institucional */
+            background: #1e293b; 
             padding: 24px 20px;
             border-radius: 24px;
             border: 3px solid #38bdf8; 
@@ -232,11 +229,19 @@
             border-radius: 50%;
         }
 
+        /* Contenedor del Lottie con fondo blanco sólido para eliminar cualquier efecto translúcido/fantasma */
         .raccoon-lottie-container {
             width: 140px;
             height: 160px;
             margin-bottom: 16px;
-            filter: drop-shadow(0 6px 8px rgba(0,0,0,0.5));
+            background: #ffffff; /* Fondo sólido blanco que elimina la transparencia y el halo */
+            border-radius: 16px;  /* Bordes redondeados limpios */
+            border: 2px solid #cbd5e1; /* Borde sutil para darle presencia */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
         }
 
         .modal-btn {
@@ -256,23 +261,31 @@
             transform: scale(1.05);
         }
 
-        /* 6. Adaptación para PC */
+        /* 6. Adaptación específica para PC (Soluciona que los botones tapaban el lema) */
         @media (min-width: 769px) {
             .img-celular { display: none; }
             .img-pc { display: block; }
 
+            .main-container {
+                max-width: 800px;
+                /* Desplazamos el contenedor de los botones hacia abajo para que queden 
+                   exactamente en el centro de la pista de la PC, debajo de "Rastrea, Encuentra, Matricula" */
+                justify-content: flex-end; 
+                padding-bottom: 110px; /* Margen inferior exacto para no tapar el lema ni las marcas de agua */
+            }
+
             .bloque-controles {
                 width: 100%;
-                max-width: 520px;          
-                padding: 24px;             
-                gap: 16px;
-                border-radius: 26px;
+                max-width: 440px;          
+                padding: 22px;             
+                gap: 14px;
+                border-radius: 24px;
             }
 
             .input-busqueda, .btn-opcion {
-                padding: 16px 20px;        
-                font-size: 15px;           
-                border-radius: 16px;
+                padding: 14px 18px;        
+                font-size: 14px;           
+                border-radius: 14px;
             }
         }
     </style>
@@ -329,7 +342,7 @@
         const animacionEl = document.getElementById('animacionLottie');
         
         let tiempoInactividad;
-        const SEGUNDOS_PARA_DORMIR = 30; // Se duerme si pasa 30 segundos sin actividad
+        const SEGUNDOS_PARA_DORMIR = 30;
 
         function abrirModalMapachito(estado) {
             reiniciarTemporizadorInactividad();
@@ -390,14 +403,13 @@
 
         function reiniciarTemporizadorInactividad() {
             clearTimeout(tiempoInactividad);
-            tiempoInactividad = setTimeout(irAEstadoDurmiente, SEGUNDOS_PARA_DORMIR * 1000);
+            tiempoInactividad = setTimeout(irAEstadoDurmiente, SEGUNDOS_PARA_DORNIR = SEGUNDOS_PARA_DORMIR * 1000);
         }
 
         function pararTemporizadorInactividad() {
             clearTimeout(tiempoInactividad);
         }
 
-        // Activación inicial y control de inactividad
         window.onload = function() {
             abrirModalMapachito('saludando');
 
