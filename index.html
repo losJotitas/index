@@ -33,7 +33,7 @@
         overflow: hidden;
     }
 
-   /* Estilos comunes para ambas imágenes de portada */
+    /* Estilos comunes para ambas imágenes de portada */
     .fondo-portada img {
         width: 100%;
         height: 100%;
@@ -46,20 +46,24 @@
 
     /* CONTROL INTELIGENTE DE IMÁGENES: */
 
-    .img-pc {
-        display: none;
-        width: 98%;       /* Un toque menos del 100% para que no sobresalga */
-        height: 100%;
-        object-fit: fill; 
-        margin-left: 1%;  /* Centrado simétrico exacto */
-    }
-    
+    /* Celular: Usamos fill con altura al 100% estirada para que abarque perfectamente de extremo a extremo sin dejar franjas */
     .img-celular {
         display: block;
-        object-fit: contain; 
+        width: 100%;
+        height: 100%;
+        object-fit: fill; 
     }
 
-    /* Cuando la pantalla sea de PC (mayor a 768px), mostramos la de PC ajustada */
+    /* PC: Ancho del 98% con centrado simétrico y fill para evitar espacios */
+    .img-pc {
+        display: none;
+        width: 98%;       
+        height: 100%;
+        object-fit: fill; 
+        margin-left: 1%;  
+    }
+
+    /* Cuando la pantalla sea de PC (mayor a 768px), mostramos la de PC y ocultamos la de celular */
     @media (min-width: 769px) {
         .img-celular {
             display: none;
@@ -255,10 +259,10 @@
 
     <!-- Fondo de pantalla con ambas opciones de imágenes independientes -->
     <div class="fondo-portada">
-        <!-- Imagen diseñada exclusivamente para celulares (ej. formato vertical 9:16) -->
+        <!-- Imagen diseñada exclusivamente para celulares -->
         <img src="portada-celular.jpg" class="img-celular" alt="MAPACHE Móvil">
         
-        <!-- Imagen diseñada exclusivamente para computadoras (ej. formato horizontal 16:9) -->
+        <!-- Imagen diseñada exclusivamente para computadoras -->
         <img src="portada-pc.jpg" class="img-pc" alt="MAPACHE PC">
     </div>
 
