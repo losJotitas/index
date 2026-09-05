@@ -46,17 +46,20 @@
 
     /* CONTROL INTELIGENTE DE IMÁGENES: */
 
-    /* Por defecto ocultamos la de PC y mostramos la de Celular (con contain para que se vea íntegra en móvil) */
     .img-pc {
         display: none;
-        object-fit: cover; /* Cubre toda la pantalla de la PC sin franjas azules a los lados */
+        width: 98%;       /* Un toque menos del 100% para que no sobresalga */
+        height: 100%;
+        object-fit: fill; 
+        margin-left: 1%;  /* Centrado simétrico exacto */
     }
+    
     .img-celular {
         display: block;
         object-fit: contain; 
     }
 
-    /* Cuando la pantalla sea de PC (mayor a 768px), mostramos la de PC en modo cobertura total */
+    /* Cuando la pantalla sea de PC (mayor a 768px), mostramos la de PC ajustada */
     @media (min-width: 769px) {
         .img-celular {
             display: none;
