@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* Desplazamiento nativo libre para el gesto de actualizar */
+    /* Desplazamiento nativo libre para conservar el gesto táctil de actualizar en celulares */
     html, body {
         margin: 0;
         padding: 0;
@@ -21,7 +21,8 @@
         background-color: #0f172a;
     }
 
-    /* Fondo de pantalla ajustado con contain para que la imagen se vea completa y reducida */
+    /* Fondo de pantalla fijo que utiliza object-fit: contain para mostrar toda la imagen 
+       (el título, el mapache y los objetos de los costados) sin recortes en ningún formato */
     .fondo-portada {
         position: fixed;
         top: 0;
@@ -29,48 +30,38 @@
         width: 100vw;
         height: 100vh;
         z-index: 0;
-        pointer-events: none; /* Mantiene el gesto táctil de actualizar en el celular */
+        pointer-events: none; /* Clave absoluta para no bloquear el refresh táctil */
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: #0f172a;
     }
 
     .fondo-portada img {
         width: 100%;
         height: 100%;
-        object-fit: contain; /* Muestra toda la imagen entera sin recortar el título ni al mapache */
+        object-fit: contain; /* Garantiza que la proporción 4:5 se ajuste completa sin recortar bordes */
         object-position: center;
         image-rendering: -webkit-optimize-contrast;
     }
 
-    /* Capa de contraste oscura sutil detrás de los controles */
-    .fondo-portada::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(15, 23, 42, 0.3); 
-    }
-
-    /* Contenedor principal que centra perfectamente los controles */
+    /* Contenedor principal que centra perfectamente los botones sobre el área central del mapa */
     .main-container { 
         position: relative;
         z-index: 2;
         width: 100%;
-        max-width: 420px; 
+        max-width: 400px; 
         min-height: 100vh;
         margin: 0 auto;
         padding: 20px 16px;
         display: flex;
         flex-direction: column;
-        justify-content: center; /* Centrado verticalmente */
+        justify-content: center; /* Centrado exacto verticalmente */
         align-items: center;
         box-sizing: border-box;
     }
 
-    /* Bloque del Buscador y Botones con fondo traslúcido y compacto */
+    /* Bloque del Buscador y Botones con diseño traslúcido y elegante */
     .bloque-controles {
         width: 100%;
         display: flex;
@@ -221,12 +212,12 @@
 </head>
 <body>
 
-    <!-- Fondo de pantalla con imagen completa adaptada -->
+    <!-- Fondo de pantalla fijo con la nueva portada.jpg en formato contain -->
     <div class="fondo-portada">
         <img src="portada.jpg" alt="MAPACHE - Ventanilla & Mi Perú">
     </div>
 
-    <!-- Contenido principal centrado -->
+    <!-- Contenido principal centrado perfectamente -->
     <div class="main-container">
         <div class="bloque-controles">
             <input type="text" class="input-busqueda" placeholder="🔍 Buscar por nombre o número...">
