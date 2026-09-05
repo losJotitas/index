@@ -129,25 +129,25 @@
             filter: brightness(1.08);
         }
 
-        /* Colores exactos personalizados por botón según tu imagen */
+        /* Colores exactos personalizados por botón */
         .btn-verde {
-            background-color: #729b79; /* Verde suave del segundo elemento */
+            background-color: #729b79; 
             box-shadow: 0 0 12px rgba(114, 155, 121, 0.4);
         }
 
         .btn-azul {
-            background-color: #7b8db9; /* Azul lila del tercer elemento */
+            background-color: #7b8db9; 
             box-shadow: 0 0 12px rgba(123, 141, 185, 0.4);
         }
 
         .btn-estatales {
-            background-color: #d18b6d; /* Naranja terracota del cuarto elemento */
+            background-color: #d18b6d; 
             box-shadow: 0 0 12px rgba(209, 139, 109, 0.4);
         }
 
         .btn-particulares {
-            background-color: #a8a697; /* Gris arena/verdoso del quinto elemento */
-            color: #1e293b;            /* Texto oscuro para mejor contraste en este tono claro */
+            background-color: #a8a697; 
+            color: #1e293b;            
             box-shadow: 0 0 12px rgba(168, 166, 151, 0.4);
         }
 
@@ -161,7 +161,7 @@
             flex: 1; 
         }
 
-        /* 6. Estilos para la ventana emergente ("Próximamente") */
+        /* 6. Estilos de la ventana emergente tipo Historieta / Cómic */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -169,45 +169,92 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.65);
             z-index: 999;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(5px);
         }
 
-        .modal-content {
-            background: #1e293b;
-            padding: 24px 32px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+        .modal-content-comic {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 26px 20px;
+            border-radius: 24px;
+            border: 2px solid rgba(56, 189, 248, 0.4);
             text-align: center;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.7);
             max-width: 280px;
             width: 85%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .modal-content h3 {
-            margin: 0 0 12px 0;
-            color: #38bdf8;
-            font-size: 18px;
+        /* Bocadillo de pensamiento */
+        .thought-bubble {
+            position: relative;
+            background: #ffffff;
+            color: #0f172a;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .modal-content p {
-            margin: 0 0 20px 0;
-            color: #f8fafc;
-            font-size: 15px;
+        /* Círculos del pensamiento del cómic que apuntan al mapache */
+        .thought-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+        .thought-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%) translateX(-6px);
+            width: 7px;
+            height: 7px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+
+        .raccoon-avatar {
+            font-size: 52px;
+            margin-bottom: 15px;
+            animation: bounceRaccoon 1.5s infinite ease-in-out;
+        }
+
+        @keyframes bounceRaccoon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
         }
 
         .modal-btn {
-            background: #2563eb;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 10px 24px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.05);
         }
 
         /* 7. Adaptación para Computadora / PC (Pantallas mayores a 768px) */
@@ -267,11 +314,13 @@
         </div>
     </div>
 
-    <!-- Ventana emergente personalizada para el mensaje limpio de "Próximamente" -->
+    <!-- Ventana emergente tipo cómic con el mapache y el pensamiento -->
     <div id="modalAviso" class="modal-overlay" onclick="cerrarAviso()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h3>MAPACHE</h3>
-            <p>Próximamente</p>
+        <div class="modal-content-comic" onclick="event.stopPropagation()">
+            <div class="thought-bubble">
+                Próximamente
+            </div>
+            <div class="raccoon-avatar">🦝</div>
             <button class="modal-btn" onclick="cerrarAviso()">Aceptar</button>
         </div>
     </div>
