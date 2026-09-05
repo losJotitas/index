@@ -75,7 +75,7 @@
             overflow: hidden;
         }
 
-        /* 5. Bloque del Buscador y Botones (Con márgenes laterales elegantes en celular) */
+        /* 5. Bloque del Buscador y Botones */
         .bloque-controles {
             width: 90%;                    
             max-width: 340px;              
@@ -88,13 +88,54 @@
             backdrop-filter: blur(6px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.15);
+            box-sizing: border-box;
         }
 
+        /* Estilos base garantizados para inputs y botones oscuros */
         .input-busqueda {
-        background-color: #ffffff;
-        color: #0f172a;
-        border: none;
-    }
+            width: 100%;
+            padding: 14px 16px;
+            background-color: #ffffff;
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .btn-opcion {
+            width: 100%;
+            padding: 14px 16px;
+            background-color: #1e293b; /* Color oscuro profesional */
+            color: #ffffff;            /* Texto blanco forzado */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: background 0.2s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-opcion:hover {
+            background-color: #334155;
+        }
+
+        .fila-botones-dividida {
+            display: flex; 
+            gap: 8px; 
+            width: 100%;
+        }
+
+        .fila-botones-dividida .btn-opcion {
+            flex: 1; /* Distribuye equitativamente el espacio en la fila */
+        }
+
         /* 6. Adaptación para Computadora / PC (Pantallas mayores a 768px) */
         @media (min-width: 769px) {
             .img-celular {
@@ -116,11 +157,18 @@
                 padding: 16px 20px;
                 font-size: 15px;           
                 border-radius: 16px;
-           .input-busqueda {
-        background-color: #ffffff;
-        color: #0f172a;
-        border: none;
-    }
+            }
+
+            .btn-opcion {
+                padding: 16px 20px;        
+                font-size: 15px;           
+                border-radius: 16px;
+            }
+
+            .fila-botones-dividida .btn-opcion {
+                padding: 16px 15px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -135,13 +183,12 @@
     <!-- Contenedor principal de la interfaz y botones -->
     <div class="main-container">
         <div class="bloque-controles">
-            <!-- Aquí van tus elementos de búsqueda y botones actuales -->
             <input type="text" class="input-busqueda" placeholder="Buscar por nombre o número...">
             <button class="btn-opcion">Ver Todos los Colegios en el Mapa</button>
             <button class="btn-opcion">Filtrar por Redes Educativas (1-9)</button>
-            <div class="fila-botones-dividida" style="display: flex; gap: 8px; width: 100%;">
+            <div class="fila-botones-dividida">
                 <button class="btn-opcion">Colegios Estatales</button>
-                <button class="btn-opcion">Colegios Particulares</button>
+                <button class="btn-opcion" onclick="alert('Próximamente');">Colegios Particulares</button>
             </div>
         </div>
     </div>
