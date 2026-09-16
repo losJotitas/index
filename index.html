@@ -340,7 +340,6 @@
                 const colorPin = (numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568";
                 const textoPin = numRed ? numRed : "🏫";
 
-                // Crear icono clásico de gota de agua invertida con el número dentro
                 const iconoClasico = L.divIcon({
                     className: 'custom-div-icon',
                     html: `
@@ -350,7 +349,7 @@
                         </div>
                     `,
                     iconSize: [30, 42],
-                    iconAnchor: [15, 42], // Ajustado para que la punta exacta de la gota señale la coordenada
+                    iconAnchor: [15, 42],
                     popupAnchor: [0, -38]
                 });
 
@@ -480,11 +479,13 @@
                 : `<div style="background:#f7fafc; border: 2px dashed #cbd5e0; padding:20px; text-align:center; border-radius:8px; margin-bottom:15px;"><span style="font-size: 2rem;">🐾</span><p style="color:#718096; margin-top:5px; font-weight:600; font-size:0.9rem;">Mapachito está preparando la foto</p></div>`;
 
             const nivelesTexto = (colegio.NIVELES || colegio.niveles || '').toLowerCase();
+            const tieneCuna = nivelesTexto.includes("cuna");
             const tieneInicial = nivelesTexto.includes("inicial");
             const tienePrimaria = nivelesTexto.includes("primaria");
             const tieneSecundaria = nivelesTexto.includes("secundaria");
 
             let htmlSemaforo = `
+                <span class="semaforo-tag ${tieneCuna ? 'semaforo-activo' : 'semaforo-inactivo'}">${tieneCuna ? '🟢' : '🔴'} Cuna</span>
                 <span class="semaforo-tag ${tieneInicial ? 'semaforo-activo' : 'semaforo-inactivo'}">${tieneInicial ? '🟢' : '🔴'} Inicial</span>
                 <span class="semaforo-tag ${tienePrimaria ? 'semaforo-activo' : 'semaforo-inactivo'}">${tienePrimaria ? '🟢' : '🔴'} Primaria</span>
                 <span class="semaforo-tag ${tieneSecundaria ? 'semaforo-activo' : 'semaforo-inactivo'}">${tieneSecundaria ? '🟢' : '🔴'} Secundaria</span>
