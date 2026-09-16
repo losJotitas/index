@@ -11,6 +11,17 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { display: flex; height: 100vh; overflow: hidden; background-color: #f4f6f9; }
+        
+        /* Pantalla Principal (Bienvenida) */
+        #pantalla-bienvenida { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); z-index: 3000; display: flex; justify-content: center; align-items: center; color: white; text-align: center; }
+        .welcome-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 40px; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); max-width: 500px; width: 90%; border: 1px solid rgba(255,255,255,0.2); }
+        .welcome-card lottie-player { width: 150px; height: 150px; margin: 0 auto 20px auto; }
+        .welcome-card h1 { font-size: 2rem; margin-bottom: 10px; font-weight: 700; }
+        .welcome-card p { font-size: 1rem; opacity: 0.9; margin-bottom: 25px; line-height: 1.5; }
+        .btn-ingresar { background: #48bb78; color: white; border: none; padding: 12px 30px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s, transform 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .btn-ingresar:hover { background: #38a169; transform: scale(1.05); }
+
+        /* Estructura Principal App */
         #sidebar { width: 420px; background: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; z-index: 1000; }
         
         .header-app { background: #1a365d; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
@@ -86,6 +97,16 @@
     </style>
 </head>
 <body>
+    <!-- Pantalla Principal / Bienvenida -->
+    <div id="pantalla-bienvenida">
+        <div class="welcome-card">
+            <lottie-player src="mapache_saludando.json" background="transparent" speed="1" loop autoplay></lottie-player>
+            <h1>MAPACHE</h1>
+            <p>Directorio Escolar interactivo de Ventanilla y Mi Perú. Encuentra colegios, datos de contacto, niveles educativos y rutas exactas.</p>
+            <button class="btn-ingresar" onclick="entrarAlDirectorio()">🚀 Comenzar Explora</button>
+        </div>
+    </div>
+
     <div id="sidebar">
         <div class="header-app">
             <div class="header-titles">
@@ -143,6 +164,15 @@
         const contenedorResultados = document.getElementById('results-container');
         const inputBuscador = document.getElementById('searchInput');
         let marcadoresCreados = [];
+
+        function entrarAlDirectorio() {
+            document.getElementById('pantalla-bienvenida').style.display = 'none';
+            // Invalidar tamaño del mapa para que Leaflet cargue bien al mostrarse
+            setTimeout(() => { map.invalidateSize(); }, 200);
+            if (typeof colegios !== 'undefined') {
+                mostrarColegios(colegios);
+            }
+        }
 
         function mostrarColegios(lista) {
             contenedorResultados.innerHTML = ""; 
@@ -205,11 +235,8 @@
 
         function reiniciarPantallaPrincipal() {
             inputBuscador.value = "";
-            if (typeof colegios !== 'undefined') {
-                mostrarColegios(colegios);
-            }
+            document.getElementById('pantalla-bienvenida').style.display = 'flex';
             map.setView([-11.875, -77.135], 13);
-            abrirModalMapachito('saludando');
         }
 
         // --- GESTIÓN DE FOTOS EN GITHUB ---
@@ -364,7 +391,6 @@
                     break;
             }
 
-            // Uso correcto del atributo 'src' para lottie-player en vez de .load()
             animacionEl.setAttribute('src', archivoJson);
             textoEl.innerText = textoMensaje;
             modalEl.style.display = 'flex';
@@ -374,7 +400,7 @@
             document.getElementById('modal-mapachito').style.display = 'none';
         }
 
-        // Inicialización de datos
+        // Inicialización preventiva si no cargase el archivo externo
         if (typeof colegios !== 'undefined') {
             mostrarColegios(colegios);
         } else {
