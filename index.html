@@ -7,48 +7,32 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { display: flex; height: 100vh; overflow: hidden; background-color: #f4f6f9; }
-        #sidebar { width: 420px; background: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; z-index: 1000; }
+        body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; background-color: #f4f6f9; }
         
-        .header-app { background: #1a365d; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
-        .header-titles { flex: 1; }
-        .header-app h1 { font-size: 1.2rem; margin-bottom: 2px; }
-        .header-app p { font-size: 0.75rem; opacity: 0.8; }
+        /* Barra superior estilo tu pantalla principal */
+        .top-bar { background: #1a365d; color: white; padding: 10px 15px; display: flex; align-items: center; gap: 15px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .btn-volver { background: #2b6cb0; border: 1px solid #4299e1; color: white; padding: 8px 15px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+        .btn-volver:hover { background: #3182ce; }
         
-        .btn-home { background: #3182ce; border: 1px solid #63b3ed; color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; text-decoration: none; }
-        .btn-home:hover { background: #2b6cb0; }
+        .search-container { flex: 1; }
+        .search-container input { width: 100%; padding: 10px 15px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; outline: none; background: #fff; color: #2d3748; }
+        .search-container input:focus { border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.1); }
 
-        .search-box { padding: 15px; background: #fff; border-bottom: 1px solid #eee; }
-        .search-box input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 0.95rem; outline: none; }
-        .search-box input:focus { border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.1); }
-        #results-container { flex: 1; overflow-y: auto; padding: 15px; }
-        
-        .school-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s; }
-        .school-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .school-card h3 { font-size: 1.05rem; color: #2d3748; margin-bottom: 10px; }
-        
-        .school-badge { display: inline-block; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-bottom: 8px; }
+        /* Mapa a pantalla completa */
+        #map { flex: 1; width: 100%; }
+
+        /* Estilos de los Badges y Popups */
+        .school-badge { display: inline-block; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-bottom: 5px; }
         .badge-estatal { background: #ebf8ff; color: #3182ce; }
         .badge-particular { background: #faf5ff; color: #805ad5; }
 
-        .card-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-        .row-actions { display: flex; gap: 8px; }
-        
-        .btn { flex: 1; padding: 8px; text-align: center; border-radius: 6px; font-size: 0.8rem; font-weight: bold; text-decoration: none; cursor: pointer; border: none; }
-        .btn-primary { background: #3182ce; color: white; }
-        .btn-primary:hover { background: #2b6cb0; }
-        .btn-secondary { background: #edf2f7; color: #4a5568; }
-        .btn-secondary:hover { background: #e2e8f0; }
-        .btn-foto { background: #edf2f7; color: #2b6cb0; border: 1px solid #cbd5e0; width: 100%; }
-        .btn-foto:hover { background: #e2e8f0; }
-
-        #map { flex: 1; height: 100%; }
-
-        .semaforo-container { display: flex; gap: 8px; margin: 6px 0 10px 0; font-size: 0.8rem; flex-wrap: wrap; }
-        .semaforo-tag { padding: 5px 10px; border-radius: 4px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        /* Semáforo de niveles */
+        .semaforo-container { display: flex; gap: 6px; margin: 6px 0 10px 0; font-size: 0.8rem; flex-wrap: wrap; }
+        .semaforo-tag { padding: 4px 8px; border-radius: 4px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
         .semaforo-activo { background: #def7ec; color: #03543f; border: 1px solid #bcf0da; }
         .semaforo-inactivo { background: #fdf2f2; color: #9b1c1c; border: 1px solid #f8d7da; }
 
+        /* Modal Detalle (Segunda Pantalla) */
         #modal-detalle { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: white; width: 90%; max-width: 600px; max-height: 85vh; border-radius: 12px; overflow-y: auto; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #a0aec0; }
@@ -57,30 +41,24 @@
         .modal-body p { font-size: 0.9rem; color: #4a5568; margin-bottom: 10px; line-height: 1.5; }
         .school-photo { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #edf2f7; }
         .mapachito-avisos { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 10px 15px; border-radius: 4px; font-size: 0.85rem; color: #2b6cb0; margin-top: 15px; }
-
-        @media (max-width: 768px) {
-            body { flex-direction: column-reverse; }
-            #sidebar { width: 100%; height: 50vh; }
-            #map { height: 50vh; }
-        }
+        .btn-primary { background: #3182ce; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; }
+        .btn-primary:hover { background: #2b6cb0; }
     </style>
 </head>
 <body>
-    <div id="sidebar">
-        <div class="header-app">
-            <div class="header-titles">
-                <h1>MAPACHE</h1>
-                <p>Ventanilla y Mi Perú</p>
-            </div>
-            <button class="btn-home" onclick="reiniciarPantallaPrincipal()">🏠 Volver al inicio</button>
+
+    <!-- Barra Superior (Pantalla Principal) -->
+    <div class="top-bar">
+        <button class="btn-volver" onclick="reiniciarPantallaPrincipal()">⬅ Volver</button>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Filtrar colegios en el mapa...">
         </div>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Buscar por nombre o número de colegio...">
-        </div>
-        <div id="results-container"></div>
     </div>
+
+    <!-- Mapa -->
     <div id="map"></div>
 
+    <!-- Modal de Detalle (Segunda Pantalla) -->
     <div id="modal-detalle">
         <div class="modal-content">
             <span class="modal-close" onclick="cerrarDetalle()">&times;</span>
@@ -89,70 +67,67 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Asegúrate de que colegios.js esté en la misma carpeta o pega tus datos aquí -->
     <script src="colegios.js"></script>
     <script>
         var map = L.map('map').setView([-11.875, -77.135], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
 
-        const contenedorResultados = document.getElementById('results-container');
         const inputBuscador = document.getElementById('searchInput');
         let marcadoresCreados = [];
 
-        function mostrarColegios(lista) {
-            contenedorResultados.innerHTML = ""; 
+        function mostrarColegiosEnMapa(lista) {
+            // Remover marcadores anteriores
             marcadoresCreados.forEach(item => map.removeLayer(item.marker));
             marcadoresCreados = [];
 
-            if (!lista || lista.length === 0) {
-                contenedorResultados.innerHTML = "<p style='padding:15px; color:#718096;'>No se encontraron colegios.</p>";
-                return;
-            }
+            if (!lista || lista.length === 0) return;
 
             lista.forEach(colegio => {
                 if (!colegio.latitud || !colegio.longitud) return;
 
                 var marker = L.marker([colegio.latitud, colegio.longitud]).addTo(map);
-                marker.bindPopup(`<b>${colegio.nombre_colegio}</b><br>${colegio.gestion} - ${colegio.distrito || 'Ventanilla'}`);
-                marcadoresCreados.push({ colegio, marker });
-
-                const tarjeta = document.createElement('div');
-                tarjeta.className = 'school-card';
-                let claseBadge = colegio.gestion === 'Estatal' ? 'badge-estatal' : 'badge-particular';
-                const urlGoogleMaps = `https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}`;
-
-                tarjeta.innerHTML = `
-                    <span class="school-badge ${claseBadge}">${colegio.gestion}</span>
-                    <h3>${colegio.nombre_colegio}</h3>
-                    <div class="card-actions">
-                        <button class="btn btn-foto" onclick="abrirDetalle('${colegio.nombre_colegio}')">📸 Foto Fachada</button>
-                        <div class="row-actions">
-                            <button class="btn btn-primary" onclick="abrirDetalle('${colegio.nombre_colegio}')">Ver Detalle</button>
-                            <a href="${urlGoogleMaps}" target="_blank" class="btn btn-secondary">Cómo llegar</a>
-                        </div>
+                
+                // Popup enriquecido al hacer clic en el pin del mapa
+                marker.bindPopup(`
+                    <div style="min-width: 200px;">
+                        <b style="font-size: 1rem; color: #1a365d;">${colegio.nombre_colegio}</b><br>
+                        <span style="color: #4a5568;">Código: ${colegio.codigo || 'S/N'}</span><br>
+                        <b>Tipo:</b> ${colegio.gestion}<br>
+                        <b>Red Educativa:</b> ${colegio.red_educativa || 'No especificada'}<br>
+                        <b>Dirección:</b> ${colegio.direccion || 'No especificada'}<br><br>
+                        <button onclick="abrirDetalle('${colegio.nombre_colegio}')" style="background:#3182ce; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; width:100%; font-weight:bold;">Ver Detalle Completo</button>
                     </div>
-                `;
-                contenedorResultados.appendChild(tarjeta);
+                `);
+
+                marcadoresCreados.push({ colegio, marker });
             });
         }
 
+        // Filtrar en tiempo real desde la barra superior
         inputBuscador.addEventListener('input', (e) => {
             const texto = e.target.value.toLowerCase().trim();
             const filtrados = colegios.filter(c => 
                 (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
-                (c.distrito && c.distrito.toLowerCase().includes(texto))
+                (c.distrito && c.distrito.toLowerCase().includes(texto)) ||
+                (c.codigo && c.codigo.toLowerCase().includes(texto))
             );
-            mostrarColegios(filtrados);
+            mostrarColegiosEnMapa(filtrados);
+
+            // Si hay resultados y el usuario escribe, podemos centrar el mapa en el primer resultado opcionalmente
+            if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+            }
         });
 
         function reiniciarPantallaPrincipal() {
             inputBuscador.value = "";
             if (typeof colegios !== 'undefined') {
-                mostrarColegios(colegios);
+                mostrarColegiosEnMapa(colegios);
             }
             map.setView([-11.875, -77.135], 13);
         }
 
+        // Sistema inteligente para buscar fotos en la carpeta fotos/
         function obtenerRutaFoto(nombreColegio) {
             const numerosMatch = nombreColegio.match(/\d+/);
             if (!numerosMatch) return null;
@@ -177,6 +152,7 @@
             return fotosDisponibles[numeroColegio] || null;
         }
 
+        // Segunda Pantalla (Modal de Detalle Completo)
         function abrirDetalle(nombreColegio) {
             const colegio = colegios.find(c => c.nombre_colegio === nombreColegio);
             if (!colegio) return;
@@ -211,8 +187,8 @@
                     <span class="semaforo-tag ${tieneCuna ? 'semaforo-activo' : 'semaforo-inactivo'}">
                         ${tieneCuna ? '🟢' : '🔴'} Cuna (Menores de 3 años)
                     </span>
-                    <span class="semaforo-tag semaforo-inactivo">🔴 Primaria</span>
-                    <span class="semaforo-tag semaforo-inactivo">🔴 Secundaria</span>
+                    <span class="semaforo-tag semaforo-inactivo">🟢 Primaria</span>
+                    <span class="semaforo-tag semaforo-inactivo">🟢 Secundaria</span>
                 `;
             } else {
                 const tieneInicial = nivelesTexto.includes("inicial");
@@ -252,8 +228,8 @@
                     <p style="margin-top: 15px;">🕒 <b>Turnos disponibles:</b> ${colegio.TURNOS || 'Mañana, Tarde'}</p>
                     <p>📋 <b>Requisitos de Matrícula:</b> ${requisitosMatricula}</p>
                 </div>
-                <div style="margin-top: 15px; display: flex; gap: 10px;">
-                    <a href="${urlGoogleMapsModal}" target="_blank" class="btn btn-primary" style="padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%;">🗺️ Abrir ruta exacta en Google Maps</a>
+                <div style="margin-top: 15px;">
+                    <a href="${urlGoogleMapsModal}" target="_blank" class="btn-primary">🗺️ Abrir ruta exacta en Google Maps</a>
                 </div>
                 <div class="mapachito-avisos">
                     💡 <b>Nota de Mapachito:</b> Toda la información proviene de la base de datos oficial de Ventanilla y Mi Perú.
@@ -267,10 +243,11 @@
             document.getElementById('modal-detalle').style.display = 'none';
         }
 
+        // Carga inicial de todos los colegios de colegios.js al abrir la página
         if (typeof colegios !== 'undefined') {
-            mostrarColegios(colegios);
+            mostrarColegiosEnMapa(colegios);
         } else {
-            contenedorResultados.innerHTML = "<p style='padding:15px; color:red;'>Aviso: No se encontró el archivo colegios.js o la variable colegios.</p>";
+            alert("Aviso: No se encontró el archivo colegios.js");
         }
     </script>
 </body>
