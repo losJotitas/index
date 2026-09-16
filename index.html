@@ -21,6 +21,7 @@
             color: #ffffff;
             background-color: #0f172a;
             overflow: hidden;
+            overscroll-behavior-y: contain; /* Previene rebotes extraños en móvil */
         }
 
         /* 2. Pantalla de Portada (Pantalla 1) */
@@ -136,18 +137,18 @@
 
         #map { flex: 1; width: 100%; }
 
-        /* 4. Widget Flotante del Mapachito Durmiendo (Inactivo) */
+        /* 4. Widget Flotante del Mapachito Durmiendo (Inactivo tras 30s) */
         #mapachito-flotante {
             position: fixed;
             bottom: 20px;
             right: 20px;
             width: 75px;
             height: 75px;
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(30, 41, 59, 0.92);
             border: 2px solid #38bdf8;
             border-radius: 50%;
             z-index: 999;
-            display: flex;
+            display: none; /* Oculto por defecto, aparece solo tras 30s de inactividad */
             justify-content: center;
             align-items: center;
             cursor: pointer;
@@ -189,7 +190,7 @@
         .red-8 { background-color: #805ad5; }
         .red-9 { background-color: #d53f8c; }
 
-        /* 6. Forma clásica de Gota de Agua Invertida para el Pin */
+        /* 6. Pins del Mapa */
         .pin-clasico-container { position: relative; width: 30px; height: 42px; }
         .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
         .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
@@ -217,6 +218,25 @@
         .semaforo-activo { background: #def7ec; color: #03543f; border: 1px solid #bcf0da; }
         .semaforo-inactivo { background: #fdf2f2; color: #9b1c1c; border: 1px solid #f8d7da; }
 
+        /* Indicador visual de Pull-to-Refresh en Celular */
+        #pull-indicator {
+            position: fixed;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1e293b;
+            color: #38bdf8;
+            font-weight: bold;
+            font-size: 0.85rem;
+            z-index: 30000;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
         @media (min-width: 769px) {
             .img-celular { display: none; }
             .img-pc { display: block; }
@@ -224,6 +244,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Indicador de Refresco Táctil para Celulares -->
+    <div id="pull-indicator">🔄 Desliza hacia abajo para actualizar...</div>
 
     <!-- ================= PANTALLA 1: PORTADA ================= -->
     <div id="pantalla-portada">
@@ -258,7 +281,7 @@
         <div id="map"></div>
     </div>
 
-    <!-- WIDGET FLOTANTE: MAPACHITO DURMIENDO (Inactivo) -->
+    <!-- WIDGET FLOTANTE: MAPACHITO DURMIENDO (Solo aparece tras 30s de inactividad) -->
     <div id="mapachito-flotante" onclick="despertarMapachito()" title="¡Haz clic para despertar a Mapachito!">
         <div class="burbuja-ronquido">zzz... 🐾</div>
         <lottie-player id="animacionDurmiendo" src="mapache_durmiendo.json" background="transparent" speed="1" loop autoplay></lottie-player>
@@ -313,6 +336,28 @@
 
         let marcadoresCreados = [];
         let accionPendiente = null;
+        let temporizadorInactividad = null;
+
+        // Control de Inactividad (30 segundos)
+        function reiniciarTemporizadorInactividad() {
+            // Ocultar widget de dormido si estaba visible
+            const widgetDormido = document.getElementById('mapachito-flotante');
+            if (widgetDormido) widgetDormido.style.display = 'none';
+
+            if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
+
+            // Configurar 30 segundos exactos (30000 ms)
+            temporizadorInactividad = setTimeout(() => {
+                if (widgetDormido) {
+                    widgetDormido.style.display = 'flex';
+                }
+            }, 30000);
+        }
+
+        // Detectar cualquier interacción del usuario para mantener despierto a Mapachito
+        ['click', 'mousemove', 'keypress', 'touchstart', 'scroll'].forEach(evento => {
+            window.addEventListener(evento, reiniciarTemporizadorInactividad, true);
+        });
 
         const coloresRedes = {
             1: "#e53e3e", 2: "#dd6b20", 3: "#d69e2e", 4: "#38a169",
@@ -426,7 +471,6 @@
             document.getElementById('pantalla-mapa').style.display = 'none';
             document.getElementById('pantalla-portada').style.display = 'flex';
             document.getElementById('inputPortada').value = '';
-            // Mapachito vuelve a descansar pasivamente en su widget flotante
         }
 
         // Buscador desde la Portada
@@ -536,7 +580,7 @@
         function abrirModalMapachito(estado, mensajePersonalizado) {
             let archivoJson = 'mapache_saludando.json';
             if (estado === 'buscando') {
-                archivoJson = 'mapache_buscando.json'; // O usa 'mapache_pensando.json' según tus archivos
+                archivoJson = 'mapache_buscando.json';
             } else if (estado === 'pensando') {
                 archivoJson = 'mapache_pensando.json';
             }
@@ -555,14 +599,46 @@
             }
         }
 
-        // Despertar al Mapachito flotante si el usuario le hace clic
         function despertarMapachito() {
-            abrirModalMapachito('pensando', "¡Hola! Estoy aquí vigilando el mapa. ¿Qué colegio estás buscando hoy? 🦝✨");
+            document.getElementById('mapachito-flotante').style.display = 'none';
+            abrirModalMapachito('pensando', "¡Zzz... Ah, hola! Estaba descansando, pero ya desperté. ¿En qué te ayudo? 🦝✨");
+            reiniciarTemporizadorInactividad();
         }
+
+        // Pull-to-Refresh Táctil para Celulares y Tablets
+        let touchstartY = 0;
+        let touchendY = 0;
+        const pullIndicator = document.getElementById('pull-indicator');
+
+        window.addEventListener('touchstart', e => {
+            if (window.scrollY === 0) {
+                touchstartY = e.changedTouches[0].screenY;
+            }
+        }, {passive: true});
+
+        window.addEventListener('touchmove', e => {
+            touchendY = e.changedTouches[0].screenY;
+            if (touchendY - touchstartY > 80 && window.scrollY === 0) {
+                pullIndicator.style.transform = 'translateY(50px)';
+            }
+        }, {passive: true});
+
+        window.addEventListener('touchend', e => {
+            touchendY = e.changedTouches[0].screenY;
+            if (touchendY - touchstartY > 100 && window.scrollY === 0) {
+                pullIndicator.innerText = "✨ ¡Actualizando directorio escolar!...";
+                setTimeout(() => {
+                    window.location.reload();
+                }, 800);
+            } else {
+                pullIndicator.style.transform = 'translateY(0)';
+            }
+        }, {passive: true});
 
         // Bienvenida inicial al cargar la página
         window.onload = function() {
             abrirModalMapachito('pensando', "¡Hola! Soy Mapachito, tu guía escolar en Ventanilla y Mi Perú. ¡Explora conmigo! 🎒🏫");
+            reiniciarTemporizadorInactividad();
         };
     </script>
 </body>
