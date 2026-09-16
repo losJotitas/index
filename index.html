@@ -136,7 +136,41 @@
 
         #map { flex: 1; width: 100%; }
 
-        /* 4. Modal Redes Educativas (Desplegable de las 9 Redes) */
+        /* 4. Widget Flotante del Mapachito Durmiendo (Inactivo) */
+        #mapachito-flotante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 75px;
+            height: 75px;
+            background: rgba(30, 41, 59, 0.9);
+            border: 2px solid #38bdf8;
+            border-radius: 50%;
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease;
+        }
+        #mapachito-flotante:hover { transform: scale(1.08); }
+        #mapachito-flotante lottie-player { width: 65px; height: 65px; pointer-events: none; }
+        .burbuja-ronquido {
+            position: absolute;
+            top: -22px;
+            right: -5px;
+            background: #ffffff;
+            color: #0f172a;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            white-space: nowrap;
+        }
+
+        /* 5. Modal Redes Educativas */
         #modal-redes { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.85); z-index: 9998; justify-content: center; align-items: center; }
         .modal-redes-content { background: #1e293b; width: 90%; max-width: 400px; border-radius: 20px; border: 2px solid #38bdf8; padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto; }
         .modal-redes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
@@ -145,59 +179,25 @@
         .btn-red-item { padding: 12px; border-radius: 12px; border: none; color: white; font-weight: bold; font-size: 0.9rem; cursor: pointer; text-align: center; transition: transform 0.2s; }
         .btn-red-item:hover { transform: scale(1.03); filter: brightness(1.1); }
 
-        /* Colores únicos para las 9 Redes */
-        .red-1 { background-color: #e53e3e; } /* Rojo */
-        .red-2 { background-color: #dd6b20; } /* Naranja */
-        .red-3 { background-color: #d69e2e; color: #1a202c; } /* Amarillo oscuro */
-        .red-4 { background-color: #38a169; } /* Verde esmeralda */
-        .red-5 { background-color: #319795; } /* Verde azulado */
-        .red-6 { background-color: #3182ce; } /* Azul */
-        .red-7 { background-color: #5a67d8; } /* Índigo */
-        .red-8 { background-color: #805ad5; } /* Morado */
-        .red-9 { background-color: #d53f8c; } /* Rosado */
+        .red-1 { background-color: #e53e3e; }
+        .red-2 { background-color: #dd6b20; }
+        .red-3 { background-color: #d69e2e; color: #1a202c; }
+        .red-4 { background-color: #38a169; }
+        .red-5 { background-color: #319795; }
+        .red-6 { background-color: #3182ce; }
+        .red-7 { background-color: #5a67d8; }
+        .red-8 { background-color: #805ad5; }
+        .red-9 { background-color: #d53f8c; }
 
-        /* 5. Forma clásica de Gota de Agua Invertida para el Pin */
-        .pin-clasico-container {
-            position: relative;
-            width: 30px;
-            height: 42px;
-        }
+        /* 6. Forma clásica de Gota de Agua Invertida para el Pin */
+        .pin-clasico-container { position: relative; width: 30px; height: 42px; }
+        .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
+        .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
 
-        .pin-gota {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 30px;
-            height: 30px;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.4);
-            border: 2px solid #ffffff;
-        }
-
-        .pin-texto {
-            position: absolute;
-            top: 4px;
-            left: 0;
-            width: 30px;
-            height: 30px;
-            transform: rotate(0deg);
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-        }
-
-        /* 6. Modal Lottie Mapachito y Detalles */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 9999; justify-content: center; align-items: center; }
+        /* 7. Modal Reactivo de Mapachito */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; }
         .modal-content-comic { background: #1e293b; padding: 24px 20px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 290px; width: 85%; display: flex; flex-direction: column; align-items: center; }
-        .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 10px 18px; border-radius: 18px; font-weight: 700; font-size: 15px; margin-bottom: 14px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 85%; }
+        .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 10px 18px; border-radius: 18px; font-weight: 700; font-size: 14px; margin-bottom: 14px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 95%; line-height: 1.4; }
         .raccoon-lottie-container { width: 140px; height: 160px; margin-bottom: 16px; background: #ffffff; border-radius: 16px; border: 2px solid #cbd5e1; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; }
 
@@ -207,7 +207,6 @@
         .modal-header { border-bottom: 1px solid #edf2f7; padding-bottom: 15px; margin-bottom: 15px; }
         .modal-body p { font-size: 0.9rem; color: #4a5568; margin-bottom: 10px; line-height: 1.5; }
         .school-photo { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #edf2f7; }
-        .mapachito-avisos { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 10px 15px; border-radius: 4px; font-size: 0.85rem; color: #2b6cb0; margin-top: 15px; }
         .btn-primary { background: #3182ce; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; }
         
         .school-badge { display: inline-block; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-bottom: 5px; }
@@ -237,12 +236,12 @@
             <div class="bloque-controles">
                 <input type="text" id="inputPortada" class="input-busqueda" placeholder="Buscar por nombre o número...">
                 
-                <button class="btn-opcion btn-verde" onclick="irAlMapa('todos')">Ver Todos los Colegios en el Mapa</button>
-                <button class="btn-opcion btn-azul" onclick="abrirModalRedes()">Filtrar por Redes Educativas (1-9)</button>
+                <button class="btn-opcion btn-verde" onclick="interactuarYEjecutar('todos')">Ver Todos los Colegios en el Mapa</button>
+                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito()">Filtrar por Redes Educativas (1-9)</button>
                 
                 <div class="fila-botones-dividida">
-                    <button class="btn-opcion btn-estatales" onclick="irAlMapa('Estatal')">Colegios Estatales</button>
-                    <button class="btn-opcion btn-particulares" onclick="irAlMapa('Particular')">Colegios Particulares</button>
+                    <button class="btn-opcion btn-estatales" onclick="interactuarYEjecutar('Estatal')">Colegios Estatales</button>
+                    <button class="btn-opcion btn-particulares" onclick="interactuarYEjecutar('Particular')">Colegios Particulares</button>
                 </div>
             </div>
         </div>
@@ -259,6 +258,12 @@
         <div id="map"></div>
     </div>
 
+    <!-- WIDGET FLOTANTE: MAPACHITO DURMIENDO (Inactivo) -->
+    <div id="mapachito-flotante" onclick="despertarMapachito()" title="¡Haz clic para despertar a Mapachito!">
+        <div class="burbuja-ronquido">zzz... 🐾</div>
+        <lottie-player id="animacionDurmiendo" src="mapache_durmiendo.json" background="transparent" speed="1" loop autoplay></lottie-player>
+    </div>
+
     <!-- ================= MODAL DESPLEGABLE DE LAS 9 REDES EDUCATIVAS ================= -->
     <div id="modal-redes" onclick="cerrarModalRedes()">
         <div class="modal-redes-content" onclick="event.stopPropagation()">
@@ -267,27 +272,27 @@
                 <span style="cursor:pointer; font-size:1.4rem; color:#a0aec0;" onclick="cerrarModalRedes()">&times;</span>
             </div>
             <div class="redes-grid">
-                <button class="btn-red-item red-1" onclick="filtrarPorRed(1)">Red 01</button>
-                <button class="btn-red-item red-2" onclick="filtrarPorRed(2)">Red 02</button>
-                <button class="btn-red-item red-3" onclick="filtrarPorRed(3)">Red 03</button>
-                <button class="btn-red-item red-4" onclick="filtrarPorRed(4)">Red 04</button>
-                <button class="btn-red-item red-5" onclick="filtrarPorRed(5)">Red 05</button>
-                <button class="btn-red-item red-6" onclick="filtrarPorRed(6)">Red 06</button>
-                <button class="btn-red-item red-7" onclick="filtrarPorRed(7)">Red 07</button>
-                <button class="btn-red-item red-8" onclick="filtrarPorRed(8)">Red 08</button>
-                <button class="btn-red-item red-9" onclick="filtrarPorRed(9)">Red 09</button>
+                <button class="btn-red-item red-1" onclick="filtrarPorRedConMapachito(1)">Red 01</button>
+                <button class="btn-red-item red-2" onclick="filtrarPorRedConMapachito(2)">Red 02</button>
+                <button class="btn-red-item red-3" onclick="filtrarPorRedConMapachito(3)">Red 03</button>
+                <button class="btn-red-item red-4" onclick="filtrarPorRedConMapachito(4)">Red 04</button>
+                <button class="btn-red-item red-5" onclick="filtrarPorRedConMapachito(5)">Red 05</button>
+                <button class="btn-red-item red-6" onclick="filtrarPorRedConMapachito(6)">Red 06</button>
+                <button class="btn-red-item red-7" onclick="filtrarPorRedConMapachito(7)">Red 07</button>
+                <button class="btn-red-item red-8" onclick="filtrarPorRedConMapachito(8)">Red 08</button>
+                <button class="btn-red-item red-9" onclick="filtrarPorRedConMapachito(9)">Red 09</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Cómics Mapachito (Portada) -->
+    <!-- Modal Reactivo de Mapachito (Pensamientos / Reacciones) -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
             <div class="raccoon-lottie-container">
                 <lottie-player id="animacionLottie" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>
             </div>
-            <button class="modal-btn" onclick="cerrarModalMapachito()">Aceptar</button>
+            <button class="modal-btn" onclick="cerrarModalMapachito()">¡Entendido! 🚀</button>
         </div>
     </div>
 
@@ -307,18 +312,11 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
 
         let marcadoresCreados = [];
+        let accionPendiente = null;
 
-        // Colores asignados para cada red educativa
         const coloresRedes = {
-            1: "#e53e3e",
-            2: "#dd6b20",
-            3: "#d69e2e",
-            4: "#38a169",
-            5: "#319795",
-            6: "#3182ce",
-            7: "#5a67d8",
-            8: "#805ad5",
-            9: "#d53f8c"
+            1: "#e53e3e", 2: "#dd6b20", 3: "#d69e2e", 4: "#38a169",
+            5: "#319795", 6: "#3182ce", 7: "#5a67d8", 8: "#805ad5", 9: "#d53f8c"
         };
 
         function extraerNumeroRed(redStr) {
@@ -370,8 +368,22 @@
             });
         }
 
-        // Navegación de Portada a Mapa
-        function irAlMapa(filtroTipo) {
+        // Lógica de Transiciones con Reacciones de Mapachito
+        function interactuarYEjecutar(tipoFiltro) {
+            let mensaje = "¡Buscando colegios en el mapa para ti!";
+            if (tipoFiltro === 'Estatal') {
+                mensaje = "¡Excelente! Preparando el radar para ubicar todos los colegios Estatales de la zona. 🎒";
+            } else if (tipoFiltro === 'Particular') {
+                mensaje = "¡Muy bien! Desplegando las opciones de colegios Particulares. 📝";
+            } else {
+                mensaje = "¡Genial! Alistando todo el directorio escolar de Ventanilla y Mi Perú. 🗺️";
+            }
+
+            accionPendiente = () => ejecutarIrAlMapa(tipoFiltro);
+            abrirModalMapachito('buscando', mensaje);
+        }
+
+        function ejecutarIrAlMapa(filtroTipo) {
             document.getElementById('pantalla-portada').style.display = 'none';
             document.getElementById('pantalla-mapa').style.display = 'flex';
             setTimeout(() => { map.invalidateSize(); }, 200);
@@ -384,53 +396,56 @@
             mostrarColegiosEnMapa(colegiosFiltrados);
         }
 
-        // Funciones del Modal Desplegable de Redes
-        function abrirModalRedes() {
-            document.getElementById('modal-redes').style.display = 'flex';
+        function abrirModalRedesConMapachito() {
+            accionPendiente = () => document.getElementById('modal-redes').style.display = 'flex';
+            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar? 🏫");
         }
 
-        function cerrarModalRedes() {
-            document.getElementById('modal-redes').style.display = 'none';
-        }
-
-        function filtrarPorRed(numeroRed) {
+        function filtrarPorRedConMapachito(numeroRed) {
             cerrarModalRedes();
-            document.getElementById('pantalla-portada').style.display = 'none';
-            document.getElementById('pantalla-mapa').style.display = 'flex';
-            setTimeout(() => { map.invalidateSize(); }, 200);
+            accionPendiente = () => {
+                document.getElementById('pantalla-portada').style.display = 'none';
+                document.getElementById('pantalla-mapa').style.display = 'flex';
+                setTimeout(() => { map.invalidateSize(); }, 200);
 
-            const filtrados = colegios.filter(c => {
-                const num = extraerNumeroRed(c.red_educativa);
-                return num === numeroRed;
-            });
+                const filtrados = colegios.filter(c => {
+                    const num = extraerNumeroRed(c.red_educativa);
+                    return num === numeroRed;
+                });
 
-            mostrarColegiosEnMapa(filtrados);
+                mostrarColegiosEnMapa(filtrados);
 
-            if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-            }
+                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                }
+            };
+            abrirModalMapachito('buscando', `¡Buscando colegios de la Red Educativa N° ${numeroRed}! 🔍`);
         }
 
         function volverAPortada() {
             document.getElementById('pantalla-mapa').style.display = 'none';
             document.getElementById('pantalla-portada').style.display = 'flex';
             document.getElementById('inputPortada').value = '';
+            // Mapachito vuelve a descansar pasivamente en su widget flotante
         }
 
         // Buscador desde la Portada
         document.getElementById('inputPortada').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 const texto = this.value.toLowerCase().trim();
-                document.getElementById('pantalla-portada').style.display = 'none';
-                document.getElementById('pantalla-mapa').style.display = 'flex';
-                setTimeout(() => { map.invalidateSize(); }, 200);
+                accionPendiente = () => {
+                    document.getElementById('pantalla-portada').style.display = 'none';
+                    document.getElementById('pantalla-mapa').style.display = 'flex';
+                    setTimeout(() => { map.invalidateSize(); }, 200);
 
-                const filtrados = colegios.filter(c => 
-                    (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
-                    (c.codigo && c.codigo.toLowerCase().includes(texto))
-                );
-                mostrarColegiosEnMapa(filtrados);
-                document.getElementById('searchInputMap').value = texto;
+                    const filtrados = colegios.filter(c => 
+                        (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
+                        (c.codigo && c.codigo.toLowerCase().includes(texto))
+                    );
+                    mostrarColegiosEnMapa(filtrados);
+                    document.getElementById('searchInputMap').value = texto;
+                };
+                abrirModalMapachito('buscando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`);
             }
         });
 
@@ -513,23 +528,41 @@
 
         function cerrarDetalle() { document.getElementById('modal-detalle').style.display = 'none'; }
 
-        // Funciones del Modal de Lottie Mapachito
-        const modalEl = document.getElementById('modalMapachito');
-        const textoEl = document.getElementById('textoMapachito');
-        const animacionEl = document.getElementById('animacionLottie');
+        // Funciones del Modal Dinámico del Mapachito
+        const modalMapachitoEl = document.getElementById('modalMapachito');
+        const textoMapachitoEl = document.getElementById('textoMapachito');
+        const animacionLottieEl = document.getElementById('animacionLottie');
 
-        function abrirModalMapachito(estado) {
+        function abrirModalMapachito(estado, mensajePersonalizado) {
             let archivoJson = 'mapache_saludando.json';
-            let textoMensaje = '¡Bienvenidos a Ventanilla y Mi Perú!';
-            animacionEl.load(archivoJson);
-            textoEl.innerText = textoMensaje;
-            modalEl.style.display = 'flex';
+            if (estado === 'buscando') {
+                archivoJson = 'mapache_buscando.json'; // O usa 'mapache_pensando.json' según tus archivos
+            } else if (estado === 'pensando') {
+                archivoJson = 'mapache_pensando.json';
+            }
+
+            animacionLottieEl.load(archivoJson);
+            textoMapachitoEl.innerText = mensajePersonalizado;
+            modalMapachitoEl.style.display = 'flex';
         }
 
-        function cerrarModalMapachito() { modalEl.style.display = 'none'; }
+        function cerrarModalMapachito() {
+            modalMapachitoEl.style.display = 'none';
+            if (accionPendiente) {
+                const fn = accionPendiente;
+                accionPendiente = null;
+                fn();
+            }
+        }
 
+        // Despertar al Mapachito flotante si el usuario le hace clic
+        function despertarMapachito() {
+            abrirModalMapachito('pensando', "¡Hola! Estoy aquí vigilando el mapa. ¿Qué colegio estás buscando hoy? 🦝✨");
+        }
+
+        // Bienvenida inicial al cargar la página
         window.onload = function() {
-            abrirModalMapachito('saludando');
+            abrirModalMapachito('pensando', "¡Hola! Soy Mapachito, tu guía escolar en Ventanilla y Mi Perú. ¡Explora conmigo! 🎒🏫");
         };
     </script>
 </body>
