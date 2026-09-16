@@ -9,7 +9,7 @@
     <!-- Librería Lottie Player -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     
-    <!-- Librería Leaflet para el Mapa (Segunda Pantalla) -->
+    <!-- Librería Leaflet para el Mapa -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -152,28 +152,47 @@
             flex: 1; 
         }
 
-        /* --- VISTA 2: MAPA INTERACTIVO --- */
-        #mapa-container {
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            position: relative;
+        /* --- VISTA 2: SEGUNDA PANTALLA (MAPA) --- */
+        #vista-mapa {
+            flex-direction: column;
+        }
+
+        .header-mapa {
+            background: #0f172a;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+            z-index: 1000;
         }
 
         .btn-volver {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            background: #0f172a;
+            background: #1e293b;
             color: white;
             border: 2px solid #38bdf8;
-            padding: 10px 18px;
-            border-radius: 12px;
+            padding: 8px 14px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             font-family: 'Montserrat', sans-serif;
+        }
+
+        .input-mapa-busqueda {
+            flex: 1;
+            padding: 10px 14px;
+            background-color: #ffffff;
+            color: #0f172a;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        #mapa-container {
+            width: 100vw;
+            flex: 1;
         }
 
         /* --- VENTANA MODAL --- */
@@ -185,7 +204,7 @@
             width: 100vw;
             height: 100vh;
             background: rgba(11, 19, 36, 0.92);
-            z-index: 2000;
+            z-index: 3000;
             justify-content: center;
             align-items: center;
         }
@@ -285,15 +304,16 @@
 
         <div class="main-container">
             <div class="bloque-controles">
-                <!-- Buscador que activa la transición al mapa -->
-                <input type="text" id="inputBuscador" class="input-busqueda" placeholder="Buscar por nombre o número..." onkeypress="handleBusqueda(event)">
+                <!-- Buscador principal -->
+                <input type="text" id="inputBuscadorPrincipal" class="input-busqueda" placeholder="Buscar por nombre o número..." onkeypress="handleBusquedaPrincipal(event)">
                 
-                <button class="btn-opcion btn-verde" onclick="irAlMapa('todos')">Ver Todos los Colegios en el Mapa</button>
-                <button class="btn-opcion btn-azul" onclick="irAlMapa('redes')">Filtrar por Redes Educativas (1-9)</button>
+                <!-- Botones que activan modal primero o van directamente al mapa con filtro -->
+                <button class="btn-opcion btn-verde" onclick="ejecutarAccionBoton('todos')">Ver Todos los Colegios en el Mapa</button>
+                <button class="btn-opcion btn-azul" onclick="ejecutarAccionBoton('redes')">Filtrar por Redes Educativas (1-9)</button>
                 
                 <div class="fila-botones-dividida">
-                    <button class="btn-opcion btn-estatales" onclick="irAlMapa('estatales')">Colegios Estatales</button>
-                    <button class="btn-opcion btn-particulares" onclick="irAlMapa('particulares')">Colegios Particulares</button>
+                    <button class="btn-opcion btn-estatales" onclick="ejecutarAccionBoton('estatales')">Colegios Estatales</button>
+                    <button class="btn-opcion btn-particulares" onclick="ejecutarAccionBoton('particulares')">Colegios Particulares</button>
                 </div>
             </div>
         </div>
@@ -301,7 +321,10 @@
 
     <!-- ================= VISTA 2: SEGUNDA PANTALLA (MAPA) ================= -->
     <div id="vista-mapa" class="vista">
-        <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
+        <div class="header-mapa">
+            <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
+            <input type="text" id="inputBuscadorMapa" class="input-mapa-busqueda" placeholder="Filtrar colegios en el mapa..." oninput="filtrarColegiosMapa()">
+        </div>
         <div id="mapa-container"></div>
     </div>
 
@@ -325,8 +348,20 @@
         let tiempoInactividad;
         const SEGUNDOS_PARA_DORMIR = 30;
         let mapa = null;
+        let marcadoresLayer = null;
 
-        function abrirModalMapachito(estado) {
+        // Base de datos de ejemplo (Puedes reemplazarla o adaptarla con tus colegios reales de Ventanilla y Mi Perú)
+        const colegiosData = [
+            { id: 1, nombre: "Colegio Nacional Ventanilla", tipo: "estatal", red: "Red 1", lat: -11.8700, lng: -77.1250, codigo: "001", direccion: "Av. La Playa s/n" },
+            { id: 2, nombre: "Colegio Mi Perú 5127", tipo: "estatal", red: "Red 3", lat: -11.8550, lng: -77.1100, codigo: "002", direccion: "Sector K Mi Perú" },
+            { id: 3, nombre: "Colegio Particular Divino Maestro", tipo: "particular", red: "Red 2", lat: -11.8650, lng: -77.1350, codigo: "003", direccion: "Calle Los Rosales 120" },
+            { id: 4, nombre: "Colegio San Pedro Ventanilla", tipo: "estatal", red: "Red 4", lat: -11.8800, lng: -77.1400, codigo: "004", direccion: "Asoc. Pro Vivienda" },
+            { id: 5, nombre: "Colegio Particular Santa Rosa", tipo: "particular", red: "Red 5", lat: -11.8500, lng: -77.1200, codigo: "005", direccion: "Av. Principal Mi Perú" }
+        ];
+
+        let filtroActualGlobal = 'todos';
+
+        function abrirModalMapachito(estado, callbackAccion) {
             reiniciarTemporizadorInactividad();
             let archivoJson = '';
             let textoMensaje = '';
@@ -338,19 +373,19 @@
                     break;
                 case 'feliz':
                     archivoJson = 'mapache_feliz.json';
-                    textoMensaje = '¡Excelente! Aquí tienes la información.';
+                    textoMensaje = '¡Excelente! Mostrando Colegios Estatales.';
                     break;
                 case 'pensando':
                     archivoJson = 'mapache_pensando.json';
-                    textoMensaje = 'Analizando las redes educativas...';
+                    textoMensaje = 'Analizando las redes educativas (1-9)...';
                     break;
                 case 'olfateando':
                     archivoJson = 'mapache_olfateando.json';
-                    textoMensaje = 'Rastreando colegios en el mapa...';
+                    textoMensaje = 'Rastreando todos los colegios en el mapa...';
                     break;
                 case 'sorprendido':
                     archivoJson = 'mapache_sorprendido.json';
-                    textoMensaje = '¡Próximamente más novedades!';
+                    textoMensaje = 'Mostrando Colegios Particulares.';
                     break;
                 case 'durmiendo':
                     archivoJson = 'mapache_durmiendo.json';
@@ -366,6 +401,9 @@
             textoEl.innerText = textoMensaje;
             modalEl.style.display = 'flex';
 
+            // Al cerrar el modal, ejecutamos la acción que correspondía (ej. ir al mapa)
+            window.accionPendiente = callbackAccion;
+
             if(estado === 'durmiendo') {
                 pararTemporizadorInactividad();
             }
@@ -374,11 +412,16 @@
         function cerrarModalMapachito() {
             modalEl.style.display = 'none';
             reiniciarTemporizadorInactividad();
+            if (window.accionPendiente) {
+                let fn = window.accionPendiente;
+                window.accionPendiente = null;
+                fn();
+            }
         }
 
         function irAEstadoDurmiente() {
             if (modalEl.style.display === 'none') {
-                abrirModalMapachito('durmiendo');
+                abrirModalMapachito('durmiendo', null);
             }
         }
 
@@ -391,43 +434,125 @@
             clearTimeout(tiempoInactividad);
         }
 
-        /* --- CONTROL DE VISTAS Y TRANSICIONES --- */
+        // Manejo de botones de la pantalla principal con su respectivo modal y animación de Mapachito
+        function ejecutarAccionBoton(tipoFiltro) {
+            filtroActualGlobal = tipoFiltro;
+            let estadoMapachito = 'olfateando';
+            
+            if (tipoFiltro === 'estatales') estadoMapachito = 'feliz';
+            else if (tipoFiltro === 'particulares') estadoMapachito = 'sorprendido';
+            else if (tipoFiltro === 'redes') estadoMapachito = 'pensando';
+
+            abrirModalMapachito(estadoMapachito, function() {
+                irAlMapa(tipoFiltro);
+            });
+        }
+
+        function handleBusquedaPrincipal(event) {
+            if (event.key === 'Enter') {
+                const query = document.getElementById('inputBuscadorPrincipal').value.trim();
+                if (query !== "") {
+                    filtroActualGlobal = 'busqueda:' + query;
+                    abrirModalMapachito('olfateando', function() {
+                        irAlMapa(filtroActualGlobal);
+                    });
+                }
+            }
+        }
+
+        /* --- CONTROL DE VISTAS Y MAPA --- */
         function irAlMapa(filtro) {
-            // Ocultar portada y mostrar mapa
             document.getElementById('vista-portada').classList.remove('activa');
             document.getElementById('vista-mapa').classList.add('activa');
 
-            // Inicializar mapa de Leaflet si no existe
             if (!mapa) {
-                mapa = L.map('mapa-container').setView([-11.8685, -77.1265], 13); // Coordenadas aprox. Ventanilla
+                mapa = L.map('mapa-container').setView([-11.8685, -77.1265], 13);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors'
                 }).addTo(mapa);
+                
+                marcadoresLayer = L.layerGroup().addTo(mapa);
             } else {
                 mapa.invalidateSize();
             }
 
-            // Aquí puedes manejar la lógica del filtro seleccionado ("todos", "redes", "estatales", "particulares")
-            console.log("Filtro aplicado:", filtro);
+            renderizarPines(filtro);
         }
 
         function volverAPortada() {
             document.getElementById('vista-mapa').classList.remove('activa');
             document.getElementById('vista-portada').classList.add('activa');
+            document.getElementById('inputBuscadorPrincipal').value = '';
             reiniciarTemporizadorInactividad();
         }
 
-        function handleBusqueda(event) {
-            if (event.key === 'Enter') {
-                const query = document.getElementById('inputBuscador').value;
-                if (query.trim() !== "") {
-                    irAlMapa('busqueda:' + query);
-                }
+        function renderizarPines(filtro) {
+            if (!marcadoresLayer) return;
+            marcadoresLayer.clearLayers();
+
+            let colegiosFiltrados = colegiosData;
+
+            if (filtro === 'estatales') {
+                colegiosFiltrados = colegiosData.filter(c => c.tipo === 'estatal');
+            } else if (filtro === 'particulares') {
+                colegiosFiltrados = colegiosData.filter(c => c.tipo === 'particular');
+            } else if (filtro === 'redes') {
+                // Aquí puedes mostrar todos o un subconjunto de redes (1-9)
+                colegiosFiltrados = colegiosData;
+            } else if (filtro && filtro.startsWith('busqueda:')) {
+                let query = filtro.replace('busqueda:', '').toLowerCase();
+                colegiosFiltrados = colegiosData.filter(c => 
+                    c.nombre.toLowerCase().includes(query) || c.codigo.includes(query)
+                );
+                document.getElementById('inputBuscadorMapa').value = query;
             }
+
+            colegiosFiltrados.forEach(colegio => {
+                let marker = L.marker([colegio.lat, colegio.lng]);
+                
+                // Ventana desplegable (Popup) con la información general del colegio
+                let contenidoPopup = `
+                    <div style="font-family: 'Montserrat', sans-serif; color: #0f172a; min-width: 180px;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 15px; color: #1e293b;">${colegio.nombre}</h3>
+                        <p style="margin: 4px 0; font-size: 13px;"><b>Código:</b> ${colegio.codigo}</p>
+                        <p style="margin: 4px 0; font-size: 13px;"><b>Tipo:</b> ${colegio.tipo.toUpperCase()}</p>
+                        <p style="margin: 4px 0; font-size: 13px;"><b>Red Educativa:</b> ${colegio.red}</p>
+                        <p style="margin: 4px 0; font-size: 13px;"><b>Dirección:</b> ${colegio.direccion}</p>
+                    </div>
+                `;
+
+                marker.bindPopup(contenidoPopup);
+                marcadoresLayer.addLayer(marker);
+            });
+        }
+
+        function filtrarColegiosMapa() {
+            let query = document.getElementById('inputBuscadorMapa').value.toLowerCase();
+            if(!marcadoresLayer) return;
+            marcadoresLayer.clearLayers();
+
+            let colegiosFiltrados = colegiosData.filter(c => 
+                c.nombre.toLowerCase().includes(query) || c.codigo.includes(query) || c.red.toLowerCase().includes(query)
+            );
+
+            colegiosFiltrados.forEach(colegio => {
+                let marker = L.marker([colegio.lat, colegio.lng]);
+                let contenidoPopup = `
+                    <div style="font-family: 'Montserrat', sans-serif; color: #0f172a; min-width: 180px;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 15px; color: #1e293b;">${colegio.nombre}</h3>
+                        <p style="margin: 4px 0; font-size: 13px;"><b>Código:</b> ${colegio.codigo}</p>
+                        <p style="margin: 4px 0; font-size: 13px;"><b>Tipo:</b> ${colegio.tipo.toUpperCase()}</p>
+                        <p style="margin: 4px 0; font-size: 13px;"><b>Red Educativa:</b> ${colegio.red}</p>
+                        <p style="margin: 4px 0; font-size: 13px;"><b>Dirección:</b> ${colegio.direccion}</p>
+                    </div>
+                `;
+                marker.bindPopup(contenidoPopup);
+                marcadoresLayer.addLayer(marker);
+            });
         }
 
         window.onload = function() {
-            abrirModalMapachito('saludando');
+            abrirModalMapachito('saludando', null);
 
             window.addEventListener('mousemove', reiniciarTemporizadorInactividad);
             window.addEventListener('mousedown', reiniciarTemporizadorInactividad);
