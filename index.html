@@ -156,19 +156,42 @@
         .red-8 { background-color: #805ad5; } /* Morado */
         .red-9 { background-color: #d53f8c; } /* Rosado */
 
-        /* 5. Pines personalizados circulares con el número de red */
-        .pin-red-custom {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            color: white;
-            font-weight: bold;
+        /* 5. Forma clásica de Gota de Agua Invertida para el Pin */
+        .pin-clasico-container {
+            position: relative;
+            width: 30px;
+            height: 42px;
+        }
+
+        .pin-gota {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.4);
-            border: 2px solid white;
+            border: 2px solid #ffffff;
+        }
+
+        .pin-texto {
+            position: absolute;
+            top: 4px;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            transform: rotate(0deg);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
         }
 
         /* 6. Modal Lottie Mapachito y Detalles */
@@ -285,7 +308,7 @@
 
         let marcadoresCreados = [];
 
-        // Colores asignados para cada red educativa (hexadecimales exactos para los pines)
+        // Colores asignados para cada red educativa
         const coloresRedes = {
             1: "#e53e3e",
             2: "#dd6b20",
@@ -313,20 +336,25 @@
             lista.forEach(colegio => {
                 if (!colegio.latitud || !colegio.longitud) return;
 
-                // Detectar el número de red (ej. "Red 01" o "1")
                 const numRed = extraerNumeroRed(colegio.red_educativa);
                 const colorPin = (numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568";
                 const textoPin = numRed ? numRed : "🏫";
 
-                // Crear icono personalizado con el número de la red
-                const iconoPersonalizado = L.divIcon({
+                // Crear icono clásico de gota de agua invertida con el número dentro
+                const iconoClasico = L.divIcon({
                     className: 'custom-div-icon',
-                    html: `<div class="pin-red-custom" style="background-color: ${colorPin};">${textoPin}</div>`,
-                    iconSize: [32, 32],
-                    iconAnchor: [16, 16]
+                    html: `
+                        <div class="pin-clasico-container">
+                            <div class="pin-gota" style="background-color: ${colorPin};"></div>
+                            <div class="pin-texto">${textoPin}</div>
+                        </div>
+                    `,
+                    iconSize: [30, 42],
+                    iconAnchor: [15, 42], // Ajustado para que la punta exacta de la gota señale la coordenada
+                    popupAnchor: [0, -38]
                 });
 
-                var marker = L.marker([colegio.latitud, colegio.longitud], { icon: iconoPersonalizado }).addTo(map);
+                var marker = L.marker([colegio.latitud, colegio.longitud], { icon: iconoClasico }).addTo(map);
                 
                 marker.bindPopup(`
                     <div style="min-width: 200px;">
@@ -372,7 +400,6 @@
             document.getElementById('pantalla-mapa').style.display = 'flex';
             setTimeout(() => { map.invalidateSize(); }, 200);
 
-            // Filtrar colegios que coincidan con la red seleccionada
             const filtrados = colegios.filter(c => {
                 const num = extraerNumeroRed(c.red_educativa);
                 return num === numeroRed;
@@ -380,7 +407,6 @@
 
             mostrarColegiosEnMapa(filtrados);
 
-            // Si hay colegios, centrar el mapa en el primero de ellos
             if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
                 map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
             }
