@@ -567,8 +567,8 @@
                     <p>📋 <b>Requisitos:</b> ${colegio.requisitos_de_matricula || 'Consultar en la institución.'}</p>
                 </div>
                 <div style="margin-top: 15px;">
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" class="btn-primary">🗺️ Abrir ruta exacta en Google Maps</a>
-                </div>
+    <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}&travelmode=driving" target="_blank" class="btn-primary">🗺️ Abrir ruta exacta desde mi ubicación en Google Maps</a>
+</div>
             `;
             modal.style.display = 'flex';
         }
