@@ -9,6 +9,10 @@
     <!-- Librería Lottie Player -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     
+    <!-- Librería Leaflet para el Mapa (Segunda Pantalla) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         /* 1. Configuración general */
         html, body {
@@ -20,11 +24,28 @@
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             background-color: #0f172a;
-            overflow-y: auto;          
-            overscroll-behavior-y: auto; 
+            overflow: hidden; 
+            overscroll-behavior-y: none; 
         }
 
-        /* 2. Fondo de pantalla fijo */
+        /* Sistema de Vistas (Pantallas) */
+        .vista {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            display: none;
+            z-index: 1;
+        }
+
+        .vista.activa {
+            display: flex;
+            z-index: 10;
+        }
+
+        /* --- VISTA 1: PORTADA PRINCIPAL --- */
         .fondo-portada {
             position: fixed;
             top: 0;
@@ -37,32 +58,19 @@
             overflow: hidden;
         }
 
-        .img-celular {
+        .img-celular, .img-pc {
             display: block;
             width: 100%;
-            height: 100%; 
-            object-fit: cover; 
+            height: 100%;
+            object-fit: cover;
             position: absolute;
             top: 0; 
             left: 0;
         }
+        .img-pc { display: none; }
 
-        .img-pc {
-            display: none;
-            width: 100%;       
-            height: 100%;
-            object-fit: fill; 
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        /* 3. Contenedor principal para celular por defecto */
         .main-container { 
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
             width: 100vw;
             height: 100vh;
             height: 100dvh;
@@ -77,14 +85,13 @@
             box-sizing: border-box;
         }
 
-        /* 4. Bloque del Buscador y Botones */
         .bloque-controles {
             width: 90%;                    
             max-width: 340px;              
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: rgba(15, 23, 42, 0.88); 
+            background: rgba(15, 23, 42, 0.88);
             padding: 16px;
             border-radius: 22px;
             backdrop-filter: blur(6px);
@@ -111,7 +118,7 @@
         .btn-opcion {
             width: 100%;
             padding: 14px 16px;
-            color: #ffffff;            
+            color: #ffffff;           
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 14px;
             font-size: 14px;
@@ -130,26 +137,10 @@
             filter: brightness(1.08);
         }
 
-        .btn-verde {
-            background-color: #729b79; 
-            box-shadow: 0 0 12px rgba(114, 155, 121, 0.4);
-        }
-
-        .btn-azul {
-            background-color: #7b8db9; 
-            box-shadow: 0 0 12px rgba(123, 141, 185, 0.4);
-        }
-
-        .btn-estatales {
-            background-color: #d18b6d; 
-            box-shadow: 0 0 12px rgba(209, 139, 109, 0.4);
-        }
-
-        .btn-particulares {
-            background-color: #a8a697; 
-            color: #1e293b;            
-            box-shadow: 0 0 12px rgba(168, 166, 151, 0.4);
-        }
+        .btn-verde { background-color: #729b79; box-shadow: 0 0 12px rgba(114, 155, 121, 0.4); }
+        .btn-azul { background-color: #7b8db9; box-shadow: 0 0 12px rgba(123, 141, 185, 0.4); }
+        .btn-estatales { background-color: #d18b6d; box-shadow: 0 0 12px rgba(209, 139, 109, 0.4); }
+        .btn-particulares { background-color: #a8a697; color: #1e293b; box-shadow: 0 0 12px rgba(168, 166, 151, 0.4); }
 
         .fila-botones-dividida {
             display: flex; 
@@ -161,7 +152,31 @@
             flex: 1; 
         }
 
-        /* 5. Ventana Modal Universal (Sólida, sin rastros de fantasma) */
+        /* --- VISTA 2: MAPA INTERACTIVO --- */
+        #mapa-container {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            position: relative;
+        }
+
+        .btn-volver {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: #0f172a;
+            color: white;
+            border: 2px solid #38bdf8;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* --- VENTANA MODAL --- */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -169,8 +184,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(11, 19, 36, 0.92); 
-            z-index: 999;
+            background: rgba(11, 19, 36, 0.92);
+            z-index: 2000;
             justify-content: center;
             align-items: center;
         }
@@ -220,17 +235,6 @@
             background: #ffffff;
             border-radius: 50%;
         }
-        .thought-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%) translateX(-4px);
-            width: 6px;
-            height: 6px;
-            background: #ffffff;
-            border-radius: 50%;
-        }
 
         .raccoon-lottie-container {
             width: 140px;
@@ -259,84 +263,60 @@
             transition: transform 0.2s;
         }
 
-        .modal-btn:hover {
-            transform: scale(1.05);
-        }
+        .modal-btn:hover { transform: scale(1.05); }
 
-        /* 6. Adaptación específica para PC (Centrado exacto en pantalla) */
+        /* Media query PC */
         @media (min-width: 769px) {
             .img-celular { display: none; }
             .img-pc { display: block; }
-
-            .main-container {
-                max-width: 1000px;
-                /* Centrado perfecto vertical y horizontalmente en PC */
-                justify-content: center;
-                padding-top: 50px; 
-            }
-
-            .bloque-controles {
-                width: 100%;
-                max-width: 480px;          
-                padding: 20px 24px;             
-                gap: 12px;
-                border-radius: 22px;
-            }
-
-            .input-busqueda, .btn-opcion {
-                padding: 13px 18px;        
-                font-size: 14px;           
-                border-radius: 14px;
-            }
+            .main-container { max-width: 1000px; padding-top: 50px; }
+            .bloque-controles { width: 100%; max-width: 480px; padding: 20px 24px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Fondo adaptativo -->
-    <div class="fondo-portada">
-        <img src="portada-celular.jpg" alt="Portada Celular" class="img-celular">
-        <img src="portada-pc.jpg" alt="Portada PC" class="img-pc">
-    </div>
+    <!-- ================= VISTA 1: PORTADA PRINCIPAL ================= -->
+    <div id="vista-portada" class="vista activa">
+        <div class="fondo-portada">
+            <img src="portada-celular.jpg" alt="Portada Celular" class="img-celular">
+            <img src="portada-pc.jpg" alt="Portada PC" class="img-pc">
+        </div>
 
-    <!-- Controles principales -->
-    <div class="main-container">
-        <div class="bloque-controles">
-            <input type="text" class="input-busqueda" placeholder="Buscar por nombre o número...">
-            
-            <button class="btn-opcion btn-verde" onclick="abrirModalMapachito('olfateando')">Ver Todos los Colegios en el Mapa</button>
-            <button class="btn-opcion btn-azul" onclick="abrirModalMapachito('pensando')">Filtrar por Redes Educativas (1-9)</button>
-            
-            <div class="fila-botones-dividida">
-                <button class="btn-opcion btn-estatales" onclick="abrirModalMapachito('feliz')">Colegios Estatales</button>
-                <button class="btn-opcion btn-particulares" onclick="abrirModalMapachito('sorprendido')">Colegios Particulares</button>
+        <div class="main-container">
+            <div class="bloque-controles">
+                <!-- Buscador que activa la transición al mapa -->
+                <input type="text" id="inputBuscador" class="input-busqueda" placeholder="Buscar por nombre o número..." onkeypress="handleBusqueda(event)">
+                
+                <button class="btn-opcion btn-verde" onclick="irAlMapa('todos')">Ver Todos los Colegios en el Mapa</button>
+                <button class="btn-opcion btn-azul" onclick="irAlMapa('redes')">Filtrar por Redes Educativas (1-9)</button>
+                
+                <div class="fila-botones-dividida">
+                    <button class="btn-opcion btn-estatales" onclick="irAlMapa('estatales')">Colegios Estatales</button>
+                    <button class="btn-opcion btn-particulares" onclick="irAlMapa('particulares')">Colegios Particulares</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Universal de Mapachito -->
+    <!-- ================= VISTA 2: SEGUNDA PANTALLA (MAPA) ================= -->
+    <div id="vista-mapa" class="vista">
+        <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
+        <div id="mapa-container"></div>
+    </div>
+
+    <!-- ================= MODAL DE MAPACHITO ================= -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
-            <div id="textoMapachito" class="thought-bubble">
-                ¡Hola!
-            </div>
-            
+            <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
             <div class="raccoon-lottie-container">
-                <lottie-player 
-                    id="animacionLottie"
-                    background="transparent"    
-                    speed="1"                   
-                    style="width: 100%; height: 100%;" 
-                    loop                        
-                    autoplay                    
-                ></lottie-player>
+                <lottie-player id="animacionLottie" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>
             </div>
-
             <button class="modal-btn" onclick="cerrarModalMapachito()">Aceptar</button>
         </div>
     </div>
 
-    <!-- Lógica de JavaScript -->
+    <!-- ================= LÓGICA DE JAVASCRIPT ================= -->
     <script>
         const modalEl = document.getElementById('modalMapachito');
         const textoEl = document.getElementById('textoMapachito');
@@ -344,10 +324,10 @@
         
         let tiempoInactividad;
         const SEGUNDOS_PARA_DORMIR = 30;
+        let mapa = null;
 
         function abrirModalMapachito(estado) {
             reiniciarTemporizadorInactividad();
-
             let archivoJson = '';
             let textoMensaje = '';
 
@@ -411,6 +391,41 @@
             clearTimeout(tiempoInactividad);
         }
 
+        /* --- CONTROL DE VISTAS Y TRANSICIONES --- */
+        function irAlMapa(filtro) {
+            // Ocultar portada y mostrar mapa
+            document.getElementById('vista-portada').classList.remove('activa');
+            document.getElementById('vista-mapa').classList.add('activa');
+
+            // Inicializar mapa de Leaflet si no existe
+            if (!mapa) {
+                mapa = L.map('mapa-container').setView([-11.8685, -77.1265], 13); // Coordenadas aprox. Ventanilla
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(mapa);
+            } else {
+                mapa.invalidateSize();
+            }
+
+            // Aquí puedes manejar la lógica del filtro seleccionado ("todos", "redes", "estatales", "particulares")
+            console.log("Filtro aplicado:", filtro);
+        }
+
+        function volverAPortada() {
+            document.getElementById('vista-mapa').classList.remove('activa');
+            document.getElementById('vista-portada').classList.add('activa');
+            reiniciarTemporizadorInactividad();
+        }
+
+        function handleBusqueda(event) {
+            if (event.key === 'Enter') {
+                const query = document.getElementById('inputBuscador').value;
+                if (query.trim() !== "") {
+                    irAlMapa('busqueda:' + query);
+                }
+            }
+        }
+
         window.onload = function() {
             abrirModalMapachito('saludando');
 
@@ -420,6 +435,5 @@
             window.addEventListener('touchstart', reiniciarTemporizadorInactividad);
         };
     </script>
-
 </body>
 </html>
