@@ -60,30 +60,6 @@
             align-items: center;
         }
 
-        .mapachito-portada-banner {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(30, 41, 59, 0.9);
-            padding: 8px 14px;
-            border-radius: 20px;
-            border: 2px solid #38bdf8;
-            margin-bottom: 12px;
-            width: 90%;
-            max-width: 340px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        .mapachito-portada-banner lottie-player {
-            width: 45px;
-            height: 45px;
-        }
-        .mapachito-portada-banner p {
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: #38bdf8;
-            line-height: 1.2;
-        }
-
         .bloque-controles {
             width: 90%;                    
             max-width: 340px;              
@@ -377,11 +353,6 @@
         </div>
 
         <div class="main-container">
-            <div class="mapachito-portada-banner">
-                <lottie-player src="mapache_feliz.json" background="transparent" speed="1" loop autoplay></lottie-player>
-                <p>¡Hola! Soy Mapachito, dueño de esta app escolar. ¿Qué colegios exploramos hoy?</p>
-            </div>
-
             <div class="bloque-controles">
                 <div class="search-box-wrapper">
                     <input type="text" id="inputPortada" class="input-busqueda" placeholder="Buscar por nombre o código..." autocomplete="off">
@@ -573,12 +544,12 @@
             });
         }
 
-        // VER TODOS LOS COLEGIOS EN EL MAPA (Estado 'mapa', 3 segundos, sin botón)
+        // VER TODOS LOS COLEGIOS EN EL MAPA (Estado 'olfateando', 3 segundos, sin botón)
         function mostrarInfoTodosMapa(e) {
             e.stopPropagation();
             abrirModalMapachito(
-                'mapa', 
-                "¡Vamos a explorar todos los colegios en el mapa juntos!", 
+                'olfateando', 
+                "¡Olfateando todos los colegios para mostrarlos en el mapa!", 
                 false, 
                 () => { ejecutarIrAlMapa('todos'); }, 
                 3000
@@ -949,8 +920,6 @@
                 archivoJson = 'mapache_olfateando.json';
             } else if (estado === 'feliz') {
                 archivoJson = 'mapache_feliz.json';
-            } else if (estado === 'mapa') {
-                archivoJson = 'mapache_mapa.json'; // Nueva animación de mapachito analizando/señalando el mapa
             }
 
             animacionLottieEl.load(archivoJson);
