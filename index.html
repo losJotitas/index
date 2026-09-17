@@ -60,6 +60,31 @@
             align-items: center;
         }
 
+        /* Banner decorativo con Mapachito Feliz en portada */
+        .mapachito-portada-banner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(30, 41, 59, 0.9);
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: 2px solid #38bdf8;
+            margin-bottom: 12px;
+            width: 90%;
+            max-width: 340px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        .mapachito-portada-banner lottie-player {
+            width: 45px;
+            height: 45px;
+        }
+        .mapachito-portada-banner p {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #38bdf8;
+            line-height: 1.2;
+        }
+
         .bloque-controles {
             width: 90%;                    
             max-width: 340px;              
@@ -159,36 +184,47 @@
 
         #map { flex: 1; width: 100%; }
 
-        #mapachito-flotante {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 75px;
-            height: 75px;
-            background: rgba(30, 41, 59, 0.92);
-            border: 2px solid #38bdf8;
-            border-radius: 50%;
-            z-index: 999;
+        /* PANTALLA INACTIVITY OVERLAY (Mapachito Durmiendo a los 30s) */
+        #modal-inactividad-total {
             display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(11, 19, 36, 0.96);
+            z-index: 50000;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.2s ease;
         }
-        #mapachito-flotante:hover { transform: scale(1.08); }
-        .burbuja-ronquido {
-            position: absolute;
-            top: -22px;
-            right: -5px;
-            background: #ffffff;
-            color: #0f172a;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            white-space: nowrap;
+        .inactivity-box {
+            background: #1e293b;
+            border: 3px solid #38bdf8;
+            border-radius: 28px;
+            padding: 30px 20px;
+            max-width: 320px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .inactivity-box lottie-player {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 15px;
+        }
+        .inactivity-box h2 {
+            color: #38bdf8;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .inactivity-box p {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            font-weight: 500;
         }
 
         #modal-redes { 
@@ -256,7 +292,6 @@
         
         .raccoon-avatar-box { width: 110px; height: 110px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
         .raccoon-avatar-box lottie-player { width: 100px; height: 100px; position: absolute; z-index: 2; }
-        .mapache-fallback-emoji { font-size: 55px; position: absolute; z-index: 1; }
 
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
 
@@ -343,9 +378,16 @@
         </div>
 
         <div class="main-container">
+            <!-- Estado 1: Mapachito Feliz como dueño y bienvenida -->
+            <div class="mapachito-portada-banner">
+                <lottie-player src="mapache_feliz.json" background="transparent" speed="1" loop autoplay></lottie-player>
+                <p>¡Hola! Soy Mapachito, dueño de esta app escolar. ¿Qué colegios exploramos hoy?</p>
+            </div>
+
             <div class="bloque-controles">
                 <div class="search-box-wrapper">
-                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="Buscar por nombre o número..." autocomplete="off">
+                    <!-- Estado 2: Mapachito Olfateando activo en la caja de búsqueda -->
+                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="Buscar por nombre o código..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
@@ -376,10 +418,13 @@
         <div id="map"></div>
     </div>
 
-    <!-- WIDGET FLOTANTE DE MAPACHITO -->
-    <div id="mapachito-flotante" onclick="despertarMapachito()" title="¡Haz clic para despertar a Mapachito!">
-        <div class="burbuja-ronquido">zzz... 🐾</div>
-        <span style="font-size: 32px;">🦝💤</span>
+    <!-- ================= MODAL INACTIVIDAD 30s (Mapachito Durmiendo Pantalla Completa) ================= -->
+    <div id="modal-inactividad-total" onclick="despertarMapachitoInactivo()">
+        <div class="inactivity-box" onclick="event.stopPropagation(); despertarMapachitoInactivo();">
+            <lottie-player src="mapache_durmiendo.json" background="transparent" speed="1" loop autoplay></lottie-player>
+            <h2>¡Zzz... Mapachito está durmiendo!</h2>
+            <p>Toca la pantalla o mueve el cursor para despertar al dueño de la app.</p>
+        </div>
     </div>
 
     <!-- ================= MODAL REDES EDUCATIVAS ================= -->
@@ -389,45 +434,25 @@
                 <h3>Selecciona una Red Educativa</h3>
                 <span style="cursor:pointer; font-size:1.4rem; color:#a0aec0;" onclick="forzarCierreModalRedes()">&times;</span>
             </div>
-            <!-- Lista vertical actualizada con nombres de corrido usando guiones -->
             <div class="redes-lista-vertical">
-                <button class="btn-red-item red-1" onclick="filtrarPorRedConMapachito(1)">
-                    <span>RED N° 01 - PACHACÚTEC OESTE</span>
-                </button>
-                <button class="btn-red-item red-2" onclick="filtrarPorRedConMapachito(2)">
-                    <span>RED N° 02 - PACHACÚTEC SUR</span>
-                </button>
-                <button class="btn-red-item red-3" onclick="filtrarPorRedConMapachito(3)">
-                    <span>RED N° 03 - PACHACÚTEC NORTE</span>
-                </button>
-                <button class="btn-red-item red-4" onclick="filtrarPorRedConMapachito(4)">
-                    <span>RED N° 04 - PACHACÚTEC ESTE</span>
-                </button>
-                <button class="btn-red-item red-5" onclick="filtrarPorRedConMapachito(5)">
-                    <span>RED N° 05 - VILLA LOS REYES</span>
-                </button>
-                <button class="btn-red-item red-6" onclick="filtrarPorRedConMapachito(6)">
-                    <span>RED N° 06 - MI PERÚ</span>
-                </button>
-                <button class="btn-red-item red-7" onclick="filtrarPorRedConMapachito(7)">
-                    <span>RED N° 07 - SATÉLITE</span>
-                </button>
-                <button class="btn-red-item red-8" onclick="filtrarPorRedConMapachito(8)">
-                    <span>RED N° 08 - ANTONIA MORENO DE CÁCERES</span>
-                </button>
-                <button class="btn-red-item red-9" onclick="filtrarPorRedConMapachito(9)">
-                    <span>RED N° 09 - ANGAMOS</span>
-                </button>
+                <button class="btn-red-item red-1" onclick="filtrarPorRedConMapachito(1)"><span>RED N° 01 - PACHACÚTEC OESTE</span></button>
+                <button class="btn-red-item red-2" onclick="filtrarPorRedConMapachito(2)"><span>RED N° 02 - PACHACÚTEC SUR</span></button>
+                <button class="btn-red-item red-3" onclick="filtrarPorRedConMapachito(3)"><span>RED N° 03 - PACHACÚTEC NORTE</span></button>
+                <button class="btn-red-item red-4" onclick="filtrarPorRedConMapachito(4)"><span>RED N° 04 - PACHACÚTEC ESTE</span></button>
+                <button class="btn-red-item red-5" onclick="filtrarPorRedConMapachito(5)"><span>RED N° 05 - VILLA LOS REYES</span></button>
+                <button class="btn-red-item red-6" onclick="filtrarPorRedConMapachito(6)"><span>RED N° 06 - MI PERÚ</span></button>
+                <button class="btn-red-item red-7" onclick="filtrarPorRedConMapachito(7)"><span>RED N° 07 - SATÉLITE</span></button>
+                <button class="btn-red-item red-8" onclick="filtrarPorRedConMapachito(8)"><span>RED N° 08 - ANTONIA MORENO DE CÁCERES</span></button>
+                <button class="btn-red-item red-9" onclick="filtrarPorRedConMapachito(9)"><span>RED N° 09 - ANGAMOS</span></button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Reactivo de Mapachito -->
+    <!-- Modal Reactivo de Mapachito (Estados intermedios: saludando, pensando, buscando, sorprendido) -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
             <div class="raccoon-avatar-box">
-                <span class="mapache-fallback-emoji">🦝</span>
                 <lottie-player id="animacionLottie" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>
             </div>
             <button class="modal-btn" onclick="cerrarModalMapachito()">¡Entendido! 🚀</button>
@@ -458,22 +483,29 @@
         let accionPendiente = null;
         let temporizadorInactividad = null;
 
+        // GESTIÓN DE INACTIVIDAD (30 SEGUNDOS - CELULAR Y PC)
         function reiniciarTemporizadorInactividad() {
-            const widgetDormido = document.getElementById('mapachito-flotante');
-            if (widgetDormido) widgetDormido.style.display = 'none';
+            const modalInactivo = document.getElementById('modal-inactividad-total');
+            if (modalInactivo.style.display === 'flex') {
+                return; // Si ya está durmiendo, esperamos el toque de despertar
+            }
 
             if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
 
             temporizadorInactividad = setTimeout(() => {
-                if (widgetDormido) {
-                    widgetDormido.style.display = 'flex';
-                }
-            }, 30000);
+                modalInactivo.style.display = 'flex';
+            }, 30000); // 30 segundos exactos
+        }
+
+        function despertarMapachitoInactivo() {
+            document.getElementById('modal-inactividad-total').style.display = 'none';
+            reiniciarTemporizadorInactividad();
         }
 
         ['click', 'mousemove', 'keypress', 'touchstart', 'scroll'].forEach(evento => {
             window.addEventListener(evento, reiniciarTemporizadorInactividad, true);
         });
+        reiniciarTemporizadorInactividad();
 
         const coloresRedes = {
             1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
@@ -516,7 +548,7 @@
                 
                 marker.bindPopup(`
                     <div style="min-width: 200px;">
-                        <b style="font-size: 1rem; color: #1a365d;">${colegio.nombre_colegio}</b><br>
+                        <b style="font-size: 1.0rem; color: #1a365d;">${colegio.nombre_colegio}</b><br>
                         <span style="color: #4a5568;">Código: ${colegio.codigo || 'S/N'}</span><br>
                         <b>Tipo:</b> ${colegio.gestion}<br>
                         <b>Red Educativa:</b> ${colegio.red_educativa || 'No especificada'}<br>
@@ -530,13 +562,13 @@
         }
 
         function interactuarYEjecutar(tipoFiltro) {
-            let mensaje = "¡Buscando colegios en el mapa para ti!";
+            let mensaje = "¡Preparando el mapa escolar para ti!";
             if (tipoFiltro === 'Estatal') {
-                mensaje = "¡Excelente! Preparando el radar para ubicar todos los colegios Estatales de la zona. 🎒";
+                mensaje = "¡Excelente! Ubicando todos los colegios Estatales del distrito. 🎒";
             } else if (tipoFiltro === 'Particular') {
-                mensaje = "¡Muy well! Desplegando las opciones de colegios Particulares. 📝";
+                mensaje = "¡Muy bien! Desplegando las opciones de colegios Particulares. 📝";
             } else {
-                mensaje = "¡Genial! Alistando todo el directorio escolar de Ventanilla y Mi Perú. 🗺️";
+                mensaje = "¡Genial! Mostrando todo el directorio escolar en acción. 🗺️";
             }
 
             accionPendiente = () => ejecutarIrAlMapa(tipoFiltro);
@@ -662,7 +694,7 @@
                     map.setView([colegioSeleccionado.latitud, colegioSeleccionado.longitud], 16);
                 }
             };
-            abrirModalMapachito('buscando', `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`);
+            abrirModalMapachito('saludando', `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`);
         });
 
         function alSeleccionarPorTexto(texto) {
@@ -681,7 +713,7 @@
                     map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
                 }
             };
-            abrirModalMapachito('buscando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`);
+            abrirModalMapachito('olfateando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`);
         }
 
         const inputBuscadorMapa = document.getElementById('searchInputMap');
@@ -809,7 +841,8 @@
                 imgFull.src = ruta;
                 modalFull.style.display = 'flex';
             } else {
-                abrirModalMapachito('pensando', "Pronto se agregara la foto de la fachada del colegio");
+                // Estado 6: Mapachito Sorprendido cuando falta la foto
+                abrirModalMapachito('sorprendido', "¡Vaya! Aún no tengo la foto de esta fachada registrada en mi base de datos.");
             }
         }
 
@@ -848,6 +881,12 @@
                 archivoJson = 'mapache_buscando.json';
             } else if (estado === 'pensando') {
                 archivoJson = 'mapache_pensando.json';
+            } else if (estado === 'sorprendido') {
+                archivoJson = 'mapache_sorprendido.json';
+            } else if (estado === 'olfateando') {
+                archivoJson = 'mapache_olfateando.json';
+            } else if (estado === 'feliz') {
+                archivoJson = 'mapache_feliz.json';
             }
 
             animacionLottieEl.load(archivoJson);
@@ -862,11 +901,6 @@
                 accionPendiente = null;
                 fn();
             }
-        }
-
-        function despertarMapachito() {
-            document.getElementById('mapachito-flotante').style.display = 'none';
-            abrirModalMapachito('pensando', "¡Zzz... Ah, hola! Estaba soñando con galletas de mapache. ¿En qué te ayudo a explorar el mapa?");
         }
     </script>
 </body>
