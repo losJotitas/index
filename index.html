@@ -567,8 +567,10 @@
                     <p>📋 <b>Requisitos:</b> ${colegio.requisitos_de_matricula || 'Consultar en la institución.'}</p>
                 </div>
                 <div style="margin-top: 15px;">
-    <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}&travelmode=driving" target="_blank" class="btn-primary">🗺️ Abrir ruta exacta desde mi ubicación en Google Maps</a>
-</div>
+                    <button onclick="abrirRutaDesdeMiUbicacion(${colegio.latitud}, ${colegio.longitud})" class="btn-primary">
+                        🗺️ Abrir ruta exacta desde mi ubicación
+                    </button>
+                </div>
             `;
             modal.style.display = 'flex';
         }
@@ -640,6 +642,38 @@
             abrirModalMapachito('pensando', "¡Hola! Soy Mapachito, tu guía escolar en Ventanilla y Mi Perú. ¡Explora conmigo! 🎒🏫");
             reiniciarTemporizadorInactividad();
         };
+        // ... aquí termina tu código de JavaScript anterior ...
+
+        // Función inteligente para diferenciar PC y Celular con la ubicación
+        function abrirRutaDesdeMiUbicacion(latDestino, lngDestino) {
+            const esDispositivoMovil = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+            if (esDispositivoMovil && navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const latOrigen = position.coords.latitude;
+                        const lngOrigen = position.coords.longitude;
+                        const urlMaps = `https://www.google.com/maps/dir/?api=1&origin=${latOrigen},${lngOrigen}&destination=${latDestino},${lngDestino}&travelmode=driving`;
+                        window.open(urlMaps, '_blank');
+                    },
+                    function(error) {
+                        abrirSinOrigen(latDestino, lngDestino);
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+            } else {
+                abrirSinOrigen(latDestino, lngDestino);
+            }
+        }
+
+        function abrirSinOrigen(latDestino, lngDestino) {
+            const urlMaps = `https://www.google.com/maps/dir/?api=1&destination=${latDestino},${lngDestino}&travelmode=driving`;
+            window.open(urlMaps, '_blank');
+        }
+
+    </script> <!-- <--- Aquí cierras el script -->
+</body>
+</html>
     </script>
 </body>
 </html>
