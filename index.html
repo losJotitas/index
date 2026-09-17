@@ -60,7 +60,6 @@
             align-items: center;
         }
 
-        /* Banner decorativo con Mapachito Feliz en portada */
         .mapachito-portada-banner {
             display: flex;
             align-items: center;
@@ -184,7 +183,7 @@
 
         #map { flex: 1; width: 100%; }
 
-        /* PANTALLA INACTIVITY OVERLAY (Mapachito Durmiendo a los 30s) */
+        /* MODAL INACTIVIDAD 30s (Mapachito Durmiendo Pantalla Completa - Sin destellos) */
         #modal-inactividad-total {
             display: none;
             position: fixed;
@@ -287,11 +286,11 @@
         .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; }
-        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 280px; width: 85%; display: flex; flex-direction: column; align-items: center; }
-        .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 10px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 100%; line-height: 1.4; }
+        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 300px; width: 90%; display: flex; flex-direction: column; align-items: center; }
+        .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 100%; line-height: 1.4; }
         
-        .raccoon-avatar-box { width: 110px; height: 110px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
-        .raccoon-avatar-box lottie-player { width: 100px; height: 100px; position: absolute; z-index: 2; }
+        .raccoon-avatar-box { width: 130px; height: 130px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+        .raccoon-avatar-box lottie-player { width: 120px; height: 120px; position: absolute; z-index: 2; }
 
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
 
@@ -378,7 +377,6 @@
         </div>
 
         <div class="main-container">
-            <!-- Estado 1: Mapachito Feliz como dueño y bienvenida -->
             <div class="mapachito-portada-banner">
                 <lottie-player src="mapache_feliz.json" background="transparent" speed="1" loop autoplay></lottie-player>
                 <p>¡Hola! Soy Mapachito, dueño de esta app escolar. ¿Qué colegios exploramos hoy?</p>
@@ -386,7 +384,6 @@
 
             <div class="bloque-controles">
                 <div class="search-box-wrapper">
-                    <!-- Estado 2: Mapachito Olfateando activo en la caja de búsqueda -->
                     <input type="text" id="inputPortada" class="input-busqueda" placeholder="Buscar por nombre o código..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
@@ -399,8 +396,8 @@
                 </button>
                 
                 <div class="fila-botones-dividida">
-                    <button class="btn-opcion btn-estatales" onclick="interactuarYEjecutar('Estatal')">Colegios Estatales</button>
-                    <button class="btn-opcion btn-particulares" onclick="interactuarYEjecutar('Particular')">Colegios Particulares</button>
+                    <button class="btn-opcion btn-estatales" onclick="mostrarInfoEstatales(event)">Colegios Estatales</button>
+                    <button class="btn-opcion btn-particulares" onclick="mostrarInfoParticulares(event)">Colegios Particulares</button>
                 </div>
             </div>
         </div>
@@ -448,14 +445,14 @@
         </div>
     </div>
 
-    <!-- Modal Reactivo de Mapachito (Estados intermedios: saludando, pensando, buscando, sorprendido) -->
+    <!-- Modal Reactivo de Mapachito (Con emociones dinámicas y opción de auto-cierre de 5s o botón) -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
             <div class="raccoon-avatar-box">
                 <lottie-player id="animacionLottie" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>
             </div>
-            <button class="modal-btn" onclick="cerrarModalMapachito()">¡Entendido! 🚀</button>
+            <button id="btnEntendidoModal" class="modal-btn" onclick="cerrarModalMapachito()">¡Entendido! 🚀</button>
         </div>
     </div>
 
@@ -482,19 +479,19 @@
         let marcadoresCreados = [];
         let accionPendiente = null;
         let temporizadorInactividad = null;
+        let temporizadorAutoCierre = null;
+        let primeraInteraccionRealizada = false;
 
-        // GESTIÓN DE INACTIVIDAD (30 SEGUNDOS - CELULAR Y PC)
+        // GESTIÓN DE INACTIVIDAD (30 SEGUNDOS)
         function reiniciarTemporizadorInactividad() {
             const modalInactivo = document.getElementById('modal-inactividad-total');
-            if (modalInactivo.style.display === 'flex') {
-                return; // Si ya está durmiendo, esperamos el toque de despertar
-            }
+            if (modalInactivo.style.display === 'flex') return;
 
             if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
 
             temporizadorInactividad = setTimeout(() => {
                 modalInactivo.style.display = 'flex';
-            }, 30000); // 30 segundos exactos
+            }, 30000);
         }
 
         function despertarMapachitoInactivo() {
@@ -502,8 +499,21 @@
             reiniciarTemporizadorInactividad();
         }
 
+        // BIENVENIDA INICIAL AL TOCAR/MOVER CURSOR POR PRIMERA VEZ
+        function verificarPrimeraInteraccion() {
+            if (!primeraInteraccionRealizada) {
+                primeraInteraccionRealizada = true;
+                abrirModalMapachito(
+                    'saludando', 
+                    "¡Hola! Soy Mapachito, dueño de esta app escolar. Seré tu guía en este recorrido.", 
+                    true // requiere botón entendido
+                );
+            }
+            reiniciarTemporizadorInactividad();
+        }
+
         ['click', 'mousemove', 'keypress', 'touchstart', 'scroll'].forEach(evento => {
-            window.addEventListener(evento, reiniciarTemporizadorInactividad, true);
+            window.addEventListener(evento, verificarPrimeraInteraccion, true);
         });
         reiniciarTemporizadorInactividad();
 
@@ -563,16 +573,32 @@
 
         function interactuarYEjecutar(tipoFiltro) {
             let mensaje = "¡Preparando el mapa escolar para ti!";
-            if (tipoFiltro === 'Estatal') {
-                mensaje = "¡Excelente! Ubicando todos los colegios Estatales del distrito. 🎒";
-            } else if (tipoFiltro === 'Particular') {
-                mensaje = "¡Muy bien! Desplegando las opciones de colegios Particulares. 📝";
-            } else {
-                mensaje = "¡Genial! Mostrando todo el directorio escolar en acción. 🗺️";
-            }
-
             accionPendiente = () => ejecutarIrAlMapa(tipoFiltro);
-            abrirModalMapachito('buscando', mensaje);
+            abrirModalMapachito('buscando', mensaje, true);
+        }
+
+        // MENSAJE DE COLEGIOS PARTICULARES (Auto-cierre a los 5 segundos, sin botón Entendido)
+        function mostrarInfoParticulares(e) {
+            e.stopPropagation();
+            abrirModalMapachito(
+                'feliz', 
+                "Aquí te mostraré todos los colegios Particulares", 
+                false, // Oculta el botón Entendido
+                () => { ejecutarIrAlMapa('Particular'); }, 
+                5000 // 5 segundos exactos
+            );
+        }
+
+        // MENSAJE DE COLEGIOS ESTATALES (Auto-cierre a los 5 segundos, sin botón Entendido)
+        function mostrarInfoEstatales(e) {
+            e.stopPropagation();
+            abrirModalMapachito(
+                'sorprendido', 
+                "¿Sabías que en total son 146 colegios estatales en Ventanilla y Mi Perú?", 
+                false, // Oculta el botón Entendido
+                () => { ejecutarIrAlMapa('Estatal'); }, 
+                5000 // 5 segundos exactos
+            );
         }
 
         function ejecutarIrAlMapa(filtroTipo) {
@@ -592,7 +618,7 @@
             accionPendiente = () => {
                 document.getElementById('modal-redes').style.display = 'flex';
             };
-            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar? 🏫");
+            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar? 🏫", true);
         }
 
         function cerrarModalRedes(e) {
@@ -621,7 +647,7 @@
                     map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
                 }
             };
-            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`);
+            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, true);
         }
 
         function volverAPortada() {
@@ -694,7 +720,7 @@
                     map.setView([colegioSeleccionado.latitud, colegioSeleccionado.longitud], 16);
                 }
             };
-            abrirModalMapachito('saludando', `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`);
+            abrirModalMapachito('saludando', `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`, true);
         });
 
         function alSeleccionarPorTexto(texto) {
@@ -713,7 +739,7 @@
                     map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
                 }
             };
-            abrirModalMapachito('olfateando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`);
+            abrirModalMapachito('olfateando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`, true);
         }
 
         const inputBuscadorMapa = document.getElementById('searchInputMap');
@@ -841,8 +867,7 @@
                 imgFull.src = ruta;
                 modalFull.style.display = 'flex';
             } else {
-                // Estado 6: Mapachito Sorprendido cuando falta la foto
-                abrirModalMapachito('sorprendido', "¡Vaya! Aún no tengo la foto de esta fachada registrada en mi base de datos.");
+                abrirModalMapachito('sorprendido', "¡Vaya! Aún no tengo la foto de esta fachada registrada en mi base de datos.", true);
             }
         }
 
@@ -874,8 +899,11 @@
         const modalMapachitoEl = document.getElementById('modalMapachito');
         const textoMapachitoEl = document.getElementById('textoMapachito');
         const animacionLottieEl = document.getElementById('animacionLottie');
+        const btnEntendidoModalEl = document.getElementById('btnEntendidoModal');
 
-        function abrirModalMapachito(estado, mensajePersonalizado) {
+        function abrirModalMapachito(estado, mensajePersonalizado, mostrarBotonEntendido = true, callbackAccion = null, tiempoAutoCierreMs = 0) {
+            if (temporizadorAutoCierre) clearTimeout(temporizadorAutoCierre);
+
             let archivoJson = 'mapache_saludando.json';
             if (estado === 'buscando') {
                 archivoJson = 'mapache_buscando.json';
@@ -891,10 +919,33 @@
 
             animacionLottieEl.load(archivoJson);
             textoMapachitoEl.innerText = mensajePersonalizado;
+
+            if (mostrarBotonEntendido) {
+                btnEntendidoModalEl.style.display = 'block';
+            } else {
+                btnEntendidoModalEl.style.display = 'none';
+            }
+
+            if (callbackAccion) {
+                accionPendiente = callbackAccion;
+            } else if (mostrarBotonEntendido) {
+                // por defecto si requiere botón
+            } else {
+                accionPendiente = null;
+            }
+
             modalMapachitoEl.style.display = 'flex';
+
+            // Configurar auto-cierre si se especifica tiempo (ej: 5000 ms = 5 segundos)
+            if (tiempoAutoCierreMs > 0) {
+                temporizadorAutoCierre = setTimeout(() => {
+                    cerrarModalMapachito();
+                }, tiempoAutoCierreMs);
+            }
         }
 
         function cerrarModalMapachito() {
+            if (temporizadorAutoCierre) clearTimeout(temporizadorAutoCierre);
             modalMapachitoEl.style.display = 'none';
             if (accionPendiente) {
                 const fn = accionPendiente;
