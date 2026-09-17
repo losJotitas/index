@@ -183,7 +183,7 @@
 
         #map { flex: 1; width: 100%; }
 
-        /* MODAL INACTIVIDAD 30s (Mapachito Durmiendo Pantalla Completa - Sin destellos) */
+        /* MODAL INACTIVIDAD 30s (Mapachito Durmiendo Pantalla Completa) */
         #modal-inactividad-total {
             display: none;
             position: fixed;
@@ -388,9 +388,9 @@
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
-                <button class="btn-opcion btn-verde" onclick="interactuarYEjecutar('todos')">Ver Todos los Colegios en el Mapa</button>
+                <button class="btn-opcion btn-verde" onclick="interactuarYEjecutar(event, 'todos')">Ver Todos los Colegios en el Mapa</button>
                 
-                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito()">
+                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito(event)">
                     Filtrar por Redes Educativas<br>
                     <span style="font-size: 0.85rem; font-weight: 500; opacity: 0.9;">(1-9)</span>
                 </button>
@@ -445,7 +445,7 @@
         </div>
     </div>
 
-    <!-- Modal Reactivo de Mapachito (Con emociones dinámicas y opción de auto-cierre de 5s o botón) -->
+    <!-- Modal Reactivo de Mapachito (Con soporte para auto-cierre y ocultar botón) -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
@@ -499,14 +499,16 @@
             reiniciarTemporizadorInactividad();
         }
 
-        // BIENVENIDA INICIAL AL TOCAR/MOVER CURSOR POR PRIMERA VEZ
+        // BIENVENIDA INICIAL (3 segundos, sin botón de entendido)
         function verificarPrimeraInteraccion() {
             if (!primeraInteraccionRealizada) {
                 primeraInteraccionRealizada = true;
                 abrirModalMapachito(
                     'saludando', 
                     "¡Hola! Soy Mapachito, dueño de esta app escolar. Seré tu guía en este recorrido.", 
-                    true // requiere botón entendido
+                    false, // Oculta el botón
+                    null, 
+                    3000   // 3 segundos de duración
                 );
             }
             reiniciarTemporizadorInactividad();
@@ -571,33 +573,40 @@
             });
         }
 
-        function interactuarYEjecutar(tipoFiltro) {
+        // VER TODOS LOS COLEGIOS (3 segundos, sin botón de entendido)
+        function interactuarYEjecutar(e, tipoFiltro) {
+            e.stopPropagation();
             let mensaje = "¡Preparando el mapa escolar para ti!";
-            accionPendiente = () => ejecutarIrAlMapa(tipoFiltro);
-            abrirModalMapachito('buscando', mensaje, true);
+            abrirModalMapachito(
+                'buscando', 
+                mensaje, 
+                false, // Oculta botón Entendido
+                () => { ejecutarIrAlMapa(tipoFiltro); }, 
+                3000   // 3 segundos exactos
+            );
         }
 
-        // MENSAJE DE COLEGIOS PARTICULARES (Auto-cierre a los 5 segundos, sin botón Entendido)
+        // COLEGIOS PARTICULARES (5 segundos, sin botón de entendido)
         function mostrarInfoParticulares(e) {
             e.stopPropagation();
             abrirModalMapachito(
                 'feliz', 
                 "Aquí te mostraré todos los colegios Particulares", 
-                false, // Oculta el botón Entendido
+                false, // Oculta botón Entendido
                 () => { ejecutarIrAlMapa('Particular'); }, 
-                5000 // 5 segundos exactos
+                5000   // 5 segundos exactos
             );
         }
 
-        // MENSAJE DE COLEGIOS ESTATALES (Auto-cierre a los 5 segundos, sin botón Entendido)
+        // COLEGIOS ESTATALES (5 segundos, sin botón de entendido)
         function mostrarInfoEstatales(e) {
             e.stopPropagation();
             abrirModalMapachito(
                 'sorprendido', 
                 "¿Sabías que en total son 146 colegios estatales en Ventanilla y Mi Perú?", 
-                false, // Oculta el botón Entendido
+                false, // Oculta botón Entendido
                 () => { ejecutarIrAlMapa('Estatal'); }, 
-                5000 // 5 segundos exactos
+                5000   // 5 segundos exactos
             );
         }
 
@@ -614,11 +623,16 @@
             mostrarColegiosEnMapa(colegiosFiltrados);
         }
 
-        function abrirModalRedesConMapachito() {
-            accionPendiente = () => {
-                document.getElementById('modal-redes').style.display = 'flex';
-            };
-            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar? 🏫", true);
+        // FILTRAR POR REDES EDUCATIVAS (3 segundos, sin botón de entendido)
+        function abrirModalRedesConMapachito(e) {
+            e.stopPropagation();
+            abrirModalMapachito(
+                'pensando', 
+                "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar? 🏫", 
+                false, // Oculta botón Entendido
+                () => { document.getElementById('modal-redes').style.display = 'flex'; }, 
+                3000   // 3 segundos exactos
+            );
         }
 
         function cerrarModalRedes(e) {
@@ -631,23 +645,30 @@
 
         function filtrarPorRedConMapachito(numeroRed) {
             document.getElementById('modal-redes').style.display = 'none';
-            accionPendiente = () => {
-                document.getElementById('pantalla-portada').style.display = 'none';
-                document.getElementById('pantalla-mapa').style.display = 'flex';
-                setTimeout(() => { map.invalidateSize(); }, 200);
+            
+            // Redes educativas al hacer clic en un número también con 3 segundos sin botón
+            abrirModalMapachito(
+                'buscando', 
+                `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, 
+                false, 
+                () => {
+                    document.getElementById('pantalla-portada').style.display = 'none';
+                    document.getElementById('pantalla-mapa').style.display = 'flex';
+                    setTimeout(() => { map.invalidateSize(); }, 200);
 
-                const filtrados = colegios.filter(c => {
-                    const num = extraerNumeroRed(c.red_educativa);
-                    return num === numeroRed;
-                });
+                    const filtrados = colegios.filter(c => {
+                        const num = extraerNumeroRed(c.red_educativa);
+                        return num === numeroRed;
+                    });
 
-                mostrarColegiosEnMapa(filtrados);
+                    mostrarColegiosEnMapa(filtrados);
 
-                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-                }
-            };
-            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, true);
+                    if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                        map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                    }
+                }, 
+                3000
+            );
         }
 
         function volverAPortada() {
@@ -711,35 +732,45 @@
         }
 
         configurarAutocompletado('inputPortada', 'sugerenciasPortada', function(colegioSeleccionado) {
-            accionPendiente = () => {
-                document.getElementById('pantalla-portada').style.display = 'none';
-                document.getElementById('pantalla-mapa').style.display = 'flex';
-                setTimeout(() => { map.invalidateSize(); }, 200);
-                mostrarColegiosEnMapa([colegioSeleccionado]);
-                if (colegioSeleccionado.latitud && colegioSeleccionado.longitud) {
-                    map.setView([colegioSeleccionado.latitud, colegioSeleccionado.longitud], 16);
-                }
-            };
-            abrirModalMapachito('saludando', `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`, true);
+            abrirModalMapachito(
+                'saludando', 
+                `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`, 
+                false, 
+                () => {
+                    document.getElementById('pantalla-portada').style.display = 'none';
+                    document.getElementById('pantalla-mapa').style.display = 'flex';
+                    setTimeout(() => { map.invalidateSize(); }, 200);
+                    mostrarColegiosEnMapa([colegioSeleccionado]);
+                    if (colegioSeleccionado.latitud && colegioSeleccionado.longitud) {
+                        map.setView([colegioSeleccionado.latitud, colegioSeleccionado.longitud], 16);
+                    }
+                }, 
+                3000
+            );
         });
 
         function alSeleccionarPorTexto(texto) {
-            accionPendiente = () => {
-                document.getElementById('pantalla-portada').style.display = 'none';
-                document.getElementById('pantalla-mapa').style.display = 'flex';
-                setTimeout(() => { map.invalidateSize(); }, 200);
+            abrirModalMapachito(
+                'olfateando', 
+                `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`, 
+                false, 
+                () => {
+                    document.getElementById('pantalla-portada').style.display = 'none';
+                    document.getElementById('pantalla-mapa').style.display = 'flex';
+                    setTimeout(() => { map.invalidateSize(); }, 200);
 
-                const filtrados = colegios.filter(c => 
-                    (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
-                    (c.codigo && c.codigo.toLowerCase().includes(texto))
-                );
-                mostrarColegiosEnMapa(filtrados);
-                document.getElementById('searchInputMap').value = texto;
-                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-                }
-            };
-            abrirModalMapachito('olfateando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`, true);
+                    const filtrados = colegios.filter(c => 
+                        (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
+                        (c.codigo && c.codigo.toLowerCase().includes(texto))
+                    );
+                    mostrarColegiosEnMapa(filtrados);
+                    document.getElementById('searchInputMap').value = texto;
+                    if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                        map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                    }
+                }, 
+                3000
+            );
         }
 
         const inputBuscadorMapa = document.getElementById('searchInputMap');
@@ -867,7 +898,13 @@
                 imgFull.src = ruta;
                 modalFull.style.display = 'flex';
             } else {
-                abrirModalMapachito('sorprendido', "¡Vaya! Aún no tengo la foto de esta fachada registrada en mi base de datos.", true);
+                abrirModalMapachito(
+                    'sorprendido', 
+                    "¡Vaya! Aún no tengo la foto de esta fachada registrada en mi base de datos.", 
+                    false, 
+                    null, 
+                    3000
+                );
             }
         }
 
@@ -901,7 +938,7 @@
         const animacionLottieEl = document.getElementById('animacionLottie');
         const btnEntendidoModalEl = document.getElementById('btnEntendidoModal');
 
-        function abrirModalMapachito(estado, mensajePersonalizado, mostrarBotonEntendido = true, callbackAccion = null, tiempoAutoCierreMs = 0) {
+        function abrirModalMapachito(estado, mensajePersonalizado, mostrarBotonEntendido = false, callbackAccion = null, tiempoAutoCierreMs = 3000) {
             if (temporizadorAutoCierre) clearTimeout(temporizadorAutoCierre);
 
             let archivoJson = 'mapache_saludando.json';
@@ -928,15 +965,13 @@
 
             if (callbackAccion) {
                 accionPendiente = callbackAccion;
-            } else if (mostrarBotonEntendido) {
-                // por defecto si requiere botón
             } else {
                 accionPendiente = null;
             }
 
             modalMapachitoEl.style.display = 'flex';
 
-            // Configurar auto-cierre si se especifica tiempo (ej: 5000 ms = 5 segundos)
+            // Configurar auto-cierre automático por defecto
             if (tiempoAutoCierreMs > 0) {
                 temporizadorAutoCierre = setTimeout(() => {
                     cerrarModalMapachito();
