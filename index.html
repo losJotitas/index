@@ -15,23 +15,25 @@
         
         html, body {
             width: 100vw;
-            height: 100vh;
-            height: 100dvh;
+            min-height: 100vh;
+            min-height: 100dvh;
             color: #ffffff;
             background-color: #0f172a;
-            overflow: hidden;
-            overscroll-behavior-y: contain;
+            /* Se permite el scroll vertical para habilitar el pull-to-refresh natural */
+            overflow-y: auto; 
+            overflow-x: hidden;
+            overscroll-behavior-y: auto;
         }
 
         #pantalla-portada {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh; height: 100dvh;
+            position: relative;
+            width: 100vw; 
+            min-height: 100vh; 
+            min-height: 100dvh;
             z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-y: auto;
         }
 
         .fondo-portada {
@@ -73,6 +75,12 @@
             border: 2px solid rgba(56, 189, 248, 0.3); 
         }
 
+        /* Contenedor relativo para el Autocompletado */
+        .search-box-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
         .input-busqueda {
             width: 100%;
             padding: 14px 16px;
@@ -84,6 +92,34 @@
             outline: none;
             font-weight: 500;
             box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+        }
+
+        /* Lista Predictiva Desplegable */
+        .sugerencias-lista {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            color: #0f172a;
+            border-radius: 0 0 14px 14px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-height: 180px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .sugerencia-item {
+            padding: 10px 14px;
+            font-size: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .sugerencia-item:hover, .sugerencia-item:active {
+            background-color: #e2e8f0;
         }
 
         .btn-opcion {
@@ -111,7 +147,7 @@
 
         #pantalla-mapa {
             display: none;
-            position: absolute;
+            position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh; height: 100dvh;
             flex-direction: column;
@@ -121,7 +157,7 @@
 
         .top-bar { background: #1a365d; color: white; padding: 10px 15px; display: flex; align-items: center; gap: 15px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .btn-volver { background: #2b6cb0; border: 1px solid #4299e1; color: white; padding: 8px 15px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-        .search-container-map { flex: 1; }
+        .search-container-map { flex: 1; position: relative; }
         .search-container-map input { width: 100%; padding: 10px 15px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; outline: none; background: #fff; color: #2d3748; }
 
         #map { flex: 1; width: 100%; }
@@ -206,7 +242,6 @@
         .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 280px; width: 85%; display: flex; flex-direction: column; align-items: center; }
         .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 10px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 100%; line-height: 1.4; }
         
-        /* Contenedor del Mapachito con Avatar de Respaldo por si falla Lottie */
         .raccoon-avatar-box { width: 110px; height: 110px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
         .raccoon-avatar-box lottie-player { width: 100px; height: 100px; position: absolute; z-index: 2; }
         .mapache-fallback-emoji { font-size: 55px; position: absolute; z-index: 1; }
@@ -227,18 +262,6 @@
         .semaforo-activo { background: #def7ec; color: #03543f; border: 1px solid #bcf0da; }
         .semaforo-inactivo { background: #fdf2f2; color: #9b1c1c; border: 1px solid #f8d7da; }
 
-        #pull-indicator {
-            position: fixed;
-            top: -50px; left: 0;
-            width: 100%; height: 50px;
-            display: flex; justify-content: center; align-items: center;
-            background: #1e293b; color: #38bdf8;
-            font-weight: bold; font-size: 0.85rem;
-            z-index: 30000;
-            transition: transform 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
         @media (min-width: 769px) {
             .img-celular { display: none; }
             .img-pc { display: block; }
@@ -246,8 +269,6 @@
     </style>
 </head>
 <body>
-
-    <div id="pull-indicator">🔄 Desliza hacia abajo para actualizar...</div>
 
     <!-- ================= PANTALLA 1: PORTADA ================= -->
     <div id="pantalla-portada">
@@ -258,7 +279,10 @@
 
         <div class="main-container">
             <div class="bloque-controles">
-                <input type="text" id="inputPortada" class="input-busqueda" placeholder="Buscar por nombre o número...">
+                <div class="search-box-wrapper">
+                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="Buscar por nombre o número..." autocomplete="off">
+                    <div id="sugerenciasPortada" class="sugerencias-lista"></div>
+                </div>
                 
                 <button class="btn-opcion btn-verde" onclick="interactuarYEjecutar('todos')">Ver Todos los Colegios en el Mapa</button>
                 <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito()">Filtrar por Redes Educativas (1-9)</button>
@@ -276,7 +300,8 @@
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
             <div class="search-container-map">
-                <input type="text" id="searchInputMap" placeholder="Filtrar colegios en el mapa...">
+                <input type="text" id="searchInputMap" placeholder="Filtrar colegios en el mapa..." autocomplete="off">
+                <div id="sugerenciasMapa" class="sugerencias-lista"></div>
             </div>
         </div>
         <div id="map"></div>
@@ -477,38 +502,143 @@
             document.getElementById('pantalla-mapa').style.display = 'none';
             document.getElementById('pantalla-portada').style.display = 'flex';
             document.getElementById('inputPortada').value = '';
+            document.getElementById('sugerenciasPortada').style.display = 'none';
         }
 
-        document.getElementById('inputPortada').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const texto = this.value.toLowerCase().trim();
-                accionPendiente = () => {
-                    document.getElementById('pantalla-portada').style.display = 'none';
-                    document.getElementById('pantalla-mapa').style.display = 'flex';
-                    setTimeout(() => { map.invalidateSize(); }, 200);
+        // --- SISTEMA DE AUTOCOMPLETADO Y OCULTAR TECLADO ---
+        function configurarAutocompletado(inputId, listaId, alSeleccionar) {
+            const input = document.getElementById(inputId);
+            const lista = document.getElementById(listaId);
 
-                    const filtrados = colegios.filter(c => 
-                        (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
-                        (c.codigo && c.codigo.toLowerCase().includes(texto))
-                    );
-                    mostrarColegiosEnMapa(filtrados);
-                    document.getElementById('searchInputMap').value = texto;
-                };
-                abrirModalMapachito('buscando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`);
-            }
+            input.addEventListener('input', function() {
+                const texto = this.value.toLowerCase().trim();
+                lista.innerHTML = '';
+                if (texto.length === 0) {
+                    lista.style.display = 'none';
+                    return;
+                }
+
+                const coincidencias = colegios.filter(c => 
+                    (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
+                    (c.codigo && c.codigo.toLowerCase().includes(texto))
+                ).slice(0, 6); // Máximo 6 sugerencias
+
+                if (coincidencias.length === 0) {
+                    lista.style.display = 'none';
+                    return;
+                }
+
+                coincidencias.forEach(c => {
+                    const div = document.createElement('div');
+                    div.className = 'sugerencia-item';
+                    div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(${c.codigo || 'S/N'})</span>`;
+                    div.addEventListener('click', () => {
+                        input.value = c.nombre_colegio;
+                        lista.style.display = 'none';
+                        input.blur(); // Oculta el teclado virtual en celulares
+                        alSeleccionar(c);
+                    });
+                    lista.appendChild(div);
+                });
+                lista.style.display = 'block';
+            });
+
+            // Ocultar teclado y sugerencias al presionar Enter
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    lista.style.display = 'none';
+                    input.blur(); // Oculta el teclado móvil
+                    const texto = this.value.toLowerCase().trim();
+                    alSeleccionarPorTexto(texto);
+                }
+            });
+
+            // Ocultar sugerencias si se hace clic fuera
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !lista.contains(e.target)) {
+                    lista.style.display = 'none';
+                }
+            });
+        }
+
+        // Configuración para Portada
+        configurarAutocompletado('inputPortada', 'sugerenciasPortada', function(colegioSeleccionado) {
+            accionPendiente = () => {
+                document.getElementById('pantalla-portada').style.display = 'none';
+                document.getElementById('pantalla-mapa').style.display = 'flex';
+                setTimeout(() => { map.invalidateSize(); }, 200);
+                mostrarColegiosEnMapa([colegioSeleccionado]);
+                if (colegioSeleccionado.latitud && colegioSeleccionado.longitud) {
+                    map.setView([colegioSeleccionado.latitud, colegioSeleccionado.longitud], 16);
+                }
+            };
+            abrirModalMapachito('buscando', `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`);
         });
 
+        function alSeleccionarPorTexto(texto) {
+            accionPendiente = () => {
+                document.getElementById('pantalla-portada').style.display = 'none';
+                document.getElementById('pantalla-mapa').style.display = 'flex';
+                setTimeout(() => { map.invalidateSize(); }, 200);
+
+                const filtrados = colegios.filter(c => 
+                    (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
+                    (c.codigo && c.codigo.toLowerCase().includes(texto))
+                );
+                mostrarColegiosEnMapa(filtrados);
+                document.getElementById('searchInputMap').value = texto;
+                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                }
+            };
+            abrirModalMapachito('buscando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`);
+        }
+
+        // Configuración para el Buscador del Mapa
         const inputBuscadorMapa = document.getElementById('searchInputMap');
+        const listaMapa = document.getElementById('sugerenciasMapa');
+        
         inputBuscadorMapa.addEventListener('input', (e) => {
             const texto = e.target.value.toLowerCase().trim();
+            listaMapa.innerHTML = '';
+            if (texto.length === 0) {
+                listaMapa.style.display = 'none';
+                mostrarColegiosEnMapa(colegios);
+                return;
+            }
+
             const filtrados = colegios.filter(c => 
                 (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
                 (c.distrito && c.distrito.toLowerCase().includes(texto)) ||
                 (c.codigo && c.codigo.toLowerCase().includes(texto))
             );
+
             mostrarColegiosEnMapa(filtrados);
             if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
                 map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+            }
+
+            // Crear lista desplegable en el mapa
+            filtrados.slice(0, 5).forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'sugerencia-item';
+                div.innerHTML = `<b>${c.nombre_colegio}</b>`;
+                div.addEventListener('click', () => {
+                    inputBuscadorMapa.value = c.nombre_colegio;
+                    listaMapa.style.display = 'none';
+                    inputBuscadorMapa.blur(); // Oculta el teclado
+                    mostrarColegiosEnMapa([c]);
+                    if (c.latitud && c.longitud) map.setView([c.latitud, c.longitud], 16);
+                });
+                listaMapa.appendChild(div);
+            });
+            listaMapa.style.display = 'block';
+        });
+
+        inputBuscadorMapa.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                listaMapa.style.display = 'none';
+                inputBuscadorMapa.blur(); // Oculta el teclado virtual en el celular
             }
         });
 
