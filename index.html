@@ -19,7 +19,6 @@
             min-height: 100dvh;
             color: #ffffff;
             background-color: #0f172a;
-            /* Se permite el scroll vertical para habilitar el pull-to-refresh natural */
             overflow-y: auto; 
             overflow-x: hidden;
             overscroll-behavior-y: auto;
@@ -75,7 +74,6 @@
             border: 2px solid rgba(56, 189, 248, 0.3); 
         }
 
-        /* Contenedor relativo para el Autocompletado */
         .search-box-wrapper {
             position: relative;
             width: 100%;
@@ -94,7 +92,6 @@
             box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
         }
 
-        /* Lista Predictiva Desplegable */
         .sugerencias-lista {
             position: absolute;
             top: 100%;
@@ -162,7 +159,6 @@
 
         #map { flex: 1; width: 100%; }
 
-        /* Widget Flotante del Mapachito Durmiendo (30s de inactividad) */
         #mapachito-flotante {
             position: fixed;
             bottom: 20px;
@@ -195,7 +191,6 @@
             white-space: nowrap;
         }
 
-        /* Modal Redes Educativas Corregido y Accesible */
         #modal-redes { 
             display: none; 
             position: fixed; 
@@ -237,7 +232,6 @@
         .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
         .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
 
-        /* Modal Reactivo de Mapachito con Respaldo Visual Garantizado */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; }
         .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 280px; width: 85%; display: flex; flex-direction: column; align-items: center; }
         .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 10px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 100%; line-height: 1.4; }
@@ -251,9 +245,50 @@
         #modal-detalle { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 20000; justify-content: center; align-items: center; }
         .modal-content { background: white; width: 90%; max-width: 600px; max-height: 85vh; border-radius: 12px; overflow-y: auto; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; color: #2d3748; }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #a0aec0; }
-        .school-photo { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #edf2f7; }
-        .btn-primary { background: #3182ce; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; }
         
+        .btn-primary { background: #3182ce; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
+        .btn-secundario { background: #4a5568; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
+        
+        /* Visor de Pantalla Completa para la Fachada del Colegio */
+        #modal-fachada-fullscreen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 30000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .fachada-fullscreen-img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(255,255,255,0.1);
+        }
+        .btn-cerrar-fachada {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border: none;
+            font-size: 1.8rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .btn-cerrar-fachada:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
         .school-badge { display: inline-block; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-bottom: 5px; }
         .badge-estatal { background: #ebf8ff; color: #3182ce; }
         .badge-particular { background: #faf5ff; color: #805ad5; }
@@ -307,7 +342,7 @@
         <div id="map"></div>
     </div>
 
-    <!-- WIDGET FLOTANTE DE MAPACHITO (Tras 30s de inactividad) -->
+    <!-- WIDGET FLOTANTE DE MAPACHITO -->
     <div id="mapachito-flotante" onclick="despertarMapachito()" title="¡Haz clic para despertar a Mapachito!">
         <div class="burbuja-ronquido">zzz... 🐾</div>
         <span style="font-size: 32px;">🦝💤</span>
@@ -334,7 +369,7 @@
         </div>
     </div>
 
-    <!-- Modal Reactivo de Mapachito con Avatar Garantizado -->
+    <!-- Modal Reactivo de Mapachito -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
@@ -352,6 +387,12 @@
             <span class="modal-close" onclick="cerrarDetalle()">&times;</span>
             <div id="modal-body-content"></div>
         </div>
+    </div>
+
+    <!-- Visor de Fachada en Pantalla Completa -->
+    <div id="modal-fachada-fullscreen">
+        <button class="btn-cerrar-fachada" onclick="cerrarFachadaFullscreen()">&times;</button>
+        <img id="imgFachadaFull" class="fachada-fullscreen-img" src="" alt="Fachada del Colegio">
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -505,7 +546,6 @@
             document.getElementById('sugerenciasPortada').style.display = 'none';
         }
 
-        // --- SISTEMA DE AUTOCOMPLETADO Y OCULTAR TECLADO ---
         function configurarAutocompletado(inputId, listaId, alSeleccionar) {
             const input = document.getElementById(inputId);
             const lista = document.getElementById(listaId);
@@ -521,7 +561,7 @@
                 const coincidencias = colegios.filter(c => 
                     (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
                     (c.codigo && c.codigo.toLowerCase().includes(texto))
-                ).slice(0, 6); // Máximo 6 sugerencias
+                ).slice(0, 6);
 
                 if (coincidencias.length === 0) {
                     lista.style.display = 'none';
@@ -535,7 +575,7 @@
                     div.addEventListener('click', () => {
                         input.value = c.nombre_colegio;
                         lista.style.display = 'none';
-                        input.blur(); // Oculta el teclado virtual en celulares
+                        input.blur();
                         alSeleccionar(c);
                     });
                     lista.appendChild(div);
@@ -543,17 +583,15 @@
                 lista.style.display = 'block';
             });
 
-            // Ocultar teclado y sugerencias al presionar Enter
             input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     lista.style.display = 'none';
-                    input.blur(); // Oculta el teclado móvil
+                    input.blur();
                     const texto = this.value.toLowerCase().trim();
                     alSeleccionarPorTexto(texto);
                 }
             });
 
-            // Ocultar sugerencias si se hace clic fuera
             document.addEventListener('click', function(e) {
                 if (!input.contains(e.target) && !lista.contains(e.target)) {
                     lista.style.display = 'none';
@@ -561,7 +599,6 @@
             });
         }
 
-        // Configuración para Portada
         configurarAutocompletado('inputPortada', 'sugerenciasPortada', function(colegioSeleccionado) {
             accionPendiente = () => {
                 document.getElementById('pantalla-portada').style.display = 'none';
@@ -594,7 +631,6 @@
             abrirModalMapachito('buscando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`);
         }
 
-        // Configuración para el Buscador del Mapa
         const inputBuscadorMapa = document.getElementById('searchInputMap');
         const listaMapa = document.getElementById('sugerenciasMapa');
         
@@ -618,7 +654,6 @@
                 map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
             }
 
-            // Crear lista desplegable en el mapa
             filtrados.slice(0, 5).forEach(c => {
                 const div = document.createElement('div');
                 div.className = 'sugerencia-item';
@@ -626,7 +661,7 @@
                 div.addEventListener('click', () => {
                     inputBuscadorMapa.value = c.nombre_colegio;
                     listaMapa.style.display = 'none';
-                    inputBuscadorMapa.blur(); // Oculta el teclado
+                    inputBuscadorMapa.blur();
                     mostrarColegiosEnMapa([c]);
                     if (c.latitud && c.longitud) map.setView([c.latitud, c.longitud], 16);
                 });
@@ -638,7 +673,7 @@
         inputBuscadorMapa.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 listaMapa.style.display = 'none';
-                inputBuscadorMapa.blur(); // Oculta el teclado virtual en el celular
+                inputBuscadorMapa.blur();
             }
         });
 
@@ -666,9 +701,15 @@
             const contenido = document.getElementById('modal-body-content');
             const rutaFoto = obtenerRutaFoto(colegio.nombre_colegio);
 
-            let seccionFoto = rutaFoto 
-                ? `<img src="${rutaFoto}" class="school-photo" alt="Fachada" onerror="this.style.display='none';">`
-                : `<div style="background:#f7fafc; border: 2px dashed #cbd5e0; padding:20px; text-align:center; border-radius:8px; margin-bottom:15px;"><span style="font-size: 2rem;">🐾</span><p style="color:#718096; margin-top:5px; font-weight:600; font-size:0.9rem;">Mapachito está preparando la foto</p></div>`;
+            // Botón Fachada del Colegio (Solo aparece si existe foto registrada)
+            let botonFachadaHtml = "";
+            if (rutaFoto) {
+                botonFachadaHtml = `
+                    <button onclick="verFachadaFullscreen('${rutaFoto}')" class="btn-secundario">
+                        🏫 Fachada del Colegio
+                    </button>
+                `;
+            }
 
             const nivelesTexto = (colegio.NIVELES || colegio.niveles || '').toLowerCase();
             const tieneCuna = nivelesTexto.includes("cuna");
@@ -688,15 +729,15 @@
                     <span class="school-badge ${colegio.gestion === 'Estatal' ? 'badge-estatal' : 'badge-particular'}">${colegio.gestion}</span>
                     <h2 style="font-size: 1.2rem; color: #1a365d; margin-top: 5px;">${colegio.nombre_colegio}</h2>
                 </div>
-                ${seccionFoto}
-                <div class="modal-body">
+                <div class="modal-body" style="margin-top: 10px;">
                     <p>📍 <b>Dirección:</b> ${colegio.direccion || 'No especificada'}</p>
                     <p>🏙️ <b>Distrito:</b> ${colegio.distrito || 'Ventanilla'} &nbsp;|&nbsp; 🏫 <b>Red Educativa:</b> ${colegio.red_educativa || 'No especificada'}</p>
-                    <p>📚 <b>Niveles:</b></p>
+                    <p style="margin-top: 8px;">📚 <b>Niveles:</b></p>
                     <div class="semaforo-container">${htmlSemaforo}</div>
-                    <p>📋 <b>Requisitos:</b> ${colegio.requisitos_de_matricula || 'Consultar en la institución.'}</p>
+                    <p style="margin-top: 8px;">📋 <b>Requisitos para Matrícula:</b> ${colegio.requisitos_de_matricula || 'Consultar en la institución.'}</p>
                 </div>
-                <div style="margin-top: 15px;">
+                <div style="margin-top: 20px;">
+                    ${botonFachadaHtml}
                     <button onclick="abrirRutaDesdeMiUbicacion(${colegio.latitud}, ${colegio.longitud})" class="btn-primary">
                         🗺️ Abrir ruta exacta desde mi ubicación
                     </button>
@@ -706,6 +747,17 @@
         }
 
         function cerrarDetalle() { document.getElementById('modal-detalle').style.display = 'none'; }
+
+        function verFachadaFullscreen(ruta) {
+            const modalFull = document.getElementById('modal-fachada-fullscreen');
+            const imgFull = document.getElementById('imgFachadaFull');
+            imgFull.src = ruta;
+            modalFull.style.display = 'flex';
+        }
+
+        function cerrarFachadaFullscreen() {
+            document.getElementById('modal-fachada-fullscreen').style.display = 'none';
+        }
 
         function abrirRutaDesdeMiUbicacion(lat, lng) {
             if (navigator.geolocation) {
