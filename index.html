@@ -249,7 +249,6 @@
         .btn-primary { background: #3182ce; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
         .btn-secundario { background: #4a5568; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
         
-        /* Visor de Pantalla Completa para la Fachada del Colegio */
         #modal-fachada-fullscreen {
             display: none;
             position: fixed;
@@ -699,17 +698,13 @@
 
             const modal = document.getElementById('modal-detalle');
             const contenido = document.getElementById('modal-body-content');
-            const rutaFoto = obtenerRutaFoto(colegio.nombre_colegio);
-
-            // Botón Fachada del Colegio (Solo aparece si existe foto registrada)
-            let botonFachadaHtml = "";
-            if (rutaFoto) {
-                botonFachadaHtml = `
-                    <button onclick="verFachadaFullscreen('${rutaFoto}')" class="btn-secundario">
-                        🏫 Fachada del Colegio
-                    </button>
-                `;
-            }
+            
+            // El botón "Fachada del Colegio" ahora está fijo para absolutamente todos los colegios
+            const botonFachadaHtml = `
+                <button onclick="intentarVerFachada('${colegio.nombre_colegio}')" class="btn-secundario">
+                    🏫 Fachada del Colegio
+                </button>
+            `;
 
             const nivelesTexto = (colegio.NIVELES || colegio.niveles || '').toLowerCase();
             const tieneCuna = nivelesTexto.includes("cuna");
@@ -748,11 +743,18 @@
 
         function cerrarDetalle() { document.getElementById('modal-detalle').style.display = 'none'; }
 
-        function verFachadaFullscreen(ruta) {
-            const modalFull = document.getElementById('modal-fachada-fullscreen');
-            const imgFull = document.getElementById('imgFachadaFull');
-            imgFull.src = ruta;
-            modalFull.style.display = 'flex';
+        function intentarVerFachada(nombreColegio) {
+            const ruta = obtenerRutaFoto(nombreColegio);
+            if (ruta) {
+                // Si existe la foto, abre el visor de pantalla completa
+                const modalFull = document.getElementById('modal-fachada-fullscreen');
+                const imgFull = document.getElementById('imgFachadaFull');
+                imgFull.src = ruta;
+                modalFull.style.display = 'flex';
+            } else {
+                // Si no tiene foto, despliega a Mapachito con el mensaje exacto solicitado
+                abrirModalMapachito('pensando', "Pronto se agregara la foto de la fachada del colegio");
+            }
         }
 
         function cerrarFachadaFullscreen() {
