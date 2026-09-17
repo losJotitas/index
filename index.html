@@ -203,8 +203,8 @@
         }
         .modal-redes-content { 
             background: #1e293b; 
-            width: 90%; 
-            max-width: 380px; 
+            width: 92%; 
+            max-width: 420px; 
             border-radius: 20px; 
             border: 2px solid #38bdf8; 
             padding: 20px; 
@@ -214,19 +214,38 @@
         }
         .modal-redes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .modal-redes-header h3 { color: #38bdf8; font-size: 1rem; }
-        .redes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-red-item { padding: 12px; border-radius: 12px; border: none; color: white; font-weight: bold; font-size: 0.9rem; cursor: pointer; text-align: center; transition: transform 0.2s; }
-        .btn-red-item:hover { transform: scale(1.03); filter: brightness(1.1); }
+        
+        /* Lista vertical de redes con sus nombres completos */
+        .redes-lista-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-red-item {
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s, filter 0.2s;
+        }
+        .btn-red-item:hover { transform: scale(1.02); filter: brightness(1.1); }
 
-        .red-1 { background-color: #e53e3e; }
-        .red-2 { background-color: #dd6b20; }
-        .red-3 { background-color: #d69e2e; color: #1a202c; }
-        .red-4 { background-color: #38a169; }
-        .red-5 { background-color: #319795; }
-        .red-6 { background-color: #3182ce; }
-        .red-7 { background-color: #5a67d8; }
-        .red-8 { background-color: #805ad5; }
-        .red-9 { background-color: #d53f8c; }
+        .red-1 { background-color: #b91c1c; }
+        .red-2 { background-color: #c2410c; }
+        .red-3 { background-color: #b45309; }
+        .red-4 { background-color: #15803d; }
+        .red-5 { background-color: #0f766e; }
+        .red-6 { background-color: #1d4ed8; }
+        .red-7 { background-color: #4338ca; }
+        .red-8 { background-color: #6b21a8; }
+        .red-9 { background-color: #be185d; }
 
         .pin-clasico-container { position: relative; width: 30px; height: 42px; }
         .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
@@ -249,7 +268,6 @@
         .btn-primary { background: #1a73e8; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; }
         .btn-secundario { background: #4a5568; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
         
-        /* Contenedor para colocar los botones de mapas lado a lado en la misma línea */
         .botones-mapa-container {
             display: flex;
             gap: 8px;
@@ -333,7 +351,12 @@
                 </div>
                 
                 <button class="btn-opcion btn-verde" onclick="interactuarYEjecutar('todos')">Ver Todos los Colegios en el Mapa</button>
-                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito()">Filtrar por Redes Educativas (1-9)</button>
+                
+                <!-- Botón actualizado con texto en dos líneas -->
+                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito()">
+                    Filtrar por Redes Educativas<br>
+                    <span style="font-size: 0.85rem; font-weight: 500; opacity: 0.9;">(1-9)</span>
+                </button>
                 
                 <div class="fila-botones-dividida">
                     <button class="btn-opcion btn-estatales" onclick="interactuarYEjecutar('Estatal')">Colegios Estatales</button>
@@ -368,16 +391,35 @@
                 <h3>Selecciona una Red Educativa</h3>
                 <span style="cursor:pointer; font-size:1.4rem; color:#a0aec0;" onclick="forzarCierreModalRedes()">&times;</span>
             </div>
-            <div class="redes-grid">
-                <button class="btn-red-item red-1" onclick="filtrarPorRedConMapachito(1)">Red 01</button>
-                <button class="btn-red-item red-2" onclick="filtrarPorRedConMapachito(2)">Red 02</button>
-                <button class="btn-red-item red-3" onclick="filtrarPorRedConMapachito(3)">Red 03</button>
-                <button class="btn-red-item red-4" onclick="filtrarPorRedConMapachito(4)">Red 04</button>
-                <button class="btn-red-item red-5" onclick="filtrarPorRedConMapachito(5)">Red 05</button>
-                <button class="btn-red-item red-6" onclick="filtrarPorRedConMapachito(6)">Red 06</button>
-                <button class="btn-red-item red-7" onclick="filtrarPorRedConMapachito(7)">Red 07</button>
-                <button class="btn-red-item red-8" onclick="filtrarPorRedConMapachito(8)">Red 08</button>
-                <button class="btn-red-item red-9" onclick="filtrarPorRedConMapachito(9)">Red 09</button>
+            <!-- Lista vertical detallada con los nombres de cada Red -->
+            <div class="redes-lista-vertical">
+                <button class="btn-red-item red-1" onclick="filtrarPorRedConMapachito(1)">
+                    <span>Red N° 01</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Pachacútec Oeste</span>
+                </button>
+                <button class="btn-red-item red-2" onclick="filtrarPorRedConMapachito(2)">
+                    <span>Red N° 02</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Pachacútec Central</span>
+                </button>
+                <button class="btn-red-item red-3" onclick="filtrarPorRedConMapachito(3)">
+                    <span>Red N° 03</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Pachacútec Este</span>
+                </button>
+                <button class="btn-red-item red-4" onclick="filtrarPorRedConMapachito(4)">
+                    <span>Red N° 04</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Ventanilla Alta / Zona Comercial</span>
+                </button>
+                <button class="btn-red-item red-5" onclick="filtrarPorRedConMapachito(5)">
+                    <span>Red N° 05</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Ventanilla Baja / Ciudad Satélite</span>
+                </button>
+                <button class="btn-red-item red-6" onclick="filtrarPorRedConMapachito(6)">
+                    <span>Red N° 06</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Ciudad De Pescadores / Angamos</span>
+                </button>
+                <button class="btn-red-item red-7" onclick="filtrarPorRedConMapachito(7)">
+                    <span>Red N° 07</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Mi Perú - Sector Sur</span>
+                </button>
+                <button class="btn-red-item red-8" onclick="filtrarPorRedConMapachito(8)">
+                    <span>Red N° 08</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Mi Perú - Sector Norte</span>
+                </button>
+                <button class="btn-red-item red-9" onclick="filtrarPorRedConMapachito(9)">
+                    <span>Red N° 09</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Mi Perú - Ampliación / Nuevos Asentamientos</span>
+                </button>
             </div>
         </div>
     </div>
@@ -436,8 +478,8 @@
         });
 
         const coloresRedes = {
-            1: "#e53e3e", 2: "#dd6b20", 3: "#d69e2e", 4: "#38a169",
-            5: "#319795", 6: "#3182ce", 7: "#5a67d8", 8: "#805ad5", 9: "#d53f8c"
+            1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
+            5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
         };
 
         function extraerNumeroRed(redStr) {
@@ -549,7 +591,7 @@
                     map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
                 }
             };
-            abrirModalMapachito('buscando', `¡Buscando colegios de la Red Educativa N° ${numeroRed}! 🔍`);
+            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`);
         }
 
         function volverAPortada() {
@@ -746,8 +788,6 @@
                 </div>
                 <div style="margin-top: 20px;">
                     ${botonFachadaHtml}
-                    
-                    <!-- Contenedor flex para colocar Explorar mapa e Iniciar Viaje en la misma línea -->
                     <div class="botones-mapa-container">
                         <button onclick="explorarMapaGoogle(${colegio.latitud}, ${colegio.longitud})" class="btn-primary">
                             Explorar mapa ➔
