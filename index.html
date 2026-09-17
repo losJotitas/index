@@ -246,7 +246,7 @@
         .modal-content { background: white; width: 90%; max-width: 600px; max-height: 85vh; border-radius: 12px; overflow-y: auto; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; color: #2d3748; }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #a0aec0; }
         
-        .btn-primary { background: #3182ce; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
+        .btn-primary { background: #1a73e8; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
         .btn-secundario { background: #4a5568; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
         
         #modal-fachada-fullscreen {
@@ -699,7 +699,6 @@
             const modal = document.getElementById('modal-detalle');
             const contenido = document.getElementById('modal-body-content');
             
-            // El botón "Fachada del Colegio" ahora está fijo para absolutamente todos los colegios
             const botonFachadaHtml = `
                 <button onclick="intentarVerFachada('${colegio.nombre_colegio}')" class="btn-secundario">
                     🏫 Fachada del Colegio
@@ -733,8 +732,11 @@
                 </div>
                 <div style="margin-top: 20px;">
                     ${botonFachadaHtml}
-                    <button onclick="abrirRutaDesdeMiUbicacion(${colegio.latitud}, ${colegio.longitud})" class="btn-primary">
-                        🗺️ Abrir ruta exacta desde mi ubicación
+                    <button onclick="explorarMapaGoogle(${colegio.latitud}, ${colegio.longitud})" class="btn-primary">
+                        🗺️ Explorar mapa ➔
+                    </button>
+                    <button onclick="iniciarViajeGoogle(${colegio.latitud}, ${colegio.longitud})" class="btn-primary" style="background: #188038;">
+                        🧭 Iniciar Viaje ➢
                     </button>
                 </div>
             `;
@@ -746,13 +748,11 @@
         function intentarVerFachada(nombreColegio) {
             const ruta = obtenerRutaFoto(nombreColegio);
             if (ruta) {
-                // Si existe la foto, abre el visor de pantalla completa
                 const modalFull = document.getElementById('modal-fachada-fullscreen');
                 const imgFull = document.getElementById('imgFachadaFull');
                 imgFull.src = ruta;
                 modalFull.style.display = 'flex';
             } else {
-                // Si no tiene foto, despliega a Mapachito con el mensaje exacto solicitado
                 abrirModalMapachito('pensando', "Pronto se agregara la foto de la fachada del colegio");
             }
         }
@@ -761,20 +761,26 @@
             document.getElementById('modal-fachada-fullscreen').style.display = 'none';
         }
 
-        function abrirRutaDesdeMiUbicacion(lat, lng) {
+        function explorarMapaGoogle(lat, lng) {
+            // Equivalente a ver la ubicación en Google Maps (Explorar/Cómo llegar general)
+            window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+        }
+
+        function iniciarViajeGoogle(lat, lng) {
+            // Activa la ruta guiada paso a paso desde la ubicación actual (Estilo Navegación Google Maps)
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const userLat = position.coords.latitude;
                         const userLng = position.coords.longitude;
-                        window.open(`https://www.google.com/maps/dir/${userLat},${userLng}/${lat},${lng}`, '_blank');
+                        window.open(`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${lat},${lng}&travelmode=driving`, '_blank');
                     },
                     () => {
-                        window.open(`https://www.google.com/maps/dir//${lat},${lng}`, '_blank');
+                        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`, '_blank');
                     }
                 );
             } else {
-                window.open(`https://www.google.com/maps/dir//${lat},${lng}`, '_blank');
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`, '_blank');
             }
         }
 
