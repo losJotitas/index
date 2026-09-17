@@ -388,7 +388,7 @@
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
-                <button class="btn-opcion btn-verde" onclick="interactuarYEjecutar(event, 'todos')">Ver Todos los Colegios en el Mapa</button>
+                <button class="btn-opcion btn-verde" onclick="mostrarInfoTodosMapa(event)">Ver Todos los Colegios en el Mapa</button>
                 
                 <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito(event)">
                     Filtrar por Redes Educativas<br>
@@ -445,7 +445,7 @@
         </div>
     </div>
 
-    <!-- Modal Reactivo de Mapachito (Con soporte para auto-cierre y ocultar botón) -->
+    <!-- Modal Reactivo de Mapachito -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
@@ -499,16 +499,16 @@
             reiniciarTemporizadorInactividad();
         }
 
-        // BIENVENIDA INICIAL (3 segundos, sin botón de entendido)
+        // BIENVENIDA INICIAL (3 segundos, sin botón)
         function verificarPrimeraInteraccion() {
             if (!primeraInteraccionRealizada) {
                 primeraInteraccionRealizada = true;
                 abrirModalMapachito(
                     'saludando', 
                     "¡Hola! Soy Mapachito, dueño de esta app escolar. Seré tu guía en este recorrido.", 
-                    false, // Oculta el botón
+                    false, 
                     null, 
-                    3000   // 3 segundos de duración
+                    3000
                 );
             }
             reiniciarTemporizadorInactividad();
@@ -573,40 +573,39 @@
             });
         }
 
-        // VER TODOS LOS COLEGIOS (3 segundos, sin botón de entendido)
-        function interactuarYEjecutar(e, tipoFiltro) {
+        // VER TODOS LOS COLEGIOS EN EL MAPA (Estado 'mapa', 3 segundos, sin botón)
+        function mostrarInfoTodosMapa(e) {
             e.stopPropagation();
-            let mensaje = "¡Preparando el mapa escolar para ti!";
             abrirModalMapachito(
-                'buscando', 
-                mensaje, 
-                false, // Oculta botón Entendido
-                () => { ejecutarIrAlMapa(tipoFiltro); }, 
-                3000   // 3 segundos exactos
+                'mapa', 
+                "¡Vamos a explorar todos los colegios en el mapa juntos!", 
+                false, 
+                () => { ejecutarIrAlMapa('todos'); }, 
+                3000
             );
         }
 
-        // COLEGIOS PARTICULARES (5 segundos, sin botón de entendido)
+        // COLEGIOS PARTICULARES (5 segundos, sin botón)
         function mostrarInfoParticulares(e) {
             e.stopPropagation();
             abrirModalMapachito(
                 'feliz', 
                 "Aquí te mostraré todos los colegios Particulares", 
-                false, // Oculta botón Entendido
+                false, 
                 () => { ejecutarIrAlMapa('Particular'); }, 
-                5000   // 5 segundos exactos
+                5000
             );
         }
 
-        // COLEGIOS ESTATALES (5 segundos, sin botón de entendido)
+        // COLEGIOS ESTATALES (5 segundos, sin botón)
         function mostrarInfoEstatales(e) {
             e.stopPropagation();
             abrirModalMapachito(
                 'sorprendido', 
                 "¿Sabías que en total son 146 colegios estatales en Ventanilla y Mi Perú?", 
-                false, // Oculta botón Entendido
+                false, 
                 () => { ejecutarIrAlMapa('Estatal'); }, 
-                5000   // 5 segundos exactos
+                5000
             );
         }
 
@@ -623,15 +622,15 @@
             mostrarColegiosEnMapa(colegiosFiltrados);
         }
 
-        // FILTRAR POR REDES EDUCATIVAS (3 segundos, sin botón de entendido)
+        // FILTRAR POR REDES EDUCATIVAS (3 segundos, sin botón)
         function abrirModalRedesConMapachito(e) {
             e.stopPropagation();
             abrirModalMapachito(
                 'pensando', 
                 "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar? 🏫", 
-                false, // Oculta botón Entendido
+                false, 
                 () => { document.getElementById('modal-redes').style.display = 'flex'; }, 
-                3000   // 3 segundos exactos
+                3000
             );
         }
 
@@ -645,8 +644,6 @@
 
         function filtrarPorRedConMapachito(numeroRed) {
             document.getElementById('modal-redes').style.display = 'none';
-            
-            // Redes educativas al hacer clic en un número también con 3 segundos sin botón
             abrirModalMapachito(
                 'buscando', 
                 `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, 
@@ -952,6 +949,8 @@
                 archivoJson = 'mapache_olfateando.json';
             } else if (estado === 'feliz') {
                 archivoJson = 'mapache_feliz.json';
+            } else if (estado === 'mapa') {
+                archivoJson = 'mapache_mapa.json'; // Nueva animación de mapachito analizando/señalando el mapa
             }
 
             animacionLottieEl.load(archivoJson);
@@ -971,7 +970,6 @@
 
             modalMapachitoEl.style.display = 'flex';
 
-            // Configurar auto-cierre automático por defecto
             if (tiempoAutoCierreMs > 0) {
                 temporizadorAutoCierre = setTimeout(() => {
                     cerrarModalMapachito();
