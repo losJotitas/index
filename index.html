@@ -190,6 +190,8 @@
             width: 140px;
             height: 140px;
             margin-bottom: 15px;
+            opacity: 1 !important;
+            transform: translateZ(0);
         }
         .inactivity-box h2 {
             color: #38bdf8;
@@ -265,8 +267,31 @@
         .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 300px; width: 90%; display: flex; flex-direction: column; align-items: center; }
         .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 100%; line-height: 1.4; }
         
-        .raccoon-avatar-box { width: 130px; height: 130px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
-        .raccoon-avatar-box lottie-player { width: 120px; height: 120px; position: absolute; z-index: 2; }
+        /* CORRECCIÓN ANTI-DESTELLO (FANTASMA) */
+        .raccoon-avatar-box { 
+            width: 130px; 
+            height: 130px; 
+            margin-bottom: 14px; 
+            background: #0f172a; 
+            border-radius: 50%; 
+            border: 3px solid #38bdf8; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow: hidden; 
+            position: relative; 
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+        .raccoon-avatar-box lottie-player { 
+            width: 120px; 
+            height: 120px; 
+            position: absolute; 
+            z-index: 2;
+            opacity: 1 !important;
+            transform: translateZ(0);
+        }
 
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
 
@@ -386,7 +411,7 @@
         <div id="map"></div>
     </div>
 
-    <!-- ================= MODAL INACTIVIDAD 30s (Mapachito Durmiendo Pantalla Completa) ================= -->
+    <!-- ================= MODAL INACTIVIDAD 30s ================= -->
     <div id="modal-inactividad-total" onclick="despertarMapachitoInactivo()">
         <div class="inactivity-box" onclick="event.stopPropagation(); despertarMapachitoInactivo();">
             <lottie-player src="mapache_durmiendo.json" background="transparent" speed="1" loop autoplay></lottie-player>
@@ -453,7 +478,6 @@
         let temporizadorAutoCierre = null;
         let primeraInteraccionRealizada = false;
 
-        // GESTIÓN DE INACTIVIDAD (30 SEGUNDOS)
         function reiniciarTemporizadorInactividad() {
             const modalInactivo = document.getElementById('modal-inactividad-total');
             if (modalInactivo.style.display === 'flex') return;
@@ -470,7 +494,6 @@
             reiniciarTemporizadorInactividad();
         }
 
-        // BIENVENIDA INICIAL (3 segundos, sin botón)
         function verificarPrimeraInteraccion() {
             if (!primeraInteraccionRealizada) {
                 primeraInteraccionRealizada = true;
@@ -544,7 +567,6 @@
             });
         }
 
-        // VER TODOS LOS COLEGIOS EN EL MAPA (Estado 'olfateando', 3 segundos, sin botón)
         function mostrarInfoTodosMapa(e) {
             e.stopPropagation();
             abrirModalMapachito(
@@ -556,7 +578,6 @@
             );
         }
 
-        // COLEGIOS PARTICULARES (5 segundos, sin botón)
         function mostrarInfoParticulares(e) {
             e.stopPropagation();
             abrirModalMapachito(
@@ -568,7 +589,6 @@
             );
         }
 
-        // COLEGIOS ESTATALES (5 segundos, sin botón)
         function mostrarInfoEstatales(e) {
             e.stopPropagation();
             abrirModalMapachito(
@@ -593,7 +613,6 @@
             mostrarColegiosEnMapa(colegiosFiltrados);
         }
 
-        // FILTRAR POR REDES EDUCATIVAS (3 segundos, sin botón)
         function abrirModalRedesConMapachito(e) {
             e.stopPropagation();
             abrirModalMapachito(
