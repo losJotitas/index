@@ -215,7 +215,6 @@
         .modal-redes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .modal-redes-header h3 { color: #38bdf8; font-size: 1rem; }
         
-        /* Lista vertical de redes con sus nombres completos */
         .redes-lista-vertical {
             display: flex;
             flex-direction: column;
@@ -227,7 +226,7 @@
             border: 1px solid rgba(255,255,255,0.2);
             color: white;
             font-weight: 600;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             cursor: pointer;
             text-align: left;
             display: flex;
@@ -352,7 +351,6 @@
                 
                 <button class="btn-opcion btn-verde" onclick="interactuarYEjecutar('todos')">Ver Todos los Colegios en el Mapa</button>
                 
-                <!-- Botón actualizado con texto en dos líneas -->
                 <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito()">
                     Filtrar por Redes Educativas<br>
                     <span style="font-size: 0.85rem; font-weight: 500; opacity: 0.9;">(1-9)</span>
@@ -391,34 +389,34 @@
                 <h3>Selecciona una Red Educativa</h3>
                 <span style="cursor:pointer; font-size:1.4rem; color:#a0aec0;" onclick="forzarCierreModalRedes()">&times;</span>
             </div>
-            <!-- Lista vertical detallada con los nombres de cada Red -->
+            <!-- Lista vertical actualizada con los nombres exactos proporcionados -->
             <div class="redes-lista-vertical">
                 <button class="btn-red-item red-1" onclick="filtrarPorRedConMapachito(1)">
-                    <span>Red N° 01</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Pachacútec Oeste</span>
+                    <span>RED N° 01</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">PACHACÚTEC OESTE</span>
                 </button>
                 <button class="btn-red-item red-2" onclick="filtrarPorRedConMapachito(2)">
-                    <span>Red N° 02</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Pachacútec Central</span>
+                    <span>RED N° 02</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">PACHACÚTEC SUR</span>
                 </button>
                 <button class="btn-red-item red-3" onclick="filtrarPorRedConMapachito(3)">
-                    <span>Red N° 03</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Pachacútec Este</span>
+                    <span>RED N° 03</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">PACHACÚTEC NORTE</span>
                 </button>
                 <button class="btn-red-item red-4" onclick="filtrarPorRedConMapachito(4)">
-                    <span>Red N° 04</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Ventanilla Alta / Zona Comercial</span>
+                    <span>RED N° 04</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">PACHACÚTEC ESTE</span>
                 </button>
                 <button class="btn-red-item red-5" onclick="filtrarPorRedConMapachito(5)">
-                    <span>Red N° 05</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Ventanilla Baja / Ciudad Satélite</span>
+                    <span>RED N° 05</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">VILLA LOS REYES</span>
                 </button>
                 <button class="btn-red-item red-6" onclick="filtrarPorRedConMapachito(6)">
-                    <span>Red N° 06</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Ciudad De Pescadores / Angamos</span>
+                    <span>RED N° 06</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">MI PERÚ</span>
                 </button>
                 <button class="btn-red-item red-7" onclick="filtrarPorRedConMapachito(7)">
-                    <span>Red N° 07</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Mi Perú - Sector Sur</span>
+                    <span>RED N° 07</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">SATÉLITE</span>
                 </button>
                 <button class="btn-red-item red-8" onclick="filtrarPorRedConMapachito(8)">
-                    <span>Red N° 08</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Mi Perú - Sector Norte</span>
+                    <span>RED N° 08</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">ANTONIA MORENO DE CÁCERES</span>
                 </button>
                 <button class="btn-red-item red-9" onclick="filtrarPorRedConMapachito(9)">
-                    <span>Red N° 09</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Mi Perú - Ampliación / Nuevos Asentamientos</span>
+                    <span>RED N° 09</span> <span style="font-size: 0.78rem; font-weight: normal; opacity: 0.9;">ANGAMOS</span>
                 </button>
             </div>
         </div>
