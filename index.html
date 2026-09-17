@@ -159,7 +159,7 @@
 
         #map { flex: 1; width: 100%; }
 
-        /* MODAL INACTIVIDAD 30s (Mapachito Durmiendo Pantalla Completa) */
+        /* MODAL INACTIVIDAD 30s */
         #modal-inactividad-total {
             display: none;
             position: fixed;
@@ -193,16 +193,8 @@
             opacity: 1 !important;
             transform: translateZ(0);
         }
-        .inactivity-box h2 {
-            color: #38bdf8;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-        .inactivity-box p {
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            font-weight: 500;
-        }
+        .inactivity-box h2 { color: #38bdf8; font-size: 1.1rem; margin-bottom: 8px; }
+        .inactivity-box p { font-size: 0.85rem; color: #cbd5e1; font-weight: 500; }
 
         #modal-redes { 
             display: none; 
@@ -228,11 +220,7 @@
         .modal-redes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .modal-redes-header h3 { color: #38bdf8; font-size: 1rem; }
         
-        .redes-lista-vertical {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .redes-lista-vertical { display: flex; flex-direction: column; gap: 8px; }
         .btn-red-item {
             padding: 12px 14px;
             border-radius: 12px;
@@ -267,7 +255,7 @@
         .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 300px; width: 90%; display: flex; flex-direction: column; align-items: center; }
         .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 100%; line-height: 1.4; }
         
-        /* CORRECCIÓN ANTI-DESTELLO (FANTASMA) */
+        /* ANTIDESTELLO (FANTASMA) APLICADO */
         .raccoon-avatar-box { 
             width: 130px; 
             height: 130px; 
@@ -302,18 +290,8 @@
         .btn-primary { background: #1a73e8; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; }
         .btn-secundario { background: #4a5568; color: white; padding: 10px; text-decoration: none; text-align: center; border-radius: 6px; display: block; width: 100%; font-weight: bold; border: none; cursor: pointer; margin-bottom: 10px; }
         
-        .botones-mapa-container {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .botones-mapa-container .btn-primary {
-            flex: 1;
-            margin-bottom: 0;
-            font-size: 0.85rem;
-            padding: 10px 6px;
-        }
+        .botones-mapa-container { display: flex; gap: 8px; width: 100%; margin-top: 10px; }
+        .botones-mapa-container .btn-primary { flex: 1; margin-bottom: 0; font-size: 0.85rem; padding: 10px 6px; }
 
         #modal-fachada-fullscreen {
             display: none;
@@ -326,33 +304,15 @@
             align-items: center;
             padding: 20px;
         }
-        .fachada-fullscreen-img {
-            max-width: 100%;
-            max-height: 85vh;
-            object-fit: contain;
-            border-radius: 8px;
-            box-shadow: 0 5px 25px rgba(255,255,255,0.1);
-        }
+        .fachada-fullscreen-img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px; box-shadow: 0 5px 25px rgba(255,255,255,0.1); }
         .btn-cerrar-fachada {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            border: none;
-            font-size: 1.8rem;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute; top: 20px; right: 25px;
+            background: rgba(255, 255, 255, 0.2); color: #ffffff; border: none;
+            font-size: 1.8rem; width: 45px; height: 45px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: background 0.2s;
         }
-        .btn-cerrar-fachada:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
+        .btn-cerrar-fachada:hover { background: rgba(255, 255, 255, 0.4); }
 
         .school-badge { display: inline-block; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-bottom: 5px; }
         .badge-estatal { background: #ebf8ff; color: #3182ce; }
@@ -380,7 +340,8 @@
         <div class="main-container">
             <div class="bloque-controles">
                 <div class="search-box-wrapper">
-                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="Buscar por nombre o código..." autocomplete="off">
+                    <!-- Placeholder Dinámico inicial -->
+                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Escribe nombre o código (Ej: 5090)..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
@@ -481,9 +442,7 @@
         function reiniciarTemporizadorInactividad() {
             const modalInactivo = document.getElementById('modal-inactividad-total');
             if (modalInactivo.style.display === 'flex') return;
-
             if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
-
             temporizadorInactividad = setTimeout(() => {
                 modalInactivo.style.display = 'flex';
             }, 30000);
@@ -494,14 +453,28 @@
             reiniciarTemporizadorInactividad();
         }
 
+        // Doble bienvenida secuencial optimizada (Amigable y no intrusiva)
         function verificarPrimeraInteraccion() {
             if (!primeraInteraccionRealizada) {
                 primeraInteraccionRealizada = true;
+                
+                // Paso 1: Saludo inicial
                 abrirModalMapachito(
                     'saludando', 
                     "¡Hola! Soy Mapachito, dueño de esta app escolar. Seré tu guía en este recorrido.", 
                     false, 
-                    null, 
+                    () => {
+                        // Paso 2: Inmediatamente después, guía sutil del buscador
+                        setTimeout(() => {
+                            abrirModalMapachito(
+                                'pensando', 
+                                "💡 Tip: Aquí arribita puedes digitar el nombre o código del colegio para buscarlo rápido.", 
+                                false, 
+                                null, 
+                                4000
+                            );
+                        }, 400);
+                    }, 
                     3000
                 );
             }
@@ -512,6 +485,21 @@
             window.addEventListener(evento, verificarPrimeraInteraccion, true);
         });
         reiniciarTemporizadorInactividad();
+
+        // Rotación sutil del placeholder del buscador para usuarios impacientes
+        const textosGuia = [
+            "🔍 Escribe nombre o código (Ej: 5090)...",
+            "💡 Tip: Puedes buscar por código de colegio",
+            "🏫 Prueba buscando 'San Juan' o 'Ventanilla'"
+        ];
+        let indiceGuia = 0;
+        setInterval(() => {
+            const inputP = document.getElementById('inputPortada');
+            if (inputP && document.activeElement !== inputP && inputP.value === "") {
+                indiceGuia = (indiceGuia + 1) % textosGuia.length;
+                inputP.placeholder = textosGuia[indiceGuia];
+            }
+        }, 4000);
 
         const coloresRedes = {
             1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
@@ -569,35 +557,17 @@
 
         function mostrarInfoTodosMapa(e) {
             e.stopPropagation();
-            abrirModalMapachito(
-                'olfateando', 
-                "¡Olfateando todos los colegios para mostrarlos en el mapa!", 
-                false, 
-                () => { ejecutarIrAlMapa('todos'); }, 
-                3000
-            );
+            abrirModalMapachito('olfateando', "¡Olfateando todos los colegios para mostrarlos en el mapa!", false, () => { ejecutarIrAlMapa('todos'); }, 3000);
         }
 
         function mostrarInfoParticulares(e) {
             e.stopPropagation();
-            abrirModalMapachito(
-                'feliz', 
-                "Aquí te mostraré todos los colegios Particulares", 
-                false, 
-                () => { ejecutarIrAlMapa('Particular'); }, 
-                5000
-            );
+            abrirModalMapachito('feliz', "Aquí te mostraré todos los colegios Particulares", false, () => { ejecutarIrAlMapa('Particular'); }, 4000);
         }
 
         function mostrarInfoEstatales(e) {
             e.stopPropagation();
-            abrirModalMapachito(
-                'sorprendido', 
-                "¿Sabías que en total son 146 colegios estatales en Ventanilla y Mi Perú?", 
-                false, 
-                () => { ejecutarIrAlMapa('Estatal'); }, 
-                5000
-            );
+            abrirModalMapachito('sorprendido', "¿Sabías que en total son 146 colegios estatales en Ventanilla y Mi Perú?", false, () => { ejecutarIrAlMapa('Estatal'); }, 4000);
         }
 
         function ejecutarIrAlMapa(filtroTipo) {
@@ -615,47 +585,29 @@
 
         function abrirModalRedesConMapachito(e) {
             e.stopPropagation();
-            abrirModalMapachito(
-                'pensando', 
-                "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar? 🏫", 
-                false, 
-                () => { document.getElementById('modal-redes').style.display = 'flex'; }, 
-                3000
-            );
+            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar? 🏫", false, () => { document.getElementById('modal-redes').style.display = 'flex'; }, 3000);
         }
 
-        function cerrarModalRedes(e) {
-            document.getElementById('modal-redes').style.display = 'none';
-        }
-
-        function forzarCierreModalRedes() {
-            document.getElementById('modal-redes').style.display = 'none';
-        }
+        function cerrarModalRedes(e) { document.getElementById('modal-redes').style.display = 'none'; }
+        function forzarCierreModalRedes() { document.getElementById('modal-redes').style.display = 'none'; }
 
         function filtrarPorRedConMapachito(numeroRed) {
             document.getElementById('modal-redes').style.display = 'none';
-            abrirModalMapachito(
-                'buscando', 
-                `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, 
-                false, 
-                () => {
-                    document.getElementById('pantalla-portada').style.display = 'none';
-                    document.getElementById('pantalla-mapa').style.display = 'flex';
-                    setTimeout(() => { map.invalidateSize(); }, 200);
+            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, false, () => {
+                document.getElementById('pantalla-portada').style.display = 'none';
+                document.getElementById('pantalla-mapa').style.display = 'flex';
+                setTimeout(() => { map.invalidateSize(); }, 200);
 
-                    const filtrados = colegios.filter(c => {
-                        const num = extraerNumeroRed(c.red_educativa);
-                        return num === numeroRed;
-                    });
+                const filtrados = colegios.filter(c => {
+                    const num = extraerNumeroRed(c.red_educativa);
+                    return num === numeroRed;
+                });
 
-                    mostrarColegiosEnMapa(filtrados);
-
-                    if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                        map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-                    }
-                }, 
-                3000
-            );
+                mostrarColegiosEnMapa(filtrados);
+                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                }
+            }, 3000);
         }
 
         function volverAPortada() {
@@ -719,45 +671,33 @@
         }
 
         configurarAutocompletado('inputPortada', 'sugerenciasPortada', function(colegioSeleccionado) {
-            abrirModalMapachito(
-                'saludando', 
-                `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`, 
-                false, 
-                () => {
-                    document.getElementById('pantalla-portada').style.display = 'none';
-                    document.getElementById('pantalla-mapa').style.display = 'flex';
-                    setTimeout(() => { map.invalidateSize(); }, 200);
-                    mostrarColegiosEnMapa([colegioSeleccionado]);
-                    if (colegioSeleccionado.latitud && colegioSeleccionado.longitud) {
-                        map.setView([colegioSeleccionado.latitud, colegioSeleccionado.longitud], 16);
-                    }
-                }, 
-                3000
-            );
+            abrirModalMapachito('saludando', `¡Encontré al colegio ${colegioSeleccionado.nombre_colegio}! Te llevo directo. 🎯`, false, () => {
+                document.getElementById('pantalla-portada').style.display = 'none';
+                document.getElementById('pantalla-mapa').style.display = 'flex';
+                setTimeout(() => { map.invalidateSize(); }, 200);
+                mostrarColegiosEnMapa([colegioSeleccionado]);
+                if (colegioSeleccionado.latitud && colegioSeleccionado.longitud) {
+                    map.setView([colegioSeleccionado.latitud, colegioSeleccionado.longitud], 16);
+                }
+            }, 3000);
         });
 
         function alSeleccionarPorTexto(texto) {
-            abrirModalMapachito(
-                'olfateando', 
-                `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`, 
-                false, 
-                () => {
-                    document.getElementById('pantalla-portada').style.display = 'none';
-                    document.getElementById('pantalla-mapa').style.display = 'flex';
-                    setTimeout(() => { map.invalidateSize(); }, 200);
+            abrirModalMapachito('olfateando', `¡Rastreando coincidencias para "${texto}" con mi olfato de mapache! 🕵️‍♂️`, false, () => {
+                document.getElementById('pantalla-portada').style.display = 'none';
+                document.getElementById('pantalla-mapa').style.display = 'flex';
+                setTimeout(() => { map.invalidateSize(); }, 200);
 
-                    const filtrados = colegios.filter(c => 
-                        (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
-                        (c.codigo && c.codigo.toLowerCase().includes(texto))
-                    );
-                    mostrarColegiosEnMapa(filtrados);
-                    document.getElementById('searchInputMap').value = texto;
-                    if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                        map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-                    }
-                }, 
-                3000
-            );
+                const filtrados = colegios.filter(c => 
+                    (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
+                    (c.codigo && c.codigo.toLowerCase().includes(texto))
+                );
+                mostrarColegiosEnMapa(filtrados);
+                document.getElementById('searchInputMap').value = texto;
+                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                }
+            }, 3000);
         }
 
         const inputBuscadorMapa = document.getElementById('searchInputMap');
@@ -829,11 +769,7 @@
             const modal = document.getElementById('modal-detalle');
             const contenido = document.getElementById('modal-body-content');
             
-            const botonFachadaHtml = `
-                <button onclick="intentarVerFachada('${colegio.nombre_colegio}')" class="btn-secundario">
-                    🏫 Fachada del Colegio
-                </button>
-            `;
+            const botonFachadaHtml = `<button onclick="intentarVerFachada('${colegio.nombre_colegio}')" class="btn-secundario">🏫 Fachada del Colegio</button>`;
 
             const nivelesTexto = (colegio.NIVELES || colegio.niveles || '').toLowerCase();
             const tieneCuna = nivelesTexto.includes("cuna");
@@ -863,12 +799,8 @@
                 <div style="margin-top: 20px;">
                     ${botonFachadaHtml}
                     <div class="botones-mapa-container">
-                        <button onclick="explorarMapaGoogle(${colegio.latitud}, ${colegio.longitud})" class="btn-primary">
-                            Explorar mapa ➔
-                        </button>
-                        <button onclick="iniciarViajeGoogle(${colegio.latitud}, ${colegio.longitud})" class="btn-primary" style="background: #188038;">
-                            Iniciar Viaje ➢
-                        </button>
+                        <button onclick="explorarMapaGoogle(${colegio.latitud}, ${colegio.longitud})" class="btn-primary">Explorar mapa ➔</button>
+                        <button onclick="iniciarViajeGoogle(${colegio.latitud}, ${colegio.longitud})" class="btn-primary" style="background: #188038;">Iniciar Viaje ➢</button>
                     </div>
                 </div>
             `;
@@ -885,35 +817,21 @@
                 imgFull.src = ruta;
                 modalFull.style.display = 'flex';
             } else {
-                abrirModalMapachito(
-                    'sorprendido', 
-                    "¡Vaya! Aún no tengo la foto de esta fachada registrada en mi base de datos.", 
-                    false, 
-                    null, 
-                    3000
-                );
+                abrirModalMapachito('sorprendido', "¡Vaya! Aún no tengo la foto de esta fachada registrada en mi base de datos.", false, null, 3000);
             }
         }
 
-        function cerrarFachadaFullscreen() {
-            document.getElementById('modal-fachada-fullscreen').style.display = 'none';
-        }
+        function cerrarFachadaFullscreen() { document.getElementById('modal-fachada-fullscreen').style.display = 'none'; }
 
-        function explorarMapaGoogle(lat, lng) {
-            window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
-        }
+        function explorarMapaGoogle(lat, lng) { window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank'); }
 
         function iniciarViajeGoogle(lat, lng) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        const userLat = position.coords.latitude;
-                        const userLng = position.coords.longitude;
-                        window.open(`https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${lat},${lng}&travelmode=driving`, '_blank');
+                        window.open(`https://www.google.com/maps/dir/?api=1&origin=${position.coords.latitude},${position.coords.longitude}&destination=${lat},${lng}&travelmode=driving`, '_blank');
                     },
-                    () => {
-                        window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`, '_blank');
-                    }
+                    () => { window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`, '_blank'); }
                 );
             } else {
                 window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`, '_blank');
@@ -929,39 +847,21 @@
             if (temporizadorAutoCierre) clearTimeout(temporizadorAutoCierre);
 
             let archivoJson = 'mapache_saludando.json';
-            if (estado === 'buscando') {
-                archivoJson = 'mapache_buscando.json';
-            } else if (estado === 'pensando') {
-                archivoJson = 'mapache_pensando.json';
-            } else if (estado === 'sorprendido') {
-                archivoJson = 'mapache_sorprendido.json';
-            } else if (estado === 'olfateando') {
-                archivoJson = 'mapache_olfateando.json';
-            } else if (estado === 'feliz') {
-                archivoJson = 'mapache_feliz.json';
-            }
+            if (estado === 'buscando') archivoJson = 'mapache_buscando.json';
+            else if (estado === 'pensando') archivoJson = 'mapache_pensando.json';
+            else if (estado === 'sorprendido') archivoJson = 'mapache_sorprendido.json';
+            else if (estado === 'olfateando') archivoJson = 'mapache_olfateando.json';
+            else if (estado === 'feliz') archivoJson = 'mapache_feliz.json';
 
             animacionLottieEl.load(archivoJson);
             textoMapachitoEl.innerText = mensajePersonalizado;
-
-            if (mostrarBotonEntendido) {
-                btnEntendidoModalEl.style.display = 'block';
-            } else {
-                btnEntendidoModalEl.style.display = 'none';
-            }
-
-            if (callbackAccion) {
-                accionPendiente = callbackAccion;
-            } else {
-                accionPendiente = null;
-            }
+            btnEntendidoModalEl.style.display = mostrarBotonEntendido ? 'block' : 'none';
+            accionPendiente = callbackAccion || null;
 
             modalMapachitoEl.style.display = 'flex';
 
             if (tiempoAutoCierreMs > 0) {
-                temporizadorAutoCierre = setTimeout(() => {
-                    cerrarModalMapachito();
-                }, tiempoAutoCierreMs);
+                temporizadorAutoCierre = setTimeout(() => { cerrarModalMapachito(); }, tiempoAutoCierreMs);
             }
         }
 
