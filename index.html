@@ -489,9 +489,13 @@ resultado.forEach(item => {
     if (!colegioEncontrado) {
         alert("Código de colegio no encontrado.");
         return;
+   if (String(colegioEncontrado.password_director).trim() !== String(password).trim()) {
+        alert("Error: Código o contraseña incorrectos");
+        return;
     }
-            document.getElementById('modal-director').remove();
-            abrirPanelEdicionVacantes(colegioEncontrado, password);
+
+    document.getElementById('modal-director').remove();
+    abrirPanelEdicionVacantes(colegioEncontrado, password);
         }
 
         function abrirPanelEdicionVacantes(colegio, password) {
