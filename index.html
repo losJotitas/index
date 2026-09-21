@@ -480,9 +480,12 @@ resultado.forEach(item => {
     const codigo = document.getElementById('dir-codigo').value.trim();
     const password = document.getElementById('dir-password').value.trim();
     
-    // Corregido de c.codigo a c.id_colegio
+    if (!codigo) {
+        alert("Por favor ingresa un código.");
+        return;
+    }
+
     const colegioEncontrado = colegios.find(c => Number(c.id_colegio) === Number(codigo));
-    
     if (!colegioEncontrado) {
         alert("Código de colegio no encontrado.");
         return;
