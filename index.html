@@ -12,7 +12,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body, html { width: 100%; height: 100%; overflow: hidden; background: #0f172a; }
         
-        /* Pantallas principales */
         #pantalla-portada, #pantalla-mapa { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; }
         #pantalla-mapa { display: none; z-index: 10; }
         
@@ -65,27 +64,32 @@
         .redes-lista-vertical { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .btn-red-item { padding: 10px; border: none; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; text-align: left; font-size: 0.85rem; }
 
-        /* Modal Detalle */
+        /* Modal Detalle Completo */
         #modal-detalle, #modal-fachada-fullscreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: white; width: 100%; max-width: 500px; border-radius: 12px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; color: #1e293b; }
+        .modal-content { background: white; width: 100%; max-width: 520px; border-radius: 12px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #64748b; }
         
-        .school-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; color: white; margin-bottom: 10px; }
+        .school-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; color: white; margin-bottom: 10px; }
         .badge-estatal { background: #0284c7; }
         .badge-particular { background: #9333ea; }
         
-        .semaforo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .semaforo-tag { background: #f8fafc; padding: 8px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.85rem; }
+        .vacantes-grid-detallado { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .vacante-box-nivel { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; font-size: 0.85rem; }
+        .grado-item { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; font-size: 0.8rem; color: #475569; }
+        .circulo-estado { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .circulo-verde { background: #16a34a; }
+        .circulo-rojo { background: #dc2626; }
+        .circulo-amarillo { background: #ca8a04; }
 
         #modal-fachada-fullscreen { background: rgba(0,0,0,0.9); flex-direction: column; }
         .fachada-fullscreen-img { max-width: 90%; max-height: 80vh; border-radius: 8px; }
         .btn-cerrar-fachada { position: absolute; top: 20px; right: 25px; background: none; border: none; color: white; font-size: 2.5rem; cursor: pointer; }
 
-        /* Pines personalizados en Mapa */
+        /* Pines Personalizados Originales */
         .custom-div-icon { background: transparent; border: none; }
-        .pin-clasico-container { position: relative; width: 30px; height: 42px; display: flex; justify-content: center; align-items: flex-start; }
-        .pin-gota { position: absolute; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); left: 0; top: 0; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
-        .pin-texto { position: relative; z-index: 2; font-size: 0.75rem; font-weight: bold; color: white; margin-top: 4px; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        .pin-container-real { position: relative; width: 36px; height: 48px; display: flex; flex-direction: column; align-items: center; }
+        .pin-pinpointer { width: 34px; height: 34px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.4); border: 2px solid #ffffff; position: absolute; top: 0; }
+        .pin-numero-interno { transform: rotate(45deg); color: white; font-weight: bold; font-size: 0.8rem; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 
         @media (min-width: 769px) {
             .img-celular { display: none; }
@@ -95,7 +99,7 @@
 </head>
 <body>
 
-    <!-- 🔐 BOTÓN FLOTANTE DE ACCESO DIRECTORES -->
+    <!-- 🔐 ACCESO DIRECTORES FLOTANTE -->
     <div style="position: fixed; top: 15px; right: 15px; z-index: 99999;">
         <button onclick="abrirModalDirector()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
             🔐 Acceso Directores
@@ -282,7 +286,6 @@
                 return;
             }
 
-            // Búsqueda flexible adaptada para producción (GitHub Pages)
             const colegioEncontrado = colegios.find(c => 
                 String(c.id_colegio).trim() === String(codigo) || 
                 String(c.codigo).trim() === String(codigo)
@@ -456,14 +459,15 @@
                 const iconoClasico = L.divIcon({
                     className: 'custom-div-icon',
                     html: `
-                        <div class="pin-clasico-container">
-                            <div class="pin-gota" style="background-color: ${colorPin};"></div>
-                            <div class="pin-texto">${textoPin}</div>
+                        <div class="pin-container-real">
+                            <div class="pin-pinpointer" style="background-color: ${colorPin};">
+                                <span class="pin-numero-interno">${textoPin}</span>
+                            </div>
                         </div>
                     `,
-                    iconSize: [30, 42],
-                    iconAnchor: [15, 42],
-                    popupAnchor: [0, -38]
+                    iconSize: [36, 48],
+                    iconAnchor: [18, 48],
+                    popupAnchor: [0, -42]
                 });
 
                 var marker = L.marker([colegio.latitud, colegio.longitud], { icon: iconoClasico }).addTo(map);
@@ -619,7 +623,6 @@
             }, 3000);
         });
 
-        // Autocompletado del buscador interno del mapa
         configurarAutocompletado('searchInputMap', 'sugerenciasMapa', function(colegioSeleccionado) {
             mostrarColegiosEnMapa([colegioSeleccionado]);
             if (colegioSeleccionado.latitud && colegioSeleccionado.longitud) {
@@ -687,14 +690,22 @@
                 <p><b>Dirección:</b> ${colegio.direccion || 'No especificada'}</p>
                 
                 <h4 style="margin-top: 15px; color: #2d3748;">Vacantes Disponibles:</h4>
-                <div class="semaforo-container">
-                    <div class="semaforo-tag semaforo-activo">Cuna: ${vacantesActuales.cuna}</div>
-                    <div class="semaforo-tag semaforo-activo">Inicial: ${vacantesActuales.inicial}</div>
-                    <div class="semaforo-tag semaforo-activo">Primaria: ${vacantesActuales.primaria}</div>
-                    <div class="semaforo-tag semaforo-activo">Secundaria: ${vacantesActuales.secundaria}</div>
+                <div class="vacantes-grid-detallado">
+                    <div class="vacante-box-nivel">
+                        <b>Cuna:</b> ${vacantesActuales.cuna}
+                    </div>
+                    <div class="vacante-box-nivel">
+                        <b>Inicial:</b> ${vacantesActuales.inicial}
+                    </div>
+                    <div class="vacante-box-nivel" style="grid-column: span 2;">
+                        <b>Primaria:</b> ${vacantesActuales.primaria}
+                    </div>
+                    <div class="vacante-box-nivel" style="grid-column: span 2;">
+                        <b>Secundaria:</b> ${vacantesActuales.secundaria}
+                    </div>
                 </div>
 
-                ${colegio.fachada ? `<div style="margin-top:15px; text-align:center;"><img src="${colegio.fachada}" style="max-width:100\%; height:160px; object-fit:cover; border-radius:8px; cursor:pointer;" onclick="abrirFachadaFullscreen('${colegio.fachada}')"></div>` : ''}
+                ${colegio.fachada ? `<div style="margin-top:15px; text-align:center;"><img src="${colegio.fachada}" style="max-width:100\%; height:180px; object-fit:cover; border-radius:8px; cursor:pointer;" onclick="abrirFachadaFullscreen('${colegio.fachada}')" alt="Fachada"></div>` : ''}
             `;
 
             document.getElementById('modal-body-content').innerHTML = contenido;
