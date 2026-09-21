@@ -476,13 +476,15 @@ resultado.forEach(item => {
             document.body.insertAdjacentHTML('beforeend', modalHTML);
         }
 
-     function autenticarDirector() {
-    // Si el cuadro de acceso ya fue cerrado/eliminado, salimos de inmediato
-    const modalDirector = document.getElementById('modal-director');
-    if (!modalDirector) return;
+function autenticarDirector() {
+    // Si ya estamos dentro del panel de vacantes, no hagas absolutamente nada
+    const campoPassword = document.getElementById('dir-password');
+    if (!campoPassword) {
+        return; 
+    }
 
     const codigo = document.getElementById('dir-codigo').value.trim();
-    const password = document.getElementById('dir-password').value.trim();
+    const password = campoPassword.value.trim();
 
     if (!codigo) {
         alert("Por favor ingresa un código.");
