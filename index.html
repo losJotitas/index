@@ -477,14 +477,17 @@ resultado.forEach(item => {
         }
 
 function autenticarDirector() {
-    // Si ya estamos dentro del panel de vacantes, no hagas absolutamente nada
-    const campoPassword = document.getElementById('dir-password');
-    if (!campoPassword) {
-        return; 
-    }
+    const modal = document.getElementById('modal-director');
+    // Si el modal de acceso ya no está en la pantalla, salimos inmediatamente sin hacer nada
+    if (!modal) return;
 
-    const codigo = document.getElementById('dir-codigo').value.trim();
-    const password = campoPassword.value.trim();
+    const codigoInput = document.getElementById('dir-codigo');
+    const passwordInput = document.getElementById('dir-password');
+    
+    if (!codigoInput || !passwordInput) return;
+
+    const codigo = codigoInput.value.trim();
+    const password = passwordInput.value.trim();
 
     if (!codigo) {
         alert("Por favor ingresa un código.");
@@ -502,7 +505,9 @@ function autenticarDirector() {
         return;
     }
 
-    document.getElementById('modal-director').remove();
+    // Eliminamos el modal de forma segura
+    modal.remove();
+    
     abrirPanelEdicionVacantes(colegioEncontrado, password);
 }
         function abrirPanelEdicionVacantes(colegio, password) {
