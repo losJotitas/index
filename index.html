@@ -477,22 +477,22 @@ resultado.forEach(item => {
         }
 
         function autenticarDirector() {
-            const codigo = document.getElementById('dir-codigo').value.trim();
-            const password = document.getElementById('dir-password').value.trim();
-
-            const colegioEncontrado = colegios.find(c => String(c.codigo).trim() === codigo);
-            
-            if (!colegioEncontrado) {
-                alert("Código de colegio no encontrado.");
-                return;
-            }
-
+    const codigo = document.getElementById('dir-codigo').value.trim();
+    const password = document.getElementById('dir-password').value.trim();
+    
+    // Corregido de c.codigo a c.id_colegio
+    const colegioEncontrado = colegios.find(c => String(c.id_colegio).trim() === codigo);
+    
+    if (!colegioEncontrado) {
+        alert("Código de colegio no encontrado.");
+        return;
+    }
             document.getElementById('modal-director').remove();
             abrirPanelEdicionVacantes(colegioEncontrado, password);
         }
 
         function abrirPanelEdicionVacantes(colegio, password) {
-            const actual = datosVacantesEnVivo[colegio.codigo] || { cuna: "", inicial: "", primaria: "", secundaria: "" };
+            const actual = datosVacantesEnVivo[colegio.id_colegio] || { cuna: "", inicial: "", primaria: "", secundaria: "" };
 
             const panelHTML = `
                 <div id="modal-panel-vacantes" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center; z-index:99999;">
@@ -521,7 +521,7 @@ resultado.forEach(item => {
 
                         <div style="display:flex; justify-content:space-between; gap:10px;">
                             <button onclick="document.getElementById('modal-panel-vacantes').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1;">Cancelar</button>
-                            <button onclick="guardarVacantesEnNube('${colegio.codigo}', '${password}')" style="background:#16a34a; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Guardar Cambios</button>
+                            <button onclick="guardarVacantesEnNube('${colegio.id_colegio}', '${password}')" style="background:#16a34a; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Guardar Cambios</button>
                         </div>
                     </div>
                 </div>
