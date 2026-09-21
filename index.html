@@ -477,6 +477,7 @@ resultado.forEach(item => {
         }
 
        function autenticarDirector() {
+           if (!document.getElementById('dir-password')) return;
     const codigo = document.getElementById('dir-codigo').value.trim();
     const password = document.getElementById('dir-password').value.trim();
 
