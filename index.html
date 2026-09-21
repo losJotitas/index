@@ -476,10 +476,15 @@ resultado.forEach(item => {
             document.body.insertAdjacentHTML('beforeend', modalHTML);
         }
 
-       function autenticarDirector() {
-           if (!document.getElementById('dir-password')) return;
+      function autenticarDirector() {
+    const inputPassword = document.getElementById('dir-password');
+    // Si ya no existe la contraseña o el campo está vacío porque ya entramos al panel, salimos de inmediato
+    if (!inputPassword || inputPassword.value.trim() === "") {
+        return;
+    }
+
     const codigo = document.getElementById('dir-codigo').value.trim();
-    const password = document.getElementById('dir-password').value.trim();
+    const password = inputPassword.value.trim();
 
     if (!codigo) {
         alert("Por favor ingresa un código.");
