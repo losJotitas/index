@@ -481,7 +481,7 @@ resultado.forEach(item => {
     const password = document.getElementById('dir-password').value.trim();
     
     // Corregido de c.codigo a c.id_colegio
-    const colegioEncontrado = colegios.find(c => String(c.id_colegio).trim() === codigo);
+    const colegioEncontrado = colegios.find(c => Number(c.id_colegio) === Number(codigo));
     
     if (!colegioEncontrado) {
         alert("Código de colegio no encontrado.");
