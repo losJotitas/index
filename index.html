@@ -432,9 +432,9 @@ const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycby2Y6cDIBQj6lRkA
                 
               // Reemplaza esta sección en tu código (alrededor de la línea 433)
 resultado.forEach(item => {
-    // Cambiamos item.codigo por item.id_colegio
-    if (item.id_colegio) {
-        datosVacantesEnVivo[String(item.id_colegio).trim()] = {
+    if (item.id_colegio !== undefined && item.id_colegio !== null) {
+        let idLimpio = String(item.id_colegio).trim();
+        datosVacantesEnVivo[idLimpio] = {
             cuna: item.vacante_cuna || "Consultar",
             inicial: item.vacante_inicial || "Consultar",
             primaria: item.vacante_primaria || "Consultar",
