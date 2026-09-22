@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <!-- Librería Lottie Player -->
+    <!-- Librería Lottie Player para Mapachito -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     
     <style>
@@ -23,6 +23,7 @@
             overscroll-behavior-y: auto;
         }
 
+        /* PANTALLA DE INICIO / PORTADA */
         #pantalla-portada {
             position: relative;
             width: 100vw; 
@@ -63,7 +64,7 @@
             max-width: 340px;              
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             background: rgba(15, 23, 42, 0.88);
             padding: 16px;
             border-radius: 22px;
@@ -72,10 +73,7 @@
             border: 2px solid rgba(56, 189, 248, 0.3); 
         }
 
-        .search-box-wrapper {
-            position: relative;
-            width: 100%;
-        }
+        .search-box-wrapper { position: relative; width: 100%; }
 
         .input-busqueda {
             width: 100%;
@@ -84,71 +82,53 @@
             color: #0f172a;
             border: none;
             border-radius: 14px;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
-            font-weight: 500;
+            font-weight: 600;
             box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
         }
 
         .sugerencias-lista {
             position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: #ffffff;
-            color: #0f172a;
+            top: 100%; left: 0; width: 100%;
+            background: #ffffff; color: #0f172a;
             border-radius: 0 0 14px 14px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            z-index: 1000;
-            max-height: 180px;
-            overflow-y: auto;
-            display: none;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            z-index: 1000; max-height: 180px;
+            overflow-y: auto; display: none;
         }
 
         .sugerencia-item {
-            padding: 10px 14px;
-            font-size: 12px;
+            padding: 10px 14px; font-size: 12px;
             border-bottom: 1px solid #f1f5f9;
-            cursor: pointer;
-            font-weight: 500;
+            cursor: pointer; font-weight: 500;
         }
-
         .sugerencia-item:hover { background-color: #e2e8f0; }
 
         .btn-opcion {
-            width: 100%;
-            padding: 14px 16px;
-            color: #ffffff;            
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 14px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
+            width: 100%; padding: 12px 14px;
+            color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 14px; font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s ease;
+            text-align: center; text-decoration: none; display: inline-block;
         }
-
         .btn-opcion:hover { transform: translateY(-1px); filter: brightness(1.08); }
-        .btn-verde { background-color: #729b79; }
-        .btn-azul { background-color: #7b8db9; }
-        .btn-estatales { background-color: #d18b6d; }
-        .btn-particulares { background-color: #a8a697; color: #1e293b; }
-        .btn-naranja { background-color: #f59e0b; }
-        .btn-rosa { background-color: #f43f5e; }
-        
+        .btn-verde { background-color: #729b79; box-shadow: 0 0 12px rgba(114, 155, 121, 0.4); }
+        .btn-azul { background-color: #7b8db9; box-shadow: 0 0 12px rgba(123, 141, 185, 0.4); }
+        .btn-estatales { background-color: #d18b6d; box-shadow: 0 0 12px rgba(209, 139, 109, 0.4); }
+        .btn-particulares { background-color: #a8a697; color: #1e293b; box-shadow: 0 0 12px rgba(168, 166, 151, 0.4); }
+        .btn-naranja { background-color: #f59e0b; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
+        .btn-rosa { background-color: #e11d48; box-shadow: 0 0 12px rgba(225, 29, 72, 0.4); }
+
         .fila-botones-dividida { display: flex; gap: 8px; width: 100%; }
         .fila-botones-dividida .btn-opcion { flex: 1; }
 
-        /* Pantallas Secundarias */
+        /* PANTALLAS SECUNDARIAS */
         .pantalla-secundaria {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            flex-direction: column;
-            z-index: 50;
-            background-color: #f4f6f9;
-            overflow-y: auto;
+            display: none; position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            flex-direction: column; z-index: 50;
+            background-color: #f4f6f9; overflow-y: auto;
         }
 
         .top-bar { background: #1a365d; color: white; padding: 10px 15px; display: flex; align-items: center; gap: 15px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
@@ -158,32 +138,63 @@
 
         #map { flex: 1; width: 100%; }
 
-        /* Estilos de Modales y Mapachito */
+        /* PINES EN EL MAPA CON NÚMERO Y COLOR DE RED */
+        .pin-clasico-container { position: relative; width: 30px; height: 42px; }
+        .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
+        .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+
+        /* MODALES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; }
         .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 300px; width: 90%; display: flex; flex-direction: column; align-items: center; }
-        .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; width: 100%; }
+        .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; width: 100%; line-height: 1.4; }
         
         .raccoon-avatar-box { 
-            width: 130px; height: 130px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; overflow: hidden; position: relative;
+            width: 130px; height: 130px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;
         }
-        /* Corregimos el Lottie Player para que sea 100% fijo */
-        .raccoon-avatar-box lottie-player { 
-            width: 120px; height: 120px; position: absolute; z-index: 2; top:5px; left:2px;
-        }
+        .raccoon-avatar-box lottie-player { width: 120px; height: 120px; position: absolute; z-index: 2; }
 
-        .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
 
-        /* Panel de Vacantes y Donaciones (Nuevos) */
-        .contenedor-central { padding: 20px; color: #1e293b; max-width: 800px; margin: 0 auto; }
-        .tarjeta-donacion { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; border: 2px solid #cbd5e1; }
+        /* MODAL REDES EDUCATIVAS */
+        #modal-redes { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.88); z-index: 25000; justify-content: center; align-items: center; }
+        .modal-redes-content { background: #1e293b; width: 92%; max-width: 420px; border-radius: 20px; border: 2px solid #38bdf8; padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto; }
+        .modal-redes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .modal-redes-header h3 { color: #38bdf8; font-size: 1rem; }
+        .redes-lista-vertical { display: flex; flex-direction: column; gap: 8px; }
+        .btn-red-item { padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 600; font-size: 0.82rem; cursor: pointer; text-align: left; display: flex; align-items: center; justify-content: space-between; }
+
+        /* MODAL DETALLE DE COLEGIO */
+        #modal-detalle { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 20000; justify-content: center; align-items: center; }
+        .modal-content { background: white; width: 92%; max-width: 550px; max-height: 85vh; border-radius: 16px; overflow-y: auto; padding: 20px; position: relative; color: #2d3748; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #a0aec0; }
+
+        /* BADGES Y SEMÁFOROS */
+        .school-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; margin-bottom: 10px; }
+        .badge-estatal { background: #fee2e2; color: #991b1b; }
+        .badge-particular { background: #fef3c7; color: #92400e; }
+        .badge-convenio { background: #e0e7ff; color: #3730a3; }
+
+        .semaforo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+        .semaforo-tag { padding: 8px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; text-align: center; }
+        .tag-rojo { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .tag-amarillo { background-color: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+        .tag-verde { background-color: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+        /* VISOR FACHADA FULLSCREEN */
+        #modal-fachada-fullscreen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.95); z-index: 30000; justify-content: center; align-items: center; padding: 20px; }
+        .fachada-fullscreen-img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px; }
+        .btn-cerrar-fachada { position: absolute; top: 20px; right: 25px; background: rgba(255, 255, 255, 0.2); color: #ffffff; border: none; font-size: 1.8rem; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; }
+
+        /* MODAL INACTIVIDAD */
+        #modal-inactividad-total { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.96); z-index: 50000; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; cursor: pointer; }
+        .inactivity-box { background: #1e293b; border: 3px solid #38bdf8; border-radius: 28px; padding: 30px 20px; max-width: 320px; width: 90%; display: flex; flex-direction: column; align-items: center; }
+        .inactivity-box lottie-player { width: 140px; height: 140px; margin-bottom: 15px; }
+
+        /* CONTENEDOR VISTAS SECUNDARIAS */
+        .contenedor-central { padding: 20px; color: #1e293b; max-width: 700px; margin: 0 auto; }
+        .card-seccion { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 15px; border: 1px solid #cbd5e1; }
         .grid-donacion { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
-        .metodo-pago { background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
-
-        /* Semáforos */
-        .semaforo-verde { color: #16a34a; font-weight: bold; }
-        .semaforo-amarillo { color: #d97706; font-weight: bold; }
-        .semaforo-rojo { color: #dc2626; font-weight: bold; }
-        .fila-colegio-vacante { background: white; padding: 15px; border-radius: 12px; border-left: 5px solid #2563eb; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .metodo-pago { background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: center; }
 
         @media (min-width: 769px) {
             .img-celular { display: none; }
@@ -194,9 +205,9 @@
 </head>
 <body>
 
-    <!-- 🔐 BOTÓN FLOTANTE DE ACCESO DIRECTORES -->
+    <!-- 🔐 BOTÓN FLOTANTE ACCESO DIRECTORES -->
     <div style="position: fixed; top: 15px; right: 15px; z-index: 99999;">
-        <button onclick="abrirModalDirector()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        <button onclick="abrirModalDirector()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
             🔐 Acceso Directores
         </button>
     </div>
@@ -204,26 +215,30 @@
     <!-- ================= PANTALLA 1: PORTADA ================= -->
     <div id="pantalla-portada">
         <div class="fondo-portada">
-            <img src="portada-celular.jpg" alt="Portada Celular" class="img-celular" onerror="this.src='https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600'">
-            <img src="portada-pc.jpg" alt="Portada PC" class="img-pc" onerror="this.src='https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200'">
+            <img src="portada-celular.jpg" alt="Portada Celular" class="img-celular">
+            <img src="portada-pc.jpg" alt="Portada PC" class="img-pc">
         </div>
 
         <div class="main-container">
             <div class="bloque-controles">
                 <div class="search-box-wrapper">
-                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Escribe nombre o código..." autocomplete="off">
+                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Escribe nombre o código (Ej: 5090)..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
                 <button class="btn-opcion btn-verde" onclick="mostrarInfoTodosMapa(event)">Ver Todos los Colegios en el Mapa</button>
                 
-                <button class="btn-opcion btn-naranja" onclick="abrirPantallaVacantes(event)">🚦 Buscar Vacantes Disponibles</button>
+                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito(event)">
+                    Filtrar por Redes Educativas<br>
+                    <span style="font-size: 0.8rem; font-weight: 500; opacity: 0.9;">(1-9)</span>
+                </button>
                 
                 <div class="fila-botones-dividida">
                     <button class="btn-opcion btn-estatales" onclick="mostrarInfoEstatales(event)">Colegios Estatales</button>
                     <button class="btn-opcion btn-particulares" onclick="mostrarInfoParticulares(event)">Colegios Particulares</button>
                 </div>
-                
+
+                <button class="btn-opcion btn-naranja" onclick="abrirPantallaVacantes(event)">🚦 Buscar Vacantes Disponibles</button>
                 <button class="btn-opcion btn-rosa" onclick="abrirPantallaDonaciones(event)">💙 Apoyar al Proyecto (Donar)</button>
             </div>
         </div>
@@ -235,116 +250,190 @@
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
             <div class="search-container-map">
                 <input type="text" id="searchInputMap" placeholder="Filtrar colegios en el mapa..." autocomplete="off">
+                <div id="sugerenciasMapa" class="sugerencias-lista"></div>
             </div>
         </div>
         <div id="map"></div>
     </div>
 
-    <!-- ================= PANTALLA 3: BUSCADOR DE VACANTES ================= -->
+    <!-- ================= PANTALLA 3: BUSCADOR DE VACANTES (IDEA B) ================= -->
     <div id="pantalla-vacantes" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
-            <h3 style="font-size: 1rem;">Buscador de Vacantes</h3>
+            <h3 style="font-size: 0.95rem;">🚦 Buscador Global de Vacantes</h3>
         </div>
         <div class="contenedor-central">
-            <h2 style="margin-bottom:15px; color:#1a365d;">Consulta rápida de Vacantes</h2>
-            <p style="font-size:0.9rem; color:#64748b; margin-bottom:20px;">Busca disponibilidad en colegios. Recuerda:<br> 🟢 Verde (Más de 10) | 🟡 Amarillo (1 a 9) | 🔴 Rojo (Agotado)</p>
-            
-            <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="Escribe el nivel (Inicial, Primaria) o colegio..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; margin-bottom:20px; font-size:1rem;">
-            
-            <div id="lista-vacantes">
-                <!-- Se llena con JavaScript -->
+            <div class="card-seccion">
+                <h2 style="color:#1a365d; margin-bottom:8px; font-size:1.2rem;">Semaforo de Vacantes en Tiempo Real</h2>
+                <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">
+                    Leyenda del Semáforo:<br>
+                    🟢 <b>Verde:</b> 10 o más vacantes disponibles<br>
+                    🟡 <b>Amarillo:</b> 1 a 9 vacantes (Pocas disponibles)<br>
+                    🔴 <b>Rojo:</b> 0 vacantes (Agotado)
+                </p>
+                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre de colegio o nivel..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
             </div>
+            
+            <div id="lista-vacantes"></div>
         </div>
     </div>
 
-    <!-- ================= PANTALLA 4: DONACIONES ================= -->
+    <!-- ================= PANTALLA 4: DONACIONES Y COLABORACIÓN (ALTERNATIVA 2) ================= -->
     <div id="pantalla-donaciones" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
-            <h3 style="font-size: 1rem;">Apoyar al Proyecto</h3>
+            <h3 style="font-size: 0.95rem;">💙 Apoya al Proyecto MAPACHE</h3>
         </div>
         <div class="contenedor-central">
-            <div class="tarjeta-donacion">
-                <h2 style="color: #2563eb; margin-bottom:10px;">¡Gracias por querer sumar! 🦝</h2>
-                <p style="font-size: 0.95rem; color:#475569;">MAPACHE es una plataforma gratuita para los padres de familia de Ventanilla y Mi Perú. Tu aporte económico nos ayuda a pagar los servidores y mantenerla siempre actualizada y sin publicidad molesta.</p>
+            <div class="card-seccion" style="text-align: center;">
+                <h2 style="color: #2563eb; margin-bottom:10px; font-size:1.3rem;">¡Ayúdanos a seguir ayudando! 🦝</h2>
+                <p style="font-size: 0.9rem; color:#475569; line-height:1.5;">
+                    MAPACHE es un proyecto social sin fines de lucro diseñado para solucionar una gran necesidad de miles de padres de familia en Ventanilla y Mi Perú: encontrar vacantes escolares rápido y sin contratiempos.
+                </p>
                 
                 <div class="grid-donacion">
                     <div class="metodo-pago">
-                        <h3 style="color:#d946ef; margin-bottom:10px;">💸 Yape / Plin</h3>
-                        <!-- Si tienes imagen QR puedes ponerla aquí: <img src="tu_qr.png" width="120"> -->
-                        <div style="font-size:3rem; margin-bottom:10px;">📱</div>
-                        <p style="font-size: 1.1rem; font-weight:bold;">999 999 999</p>
-                        <p style="font-size: 0.8rem; color:#64748b;">A nombre de: (Tu Nombre Aquí)</p>
+                        <h3 style="color:#d946ef; margin-bottom:8px;">📲 Yape / Plin</h3>
+                        <p style="font-size: 0.8rem; color:#64748b; margin-bottom:8px;">Número directo para aportes:</p>
+                        <p style="font-size: 1.2rem; font-weight:bold; color:#0f172a;">999 999 999</p>
+                        <p style="font-size: 0.75rem; color:#64748b; margin-top:5px;">Proyecto MAPACHE</p>
                     </div>
+
                     <div class="metodo-pago">
-                        <h3 style="color:#0284c7; margin-bottom:10px;">🏦 Transferencia Bancaria</h3>
-                        <div style="font-size:3rem; margin-bottom:10px;">💳</div>
-                        <p style="font-size: 0.9rem;"><strong>BCP / Interbank</strong></p>
-                        <p style="font-size: 1rem; font-weight:bold; margin: 8px 0;">N° Cuenta: 191-0000000-0-00</p>
-                        <p style="font-size: 0.85rem; color:#64748b;">CCI: 002-191-000000000000-00</p>
+                        <h3 style="color:#0284c7; margin-bottom:8px;">🏦 Transferencia Bancaria</h3>
+                        <p style="font-size: 0.8rem; color:#64748b; margin-bottom:5px;">Cuenta de Ahorros / CCI:</p>
+                        <p style="font-size: 0.85rem; font-weight:bold; color:#0f172a; word-break: break-all;">CCI: 002-191-000000000000-00</p>
+                        <button onclick="copiarCCI()" style="margin-top:10px; background:#0284c7; color:white; border:none; padding:8px 14px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">📋 Copiar CCI</button>
                     </div>
                 </div>
-                <p style="margin-top:20px; font-size:0.8rem; color:#94a3b8;">¡Todo aporte, por más pequeño que sea, es inmensamente agradecido!</p>
             </div>
         </div>
     </div>
 
+    <!-- ================= MODAL REDES EDUCATIVAS ================= -->
+    <div id="modal-redes" onclick="cerrarModalRedes(event)">
+        <div class="modal-redes-content" onclick="event.stopPropagation()">
+            <div class="modal-redes-header">
+                <h3>Selecciona una Red Educativa</h3>
+                <span style="cursor:pointer; font-size:1.4rem; color:#a0aec0;" onclick="forzarCierreModalRedes()">&times;</span>
+            </div>
+            <div class="redes-lista-vertical">
+                <button class="btn-red-item" style="background-color: #b91c1c;" onclick="filtrarPorRedConMapachito(1)"><span>RED N° 01 - PACHACÚTEC OESTE</span></button>
+                <button class="btn-red-item" style="background-color: #c2410c;" onclick="filtrarPorRedConMapachito(2)"><span>RED N° 02 - PACHACÚTEC SUR</span></button>
+                <button class="btn-red-item" style="background-color: #b45309;" onclick="filtrarPorRedConMapachito(3)"><span>RED N° 03 - PACHACÚTEC NORTE</span></button>
+                <button class="btn-red-item" style="background-color: #15803d;" onclick="filtrarPorRedConMapachito(4)"><span>RED N° 04 - PACHACÚTEC ESTE</span></button>
+                <button class="btn-red-item" style="background-color: #0f766e;" onclick="filtrarPorRedConMapachito(5)"><span>RED N° 05 - VILLA LOS REYES</span></button>
+                <button class="btn-red-item" style="background-color: #1d4ed8;" onclick="filtrarPorRedConMapachito(6)"><span>RED N° 06 - MI PERÚ</span></button>
+                <button class="btn-red-item" style="background-color: #4338ca;" onclick="filtrarPorRedConMapachito(7)"><span>RED N° 07 - SATÉLITE</span></button>
+                <button class="btn-red-item" style="background-color: #6b21a8;" onclick="filtrarPorRedConMapachito(8)"><span>RED N° 08 - ANTONIA MORENO DE CÁCERES</span></button>
+                <button class="btn-red-item" style="background-color: #be185d;" onclick="filtrarPorRedConMapachito(9)"><span>RED N° 09 - ANGAMOS</span></button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Modal Reactivo de Mapachito (Unificado para no parpadear) -->
+    <!-- Modal Reactivo de Mapachito -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
             <div class="raccoon-avatar-box">
-                <!-- Usamos una sola etiqueta y solo cambiaremos el atributo 'src' desde JS -->
-                <lottie-player id="lottieMapacheFijo" src="mapache_saludando.json" background="transparent" speed="1" loop autoplay></lottie-player>
+                <lottie-player id="animacionLottie" src="mapache_saludando.json" background="transparent" speed="1" loop autoplay></lottie-player>
             </div>
             <button id="btnEntendidoModal" class="modal-btn" onclick="cerrarModalMapachito()">¡Entendido! 🚀</button>
         </div>
     </div>
 
+    <!-- Modal Detalle Completo del Colegio -->
+    <div id="modal-detalle">
+        <div class="modal-content">
+            <span class="modal-close" onclick="cerrarDetalle()">&times;</span>
+            <div id="modal-body-content"></div>
+        </div>
+    </div>
 
-    <!-- SCRIPT PRINCIPAL -->
+    <!-- Visor de Fachada Fullscreen -->
+    <div id="modal-fachada-fullscreen">
+        <button class="btn-cerrar-fachada" onclick="cerrarFachadaFullscreen()">&times;</button>
+        <img id="imgFachadaFull" class="fachada-fullscreen-img" src="" alt="Fachada del Colegio">
+    </div>
+
+    <!-- Modal Inactividad 30s -->
+    <div id="modal-inactividad-total" onclick="despertarMapachitoInactivo()">
+        <div class="inactivity-box" onclick="event.stopPropagation(); despertarMapachitoInactivo();">
+            <lottie-player src="mapache_durmiendo.json" background="transparent" speed="1" loop autoplay></lottie-player>
+            <h2 style="color:#38bdf8; font-size:1.1rem; margin-bottom:8px;">¡Zzz... Mapachito está durmiendo!</h2>
+            <p style="font-size:0.85rem; color:#cbd5e1;">Toca la pantalla o mueve el cursor para despertar al dueño de la app.</p>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="colegios.js"></script>
     <script>
-        // CONFIGURACIÓN DE MAPA
+        // CONFIGURACIÓN DEL MAPA
         var map = L.map('map').setView([-11.875, -77.135], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
 
         let marcadoresCreados = [];
-        let datosVacantesEnVivo = {}; 
-        
-        // Cargar simuladamente las vacantes iniciales desde colegios.js si es que existen
+        let accionPendiente = null;
+        let temporizadorInactividad = null;
+        let temporizadorAutoCierre = null;
+        let primeraInteraccionRealizada = false;
+
+        // MAPA DE COLORES PARA LAS 9 REDES EDUCATIVAS
+        const coloresRedes = {
+            1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
+            5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
+        };
+
+        // SISTEMA DE VACANTES Y CONEXIÓN GOOGLE APPS SCRIPT
+        let datosVacantesEnVivo = {};
+        const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycby2Y6cDIBQj6lRkAc1eMlfrhMll99Y_LHgb8fkDYHVN66iRrvfiyij1eboTxvCKl_qw/exec";
+
+        async function cargarVacantesEnTiempoReal() {
+            try {
+                const respuesta = await fetch(URL_API_GOOGLE);
+                const resultado = await respuesta.json();
+                
+                resultado.forEach(item => {
+                    if (item.id_colegio !== undefined && item.id_colegio !== null) {
+                        let idLimpio = String(item.id_colegio).trim();
+                        datosVacantesEnVivo[idLimpio] = {
+                            cuna: item.vacante_cuna !== undefined ? String(item.vacante_cuna) : "Consultar",
+                            inicial: item.vacante_inicial !== undefined ? String(item.vacante_inicial) : "Consultar",
+                            primaria: item.vacante_primaria !== undefined ? String(item.vacante_primaria) : "Consultar",
+                            secundaria: item.vacante_secundaria !== undefined ? String(item.vacante_secundaria) : "Consultar",
+                            actualizacion: item.ultima_actualizacion || "Reciente"
+                        };
+                    }
+                });
+                renderizarListaVacantesGlobal(colegios);
+            } catch (error) {
+                console.error("Sincronización inicial local activa:", error);
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            colegios.forEach(c => {
-                datosVacantesEnVivo[c.id_colegio] = {
-                    cuna: "0",
-                    inicial: "15",
-                    primaria: "5",
-                    secundaria: "0"
-                };
-            });
-            renderizarListaVacantesGlobal(colegios);
+            cargarVacantesEnTiempoReal();
+            configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
+            configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
         });
 
-        // ================= SISTEMA DE ACCESO A DIRECTORES (CORREGIDO) =================
+        // ================= ACCESO DE DIRECTORES (CORREGIDO) =================
         function abrirModalDirector() {
             const modalHTML = `
                 <div id="modal-director" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center; z-index:99999;">
-                    <div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.2); color:#2d3748;">
-                        <h3 style="color:#1a365d; margin-bottom:15px;">Portal de Directores</h3>
-                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">Actualiza las vacantes de tu institución.</p>
+                    <div style="background:white; padding:25px; border-radius:14px; width:90%; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.3); color:#2d3748;">
+                        <h3 style="color:#1a365d; margin-bottom:8px;">Portal de Directores</h3>
+                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">Actualiza las vacantes de tu institución de forma inmediata.</p>
                         
-                        <label style="font-size:0.8rem; font-weight:bold;">Código del Colegio:</label>
-                        <input type="text" id="dir-codigo" placeholder="Ej. 01" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
+                        <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Código o Número del Colegio:</label>
+                        <input type="text" id="dir-codigo" placeholder="Ej. 01, 5090 o 121" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
                         
-                        <label style="font-size:0.8rem; font-weight:bold;">Contraseña Asignada:</label>
-                        <input type="password" id="dir-password" placeholder="Tu contraseña" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
+                        <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Contraseña Asignada:</label>
+                        <input type="password" id="dir-password" placeholder="Tu contraseña secreta" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
                         
-                        <div style="display:flex; gap:10px;">
-                            <button onclick="document.getElementById('modal-director').remove()" style="background:#e2e8f0; border:none; padding:10px; border-radius:6px; cursor:pointer; flex:1;">Cancelar</button>
-                            <button onclick="autenticarDirector()" style="background:#2563eb; color:white; border:none; padding:10px; border-radius:6px; cursor:pointer; flex:1;">Ingresar</button>
+                        <div style="display:flex; justify-content:space-between; gap:10px;">
+                            <button onclick="document.getElementById('modal-director').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
+                            <button onclick="autenticarDirector()" style="background:#2563eb; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Ingresar</button>
                         </div>
                     </div>
                 </div>
@@ -352,66 +441,76 @@
             document.body.insertAdjacentHTML('beforeend', modalHTML);
         }
 
-        // Aquí está la solución al bug: Convertimos todo a String de manera segura para comparar
         function autenticarDirector() {
             const modal = document.getElementById('modal-director');
             if (!modal) return;
 
-            const codigoVal = document.getElementById('dir-codigo').value.trim();
-            const passVal = document.getElementById('dir-password').value.trim();
+            const codigoInput = document.getElementById('dir-codigo').value.trim().toLowerCase();
+            const passwordInput = document.getElementById('dir-password').value.trim();
 
-            if (!codigoVal) { alert("Ingresa un código."); return; }
+            if (!codigoInput) { alert("Por favor ingresa un código o número de colegio."); return; }
 
-            // Buscamos convirtiendo el id de la base de datos a Texto siempre.
-            const colegioEncontrado = colegios.find(c => String(c.id_colegio).trim() === codigoVal || String(c.codigo).trim() === codigoVal);
-            
+            const codigoNum = Number(codigoInput);
+
+            // BÚSQUEDA FLEXIBLE PARA DIRECTORES (soporta ID numérico, string o nombre del colegio)
+            const colegioEncontrado = colegios.find(c => {
+                if (!isNaN(codigoNum) && Number(c.id_colegio) === codigoNum) return true;
+                if (String(c.id_colegio).trim().toLowerCase() === codigoInput) return true;
+                if (c.codigo && String(c.codigo).trim().toLowerCase() === codigoInput) return true;
+                if (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(codigoInput)) return true;
+                return false;
+            });
+
             if (!colegioEncontrado) {
-                alert("Error: Colegio no encontrado.");
+                alert("Error: Colegio no encontrado. Revisa el número ingresado.");
                 return;
             }
 
-            // Comparamos contraseña igualando ambas cosas a texto
-            if (String(colegioEncontrado.password_director).trim() !== passVal) {
+            if (String(colegioEncontrado.password_director).trim().toLowerCase() !== passwordInput.toLowerCase()) {
                 alert("Error: Contraseña incorrecta.");
                 return;
             }
 
             modal.remove();
-            abrirPanelEdicionVacantes(colegioEncontrado);
+            abrirPanelEdicionVacantes(colegioEncontrado, passwordInput);
         }
 
-        function abrirPanelEdicionVacantes(colegio) {
-            // Obtenemos los datos actuales
-            const actual = datosVacantesEnVivo[colegio.id_colegio] || { cuna: "0", inicial: "0", primaria: "0", secundaria: "0" };
+        function abrirPanelEdicionVacantes(colegio, password) {
+            const actual = datosVacantesEnVivo[colegio.id_colegio] || {
+                cuna: extraerNumeroLimpio(colegio.vacante_cuna),
+                inicial: extraerNumeroLimpio(colegio.vacante_inicial),
+                primaria: extraerNumeroLimpio(colegio.vacante_primaria),
+                secundaria: extraerNumeroLimpio(colegio.vacante_secundaria)
+            };
 
             const panelHTML = `
                 <div id="modal-panel-vacantes" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center; z-index:99999;">
-                    <div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:450px; color:#2d3748; text-align:left;">
+                    <div style="background:white; padding:25px; border-radius:14px; width:90%; max-width:450px; color:#2d3748; text-align:left;">
                         <h3 style="color:#1a365d; margin-bottom:5px;">${colegio.nombre_colegio}</h3>
-                        <p style="font-size:0.8rem; color:#16a34a; font-weight:bold; margin-bottom:15px;">✔ Sesión iniciada correctamente</p>
+                        <p style="font-size:0.8rem; color:#16a34a; margin-bottom:15px; font-weight:bold;">✔ Sesión iniciada correctamente</p>
                         
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
                             <div>
-                                <label style="font-size:0.75rem; font-weight:bold;">Vacantes Cuna:</label>
-                                <input type="number" id="edit-cuna" value="${actual.cuna}" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
+                                <label style="font-size:0.75rem; font-weight:bold; display:block;">Vacantes Cuna:</label>
+                                <input type="number" min="0" id="edit-cuna" value="${actual.cuna}" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
                             </div>
                             <div>
-                                <label style="font-size:0.75rem; font-weight:bold;">Vacantes Inicial:</label>
-                                <input type="number" id="edit-inicial" value="${actual.inicial}" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
+                                <label style="font-size:0.75rem; font-weight:bold; display:block;">Vacantes Inicial:</label>
+                                <input type="number" min="0" id="edit-inicial" value="${actual.inicial}" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
                             </div>
                             <div>
-                                <label style="font-size:0.75rem; font-weight:bold;">Vacantes Primaria:</label>
-                                <input type="number" id="edit-primaria" value="${actual.primaria}" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
+                                <label style="font-size:0.75rem; font-weight:bold; display:block;">Vacantes Primaria:</label>
+                                <input type="number" min="0" id="edit-primaria" value="${actual.primaria}" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
                             </div>
                             <div>
-                                <label style="font-size:0.75rem; font-weight:bold;">Vacantes Secundaria:</label>
-                                <input type="number" id="edit-secundaria" value="${actual.secundaria}" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
+                                <label style="font-size:0.75rem; font-weight:bold; display:block;">Vacantes Secundaria:</label>
+                                <input type="number" min="0" id="edit-secundaria" value="${actual.secundaria}" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
                             </div>
                         </div>
 
-                        <div style="display:flex; gap:10px;">
-                            <button onclick="document.getElementById('modal-panel-vacantes').remove()" style="background:#e2e8f0; border:none; padding:10px; border-radius:6px; cursor:pointer; flex:1;">Cancelar</button>
-                            <button onclick="guardarVacantesRapido('${colegio.id_colegio}')" style="background:#16a34a; color:white; border:none; padding:10px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Guardar Cambios</button>
+                        <div style="display:flex; justify-content:space-between; gap:10px;">
+                            <button onclick="document.getElementById('modal-panel-vacantes').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
+                            <button onclick="guardarVacantesInstante('${colegio.id_colegio}', '${password}')" style="background:#16a34a; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Guardar Cambios</button>
                         </div>
                     </div>
                 </div>
@@ -419,90 +518,385 @@
             document.body.insertAdjacentHTML('beforeend', panelHTML);
         }
 
-        function guardarVacantesRapido(id_colegio) {
-            // Actualización instantánea en la interfaz
+        async function guardarVacantesInstante(id_colegio, password) {
+            const ahora = new Date();
+            const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+
+            const cunaVal = document.getElementById('edit-cuna').value || "0";
+            const inicialVal = document.getElementById('edit-inicial').value || "0";
+            const primariaVal = document.getElementById('edit-primaria').value || "0";
+            const secundariaVal = document.getElementById('edit-secundaria').value || "0";
+
+            // ACTUALIZACIÓN LOCAL INSTANTÁNEA (Respuesta inmediata)
             datosVacantesEnVivo[id_colegio] = {
-                cuna: document.getElementById('edit-cuna').value || "0",
-                inicial: document.getElementById('edit-inicial').value || "0",
-                primaria: document.getElementById('edit-primaria').value || "0",
-                secundaria: document.getElementById('edit-secundaria').value || "0"
+                cuna: cunaVal,
+                inicial: inicialVal,
+                primaria: primariaVal,
+                secundaria: secundariaVal,
+                actualizacion: fechaHoraFormat
             };
 
             document.getElementById('modal-panel-vacantes').remove();
             
-            // Mapachito se pone feliz
-            abrirModalMapachito('feliz', '¡Las vacantes se actualizaron al instante!', true);
-            
-            // Actualizamos la lista de vacantes en tiempo real
+            abrirModalMapachito('feliz', `¡Vacantes actualizadas al instante!\nFecha: ${fechaHoraFormat}`, true);
             renderizarListaVacantesGlobal(colegios);
+
+            // ENVÍO SÍNCRONO/ASÍNCRONO EN SEGUNDO PLANO A GOOGLE SHEETS
+            try {
+                await fetch(URL_API_GOOGLE, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        codigo: id_colegio,
+                        password: password,
+                        vacantes_cuna: cunaVal,
+                        vacantes_inicial: inicialVal,
+                        vacantes_primaria: primariaVal,
+                        vacantes_secundaria: secundariaVal,
+                        ultima_actualizacion: fechaHoraFormat
+                    })
+                });
+            } catch (e) {
+                console.log("Guardado local garantizado.");
+            }
         }
 
-        // ================= NAVEGACIÓN Y PANTALLAS =================
-        function volverAPortada() {
-            document.querySelectorAll('.pantalla-secundaria').forEach(p => p.style.display = 'none');
-            document.getElementById('pantalla-portada').style.display = 'flex';
+        function extraerNumeroLimpio(str) {
+            if (!str) return "0";
+            const match = String(str).match(/\d+/);
+            return match ? match[0] : "0";
         }
 
-        function mostrarInfoTodosMapa(e) {
-            e.stopPropagation();
-            abrirModalMapachito('olfateando', "¡Buscando todos los colegios en el mapa!", false, () => {
-                document.getElementById('pantalla-portada').style.display = 'none';
-                document.getElementById('pantalla-mapa').style.display = 'flex';
-                setTimeout(() => map.invalidateSize(), 200);
-                mostrarColegiosEnMapa(colegios);
-            }, 2500);
-        }
-
-        function abrirPantallaVacantes(e) {
-            e.stopPropagation();
-            document.getElementById('pantalla-portada').style.display = 'none';
-            document.getElementById('pantalla-vacantes').style.display = 'flex';
-            abrirModalMapachito('pensando', "Vamos a buscar colegios con vacantes. Recuerda guiarte por los colores del semáforo.", true);
-        }
-
-        function abrirPantallaDonaciones(e) {
-            e.stopPropagation();
-            document.getElementById('pantalla-portada').style.display = 'none';
-            document.getElementById('pantalla-donaciones').style.display = 'flex';
+        // ================= MAPA Y PINES DE REDES =================
+        function extraerNumeroRed(redStr) {
+            if (!redStr) return null;
+            const match = String(redStr).match(/\d+/);
+            return match ? parseInt(match[0], 10) : null;
         }
 
         function mostrarColegiosEnMapa(lista) {
             marcadoresCreados.forEach(item => map.removeLayer(item.marker));
             marcadoresCreados = [];
 
+            if (!lista || lista.length === 0) return;
+
             lista.forEach(colegio => {
                 if (!colegio.latitud || !colegio.longitud) return;
-                var marker = L.marker([colegio.latitud, colegio.longitud]).addTo(map);
-                marker.bindPopup(`<b>${colegio.nombre_colegio}</b><br>${colegio.direccion}`);
+
+                const numRed = extraerNumeroRed(colegio.red_educativa);
+                const colorPin = (numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568";
+                const textoPin = numRed ? numRed : "🏫";
+
+                const iconoClasico = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `
+                        <div class="pin-clasico-container">
+                            <div class="pin-gota" style="background-color: ${colorPin};"></div>
+                            <div class="pin-texto">${textoPin}</div>
+                        </div>
+                    `,
+                    iconSize: [30, 42],
+                    iconAnchor: [15, 42],
+                    popupAnchor: [0, -38]
+                });
+
+                var marker = L.marker([colegio.latitud, colegio.longitud], { icon: iconoClasico }).addTo(map);
+                
+                const vacantesActuales = datosVacantesEnVivo[colegio.id_colegio] || {
+                    cuna: extraerNumeroLimpio(colegio.vacante_cuna),
+                    inicial: extraerNumeroLimpio(colegio.vacante_inicial),
+                    primaria: extraerNumeroLimpio(colegio.vacante_primaria),
+                    secundaria: extraerNumeroLimpio(colegio.vacante_secundaria)
+                };
+
+                marker.bindPopup(`
+                    <div style="min-width: 210px; color: #2d3748;">
+                        <b style="font-size: 0.95rem; color: #1a365d;">${colegio.nombre_colegio}</b><br>
+                        <span style="font-size:0.8rem; color: #4a5568;">Código: ${colegio.id_colegio}</span><br>
+                        <b>Gestión:</b> ${colegio.gestion}<br>
+                        <b>Red:</b> ${colegio.red_educativa || 'N/A'}<br>
+                        <hr style="margin: 6px 0; border:0; border-top:1px solid #cbd5e1;">
+                        <div style="font-size:0.8rem;">
+                            <b>Vacantes:</b> Cuna (${vacantesActuales.cuna}) | Inicial (${vacantesActuales.inicial}) | Primaria (${vacantesActuales.primaria}) | Sec. (${vacantesActuales.secundaria})
+                        </div>
+                        <br>
+                        <button onclick="abrirDetalle('${colegio.nombre_colegio}')" style="background:#2563eb; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; width:100%; font-weight:bold;">Ver Detalle Completo</button>
+                    </div>
+                `);
+
                 marcadoresCreados.push({ colegio, marker });
             });
         }
 
-        // ================= MAPACHITO (Sin parpadeos) =================
-        let temporizadorAutoCierre = null;
-        let accionPendiente = null;
+        function mostrarInfoTodosMapa(e) {
+            e.stopPropagation();
+            abrirModalMapachito('olfateando', "¡Olfateando todos los colegios para mostrarlos en el mapa!", false, () => { ejecutarIrAlMapa('todos'); }, 2500);
+        }
 
+        function mostrarInfoEstatales(e) {
+            e.stopPropagation();
+            abrirModalMapachito('sorprendido', "¿Sabías que son 146 colegios estatales en Ventanilla y Mi Perú?", false, () => { ejecutarIrAlMapa('Estatal'); }, 2500);
+        }
+
+        function mostrarInfoParticulares(e) {
+            e.stopPropagation();
+            abrirModalMapachito('feliz', "Aquí te mostraré los colegios Particulares registrados.", false, () => { ejecutarIrAlMapa('Particular'); }, 2500);
+        }
+
+        function ejecutarIrAlMapa(filtroTipo) {
+            ocultarTodasLasPantallas();
+            document.getElementById('pantalla-mapa').style.display = 'flex';
+            setTimeout(() => { map.invalidateSize(); }, 200);
+
+            let filtrados = colegios;
+            if (filtroTipo === 'Estatal' || filtroTipo === 'Particular') {
+                filtrados = colegios.filter(c => c.gestion && c.gestion.toLowerCase() === filtroTipo.toLowerCase());
+            }
+
+            mostrarColegiosEnMapa(filtrados);
+        }
+
+        function abrirModalRedesConMapachito(e) {
+            e.stopPropagation();
+            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál de las 9 deseas explorar?", false, () => {
+                document.getElementById('modal-redes').style.display = 'flex';
+            }, 2500);
+        }
+
+        function cerrarModalRedes(e) { document.getElementById('modal-redes').style.display = 'none'; }
+        function forzarCierreModalRedes() { document.getElementById('modal-redes').style.display = 'none'; }
+
+        function filtrarPorRedConMapachito(numeroRed) {
+            document.getElementById('modal-redes').style.display = 'none';
+            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, false, () => {
+                ocultarTodasLasPantallas();
+                document.getElementById('pantalla-mapa').style.display = 'flex';
+                setTimeout(() => { map.invalidateSize(); }, 200);
+
+                const filtrados = colegios.filter(c => extraerNumeroRed(c.red_educativa) === numeroRed);
+                mostrarColegiosEnMapa(filtrados);
+
+                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                }
+            }, 2500);
+        }
+
+        // ================= BÚSQUEDA PREDICTIVA =================
+        function configurarAutocompletado(inputId, listaId, alSeleccionar) {
+            const input = document.getElementById(inputId);
+            const lista = document.getElementById(listaId);
+
+            if (!input || !lista) return;
+
+            input.addEventListener('input', function() {
+                const texto = this.value.toLowerCase().trim();
+                lista.innerHTML = '';
+                if (texto.length === 0) { lista.style.display = 'none'; return; }
+
+                const coincidencias = colegios.filter(c => 
+                    (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
+                    (c.id_colegio && String(c.id_colegio).toLowerCase().includes(texto))
+                ).slice(0, 6);
+
+                if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
+
+                coincidencias.forEach(c => {
+                    const div = document.createElement('div');
+                    div.className = 'sugerencia-item';
+                    div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(Cod: ${c.id_colegio})</span>`;
+                    div.addEventListener('click', () => {
+                        input.value = c.nombre_colegio;
+                        lista.style.display = 'none';
+                        alSeleccionar(c);
+                    });
+                    lista.appendChild(div);
+                });
+                lista.style.display = 'block';
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !lista.contains(e.target)) {
+                    lista.style.display = 'none';
+                }
+            });
+        }
+
+        function seleccionarColegioYIr(colegio) {
+            abrirModalMapachito('saludando', `¡Encontré a ${colegio.nombre_colegio}! Te llevo directo.`, false, () => {
+                ocultarTodasLasPantallas();
+                document.getElementById('pantalla-mapa').style.display = 'flex';
+                setTimeout(() => { map.invalidateSize(); }, 200);
+
+                mostrarColegiosEnMapa([colegio]);
+                if (colegio.latitud && colegio.longitud) {
+                    map.setView([colegio.latitud, colegio.longitud], 16);
+                }
+                abrirDetalle(colegio.nombre_colegio);
+            }, 2000);
+        }
+
+        function seleccionarColegioEnMapa(colegio) {
+            mostrarColegiosEnMapa([colegio]);
+            if (colegio.latitud && colegio.longitud) {
+                map.setView([colegio.latitud, colegio.longitud], 16);
+            }
+            abrirDetalle(colegio.nombre_colegio);
+        }
+
+        // ================= MODAL DETALLE DE COLEGIO =================
+        function abrirDetalle(nombreColegio) {
+            const colegio = colegios.find(c => c.nombre_colegio === nombreColegio);
+            if (!colegio) return;
+
+            const vacantes = datosVacantesEnVivo[colegio.id_colegio] || {
+                cuna: extraerNumeroLimpio(colegio.vacante_cuna),
+                inicial: extraerNumeroLimpio(colegio.vacante_inicial),
+                primaria: extraerNumeroLimpio(colegio.vacante_primaria),
+                secundaria: extraerNumeroLimpio(colegio.vacante_secundaria)
+            };
+
+            const tipoBadge = colegio.gestion && colegio.gestion.toLowerCase().includes('particular') ? 'badge-particular' : (colegio.gestion && colegio.gestion.toLowerCase().includes('convenio') ? 'badge-convenio' : 'badge-estatal');
+
+            const contenido = `
+                <h2 style="color: #1a365d; margin-bottom: 6px; font-size:1.2rem;">${colegio.nombre_colegio}</h2>
+                <span class="school-badge ${tipoBadge}">${colegio.gestion || 'Estatal'}</span> | <b>Distrito:</b> ${colegio.distrito || 'Ventanilla'}
+                
+                <div style="font-size:0.85rem; line-height:1.6; margin-top:10px;">
+                    <p><b>Código:</b> ${colegio.id_colegio}</p>
+                    <p><b>Red Educativa:</b> ${colegio.red_educativa || 'N/A'}</p>
+                    <p><b>Niveles:</b> ${colegio.niveles || 'N/A'}</p>
+                    <p><b>Turnos:</b> ${colegio.TURNOS || 'Mañana y Tarde'}</p>
+                    <p><b>Dirección:</b> ${colegio.direccion || 'No especificada'}</p>
+                    <p><b>Requisitos:</b> ${colegio.requisitos_de_matricula || 'DNI del estudiante y apoderado'}</p>
+                </div>
+
+                <h4 style="margin-top: 15px; color: #1a365d;">Disponibilidad de Vacantes:</h4>
+                <div class="semaforo-grid">
+                    <div class="semaforo-tag ${obtenerClaseSemaforo(vacantes.cuna)}">Cuna: ${vacantes.cuna}</div>
+                    <div class="semaforo-tag ${obtenerClaseSemaforo(vacantes.inicial)}">Inicial: ${vacantes.inicial}</div>
+                    <div class="semaforo-tag ${obtenerClaseSemaforo(vacantes.primaria)}">Primaria: ${vacantes.primaria}</div>
+                    <div class="semaforo-tag ${obtenerClaseSemaforo(vacantes.secundaria)}">Secundaria: ${vacantes.secundaria}</div>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-top:15px; flex-wrap:wrap;">
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:0.85rem;">🗺️ Iniciar viaje</a>
+                    
+                    ${colegio.fachada ? `<button onclick="abrirFachadaFullscreen('${colegio.fachada}')" style="flex:1; background:#0284c7; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; font-size:0.85rem; cursor:pointer;">🏫 Fachada de Colegio</button>` : ''}
+                </div>
+            `;
+
+            document.getElementById('modal-body-content').innerHTML = contenido;
+            document.getElementById('modal-detalle').style.display = 'flex';
+        }
+
+        function obtenerClaseSemaforo(numStr) {
+            let val = parseInt(numStr) || 0;
+            if (val <= 0) return 'tag-rojo';
+            if (val < 10) return 'tag-amarillo';
+            return 'tag-verde';
+        }
+
+        function cerrarDetalle() { document.getElementById('modal-detalle').style.display = 'none'; }
+
+        function abrirFachadaFullscreen(url) {
+            document.getElementById('imgFachadaFull').src = url;
+            document.getElementById('modal-fachada-fullscreen').style.display = 'flex';
+        }
+        function cerrarFachadaFullscreen() { document.getElementById('modal-fachada-fullscreen').style.display = 'none'; }
+
+        // ================= BUSCADOR GLOBAL DE VACANTES (PANTALLA 3) =================
+        function abrirPantallaVacantes(e) {
+            e.stopPropagation();
+            ocultarTodasLasPantallas();
+            document.getElementById('pantalla-vacantes').style.display = 'flex';
+            renderizarListaVacantesGlobal(colegios);
+            abrirModalMapachito('pensando', "Revisa las vacantes de todos los colegios con nuestro semáforo.", true);
+        }
+
+        function renderizarListaVacantesGlobal(lista) {
+            const contenedor = document.getElementById('lista-vacantes');
+            if (!contenedor) return;
+            contenedor.innerHTML = '';
+
+            lista.forEach(colegio => {
+                const vacantes = datosVacantesEnVivo[colegio.id_colegio] || {
+                    cuna: extraerNumeroLimpio(colegio.vacante_cuna),
+                    inicial: extraerNumeroLimpio(colegio.vacante_inicial),
+                    primaria: extraerNumeroLimpio(colegio.vacante_primaria),
+                    secundaria: extraerNumeroLimpio(colegio.vacante_secundaria)
+                };
+
+                const card = `
+                    <div class="card-seccion" style="margin-bottom:12px; padding:15px;">
+                        <h3 style="color:#1a365d; font-size:1rem; margin-bottom:4px;">${colegio.nombre_colegio}</h3>
+                        <p style="font-size:0.8rem; color:#64748b; margin-bottom:8px;">${colegio.distrito} | ${colegio.gestion} | ${colegio.red_educativa || 'Red N/A'}</p>
+                        
+                        <div class="semaforo-grid">
+                            <div class="semaforo-tag ${obtenerClaseSemaforo(vacantes.inicial)}">Inicial: ${vacantes.inicial}</div>
+                            <div class="semaforo-tag ${obtenerClaseSemaforo(vacantes.primaria)}">Primaria: ${vacantes.primaria}</div>
+                            <div class="semaforo-tag ${obtenerClaseSemaforo(vacantes.secundaria)}">Secundaria: ${vacantes.secundaria}</div>
+                            <div class="semaforo-tag ${obtenerClaseSemaforo(vacantes.cuna)}">Cuna: ${vacantes.cuna}</div>
+                        </div>
+
+                        <div style="display:flex; gap:8px; margin-top:10px;">
+                            <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#2563eb; color:white; padding:8px; border-radius:6px; text-decoration:none; font-size:0.8rem; font-weight:bold;">🗺️ Ir al mapa</a>
+                            <button onclick="abrirDetalle('${colegio.nombre_colegio}')" style="flex:1; background:#475569; color:white; border:none; padding:8px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">Ver colegio</button>
+                        </div>
+                    </div>
+                `;
+                contenedor.innerHTML += card;
+            });
+        }
+
+        function filtrarListaVacantes() {
+            const texto = document.getElementById('inputBuscadorVacantes').value.toLowerCase();
+            const filtrados = colegios.filter(c => c.nombre_colegio.toLowerCase().includes(texto) || (c.niveles && c.niveles.toLowerCase().includes(texto)));
+            renderizarListaVacantesGlobal(filtrados);
+        }
+
+        // ================= PANTALLA DONACIONES (PANTALLA 4) =================
+        function abrirPantallaDonaciones(e) {
+            e.stopPropagation();
+            ocultarTodasLasPantallas();
+            document.getElementById('pantalla-donaciones').style.display = 'flex';
+        }
+
+        function copiarCCI() {
+            navigator.clipboard.writeText('002-191-000000000000-00');
+            alert('¡Código CCI copiado al portapapeles!');
+        }
+
+        function ocultarTodasLasPantallas() {
+            document.getElementById('pantalla-portada').style.display = 'none';
+            document.querySelectorAll('.pantalla-secundaria').forEach(p => p.style.display = 'none');
+        }
+
+        function volverAPortada() {
+            ocultarTodasLasPantallas();
+            document.getElementById('pantalla-portada').style.display = 'flex';
+        }
+
+        // ================= MAPACHITO Y EMOCIONES SIN PARPADEO =================
         function abrirModalMapachito(emocion, texto, conBoton = false, callback = null, autoCierreMs = null) {
             const modal = document.getElementById('modalMapachito');
             document.getElementById('textoMapachito').innerText = texto;
             document.getElementById('btnEntendidoModal').style.display = conBoton ? 'inline-block' : 'none';
 
-            // Archivos de Lottie (Deberás tener estos archivos o usar URLs públicas si tienes)
-            const lottieArchivos = {
-                'saludando': 'mapache_saludando.json', // Puedes reemplazar con URLs directas de LottieFiles
+            const archivosEmocion = {
+                'saludando': 'mapache_saludando.json',
                 'pensando': 'mapache_pensando.json',
                 'olfateando': 'mapache_buscando.json',
+                'buscando': 'mapache_buscando.json',
                 'feliz': 'mapache_feliz.json',
                 'sorprendido': 'mapache_sorprendido.json',
                 'durmiendo': 'mapache_durmiendo.json'
             };
 
-            // Cambiamos solo el atributo src. No destruimos el elemento para evitar parpadeos fuertes.
-            const player = document.getElementById('lottieMapacheFijo');
-            let nuevaRuta = lottieArchivos[emocion] || 'mapache_saludando.json';
-            
-            // Solo lo recargamos si es diferente
-            if(player.getAttribute('src') !== nuevaRuta) {
+            const player = document.getElementById('animacionLottie');
+            let nuevaRuta = archivosEmocion[emocion] || 'mapache_saludando.json';
+
+            if (player.getAttribute('src') !== nuevaRuta) {
                 player.setAttribute('src', nuevaRuta);
             }
 
@@ -522,42 +916,25 @@
             }
         }
 
-        // ================= BUSCADOR DE VACANTES (IDEA B) =================
-        function evaluarSemaforo(cantidadStr) {
-            let cantidad = parseInt(cantidadStr) || 0;
-            if (cantidad <= 0) return `<span class="semaforo-rojo">🔴 Agotado (0)</span>`;
-            if (cantidad < 10) return `<span class="semaforo-amarillo">🟡 Quedan Pocas (${cantidad})</span>`;
-            return `<span class="semaforo-verde">🟢 Disponible (${cantidad})</span>`;
+        // CONTROL DE INACTIVIDAD (30s)
+        function reiniciarTemporizadorInactividad() {
+            const modalInactivo = document.getElementById('modal-inactividad-total');
+            if (modalInactivo.style.display === 'flex') return;
+            if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
+            temporizadorInactividad = setTimeout(() => {
+                modalInactivo.style.display = 'flex';
+            }, 30000);
         }
 
-        function renderizarListaVacantesGlobal(lista) {
-            const contenedor = document.getElementById('lista-vacantes');
-            contenedor.innerHTML = '';
-
-            lista.forEach(colegio => {
-                const vacantes = datosVacantesEnVivo[colegio.id_colegio] || { cuna: "0", inicial: "0", primaria: "0", secundaria: "0" };
-                
-                // Solo mostramos los colegios que tengan al menos inicial, primaria o secundaria habilitado en la info.
-                const html = `
-                    <div class="fila-colegio-vacante">
-                        <h3 style="color:#1e293b; margin-bottom:5px;">${colegio.nombre_colegio}</h3>
-                        <p style="font-size:0.8rem; color:#64748b; margin-bottom:10px;">${colegio.niveles} | ${colegio.gestion}</p>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; font-size:0.85rem;">
-                            <div><b>Inicial:</b> ${evaluarSemaforo(vacantes.inicial)}</div>
-                            <div><b>Primaria:</b> ${evaluarSemaforo(vacantes.primaria)}</div>
-                            <div><b>Secundaria:</b> ${evaluarSemaforo(vacantes.secundaria)}</div>
-                        </div>
-                    </div>
-                `;
-                contenedor.innerHTML += html;
-            });
+        function despertarMapachitoInactivo() {
+            document.getElementById('modal-inactividad-total').style.display = 'none';
+            reiniciarTemporizadorInactividad();
         }
 
-        function filtrarListaVacantes() {
-            const texto = document.getElementById('inputBuscadorVacantes').value.toLowerCase();
-            const filtrados = colegios.filter(c => c.nombre_colegio.toLowerCase().includes(texto) || c.niveles.toLowerCase().includes(texto));
-            renderizarListaVacantesGlobal(filtrados);
-        }
+        ['click', 'mousemove', 'keypress', 'touchstart', 'scroll'].forEach(evento => {
+            window.addEventListener(evento, reiniciarTemporizadorInactividad, true);
+        });
+        reiniciarTemporizadorInactividad();
     </script>
 </body>
 </html>
