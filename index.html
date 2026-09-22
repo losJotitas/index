@@ -223,7 +223,7 @@
         .tag-verde-limpio { background-color: #dcfce7; color: #15803d; border: 1.5px solid #86efac; padding: 10px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; text-align: center; }
 
         /* TARJETAS CON SEMÁFORO DE VACANTES POR GRADO */
-        .grados-semaforo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 10px 0; }
+        .grados-semaforo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; margin: 10px 0; }
         .item-grado-semaforo { padding: 8px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .sem-verde { background-color: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .sem-amarillo { background-color: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
@@ -313,10 +313,10 @@
             <div class="card-seccion">
                 <h2 style="color:#1a365d; margin-bottom:8px; font-size:1.2rem;">Vacantes por Grado y Edad en Tiempo Real</h2>
                 <div style="background:#f1f5f9; border-left:4px solid #38bdf8; padding:10px; border-radius:8px; font-size:0.8rem; color:#334155; margin-bottom:15px; font-weight:600;">
-                    Leyenda del Semáforo:<br>
-                    🟢 <b>Verde:</b> 10 o más vacantes (Disponible)<br>
-                    🟡 <b>Amarillo:</b> 1 a 9 vacantes (Pocas vacantes)<br>
-                    🔴 <b>Rojo:</b> 0 vacantes (Agotado)
+                    <b>Leyenda del Semáforo:</b><br>
+                    🟢 <b>Verde:</b> Hay vacantes disponibles<br>
+                    🟡 <b>Amarillo:</b> Pocas vacantes disponibles<br>
+                    🔴 <b>Rojo:</b> Sin vacantes (Agotado)
                 </div>
                 <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por colegio, nivel (Primaria, Inicial) o grado (Ej. 3 años, 1er grado)..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
             </div>
@@ -436,7 +436,7 @@
         let temporizadorInactividad = null;
         let temporizadorAutoCierre = null;
 
-        // DICCIONARIO DIRECTO DE LAS 16 FOTOS DE FACHADAS EN GITHUB
+        // DICCIONARIO DIRECTO Y EXACTO PARA LAS 16 FOTOS EN GITHUB
         const mapaFotosFachada = {
             "107": "fotos/107_Los_Pastorcitos_de_Fatima.jpeg",
             "108": "fotos/108.jpeg",
@@ -496,19 +496,19 @@
             configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
         });
 
-        // ================= ACCESO DE DIRECTORES =================
+        // ================= ACCESO DE DIRECTORES (SISTEMA SEMÁFORO SIMPLIFICADO) =================
         function abrirModalDirector() {
             const modalHTML = `
                 <div id="modal-director" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
                     <div style="background:white; padding:25px; border-radius:14px; width:90%; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.3); color:#2d3748;">
                         <h3 style="color:#1a365d; margin-bottom:8px;">Portal de Directores</h3>
-                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:12px;">Ingresa para actualizar las vacantes por grado de tu institución.</p>
+                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:12px;">Ingresa para indicar las vacantes por grado con el sistema semáforo.</p>
 
-                        <div style="background:#f1f5f9; border-left:4px solid #f59e0b; padding:8px 10px; border-radius:6px; font-size:0.75rem; color:#334155; margin-bottom:15px;">
-                            <b>Criterio del Semáforo:</b><br>
-                            🟢 10 o más vacantes (Disponible)<br>
-                            🟡 1 a 9 vacantes (Pocas vacantes)<br>
-                            🔴 0 vacantes (Agotado)
+                        <div style="background:#f1f5f9; border-left:4px solid #38bdf8; padding:8px 10px; border-radius:6px; font-size:0.75rem; color:#334155; margin-bottom:15px; font-weight:600;">
+                            <b>Leyenda del Semáforo:</b><br>
+                            🟢 Hay vacantes disponibles<br>
+                            🟡 Pocas vacantes disponibles<br>
+                            🔴 Sin vacantes (Agotado)
                         </div>
                         
                         <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Código o Número del Colegio:</label>
@@ -560,6 +560,21 @@
             abrirPanelEdicionVacantesGrados(colegioEncontrado, passwordInput);
         }
 
+        function crearSelectSemaforo(idCampo, valActual) {
+            let val = String(valActual || '').toLowerCase();
+            let vSel = (val === 'verde' || parseInt(val) >= 10) ? 'selected' : '';
+            let aSel = (val === 'amarillo' || (parseInt(val) > 0 && parseInt(val) < 10)) ? 'selected' : '';
+            let rSel = (!vSel && !aSel) ? 'selected' : '';
+
+            return `
+                <select id="edit-${idCampo}" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:0.82rem; background:#ffffff; color:#0f172a; outline:none;">
+                    <option value="verde" ${vSel}>🟢 Hay vacantes</option>
+                    <option value="amarillo" ${aSel}>🟡 Pocas vacantes</option>
+                    <option value="rojo" ${rSel}>🔴 Sin vacantes</option>
+                </select>
+            `;
+        }
+
         function abrirPanelEdicionVacantesGrados(colegio, password) {
             const nivelesTexto = (colegio.niveles || '').toLowerCase();
             const tieneCuna = nivelesTexto.includes('cuna');
@@ -576,7 +591,7 @@
                     <div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">👶 CUNA</div>
                     <div>
                         <label style="font-size:0.75rem; font-weight:bold;">Cuna (0-3 años):</label>
-                        <input type="number" min="0" id="edit-cuna_0_3" value="${actual.cuna_0_3 || 0}" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px;">
+                        ${crearSelectSemaforo('cuna_0_3', actual.cuna_0_3)}
                     </div>
                 `;
             }
@@ -584,9 +599,9 @@
             if (tieneInicial) {
                 formularioGradosHTML += `
                     <div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">🎨 INICIAL (EDADES)</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">3 Años:</label><input type="number" min="0" id="edit-ini_3a" value="${actual.ini_3a || 0}" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px;"></div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">4 Años:</label><input type="number" min="0" id="edit-ini_4a" value="${actual.ini_4a || 0}" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px;"></div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">5 Años:</label><input type="number" min="0" id="edit-ini_5a" value="${actual.ini_5a || 0}" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px;"></div>
+                    <div><label style="font-size:0.75rem; font-weight:bold;">3 Años:</label>${crearSelectSemaforo('ini_3a', actual.ini_3a)}</div>
+                    <div><label style="font-size:0.75rem; font-weight:bold;">4 Años:</label>${crearSelectSemaforo('ini_4a', actual.ini_4a)}</div>
+                    <div><label style="font-size:0.75rem; font-weight:bold;">5 Años:</label>${crearSelectSemaforo('ini_5a', actual.ini_5a)}</div>
                 `;
             }
 
@@ -595,7 +610,7 @@
                     <div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">📚 PRIMARIA (GRADOS)</div>
                 `;
                 for (let g = 1; g <= 6; g++) {
-                    formularioGradosHTML += `<div><label style="font-size:0.75rem; font-weight:bold;">${g}° Primaria:</label><input type="number" min="0" id="edit-pri_${g}" value="${actual['pri_' + g] || 0}" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px;"></div>`;
+                    formularioGradosHTML += `<div><label style="font-size:0.75rem; font-weight:bold;">${g}° Primaria:</label>${crearSelectSemaforo('pri_' + g, actual['pri_' + g])}</div>`;
                 }
             }
 
@@ -604,7 +619,7 @@
                     <div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">🎓 SECUNDARIA (AÑOS)</div>
                 `;
                 for (let s = 1; s <= 5; s++) {
-                    formularioGradosHTML += `<div><label style="font-size:0.75rem; font-weight:bold;">${s}° Secundaria:</label><input type="number" min="0" id="edit-sec_${s}" value="${actual['sec_' + s] || 0}" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px;"></div>`;
+                    formularioGradosHTML += `<div><label style="font-size:0.75rem; font-weight:bold;">${s}° Secundaria:</label>${crearSelectSemaforo('sec_' + s, actual['sec_' + s])}</div>`;
                 }
             }
 
@@ -612,9 +627,9 @@
                 <div id="modal-panel-vacantes" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
                     <div style="background:white; padding:22px; border-radius:16px; width:92%; max-width:480px; max-height:85vh; overflow-y:auto; color:#2d3748; text-align:left;">
                         <h3 style="color:#1a365d; margin-bottom:4px; font-size:1.1rem;">${colegio.nombre_colegio}</h3>
-                        <p style="font-size:0.8rem; color:#16a34a; margin-bottom:12px; font-weight:bold;">✔ Edición de Vacantes por Grado / Edad</p>
+                        <p style="font-size:0.8rem; color:#16a34a; margin-bottom:12px; font-weight:bold;">✔ Selecciona el estado de vacantes por nivel/grado:</p>
                         
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:15px;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
                             ${formularioGradosHTML}
                         </div>
 
@@ -634,10 +649,10 @@
 
             const objetoGrados = { actualizacion: fechaHoraFormat, _editadoLocal: true };
 
-            const inputs = document.querySelectorAll('#modal-panel-vacantes input[type="number"]');
-            inputs.forEach(inp => {
-                const clave = inp.id.replace('edit-', '');
-                objetoGrados[clave] = parseInt(inp.value) || 0;
+            const selects = document.querySelectorAll('#modal-panel-vacantes select');
+            selects.forEach(sel => {
+                const clave = sel.id.replace('edit-', '');
+                objetoGrados[clave] = sel.value;
             });
 
             datosVacantesEnVivo[id_colegio] = objetoGrados;
@@ -645,7 +660,7 @@
 
             document.getElementById('modal-panel-vacantes').remove();
             
-            abrirModalMapachito('feliz', `¡Vacantes por grado actualizadas al instante!\nFecha: ${fechaHoraFormat}`, true);
+            abrirModalMapachito('feliz', `¡Vacantes actualizadas al instante con el sistema semáforo!\nFecha: ${fechaHoraFormat}`, true);
             
             if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
                 filtrarListaVacantes();
@@ -882,7 +897,7 @@
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:11px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:0.82rem;">🗺️ Iniciar viaje</a>
                     
-                    <button onclick="intentarAbrirFachadaConAlternativas('${colegio.id_colegio}', '${nombreLimpio}', '${colegio.fachada || colegio.foto || ''}')" style="flex:1; background:#0284c7; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:0.82rem; cursor:pointer;">🏫 Fachada de Colegio</button>
+                    <button onclick="intentarAbrirFachadaConAlternativas('${colegio.id_colegio}', '${nombreLimpio}')" style="flex:1; background:#0284c7; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:0.82rem; cursor:pointer;">🏫 Fachada de Colegio</button>
                 </div>
 
                 <button onclick="redirigirABuscadorVacantesColegio('${nombreLimpio}')" style="width:100%; margin-top:10px; background:#f59e0b; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; font-size:0.85rem; cursor:pointer; box-shadow:0 3px 8px rgba(245, 158, 11, 0.3);">
@@ -907,32 +922,43 @@
             filtrarListaVacantes();
         }
 
-        // ================= SISTEMA INTELIGENTE DE CARGA DE FACHADAS CON DICCIONARIO DIRECTO =================
-        function intentarAbrirFachadaConAlternativas(idColegio, nombreColegio, rutaPropiedad) {
+        // ================= CONEXIÓN EXACTA DE LAS 16 FOTOS DE FACHADAS =================
+        function intentarAbrirFachadaConAlternativas(idColegio, nombreColegio) {
             let idStr = String(idColegio).trim();
+            let idNumStr = !isNaN(idStr) ? String(Number(idStr)) : idStr;
+            let nombreNorm = (nombreColegio || '').toLowerCase();
+
             let candidatos = [];
 
-            // 1. Mapeo exacto de la lista de fotos subidas
-            if (mapaFotosFachada[idStr]) {
-                candidatos.push(mapaFotosFachada[idStr]);
-            }
+            // 1. Verificación por ID de la lista de 16 fotos
+            if (mapaFotosFachada[idStr]) candidatos.push(mapaFotosFachada[idStr]);
+            else if (mapaFotosFachada[idNumStr]) candidatos.push(mapaFotosFachada[idNumStr]);
 
-            // 2. Coincidencias especiales por nombre (ej. Coprodeli)
-            if (nombreColegio.toLowerCase().includes('chapi') || nombreColegio.toLowerCase().includes('coprodeli')) {
-                candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
-            }
+            // 2. Verificación por coincidencias de nombre
+            if (nombreNorm.includes('pastorcitos') || nombreNorm.includes('fatima')) candidatos.push(mapaFotosFachada["107"]);
+            if (nombreNorm.includes('domingo savio')) candidatos.push(mapaFotosFachada["113"]);
+            if (nombreNorm.includes('divino niño') || nombreNorm.includes('divino nino')) candidatos.push(mapaFotosFachada["125"]);
+            if (nombreNorm.includes('divina pastora')) candidatos.push(mapaFotosFachada["133"]);
+            if (nombreNorm.includes('pequeño mundo') || nombreNorm.includes('pequeno mundo')) candidatos.push(mapaFotosFachada["135"]);
+            if (nombreNorm.includes('guadalupe')) candidatos.push(mapaFotosFachada["141"]);
+            if (nombreNorm.includes('cristo rey')) candidatos.push(mapaFotosFachada["167"]);
+            if (nombreNorm.includes('antonia moreno')) candidatos.push(mapaFotosFachada["5090"]);
+            if (nombreNorm.includes('hijos de grau')) candidatos.push(mapaFotosFachada["5091"]);
+            if (nombreNorm.includes('raymondi') || nombreNorm.includes('raimondi')) candidatos.push(mapaFotosFachada["5093"]);
+            if (nombreNorm.includes('villa emilia')) candidatos.push(mapaFotosFachada["5119"]);
+            if (nombreNorm.includes('santa rosa de lima')) candidatos.push(mapaFotosFachada["5147"]);
+            if (nombreNorm.includes('san juan bosco')) candidatos.push(mapaFotosFachada["5151"]);
+            if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
 
-            // 3. Ruta asignada en la propiedad del objeto colegio
-            if (rutaPropiedad && rutaPropiedad.trim() !== '') {
-                candidatos.push(rutaPropiedad);
-            }
-
-            // 4. Intentos estándar
+            // 3. Fallbacks estándar
             const extensiones = ['.jpeg', '.jpg', '.png', '.webp'];
             extensiones.forEach(ext => {
                 candidatos.push(`fotos/${idStr}${ext}`);
-                candidatos.push(`fotos/${idStr.padStart(2, '0')}${ext}`);
+                candidatos.push(`fotos/${idNumStr}${ext}`);
             });
+
+            // Eliminar duplicados
+            candidatos = [...new Set(candidatos)];
 
             let indiceActual = 0;
             const imgFull = document.getElementById('imgFachadaFull');
@@ -960,7 +986,7 @@
 
         function cerrarFachadaFullscreen() { document.getElementById('modal-fachada-fullscreen').style.display = 'none'; }
 
-        // ================= BUSCADOR GLOBAL DE VACANTES POR GRADOS (PANTALLA 3) =================
+        // ================= BUSCADOR GLOBAL DE VACANTES CON CÓDIGO DE COLORES =================
         function abrirPantallaVacantes(e) {
             e.stopPropagation();
             ocultarTodasLasPantallas();
@@ -971,9 +997,20 @@
         }
 
         function obtenerEtiquetaSemaforo(clave, valor) {
-            let val = parseInt(valor) || 0;
-            let clase = val <= 0 ? 'sem-rojo' : (val < 10 ? 'sem-amarillo' : 'sem-verde');
-            let icono = val <= 0 ? '🔴' : (val < 10 ? '🟡' : '🟢');
+            let val = String(valor || '').toLowerCase();
+            let clase = 'sem-rojo';
+            let icono = '🔴';
+            let textoEstado = 'Sin vacantes';
+
+            if (val === 'verde' || parseInt(val) >= 10) {
+                clase = 'sem-verde';
+                icono = '🟢';
+                textoEstado = 'Hay vacantes';
+            } else if (val === 'amarillo' || (parseInt(val) > 0 && parseInt(val) < 10)) {
+                clase = 'sem-amarillo';
+                icono = '🟡';
+                textoEstado = 'Pocas vacantes';
+            }
 
             const nombresBonitos = {
                 'cuna_0_3': 'Cuna (0-3a)',
@@ -983,7 +1020,7 @@
             };
 
             let etiquetaNombre = nombresBonitos[clave] || clave;
-            return `<div class="item-grado-semaforo ${clase}">${icono} ${etiquetaNombre}: ${val}</div>`;
+            return `<div class="item-grado-semaforo ${clase}">${icono} ${etiquetaNombre}: <b>${textoEstado}</b></div>`;
         }
 
         function renderizarListaVacantesGlobal(lista) {
@@ -998,18 +1035,18 @@
                 let htmlGrados = '';
 
                 if (nivelesTexto.includes('cuna')) {
-                    htmlGrados += obtenerEtiquetaSemaforo('cuna_0_3', vacantes.cuna_0_3 || 0);
+                    htmlGrados += obtenerEtiquetaSemaforo('cuna_0_3', vacantes.cuna_0_3 || 'rojo');
                 }
                 if (nivelesTexto.includes('inicial')) {
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_3a', vacantes.ini_3a || 0);
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_4a', vacantes.ini_4a || 0);
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_5a', vacantes.ini_5a || 0);
+                    htmlGrados += obtenerEtiquetaSemaforo('ini_3a', vacantes.ini_3a || 'rojo');
+                    htmlGrados += obtenerEtiquetaSemaforo('ini_4a', vacantes.ini_4a || 'rojo');
+                    htmlGrados += obtenerEtiquetaSemaforo('ini_5a', vacantes.ini_5a || 'rojo');
                 }
                 if (nivelesTexto.includes('primaria')) {
-                    for (let g = 1; g <= 6; g++) htmlGrados += obtenerEtiquetaSemaforo('pri_' + g, vacantes['pri_' + g] || 0);
+                    for (let g = 1; g <= 6; g++) htmlGrados += obtenerEtiquetaSemaforo('pri_' + g, vacantes['pri_' + g] || 'rojo');
                 }
                 if (nivelesTexto.includes('secundaria')) {
-                    for (let s = 1; s <= 5; s++) htmlGrados += obtenerEtiquetaSemaforo('sec_' + s, vacantes['sec_' + s] || 0);
+                    for (let s = 1; s <= 5; s++) htmlGrados += obtenerEtiquetaSemaforo('sec_' + s, vacantes['sec_' + s] || 'rojo');
                 }
 
                 const card = `
