@@ -436,6 +436,25 @@
         let temporizadorInactividad = null;
         let temporizadorAutoCierre = null;
 
+        // DICCIONARIO DIRECTO DE LAS 16 FOTOS DE FACHADAS EN GITHUB
+        const mapaFotosFachada = {
+            "107": "fotos/107_Los_Pastorcitos_de_Fatima.jpeg",
+            "108": "fotos/108.jpeg",
+            "113": "fotos/113_Domingo_Savio.jpeg",
+            "125": "fotos/125_Divino_Nino_Jesus.jpeg",
+            "133": "fotos/133_Divina_Pastora.jpeg",
+            "135": "fotos/135_Mi_Pequeno_Mundo.jpeg",
+            "141": "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg",
+            "157": "fotos/157.jpeg",
+            "167": "fotos/167_Cristo_Rey_de_los_Ninos.jpeg",
+            "5090": "fotos/5090_Antonia_Moreno_de_Caceres.jpeg",
+            "5091": "fotos/5091_Hijos_de_Grau.jpeg",
+            "5093": "fotos/5093_Antonio_Raymondi.jpeg",
+            "5119": "fotos/5119_Villa_Emilia.jpeg",
+            "5147": "fotos/5147_Santa_Rosa_de_Lima.jpeg",
+            "5151": "fotos/5151_San_Juan_Bosco.jpeg"
+        };
+
         // COLORES POR RED
         const coloresRedes = {
             1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
@@ -455,14 +474,12 @@
                     if (item.id_colegio !== undefined && item.id_colegio !== null) {
                         let idLimpio = String(item.id_colegio).trim();
                         
-                        // Si no hay edición local reciente, actualizar con lo que venga del servidor
                         if (!datosVacantesEnVivo[idLimpio] || !datosVacantesEnVivo[idLimpio]._editadoLocal) {
                             datosVacantesEnVivo[idLimpio] = item.grados || item.vacantes || item;
                         }
                     }
                 });
 
-                // Si la pantalla de vacantes está abierta, refrescar respetando el texto buscado
                 if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
                     filtrarListaVacantes();
                 }
@@ -623,7 +640,6 @@
                 objetoGrados[clave] = parseInt(inp.value) || 0;
             });
 
-            // Persistencia en memoria y localStorage
             datosVacantesEnVivo[id_colegio] = objetoGrados;
             localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
 
@@ -631,7 +647,6 @@
             
             abrirModalMapachito('feliz', `¡Vacantes por grado actualizadas al instante!\nFecha: ${fechaHoraFormat}`, true);
             
-            // Si la pantalla de vacantes está abierta, refresca con el filtro activo
             if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
                 filtrarListaVacantes();
             }
@@ -845,6 +860,8 @@
                 bloquesNivelesHTML = `<div class="tag-verde-limpio" style="grid-column: span 2;">Información Registrada</div>`;
             }
 
+            const nombreLimpio = colegio.nombre_colegio.replace(/'/g, "\\'");
+
             const contenido = `
                 <h2 style="color: #1a365d; margin-bottom: 6px; font-size:1.15rem; padding-right: 35px;">${colegio.nombre_colegio}</h2>
                 <span class="school-badge ${tipoBadge}">${colegio.gestion || 'Estatal'}</span> | <b>Distrito:</b> ${colegio.distrito || 'Ventanilla'}
@@ -865,10 +882,10 @@
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:11px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:0.82rem;">🗺️ Iniciar viaje</a>
                     
-                    <button onclick="intentarAbrirFachadaConAlternativas('${colegio.id_colegio}', '${colegio.fachada || colegio.foto || ''}', '${colegio.nombre_colegio}')" style="flex:1; background:#0284c7; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:0.82rem; cursor:pointer;">🏫 Fachada de Colegio</button>
+                    <button onclick="intentarAbrirFachadaConAlternativas('${colegio.id_colegio}', '${nombreLimpio}', '${colegio.fachada || colegio.foto || ''}')" style="flex:1; background:#0284c7; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:0.82rem; cursor:pointer;">🏫 Fachada de Colegio</button>
                 </div>
 
-                <button onclick="redirigirABuscadorVacantesColegio('${colegio.nombre_colegio}')" style="width:100%; margin-top:10px; background:#f59e0b; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; font-size:0.85rem; cursor:pointer; box-shadow:0 3px 8px rgba(245, 158, 11, 0.3);">
+                <button onclick="redirigirABuscadorVacantesColegio('${nombreLimpio}')" style="width:100%; margin-top:10px; background:#f59e0b; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; font-size:0.85rem; cursor:pointer; box-shadow:0 3px 8px rgba(245, 158, 11, 0.3);">
                     🚦 Buscar Vacantes Disponibles
                 </button>
             `;
@@ -890,18 +907,31 @@
             filtrarListaVacantes();
         }
 
-        // ================= SISTEMA INTELIGENTE DE CARGA DE FACHADAS =================
-        function intentarAbrirFachadaConAlternativas(idColegio, rutaPropiedad, nombreColegio) {
-            const extensiones = ['.jpg', '.png', '.jpeg', '.webp'];
+        // ================= SISTEMA INTELIGENTE DE CARGA DE FACHADAS CON DICCIONARIO DIRECTO =================
+        function intentarAbrirFachadaConAlternativas(idColegio, nombreColegio, rutaPropiedad) {
+            let idStr = String(idColegio).trim();
             let candidatos = [];
 
+            // 1. Mapeo exacto de la lista de fotos subidas
+            if (mapaFotosFachada[idStr]) {
+                candidatos.push(mapaFotosFachada[idStr]);
+            }
+
+            // 2. Coincidencias especiales por nombre (ej. Coprodeli)
+            if (nombreColegio.toLowerCase().includes('chapi') || nombreColegio.toLowerCase().includes('coprodeli')) {
+                candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
+            }
+
+            // 3. Ruta asignada en la propiedad del objeto colegio
             if (rutaPropiedad && rutaPropiedad.trim() !== '') {
                 candidatos.push(rutaPropiedad);
             }
 
+            // 4. Intentos estándar
+            const extensiones = ['.jpeg', '.jpg', '.png', '.webp'];
             extensiones.forEach(ext => {
-                candidatos.push(`fotos/${idColegio}${ext}`);
-                candidatos.push(`fotos/${String(idColegio).padStart(2, '0')}${ext}`);
+                candidatos.push(`fotos/${idStr}${ext}`);
+                candidatos.push(`fotos/${idStr.padStart(2, '0')}${ext}`);
             });
 
             let indiceActual = 0;
@@ -937,7 +967,6 @@
             document.getElementById('pantalla-vacantes').style.display = 'flex';
             renderizarListaVacantesGlobal(colegios);
             
-            // Mapachito aparece sin botón Entendido y se cierra solo a los 3 segundos
             abrirModalMapachito('pensando', "Revisa la disponibilidad de vacantes por grado y edad reportada en vivo.", false, null, 3000);
         }
 
@@ -994,7 +1023,7 @@
 
                         <div style="display:flex; gap:8px; margin-top:10px;">
                             <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:8px; border-radius:6px; text-decoration:none; font-size:0.8rem; font-weight:bold;">🗺️ Ir al mapa</a>
-                            <button onclick="abrirDetalle('${colegio.nombre_colegio}')" style="flex:1; background:#2563eb; color:white; border:none; padding:8px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">Ver Información</button>
+                            <button onclick="abrirDetalle('${colegio.nombre_colegio.replace(/'/g, "\\'")}')" style="flex:1; background:#2563eb; color:white; border:none; padding:8px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">Ver Información</button>
                         </div>
                     </div>
                 `;
