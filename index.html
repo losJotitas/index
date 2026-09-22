@@ -184,7 +184,6 @@
         .raccoon-avatar-box { 
             width: 130px; height: 130px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;
         }
-        /* Garantiza que lottie-player no salte ni parpadee */
         .raccoon-avatar-box lottie-player { 
             width: 120px; height: 120px; position: absolute; z-index: 2; transition: opacity 0.2s ease-in-out;
         }
@@ -313,10 +312,12 @@
         <div class="contenedor-central">
             <div class="card-seccion">
                 <h2 style="color:#1a365d; margin-bottom:8px; font-size:1.2rem;">Vacantes por Grado y Edad en Tiempo Real</h2>
-                <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">
+                <div style="background:#f1f5f9; border-left:4px solid #38bdf8; padding:10px; border-radius:8px; font-size:0.8rem; color:#334155; margin-bottom:15px; font-weight:600;">
                     Leyenda del Semáforo:<br>
-                    🟢 <b>Verde:</b> 10 o más vacantes | 🟡 <b>Amarillo:</b> 1 a 9 vacantes | 🔴 <b>Rojo:</b> 0 vacantes (Agotado)
-                </p>
+                    🟢 <b>Verde:</b> 10 o más vacantes (Disponible)<br>
+                    🟡 <b>Amarillo:</b> 1 a 9 vacantes (Pocas vacantes)<br>
+                    🔴 <b>Rojo:</b> 0 vacantes (Agotado)
+                </div>
                 <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por colegio, nivel (Primaria, Inicial) o grado (Ej. 3 años, 1er grado)..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
             </div>
             
@@ -411,7 +412,7 @@
     <!-- Visor de Fachada Fullscreen -->
     <div id="modal-fachada-fullscreen">
         <button class="btn-cerrar-fachada" onclick="cerrarFachadaFullscreen()">&times;</button>
-        <img id="imgFachadaFull" class="fachada-fullscreen-img" src="" alt="Fachada del Colegio" onerror="manejadorErrorFotoFachada()">
+        <img id="imgFachadaFull" class="fachada-fullscreen-img" src="" alt="Fachada del Colegio">
     </div>
 
     <!-- Modal Inactividad 30s -->
@@ -441,8 +442,8 @@
             5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
         };
 
-        // ESTRUCTURA DE VACANTES EN TIEMPO REAL CON DESGLOSE POR GRADOS
-        let datosVacantesEnVivo = {};
+        // RECUPERACIÓN LOCAL Y SINCRONIZACIÓN EN TIEMPO REAL
+        let datosVacantesEnVivo = JSON.parse(localStorage.getItem('mapache_vacantes') || '{}');
         const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycby2Y6cDIBQj6lRkAc1eMlfrhMll99Y_LHgb8fkDYHVN66iRrvfiyij1eboTxvCKl_qw/exec";
 
         async function cargarVacantesEnTiempoReal() {
@@ -453,15 +454,20 @@
                 resultado.forEach(item => {
                     if (item.id_colegio !== undefined && item.id_colegio !== null) {
                         let idLimpio = String(item.id_colegio).trim();
-                        datosVacantesEnVivo[idLimpio] = item.grados || item.vacantes || item;
+                        
+                        // Si no hay edición local reciente, actualizar con lo que venga del servidor
+                        if (!datosVacantesEnVivo[idLimpio] || !datosVacantesEnVivo[idLimpio]._editadoLocal) {
+                            datosVacantesEnVivo[idLimpio] = item.grados || item.vacantes || item;
+                        }
                     }
                 });
 
+                // Si la pantalla de vacantes está abierta, refrescar respetando el texto buscado
                 if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
-                    renderizarListaVacantesGlobal(colegios);
+                    filtrarListaVacantes();
                 }
             } catch (error) {
-                console.log("Sincronización periódica en tiempo real activa.");
+                console.log("Consulta periódica en vivo activa.");
             }
         }
 
@@ -473,13 +479,20 @@
             configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
         });
 
-        // ================= ACCESO DE DIRECTORES (DESGLOSE POR GRADOS / EDADES) =================
+        // ================= ACCESO DE DIRECTORES =================
         function abrirModalDirector() {
             const modalHTML = `
-                <div id="modal-director" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center; z-index:99999;">
+                <div id="modal-director" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
                     <div style="background:white; padding:25px; border-radius:14px; width:90%; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.3); color:#2d3748;">
                         <h3 style="color:#1a365d; margin-bottom:8px;">Portal de Directores</h3>
-                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:15px;">Ingresa para actualizar las vacantes por grado de tu institución.</p>
+                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:12px;">Ingresa para actualizar las vacantes por grado de tu institución.</p>
+
+                        <div style="background:#f1f5f9; border-left:4px solid #f59e0b; padding:8px 10px; border-radius:6px; font-size:0.75rem; color:#334155; margin-bottom:15px;">
+                            <b>Criterio del Semáforo:</b><br>
+                            🟢 10 o más vacantes (Disponible)<br>
+                            🟡 1 a 9 vacantes (Pocas vacantes)<br>
+                            🔴 0 vacantes (Agotado)
+                        </div>
                         
                         <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Código o Número del Colegio:</label>
                         <input type="text" id="dir-codigo" placeholder="Ej. 01, 5090 o 121" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
@@ -602,27 +615,33 @@
             const ahora = new Date();
             const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
 
-            const objetoGrados = { actualizacion: fechaHoraFormat };
+            const objetoGrados = { actualizacion: fechaHoraFormat, _editadoLocal: true };
 
-            // Recopilamos dinámicamente los valores ingresados por el director
             const inputs = document.querySelectorAll('#modal-panel-vacantes input[type="number"]');
             inputs.forEach(inp => {
                 const clave = inp.id.replace('edit-', '');
                 objetoGrados[clave] = parseInt(inp.value) || 0;
             });
 
+            // Persistencia en memoria y localStorage
             datosVacantesEnVivo[id_colegio] = objetoGrados;
+            localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
 
             document.getElementById('modal-panel-vacantes').remove();
             
             abrirModalMapachito('feliz', `¡Vacantes por grado actualizadas al instante!\nFecha: ${fechaHoraFormat}`, true);
-            renderizarListaVacantesGlobal(colegios);
+            
+            // Si la pantalla de vacantes está abierta, refresca con el filtro activo
+            if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
+                filtrarListaVacantes();
+            }
 
             try {
                 await fetch(URL_API_GOOGLE, {
                     method: 'POST',
                     mode: 'no-cors',
                     body: JSON.stringify({
+                        action: 'updateVacantes',
                         codigo: id_colegio,
                         password: password,
                         grados: objetoGrados,
@@ -630,14 +649,8 @@
                     })
                 });
             } catch (e) {
-                console.log("Guardado local asegurado.");
+                console.log("Guardado local garantizado.");
             }
-        }
-
-        function extraerNumeroLimpio(str) {
-            if (!str) return "0";
-            const match = String(str).match(/\d+/);
-            return match ? match[0] : "0";
         }
 
         function extraerNumeroRed(redStr) {
@@ -820,7 +833,6 @@
 
             const tipoBadge = colegio.gestion && colegio.gestion.toLowerCase().includes('particular') ? 'badge-particular' : (colegio.gestion && colegio.gestion.toLowerCase().includes('convenio') ? 'badge-convenio' : 'badge-estatal');
 
-            // DETECCIÓN Y CONSTRUCCIÓN DE TARJETAS VERDES LIMPIAS (SIN TEXTO DE VACANTES NI CIFRAS)
             const nivelesTexto = (colegio.niveles || '').toLowerCase();
             let bloquesNivelesHTML = '';
             
@@ -833,10 +845,8 @@
                 bloquesNivelesHTML = `<div class="tag-verde-limpio" style="grid-column: span 2;">Información Registrada</div>`;
             }
 
-            const rutaFotoFachada = `fotos/${colegio.id_colegio}.jpg`;
-
             const contenido = `
-                <h2 style="color: #1a365d; margin-bottom: 6px; font-size:1.15rem; padding-right: 30px;">${colegio.nombre_colegio}</h2>
+                <h2 style="color: #1a365d; margin-bottom: 6px; font-size:1.15rem; padding-right: 35px;">${colegio.nombre_colegio}</h2>
                 <span class="school-badge ${tipoBadge}">${colegio.gestion || 'Estatal'}</span> | <b>Distrito:</b> ${colegio.distrito || 'Ventanilla'}
                 
                 <div style="font-size:0.85rem; line-height:1.6; margin-top:10px;">
@@ -855,7 +865,7 @@
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:11px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:0.82rem;">🗺️ Iniciar viaje</a>
                     
-                    <button onclick="intentarAbrirFachada('${rutaFotoFachada}', '${colegio.nombre_colegio}')" style="flex:1; background:#0284c7; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:0.82rem; cursor:pointer;">🏫 Fachada de Colegio</button>
+                    <button onclick="intentarAbrirFachadaConAlternativas('${colegio.id_colegio}', '${colegio.fachada || colegio.foto || ''}', '${colegio.nombre_colegio}')" style="flex:1; background:#0284c7; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:0.82rem; cursor:pointer;">🏫 Fachada de Colegio</button>
                 </div>
 
                 <button onclick="redirigirABuscadorVacantesColegio('${colegio.nombre_colegio}')" style="width:100%; margin-top:10px; background:#f59e0b; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; font-size:0.85rem; cursor:pointer; box-shadow:0 3px 8px rgba(245, 158, 11, 0.3);">
@@ -880,24 +890,42 @@
             filtrarListaVacantes();
         }
 
-        // ================= FACHADA DE COLEGIO CON MENSAJE DE MAPACHITO =================
-        function intentarAbrirFachada(urlFoto, nombreColegio) {
+        // ================= SISTEMA INTELIGENTE DE CARGA DE FACHADAS =================
+        function intentarAbrirFachadaConAlternativas(idColegio, rutaPropiedad, nombreColegio) {
+            const extensiones = ['.jpg', '.png', '.jpeg', '.webp'];
+            let candidatos = [];
+
+            if (rutaPropiedad && rutaPropiedad.trim() !== '') {
+                candidatos.push(rutaPropiedad);
+            }
+
+            extensiones.forEach(ext => {
+                candidatos.push(`fotos/${idColegio}${ext}`);
+                candidatos.push(`fotos/${String(idColegio).padStart(2, '0')}${ext}`);
+            });
+
+            let indiceActual = 0;
             const imgFull = document.getElementById('imgFachadaFull');
-            imgFull.src = urlFoto;
 
-            // Intentamos cargar la imagen
-            imgFull.onload = function() {
-                document.getElementById('modal-fachada-fullscreen').style.display = 'flex';
-            };
+            function probarSiguiente() {
+                if (indiceActual >= candidatos.length) {
+                    abrirModalMapachito('pensando', `¡Pronto actualizaremos la foto de la fachada de ${nombreColegio}! Estamos trabajando con la directiva para recopilar más imágenes.`, true);
+                    return;
+                }
 
-            imgFull.onerror = function() {
-                abrirModalMapachito('pensando', `¡Pronto actualizaremos la foto de la fachada de ${nombreColegio}! Estamos trabajando con la directiva para recopilar más fotos.`, true);
-            };
-        }
+                let urlActual = candidatos[indiceActual];
+                indiceActual++;
 
-        function manejadorErrorFotoFachada() {
-            cerrarFachadaFullscreen();
-            abrirModalMapachito('pensando', "¡Pronto actualizaremos la foto de la fachada de este colegio! Estamos recopilando las imágenes del plantel.", true);
+                imgFull.onload = function() {
+                    document.getElementById('modal-fachada-fullscreen').style.display = 'flex';
+                };
+                imgFull.onerror = function() {
+                    probarSiguiente();
+                };
+                imgFull.src = urlActual;
+            }
+
+            probarSiguiente();
         }
 
         function cerrarFachadaFullscreen() { document.getElementById('modal-fachada-fullscreen').style.display = 'none'; }
@@ -909,7 +937,7 @@
             document.getElementById('pantalla-vacantes').style.display = 'flex';
             renderizarListaVacantesGlobal(colegios);
             
-            // Mapachito aparece sin botón Entendido y se cierra solo en 3 segundos
+            // Mapachito aparece sin botón Entendido y se cierra solo a los 3 segundos
             abrirModalMapachito('pensando', "Revisa la disponibilidad de vacantes por grado y edad reportada en vivo.", false, null, 3000);
         }
 
@@ -975,8 +1003,15 @@
         }
 
         function filtrarListaVacantes() {
-            const texto = document.getElementById('inputBuscadorVacantes').value.toLowerCase();
-            const filtrados = colegios.filter(c => c.nombre_colegio.toLowerCase().includes(texto) || (c.niveles && c.niveles.toLowerCase().includes(texto)));
+            const input = document.getElementById('inputBuscadorVacantes');
+            if (!input) return;
+            const texto = input.value.toLowerCase().trim();
+            
+            const filtrados = colegios.filter(c => 
+                c.nombre_colegio.toLowerCase().includes(texto) || 
+                (c.niveles && c.niveles.toLowerCase().includes(texto)) ||
+                (c.id_colegio && String(c.id_colegio).toLowerCase().includes(texto))
+            );
             renderizarListaVacantesGlobal(filtrados);
         }
 
