@@ -645,7 +645,7 @@
             document.body.insertAdjacentHTML('beforeend', panelHTML);
         }
 
-       async function guardarVacantesGradosInstante(id_colegio, password) {
+      async function guardarVacantesGradosInstante(id_colegio, password) {
     ocultarTecladoMovil();
     const ahora = new Date();
     const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
@@ -661,7 +661,7 @@
     let idLimpio = String(id_colegio).trim();
     let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
 
-    // 1. Guardado local inmediato
+    // 1. Guardado local en memoria
     datosVacantesEnVivo[idLimpio] = objetoGrados;
     datosVacantesEnVivo[idNumLimpio] = objetoGrados;
     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
@@ -670,13 +670,16 @@
         filtrarListaVacantes();
     }
 
-    // 2. Envío a Google Sheets (espera la confirmación antes de cerrar)
+    // 2. Envío a Google Sheets (Nombres de campos compatibles al 100%)
     try {
         const payload = {
             action: 'updateVacantes',
+            codigo: idLimpio,
             id_colegio: idLimpio,
             password: password,
-            datos: objetoGrados
+            grados: objetoGrados,
+            datos: objetoGrados,
+            ultima_actualizacion: fechaHoraFormat
         };
 
         await fetch(URL_API_GOOGLE, {
@@ -694,8 +697,7 @@
         document.getElementById('modal-panel-vacantes').remove();
         abrirModalMapachito('sorprendido', `Guardado localmente, pero hubo un detalle de red al sincronizar con Google Sheets.`, true);
     }
-}
-        function extraerNumeroRed(redStr) {
+}        function extraerNumeroRed(redStr) {
             if (!redStr) return null;
             const match = String(redStr).match(/\d+/);
             return match ? parseInt(match[0], 10) : null;
