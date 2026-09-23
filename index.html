@@ -337,9 +337,6 @@
                 <p style="font-size: 0.9rem; color:#475569; line-height:1.6; text-align: justify; margin-bottom:15px;">
                     El Proyecto MAPACHE es el resultado de un dedicado esfuerzo técnico, recopilación de información en campo y constante coordinación con la comunidad de directores en Ventanilla y Mi Perú. 
                 </p>
-                <p style="font-size: 0.88rem; color:#334155; line-height:1.5; text-align: justify; margin-bottom:15px;">
-                    Para mantener los servidores activos, garantizar soporte técnico continuo y expandir las capacidades digitales del sistema, contamos con dos modalidades de colaboración:
-                </p>
 
                 <div style="background:#f1f5f9; padding:15px; border-radius:12px; text-align:left; margin-bottom:15px; border-left:4px solid #0284c7;">
                     <p style="font-size:0.85rem; color:#0f172a; margin-bottom:6px;"><b>🏫 Colegios Particulares:</b> Acceso mediante suscripción/membresía digital institucional.</p>
@@ -448,10 +445,13 @@
             return String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
         }
 
+        // FUNCIÓN CLAVE PARA OCULTAR EL TECLADO MÓVIL DE INMEDIATO
         function ocultarTecladoMovil() {
             if (document.activeElement && typeof document.activeElement.blur === 'function') {
                 document.activeElement.blur();
             }
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(i => i.blur());
         }
 
         // RECUPERACIÓN LOCAL Y SINCRONIZACIÓN EN TIEMPO REAL (GOOGLE APPS SCRIPT)
@@ -460,7 +460,7 @@
 
         async function cargarVacantesEnTiempoReal() {
             try {
-                const respuesta = await fetch(URL_API_GOOGLE);
+                const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime());
                 const resultado = await respuesta.json();
                 
                 if (Array.isArray(resultado)) {
@@ -498,6 +498,7 @@
 
         // ================= ACCESO DE DIRECTORES (SISTEMA SEMÁFORO SIMPLIFICADO) =================
         function abrirModalDirector() {
+            ocultarTecladoMovil();
             const modalHTML = `
                 <div id="modal-director" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
                     <div style="background:white; padding:25px; border-radius:14px; width:90%; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.3); color:#2d3748;">
@@ -528,6 +529,7 @@
         }
 
         function autenticarDirector() {
+            ocultarTecladoMovil();
             const modal = document.getElementById('modal-director');
             if (!modal) return;
 
@@ -644,6 +646,7 @@
         }
 
         async function guardarVacantesGradosInstante(id_colegio, password) {
+            ocultarTecladoMovil();
             const ahora = new Date();
             const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
 
@@ -748,16 +751,19 @@
 
         function mostrarInfoTodosMapa(e) {
             e.stopPropagation();
+            ocultarTecladoMovil();
             abrirModalMapachito('olfateando', "¡Olfateando todos los colegios para mostrarlos en el mapa!", false, () => { ejecutarIrAlMapa('todos'); }, 2000);
         }
 
         function mostrarInfoEstatales(e) {
             e.stopPropagation();
+            ocultarTecladoMovil();
             abrirModalMapachito('sorprendido', "¿Sabías que son 146 colegios estatales en Ventanilla y Mi Perú?", false, () => { ejecutarIrAlMapa('Estatal'); }, 2000);
         }
 
         function mostrarInfoParticulares(e) {
             e.stopPropagation();
+            ocultarTecladoMovil();
             abrirModalMapachito('feliz', "Aquí te mostraré los colegios Particulares registrados.", false, () => { ejecutarIrAlMapa('Particular'); }, 2000);
         }
 
@@ -776,6 +782,7 @@
 
         function abrirModalRedesConMapachito(e) {
             e.stopPropagation();
+            ocultarTecladoMovil();
             abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál deseas explorar?", false, () => {
                 document.getElementById('modal-redes').style.display = 'flex';
             }, 2000);
@@ -877,6 +884,7 @@
 
         // ================= MODAL DETALLE INFORMACIÓN GENERAL =================
         function abrirDetalle(nombreColegio) {
+            ocultarTecladoMovil();
             const colegio = colegios.find(c => c.nombre_colegio === nombreColegio);
             if (!colegio) return;
 
@@ -959,7 +967,6 @@
             candidatos.push(`fotos/${idStr}.jpeg`);
             candidatos.push(`fotos/${idNumLimpio}.jpg`);
             candidatos.push(`fotos/${idStr}.jpg`);
-            candidatos.push(`fotos/${idNumLimpio}.png`);
 
             candidatos = [...new Set(candidatos)];
 
