@@ -645,53 +645,56 @@
             document.body.insertAdjacentHTML('beforeend', panelHTML);
         }
 
-        async function guardarVacantesGradosInstante(id_colegio, password) {
-            ocultarTecladoMovil();
-            const ahora = new Date();
-            const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+       async function guardarVacantesGradosInstante(id_colegio, password) {
+    ocultarTecladoMovil();
+    const ahora = new Date();
+    const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
 
-            const objetoGrados = { actualizacion: fechaHoraFormat };
+    const objetoGrados = { actualizacion: fechaHoraFormat };
 
-            const selects = document.querySelectorAll('#modal-panel-vacantes select');
-            selects.forEach(sel => {
-                const clave = sel.id.replace('edit-', '');
-                objetoGrados[clave] = sel.value;
-            });
+    const selects = document.querySelectorAll('#modal-panel-vacantes select');
+    selects.forEach(sel => {
+        const clave = sel.id.replace('edit-', '');
+        objetoGrados[clave] = sel.value;
+    });
 
-            let idLimpio = String(id_colegio).trim();
-            let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
+    let idLimpio = String(id_colegio).trim();
+    let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
 
-            datosVacantesEnVivo[idLimpio] = objetoGrados;
-            datosVacantesEnVivo[idNumLimpio] = objetoGrados;
+    // 1. Guardado local inmediato
+    datosVacantesEnVivo[idLimpio] = objetoGrados;
+    datosVacantesEnVivo[idNumLimpio] = objetoGrados;
+    localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
 
-            localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
+    if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
+        filtrarListaVacantes();
+    }
 
-            document.getElementById('modal-panel-vacantes').remove();
-            
-            abrirModalMapachito('feliz', `¡Vacantes actualizadas al instante con el sistema semáforo!\nFecha: ${fechaHoraFormat}`, true);
-            
-            if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
-                filtrarListaVacantes();
-            }
+    // 2. Envío a Google Sheets (espera la confirmación antes de cerrar)
+    try {
+        const payload = {
+            action: 'updateVacantes',
+            id_colegio: idLimpio,
+            password: password,
+            datos: objetoGrados
+        };
 
-            try {
-                await fetch(URL_API_GOOGLE, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'updateVacantes',
-                        codigo: id_colegio,
-                        password: password,
-                        grados: objetoGrados,
-                        ultima_actualizacion: fechaHoraFormat
-                    })
-                });
-            } catch (e) {
-                console.log("Sincronización enviada.");
-            }
-        }
+        await fetch(URL_API_GOOGLE, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
+        document.getElementById('modal-panel-vacantes').remove();
+        abrirModalMapachito('feliz', `¡Vacantes sincronizadas con Google Sheets!\nFecha: ${fechaHoraFormat}`, true);
+
+    } catch (error) {
+        console.error("Error enviando a Google Sheets:", error);
+        document.getElementById('modal-panel-vacantes').remove();
+        abrirModalMapachito('sorprendido', `Guardado localmente, pero hubo un detalle de red al sincronizar con Google Sheets.`, true);
+    }
+}
         function extraerNumeroRed(redStr) {
             if (!redStr) return null;
             const match = String(redStr).match(/\d+/);
