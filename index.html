@@ -645,7 +645,7 @@
             document.body.insertAdjacentHTML('beforeend', panelHTML);
         }
 
-    async function guardarVacantesGradosInstante(id_colegio, password) {
+      async function guardarVacantesGradosInstante(id_colegio, password) {
     ocultarTecladoMovil();
     const ahora = new Date();
     const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
@@ -670,7 +670,7 @@
         filtrarListaVacantes();
     }
 
-    // 2. Envío real a Google Sheets usando text/plain (Para evitar que el navegador vacíe el contenido)
+    // 2. Envío a Google Sheets (Nombres de campos compatibles al 100%)
     try {
         const payload = {
             action: 'updateVacantes',
@@ -684,7 +684,8 @@
 
         await fetch(URL_API_GOOGLE, {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
 
@@ -696,8 +697,7 @@
         document.getElementById('modal-panel-vacantes').remove();
         abrirModalMapachito('sorprendido', `Guardado localmente, pero hubo un detalle de red al sincronizar con Google Sheets.`, true);
     }
-}
-        }        function extraerNumeroRed(redStr) {
+}        function extraerNumeroRed(redStr) {
             if (!redStr) return null;
             const match = String(redStr).match(/\d+/);
             return match ? parseInt(match[0], 10) : null;
