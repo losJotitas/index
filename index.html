@@ -114,7 +114,7 @@
             background: #ffffff; color: #0f172a;
             border-radius: 0 0 14px 14px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            z-index: 1000; max-height: 180px;
+            z-index: 1000; max-height: 200px;
             overflow-y: auto; display: none;
         }
 
@@ -176,16 +176,16 @@
         }
         .leaflet-tooltip-top:before { border-top-color: rgba(15, 23, 42, 0.92) !important; }
 
-        /* MODALES Y MAPACHITO FIJO (SIN PARPADEO) */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; }
-        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 310px; width: 90%; display: flex; flex-direction: column; align-items: center; }
+        /* MODAL DE MAPACHITO (TOCAR CUALQUIER PARTE LO CIERRA) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; cursor: pointer; }
+        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 310px; width: 90%; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
         .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; width: 100%; line-height: 1.4; }
         
         .raccoon-avatar-box { 
             width: 130px; height: 130px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;
         }
         .raccoon-avatar-box lottie-player { 
-            width: 120px; height: 120px; position: absolute; z-index: 2; transition: opacity 0.2s ease-in-out;
+            width: 120px; height: 120px; position: absolute; z-index: 2;
         }
 
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
@@ -269,7 +269,7 @@
         <div class="main-container">
             <div class="bloque-controles">
                 <div class="search-box-wrapper">
-                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Escribe nombre o código (Ej: 5090)..." autocomplete="off">
+                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, 5090)..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
@@ -318,7 +318,7 @@
                     🟡 <b>Amarillo:</b> Pocas vacantes disponibles<br>
                     🔴 <b>Rojo:</b> Sin vacantes (Agotado)
                 </div>
-                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por colegio, nivel (Primaria, Inicial) o grado (Ej. 3 años, 1er grado)..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
+                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre, apellido (Ej. Cáceres), nivel o grado..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
             </div>
             
             <div id="lista-vacantes"></div>
@@ -390,9 +390,9 @@
         </div>
     </div>
 
-    <!-- Modal Reactivo de Mapachito (Unificado y sin oscilaciones) -->
+    <!-- Modal Reactivo de Mapachito (Tocar cualquier parte lo cierra al instante) -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
-        <div class="modal-content-comic" onclick="event.stopPropagation()">
+        <div class="modal-content-comic" onclick="cerrarModalMapachito()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
             <div class="raccoon-avatar-box">
                 <lottie-player id="animacionLottie" src="mapache_saludando.json" background="transparent" speed="1" loop autoplay></lottie-player>
@@ -401,7 +401,7 @@
         </div>
     </div>
 
-    <!-- Modal Detalle Completo del Colegio (Cierre externo habilitado) -->
+    <!-- Modal Detalle Completo del Colegio -->
     <div id="modal-detalle" onclick="cerrarDetalleExt(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close-destacado" onclick="cerrarDetalle()">&times;</span>
@@ -410,7 +410,7 @@
     </div>
 
     <!-- Visor de Fachada Fullscreen -->
-    <div id="modal-fachada-fullscreen">
+    <div id="modal-fachada-fullscreen" onclick="cerrarFachadaFullscreen()">
         <button class="btn-cerrar-fachada" onclick="cerrarFachadaFullscreen()">&times;</button>
         <img id="imgFachadaFull" class="fachada-fullscreen-img" src="" alt="Fachada del Colegio">
     </div>
@@ -439,14 +439,23 @@
         // DICCIONARIO DIRECTO Y EXACTO PARA LAS 16 FOTOS EN GITHUB
         const mapaFotosFachada = {
             "107": "fotos/107_Los_Pastorcitos_de_Fatima.jpeg",
+            "0107": "fotos/107_Los_Pastorcitos_de_Fatima.jpeg",
             "108": "fotos/108.jpeg",
+            "0108": "fotos/108.jpeg",
             "113": "fotos/113_Domingo_Savio.jpeg",
+            "0113": "fotos/113_Domingo_Savio.jpeg",
             "125": "fotos/125_Divino_Nino_Jesus.jpeg",
+            "0125": "fotos/125_Divino_Nino_Jesus.jpeg",
             "133": "fotos/133_Divina_Pastora.jpeg",
+            "0133": "fotos/133_Divina_Pastora.jpeg",
             "135": "fotos/135_Mi_Pequeno_Mundo.jpeg",
+            "0135": "fotos/135_Mi_Pequeno_Mundo.jpeg",
             "141": "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg",
+            "0141": "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg",
             "157": "fotos/157.jpeg",
+            "0157": "fotos/157.jpeg",
             "167": "fotos/167_Cristo_Rey_de_los_Ninos.jpeg",
+            "0167": "fotos/167_Cristo_Rey_de_los_Ninos.jpeg",
             "5090": "fotos/5090_Antonia_Moreno_de_Caceres.jpeg",
             "5091": "fotos/5091_Hijos_de_Grau.jpeg",
             "5093": "fotos/5093_Antonio_Raymondi.jpeg",
@@ -461,7 +470,19 @@
             5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
         };
 
-        // RECUPERACIÓN LOCAL Y SINCRONIZACIÓN EN TIEMPO REAL
+        // NORMALIZACIÓN DE TEXTO PARA BÚSQUEDA INTELIGENTE
+        function normalizarTexto(txt) {
+            if (!txt) return '';
+            return String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        }
+
+        function ocultarTecladoMovil() {
+            if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                document.activeElement.blur();
+            }
+        }
+
+        // RECUPERACIÓN LOCAL Y SINCRONIZACIÓN EN TIEMPO REAL (GOOGLE APPS SCRIPT)
         let datosVacantesEnVivo = JSON.parse(localStorage.getItem('mapache_vacantes') || '{}');
         const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycby2Y6cDIBQj6lRkAc1eMlfrhMll99Y_LHgb8fkDYHVN66iRrvfiyij1eboTxvCKl_qw/exec";
 
@@ -470,27 +491,34 @@
                 const respuesta = await fetch(URL_API_GOOGLE);
                 const resultado = await respuesta.json();
                 
-                resultado.forEach(item => {
-                    if (item.id_colegio !== undefined && item.id_colegio !== null) {
-                        let idLimpio = String(item.id_colegio).trim();
-                        
-                        if (!datosVacantesEnVivo[idLimpio] || !datosVacantesEnVivo[idLimpio]._editadoLocal) {
-                            datosVacantesEnVivo[idLimpio] = item.grados || item.vacantes || item;
-                        }
-                    }
-                });
+                if (Array.isArray(resultado)) {
+                    resultado.forEach(item => {
+                        let idColegio = item.id_colegio || item.id || item.codigo;
+                        if (idColegio !== undefined && idColegio !== null) {
+                            let idLimpio = String(idColegio).trim();
+                            let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
 
-                if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
-                    filtrarListaVacantes();
+                            let datos = item.grados || item.vacantes || item;
+                            
+                            datosVacantesEnVivo[idLimpio] = datos;
+                            datosVacantesEnVivo[idNumLimpio] = datos;
+                        }
+                    });
+
+                    localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
+
+                    if (document.getElementById('pantalla-vacantes').style.display === 'flex') {
+                        filtrarListaVacantes();
+                    }
                 }
             } catch (error) {
-                console.log("Consulta periódica en vivo activa.");
+                console.log("Consulta en vivo activa.");
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             cargarVacantesEnTiempoReal();
-            setInterval(cargarVacantesEnTiempoReal, 5000);
+            setInterval(cargarVacantesEnTiempoReal, 3000); // Polling cada 3s para sincronización instantánea PC-Celular
 
             configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
             configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
@@ -531,7 +559,7 @@
             const modal = document.getElementById('modal-director');
             if (!modal) return;
 
-            const codigoInput = document.getElementById('dir-codigo').value.trim().toLowerCase();
+            const codigoInput = normalizarTexto(document.getElementById('dir-codigo').value);
             const passwordInput = document.getElementById('dir-password').value.trim();
 
             if (!codigoInput) { alert("Por favor ingresa un código o número de colegio."); return; }
@@ -540,9 +568,9 @@
 
             const colegioEncontrado = colegios.find(c => {
                 if (!isNaN(codigoNum) && Number(c.id_colegio) === codigoNum) return true;
-                if (String(c.id_colegio).trim().toLowerCase() === codigoInput) return true;
-                if (c.codigo && String(c.codigo).trim().toLowerCase() === codigoInput) return true;
-                if (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(codigoInput)) return true;
+                if (normalizarTexto(c.id_colegio) === codigoInput) return true;
+                if (c.codigo && normalizarTexto(c.codigo) === codigoInput) return true;
+                if (c.nombre_colegio && normalizarTexto(c.nombre_colegio).includes(codigoInput)) return true;
                 return false;
             });
 
@@ -576,13 +604,13 @@
         }
 
         function abrirPanelEdicionVacantesGrados(colegio, password) {
-            const nivelesTexto = (colegio.niveles || '').toLowerCase();
+            const nivelesTexto = normalizarTexto(colegio.niveles);
             const tieneCuna = nivelesTexto.includes('cuna');
             const tieneInicial = nivelesTexto.includes('inicial');
             const tienePrimaria = nivelesTexto.includes('primaria');
             const tieneSecundaria = nivelesTexto.includes('secundaria');
 
-            const actual = datosVacantesEnVivo[colegio.id_colegio] || {};
+            const actual = datosVacantesEnVivo[colegio.id_colegio] || datosVacantesEnVivo[String(Number(colegio.id_colegio))] || {};
 
             let formularioGradosHTML = '';
 
@@ -647,7 +675,7 @@
             const ahora = new Date();
             const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
 
-            const objetoGrados = { actualizacion: fechaHoraFormat, _editadoLocal: true };
+            const objetoGrados = { actualizacion: fechaHoraFormat };
 
             const selects = document.querySelectorAll('#modal-panel-vacantes select');
             selects.forEach(sel => {
@@ -655,7 +683,12 @@
                 objetoGrados[clave] = sel.value;
             });
 
-            datosVacantesEnVivo[id_colegio] = objetoGrados;
+            let idLimpio = String(id_colegio).trim();
+            let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
+
+            datosVacantesEnVivo[idLimpio] = objetoGrados;
+            datosVacantesEnVivo[idNumLimpio] = objetoGrados;
+
             localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
 
             document.getElementById('modal-panel-vacantes').remove();
@@ -670,6 +703,7 @@
                 await fetch(URL_API_GOOGLE, {
                     method: 'POST',
                     mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'updateVacantes',
                         codigo: id_colegio,
@@ -679,7 +713,7 @@
                     })
                 });
             } catch (e) {
-                console.log("Guardado local garantizado.");
+                console.log("Sincronización enviada.");
             }
         }
 
@@ -732,7 +766,7 @@
                         <b>Gestión:</b> ${colegio.gestion}<br>
                         <b>Red:</b> ${colegio.red_educativa || 'N/A'}<br>
                         <hr style="margin: 6px 0; border:0; border-top:1px solid #cbd5e1;">
-                        <button onclick="abrirDetalle('${colegio.nombre_colegio}')" style="background:#2563eb; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; width:100%; font-weight:bold;">Ver Información General</button>
+                        <button onclick="abrirDetalle('${colegio.nombre_colegio.replace(/'/g, "\\'")}')" style="background:#2563eb; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; width:100%; font-weight:bold;">Ver Información General</button>
                     </div>
                 `);
 
@@ -794,7 +828,7 @@
             }, 2000);
         }
 
-        // ================= BÚSQUEDA PREDICTIVA =================
+        // ================= BÚSQUEDA PREDICTIVA MULTICAMPO CON AUTO-OCULTAMIENTO DE TECLADO =================
         function configurarAutocompletado(inputId, listaId, alSeleccionar) {
             const input = document.getElementById(inputId);
             const lista = document.getElementById(listaId);
@@ -802,14 +836,17 @@
             if (!input || !lista) return;
 
             input.addEventListener('input', function() {
-                const texto = this.value.toLowerCase().trim();
+                const textoNorm = normalizarTexto(this.value);
                 lista.innerHTML = '';
-                if (texto.length === 0) { lista.style.display = 'none'; return; }
+                if (textoNorm.length === 0) { lista.style.display = 'none'; return; }
 
-                const coincidencias = colegios.filter(c => 
-                    (c.nombre_colegio && c.nombre_colegio.toLowerCase().includes(texto)) || 
-                    (c.id_colegio && String(c.id_colegio).toLowerCase().includes(texto))
-                ).slice(0, 6);
+                const coincidencias = colegios.filter(c => {
+                    const nombreNorm = normalizarTexto(c.nombre_colegio);
+                    const idNorm = normalizarTexto(c.id_colegio);
+                    const dirNorm = normalizarTexto(c.direccion);
+                    const nivNorm = normalizarTexto(c.niveles);
+                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm);
+                }).slice(0, 8);
 
                 if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
 
@@ -819,12 +856,20 @@
                     div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(Cod: ${c.id_colegio})</span>`;
                     div.addEventListener('click', (ev) => {
                         ev.stopPropagation();
+                        ocultarTecladoMovil();
                         lista.style.display = 'none';
                         alSeleccionar(c);
                     });
                     lista.appendChild(div);
                 });
                 lista.style.display = 'block';
+            });
+
+            input.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    ocultarTecladoMovil();
+                    lista.style.display = 'none';
+                }
             });
 
             document.addEventListener('click', function(e) {
@@ -835,6 +880,7 @@
         }
 
         function seleccionarColegioYIr(colegio) {
+            ocultarTecladoMovil();
             abrirModalMapachito('saludando', `¡Encontré a ${colegio.nombre_colegio}! Te llevo directo.`, false, () => {
                 ocultarTodasLasPantallas();
                 document.getElementById('pantalla-mapa').style.display = 'flex';
@@ -849,6 +895,7 @@
         }
 
         function seleccionarColegioEnMapa(colegio) {
+            ocultarTecladoMovil();
             mostrarColegiosEnMapa([colegio]);
             if (colegio.latitud && colegio.longitud) {
                 map.setView([colegio.latitud, colegio.longitud], 16);
@@ -863,7 +910,7 @@
 
             const tipoBadge = colegio.gestion && colegio.gestion.toLowerCase().includes('particular') ? 'badge-particular' : (colegio.gestion && colegio.gestion.toLowerCase().includes('convenio') ? 'badge-convenio' : 'badge-estatal');
 
-            const nivelesTexto = (colegio.niveles || '').toLowerCase();
+            const nivelesTexto = normalizarTexto(colegio.niveles);
             let bloquesNivelesHTML = '';
             
             if (nivelesTexto.includes('cuna')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Cuna</div>`;
@@ -922,42 +969,41 @@
             filtrarListaVacantes();
         }
 
-        // ================= CONEXIÓN EXACTA DE LAS 16 FOTOS DE FACHADAS =================
+        // ================= MAPEO ROBUSTO Y SIN ERRORES PARA LAS 16 FOTOS =================
         function intentarAbrirFachadaConAlternativas(idColegio, nombreColegio) {
-            let idStr = String(idColegio).trim();
-            let idNumStr = !isNaN(idStr) ? String(Number(idStr)) : idStr;
-            let nombreNorm = (nombreColegio || '').toLowerCase();
+            let idStr = String(idColegio || '').trim();
+            let idNumLimpio = !isNaN(idStr) ? String(Number(idStr)) : idStr;
+            let nombreNorm = normalizarTexto(nombreColegio);
 
             let candidatos = [];
 
-            // 1. Verificación por ID de la lista de 16 fotos
+            // 1. Verificación por ID directo o sin ceros a la izquierda
             if (mapaFotosFachada[idStr]) candidatos.push(mapaFotosFachada[idStr]);
-            else if (mapaFotosFachada[idNumStr]) candidatos.push(mapaFotosFachada[idNumStr]);
+            if (mapaFotosFachada[idNumLimpio]) candidatos.push(mapaFotosFachada[idNumLimpio]);
 
-            // 2. Verificación por coincidencias de nombre
+            // 2. Verificación por coincidencias en el nombre
             if (nombreNorm.includes('pastorcitos') || nombreNorm.includes('fatima')) candidatos.push(mapaFotosFachada["107"]);
             if (nombreNorm.includes('domingo savio')) candidatos.push(mapaFotosFachada["113"]);
-            if (nombreNorm.includes('divino niño') || nombreNorm.includes('divino nino')) candidatos.push(mapaFotosFachada["125"]);
-            if (nombreNorm.includes('divina pastora')) candidatos.push(mapaFotosFachada["133"]);
-            if (nombreNorm.includes('pequeño mundo') || nombreNorm.includes('pequeno mundo')) candidatos.push(mapaFotosFachada["135"]);
+            if (nombreNorm.includes('divino nino')) candidatos.push(mapaFotosFachada["125"]);
+            if (nombreNorm.includes('divina pastora') || nombreNorm.includes('pastora')) candidatos.push(mapaFotosFachada["133"]);
+            if (nombreNorm.includes('pequeno mundo')) candidatos.push(mapaFotosFachada["135"]);
             if (nombreNorm.includes('guadalupe')) candidatos.push(mapaFotosFachada["141"]);
             if (nombreNorm.includes('cristo rey')) candidatos.push(mapaFotosFachada["167"]);
-            if (nombreNorm.includes('antonia moreno')) candidatos.push(mapaFotosFachada["5090"]);
+            if (nombreNorm.includes('antonia moreno') || nombreNorm.includes('caceres')) candidatos.push(mapaFotosFachada["5090"]);
             if (nombreNorm.includes('hijos de grau')) candidatos.push(mapaFotosFachada["5091"]);
             if (nombreNorm.includes('raymondi') || nombreNorm.includes('raimondi')) candidatos.push(mapaFotosFachada["5093"]);
             if (nombreNorm.includes('villa emilia')) candidatos.push(mapaFotosFachada["5119"]);
-            if (nombreNorm.includes('santa rosa de lima')) candidatos.push(mapaFotosFachada["5147"]);
-            if (nombreNorm.includes('san juan bosco')) candidatos.push(mapaFotosFachada["5151"]);
+            if (nombreNorm.includes('santa rosa')) candidatos.push(mapaFotosFachada["5147"]);
+            if (nombreNorm.includes('san juan bosco') || nombreNorm.includes('bosco')) candidatos.push(mapaFotosFachada["5151"]);
             if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
 
-            // 3. Fallbacks estándar
+            // 3. Fallbacks con extensiones comunes
             const extensiones = ['.jpeg', '.jpg', '.png', '.webp'];
             extensiones.forEach(ext => {
                 candidatos.push(`fotos/${idStr}${ext}`);
-                candidatos.push(`fotos/${idNumStr}${ext}`);
+                candidatos.push(`fotos/${idNumLimpio}${ext}`);
             });
 
-            // Eliminar duplicados
             candidatos = [...new Set(candidatos)];
 
             let indiceActual = 0;
@@ -986,14 +1032,15 @@
 
         function cerrarFachadaFullscreen() { document.getElementById('modal-fachada-fullscreen').style.display = 'none'; }
 
-        // ================= BUSCADOR GLOBAL DE VACANTES CON CÓDIGO DE COLORES =================
+        // ================= BUSCADOR GLOBAL DE VACANTES =================
         function abrirPantallaVacantes(e) {
             e.stopPropagation();
+            ocultarTecladoMovil();
             ocultarTodasLasPantallas();
             document.getElementById('pantalla-vacantes').style.display = 'flex';
             renderizarListaVacantesGlobal(colegios);
             
-            abrirModalMapachito('pensando', "Revisa la disponibilidad de vacantes por grado y edad reportada en vivo.", false, null, 3000);
+            abrirModalMapachito('pensando', "Revisa la disponibilidad de vacantes por grado y edad reportada en vivo.", false, null, 2500);
         }
 
         function obtenerEtiquetaSemaforo(clave, valor) {
@@ -1029,8 +1076,8 @@
             contenedor.innerHTML = '';
 
             lista.forEach(colegio => {
-                const vacantes = datosVacantesEnVivo[colegio.id_colegio] || {};
-                const nivelesTexto = (colegio.niveles || '').toLowerCase();
+                const vacantes = datosVacantesEnVivo[colegio.id_colegio] || datosVacantesEnVivo[String(Number(colegio.id_colegio))] || {};
+                const nivelesTexto = normalizarTexto(colegio.niveles);
 
                 let htmlGrados = '';
 
@@ -1071,19 +1118,23 @@
         function filtrarListaVacantes() {
             const input = document.getElementById('inputBuscadorVacantes');
             if (!input) return;
-            const texto = input.value.toLowerCase().trim();
+            const textoNorm = normalizarTexto(input.value);
             
-            const filtrados = colegios.filter(c => 
-                c.nombre_colegio.toLowerCase().includes(texto) || 
-                (c.niveles && c.niveles.toLowerCase().includes(texto)) ||
-                (c.id_colegio && String(c.id_colegio).toLowerCase().includes(texto))
-            );
+            const filtrados = colegios.filter(c => {
+                const nombreNorm = normalizarTexto(c.nombre_colegio);
+                const nivNorm = normalizarTexto(c.niveles);
+                const idNorm = normalizarTexto(c.id_colegio);
+                const distNorm = normalizarTexto(c.distrito);
+                const redNorm = normalizarTexto(c.red_educativa);
+                return nombreNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || idNorm.includes(textoNorm) || distNorm.includes(textoNorm) || redNorm.includes(textoNorm);
+            });
             renderizarListaVacantesGlobal(filtrados);
         }
 
         // ================= PANTALLA DONACIONES / MEMBRESÍA =================
         function abrirPantallaDonaciones(e) {
             e.stopPropagation();
+            ocultarTecladoMovil();
             ocultarTodasLasPantallas();
             document.getElementById('pantalla-donaciones').style.display = 'flex';
         }
@@ -1099,6 +1150,7 @@
         }
 
         function volverAPortada() {
+            ocultarTecladoMovil();
             ocultarTodasLasPantallas();
             document.getElementById('pantalla-portada').style.display = 'flex';
             
@@ -1108,7 +1160,7 @@
             document.getElementById('sugerenciasMapa').style.display = 'none';
         }
 
-        // ================= MAPACHITO (SIN PARPADEO Y CON AUTO-CIERRE) =================
+        // ================= MAPACHITO (CIERRE INMEDIATO AL TOCAR LA MASCOTA O EL FONDO) =================
         function abrirModalMapachito(emocion, texto, conBoton = false, callback = null, autoCierreMs = null) {
             const modal = document.getElementById('modalMapachito');
             document.getElementById('textoMapachito').innerText = texto;
