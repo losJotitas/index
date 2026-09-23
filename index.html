@@ -490,7 +490,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             cargarVacantesEnTiempoReal();
-            setInterval(cargarVacantesEnTiempoReal, 2000); // Polling cada 3s para sincronización instantánea PC-Celular
+            setInterval(cargarVacantesEnTiempoReal, 20000); // Polling cada 3s para sincronización instantánea PC-Celular
 
             configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
             configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
