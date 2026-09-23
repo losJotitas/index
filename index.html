@@ -436,34 +436,6 @@
         let temporizadorInactividad = null;
         let temporizadorAutoCierre = null;
 
-        // DICCIONARIO DIRECTO Y EXACTO PARA LAS 16 FOTOS EN GITHUB
-        const mapaFotosFachada = {
-            "107": "fotos/107_Los_Pastorcitos_de_Fatima.jpeg",
-            "0107": "fotos/107_Los_Pastorcitos_de_Fatima.jpeg",
-            "108": "fotos/108.jpeg",
-            "0108": "fotos/108.jpeg",
-            "113": "fotos/113_Domingo_Savio.jpeg",
-            "0113": "fotos/113_Domingo_Savio.jpeg",
-            "125": "fotos/125_Divino_Nino_Jesus.jpeg",
-            "0125": "fotos/125_Divino_Nino_Jesus.jpeg",
-            "133": "fotos/133_Divina_Pastora.jpeg",
-            "0133": "fotos/133_Divina_Pastora.jpeg",
-            "135": "fotos/135_Mi_Pequeno_Mundo.jpeg",
-            "0135": "fotos/135_Mi_Pequeno_Mundo.jpeg",
-            "141": "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg",
-            "0141": "fotos/141_Inmaculada_Virgen_de_Guadalupe.jpeg",
-            "157": "fotos/157.jpeg",
-            "0157": "fotos/157.jpeg",
-            "167": "fotos/167_Cristo_Rey_de_los_Ninos.jpeg",
-            "0167": "fotos/167_Cristo_Rey_de_los_Ninos.jpeg",
-            "5090": "fotos/5090_Antonia_Moreno_de_Caceres.jpeg",
-            "5091": "fotos/5091_Hijos_de_Grau.jpeg",
-            "5093": "fotos/5093_Antonio_Raymondi.jpeg",
-            "5119": "fotos/5119_Villa_Emilia.jpeg",
-            "5147": "fotos/5147_Santa_Rosa_de_Lima.jpeg",
-            "5151": "fotos/5151_San_Juan_Bosco.jpeg"
-        };
-
         // COLORES POR RED
         const coloresRedes = {
             1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
@@ -969,7 +941,7 @@
             filtrarListaVacantes();
         }
 
-        // ================= MAPEO ROBUSTO Y SIN ERRORES PARA LAS 16 FOTOS =================
+        // ================= LECTURA DIRECTA Y EXACTA DE FOTOS EDITADAS EN GITHUB =================
         function intentarAbrirFachadaConAlternativas(idColegio, nombreColegio) {
             let idStr = String(idColegio || '').trim();
             let idNumLimpio = !isNaN(idStr) ? String(Number(idStr)) : idStr;
@@ -977,32 +949,17 @@
 
             let candidatos = [];
 
-            // 1. Verificación por ID directo o sin ceros a la izquierda
-            if (mapaFotosFachada[idStr]) candidatos.push(mapaFotosFachada[idStr]);
-            if (mapaFotosFachada[idNumLimpio]) candidatos.push(mapaFotosFachada[idNumLimpio]);
+            // Coprodeli / Virgen de Chapi
+            if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) {
+                candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
+            }
 
-            // 2. Verificación por coincidencias en el nombre
-            if (nombreNorm.includes('pastorcitos') || nombreNorm.includes('fatima')) candidatos.push(mapaFotosFachada["107"]);
-            if (nombreNorm.includes('domingo savio')) candidatos.push(mapaFotosFachada["113"]);
-            if (nombreNorm.includes('divino nino')) candidatos.push(mapaFotosFachada["125"]);
-            if (nombreNorm.includes('divina pastora') || nombreNorm.includes('pastora')) candidatos.push(mapaFotosFachada["133"]);
-            if (nombreNorm.includes('pequeno mundo')) candidatos.push(mapaFotosFachada["135"]);
-            if (nombreNorm.includes('guadalupe')) candidatos.push(mapaFotosFachada["141"]);
-            if (nombreNorm.includes('cristo rey')) candidatos.push(mapaFotosFachada["167"]);
-            if (nombreNorm.includes('antonia moreno') || nombreNorm.includes('caceres')) candidatos.push(mapaFotosFachada["5090"]);
-            if (nombreNorm.includes('hijos de grau')) candidatos.push(mapaFotosFachada["5091"]);
-            if (nombreNorm.includes('raymondi') || nombreNorm.includes('raimondi')) candidatos.push(mapaFotosFachada["5093"]);
-            if (nombreNorm.includes('villa emilia')) candidatos.push(mapaFotosFachada["5119"]);
-            if (nombreNorm.includes('santa rosa')) candidatos.push(mapaFotosFachada["5147"]);
-            if (nombreNorm.includes('san juan bosco') || nombreNorm.includes('bosco')) candidatos.push(mapaFotosFachada["5151"]);
-            if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
-
-            // 3. Fallbacks con extensiones comunes
-            const extensiones = ['.jpeg', '.jpg', '.png', '.webp'];
-            extensiones.forEach(ext => {
-                candidatos.push(`fotos/${idStr}${ext}`);
-                candidatos.push(`fotos/${idNumLimpio}${ext}`);
-            });
+            // Lectura directa del número de foto editado (Ejemplo: "fotos/107.jpeg", "fotos/108.jpeg", "fotos/133.jpeg")
+            candidatos.push(`fotos/${idNumLimpio}.jpeg`);
+            candidatos.push(`fotos/${idStr}.jpeg`);
+            candidatos.push(`fotos/${idNumLimpio}.jpg`);
+            candidatos.push(`fotos/${idStr}.jpg`);
+            candidatos.push(`fotos/${idNumLimpio}.png`);
 
             candidatos = [...new Set(candidatos)];
 
