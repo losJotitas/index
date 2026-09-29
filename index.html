@@ -13,15 +13,15 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
         
-           html, body {
-      width: 100vw;
-      min-height: 100vh;
-      color: #ffffff;
-      background: linear-gradient(135deg, #0a3d62 0%, #1e6bb8 50%, #3c6382 100%);
-      overflow-y: auto;
-      overflow-x: hidden;
-      overscroll-behavior-y: auto;
-    }
+        html, body {
+            width: 100vw;
+            min-height: 100vh;
+            color: #ffffff;
+            background-color: #0f172a;
+            overflow-y: auto; 
+            overflow-x: hidden;
+            overscroll-behavior-y: auto;
+        }
 
         /* PANTALLA DE INICIO / PORTADA */
         #pantalla-portada {
@@ -255,9 +255,16 @@
 <body>
 
     <!-- ================= PANTALLA 1: PORTADA ================= -->
-    <div id="pantalla-portada">
-        <div class="fondo-portada">
-        </div>
+   <div id="pantalla-portada" style="background: linear-gradient(135deg, #0A192F 0%, #1E3A8A 100%); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 40px 20px; font-family: 'Poppins', sans-serif; color: white; text-align: center; box-sizing: border-box;">
+    
+    <!-- Cabecera / Títulos -->
+    <div style="margin-top: 20px;">
+        <h1 style="font-size: 2.8rem; font-weight: 800; letter-spacing: 2px; margin: 0; background: linear-gradient(90deg, #38BDF8, #FFFFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MAPACHE</h1>
+        <p style="font-size: 1.1rem; color: #94A3B8; font-weight: 500; margin-top: 5px;">Ventanilla &amp; Mi Perú</p>
+        <div style="width: 50px; height: 3px; background: #38BDF8; margin: 15px auto; border-radius: 2px;"></div>
+    </div>
+
+</div>
 
         <!-- 🔐 BOTÓN ACCESO DIRECTORES (SOLO EN PANTALLA PRINCIPAL) -->
         <button class="btn-acceso-directores-flotante" onclick="abrirModalDirector()">
