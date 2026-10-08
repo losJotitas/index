@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Plataforma MAPACHE - Matrícula y Vacantes</title>
+    <title>Plataforma MAPACHE - Ventanilla & Mi Perú</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
@@ -14,7 +14,7 @@
             width: 100vw;
             min-height: 100vh;
             color: #ffffff;
-            background-color: #0f172a;
+            background-color: #0b1324;
             overflow-y: auto; 
             overflow-x: hidden;
         }
@@ -28,7 +28,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            background: radial-gradient(circle at center, #1b2a4a 0%, #0b1324 100%);
             padding: 20px 0;
         }
 
@@ -187,7 +187,7 @@
         .fila-botones-dividida { display: flex; gap: 8px; width: 100%; }
         .fila-botones-dividida .btn-opcion { flex: 1; }
 
-        /* REGLA REVISADA: TODAS LAS PANTALLAS SECUNDARIAS ESTÁN OCULTAS POR DEFECTO */
+        /* PANTALLAS SECUNDARIAS (OCULTAS POR DEFECTO) */
         .pantalla-secundaria {
             display: none !important;
             position: fixed;
@@ -277,7 +277,7 @@
 </head>
 <body>
 
-    <!-- ================= PANTALLA 1: PORTADA ================= -->
+    <!-- ================= PANTALLA 1: PORTADA PRINCIPAL ================= -->
     <div id="pantalla-portada">
         <button class="btn-acceso-directores-flotante" onclick="abrirModalDirector()">
             🔐 Acceso Directores
@@ -285,7 +285,7 @@
 
         <div class="main-container">
             <div class="hero-header">
-                <img src="mapache_apoyado_en_la_pared.png" alt="Mapachito" class="img-mapache-hero">
+                <img src="mapache_apoyado_en_la_pared.png" alt="Mapachito Mascot" class="img-mapache-hero">
                 <h1 class="titulo-app">MAPACHE</h1>
                 <p class="subtitulo-app">Ventanilla &amp; Mi Perú</p>
                 <p class="tagline-app">Rastrea, Encuentra, Matricula</p>
@@ -316,7 +316,7 @@
         </div>
     </div>
 
-    <!-- ================= PANTALLA 2: MAPA ================= -->
+    <!-- ================= PANTALLA 2: MAPA LEAFLET ================= -->
     <div id="pantalla-mapa" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
@@ -328,7 +328,7 @@
         <div id="map"></div>
     </div>
 
-    <!-- ================= PANTALLA 3: BUSCADOR DE VACANTES POR GRADO / EDAD ================= -->
+    <!-- ================= PANTALLA 3: BUSCADOR GLOBAL DE VACANTES POR GRADO / EDAD ================= -->
     <div id="pantalla-vacantes" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
@@ -388,7 +388,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL REDES EDUCATIVAS ================= -->
+    <!-- ================= MODAL REDES EDUCATIVAS (RED 01 A RED 09) ================= -->
     <div id="modal-redes" onclick="cerrarModalRedes(event)">
         <div class="modal-redes-content" onclick="event.stopPropagation()">
             <div class="modal-redes-header">
@@ -409,7 +409,7 @@
         </div>
     </div>
 
-    <!-- Modal Mapachito -->
+    <!-- ================= MODAL MAPACHITO REACTIVO ================= -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation(); cerrarModalMapachito();">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
@@ -420,7 +420,7 @@
         </div>
     </div>
 
-    <!-- Modal Detalle Colegio -->
+    <!-- ================= MODAL DETALLE COMPLETO DEL COLEGIO ================= -->
     <div id="modal-detalle" onclick="cerrarDetalleExt(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close-destacado" onclick="cerrarDetalle()">&times;</span>
@@ -428,13 +428,13 @@
         </div>
     </div>
 
-    <!-- Visor Fachada -->
+    <!-- ================= VISOR DE FACHADA FULLSCREEN ================= -->
     <div id="modal-fachada-fullscreen" onclick="cerrarFachadaFullscreen()">
         <button class="btn-cerrar-fachada" onclick="cerrarFachadaFullscreen()">&times;</button>
         <img id="imgFachadaFull" class="fachada-fullscreen-img" src="" alt="Fachada del Colegio">
     </div>
 
-    <!-- Modal Inactividad -->
+    <!-- ================= MODAL INACTIVIDAD 30S ================= -->
     <div id="modal-inactividad-total" onclick="despertarMapachitoInactivo()">
         <div class="inactivity-box" onclick="event.stopPropagation(); despertarMapachitoInactivo();">
             <img src="mapache_durmiendo.png" alt="Mapachito durmiendo">
@@ -500,7 +500,6 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            inicializarMapa();
             cargarVacantesEnTiempoReal();
             setInterval(cargarVacantesEnTiempoReal, 20000);
             configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
