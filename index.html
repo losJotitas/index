@@ -13,15 +13,11 @@
         html, body {
             width: 100vw;
             min-height: 100vh;
-            min-height: 100dvh;
             color: #ffffff;
             background-color: #0b1324;
             overflow-y: auto; 
             overflow-x: hidden;
-            overscroll-behavior-y: none;
-            overscroll-behavior: none;
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x pan-y;
         }
 
         /* PANTALLA 1: PORTADA PRINCIPAL */
@@ -29,7 +25,6 @@
             position: relative;
             width: 100vw; 
             min-height: 100vh;
-            min-height: 100dvh;
             height: auto; 
             z-index: 10;
             display: flex;
@@ -62,22 +57,22 @@
             width: 100%;
         }
 
-        /* CONTENEDOR ENCABEZADO PERFECTAMENTE CENTRADO CON EL BLOQUE DE BOTONES */
+        /* ENCABEZADO CENTRADO LIGERAMENTE AJUSTADO A LA IZQUIERDA EN PC */
         .header-brand-container {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             margin: 0 auto;
-            padding-right: 12px; /* Equilibra el peso visual del texto */
+            transform: translateX(-10px); /* Centra el peso visual con respecto a la caja inferior */
         }
 
-        /* MAPACHITO ESTÁTICO BIEN PEGADO A LA 'M' */
+        /* MAPACHITO ESTÁTICO PEGADO A LA LETRA M */
         .img-mapache-hero {
             width: auto;
-            height: clamp(130px, 28vw, 165px);
+            height: clamp(135px, 29vw, 170px);
             object-fit: contain;
-            margin-right: -20px; /* Apoya la mano directamente sobre la letra M */
+            margin-right: -28px; /* Mano apoyada exactamente sobre la letra M */
             filter: drop-shadow(0 6px 14px rgba(0,0,0,0.65));
             flex-shrink: 0;
             z-index: 2;
@@ -147,7 +142,7 @@
         }
         .btn-acceso-directores-flotante:hover { transform: scale(1.04); }
 
-        /* BLOQUE DE CONTROLES COMPLETO Y RESTAURADO */
+        /* BLOQUE DE CONTROLES */
         .bloque-controles {
             width: 100%;                    
             max-width: 350px;              
@@ -216,7 +211,7 @@
         .pantalla-secundaria {
             display: none !important;
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             flex-direction: column; z-index: 50;
             background-color: #f4f6f9; overflow-y: auto;
         }
@@ -286,7 +281,7 @@
         .fachada-fullscreen-img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px; }
         .btn-cerrar-fachada { position: absolute; top: 20px; right: 25px; background: rgba(255, 255, 255, 0.2); color: #ffffff; border: none; font-size: 1.8rem; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; }
 
-        /* MODAL INACTIVIDAD MAPACHITO DURMIENDO (MÁXIMA PRIORIDAD) */
+        /* MODAL INACTIVIDAD MAPACHITO DURMIENDO (MÁXIMA PRIORIDAD VISUAL) */
         #modal-inactividad-total { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.96); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; cursor: pointer; }
         .inactivity-box { background: #1e293b; border: 3px solid #38bdf8; border-radius: 28px; padding: 30px 20px; max-width: 320px; width: 90%; display: flex; flex-direction: column; align-items: center; }
         .inactivity-box img { width: 140px; height: 140px; object-fit: contain; margin-bottom: 15px; }
@@ -311,7 +306,7 @@
 
         <div class="main-container">
             <div class="hero-header">
-                <!-- ENCABEZADO CENTRADO CON BLOQUE DE TEXTO Y MAPACHITO -->
+                <!-- ENCABEZADO CENTRADO CON LIGERO DESPLAZAMIENTO A LA IZQUIERDA EN PC -->
                 <div class="header-brand-container">
                     <img src="mapache_apoyado_en_la_pared.png" alt="Mapachito Mascot" class="img-mapache-hero">
                     <div class="header-text-block">
@@ -323,7 +318,7 @@
                 </div>
             </div>
 
-            <!-- BLOQUE DE CONTROLES COMPLETO Y FUNCIONAL -->
+            <!-- BLOQUE DE CONTROLES -->
             <div class="bloque-controles">
                 <div class="search-box-wrapper">
                     <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, 5090)..." autocomplete="off">
@@ -441,7 +436,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL MAPACHITO REACTIVO ================= -->
+    <!-- ================= MODAL MAPACHITO REACTIVO (DIVERSAS EMOCIONES) ================= -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="event.stopPropagation(); cerrarModalMapachito();">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
@@ -797,22 +792,56 @@
             });
         }
 
+        /* BOTONES INTERACTIVOS CON DIVERSAS EMOCIONES DE MAPACHITO */
         function mostrarInfoTodosMapa(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
-            ejecutarIrAlMapa('todos');
+            abrirModalMapachito('olfateando', "¡Olfateando todos los colegios para mostrarlos en el mapa! 🦝🔍", false, () => {
+                ejecutarIrAlMapa('todos');
+            }, 1800);
         }
 
         function mostrarInfoEstatales(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
-            ejecutarIrAlMapa('Estatal');
+            abrirModalMapachito('sorprendido', "¿Sabías que son 146 colegios estatales en Ventanilla y Mi Perú? 🏛️✨", false, () => {
+                ejecutarIrAlMapa('Estatal');
+            }, 1800);
         }
 
         function mostrarInfoParticulares(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
-            ejecutarIrAlMapa('Particular');
+            abrirModalMapachito('feliz', "¡Aquí te mostraré los colegios Particulares registrados! 🏫🎉", false, () => {
+                ejecutarIrAlMapa('Particular');
+            }, 1800);
+        }
+
+        function abrirModalRedesConMapachito(e) {
+            if(e) e.stopPropagation();
+            ocultarTecladoMovil();
+            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál deseas explorar? 🤔", false, () => {
+                document.getElementById('modal-redes').style.display = 'flex';
+            }, 1800);
+        }
+
+        function abrirPantallaVacantes(e) {
+            if(e) e.stopPropagation();
+            ocultarTecladoMovil();
+            abrirModalMapachito('buscando', "🚦 ¡Revisando disponibilidad de vacantes por grado en tiempo real!", false, () => {
+                ocultarTodasLasPantallas();
+                document.getElementById('pantalla-vacantes').classList.add('activa');
+                renderizarListaVacantesGlobal(getColegiosSafe());
+            }, 1800);
+        }
+
+        function abrirPantallaDonaciones(e) {
+            if(e) e.stopPropagation();
+            ocultarTecladoMovil();
+            abrirModalMapachito('guiñando', "💎 ¡Conoce la sostenibilidad y alianzas del Proyecto MAPACHE!", false, () => {
+                ocultarTodasLasPantallas();
+                document.getElementById('pantalla-donaciones').classList.add('activa');
+            }, 1800);
         }
 
         function ejecutarIrAlMapa(filtroTipo) {
@@ -834,33 +863,29 @@
             }, 100);
         }
 
-        function abrirModalRedesConMapachito(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            document.getElementById('modal-redes').style.display = 'flex';
-        }
-
         function cerrarModalRedes(e) { document.getElementById('modal-redes').style.display = 'none'; }
         function forzarCierreModalRedes() { document.getElementById('modal-redes').style.display = 'none'; }
 
         function filtrarPorRedConMapachito(numeroRed) {
             document.getElementById('modal-redes').style.display = 'none';
-            ocultarTodasLasPantallas();
-            const pantallaMapa = document.getElementById('pantalla-mapa');
-            pantallaMapa.classList.add('activa');
-            
-            setTimeout(() => { 
-                inicializarMapa();
-                map.invalidateSize(); 
+            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, false, () => {
+                ocultarTodasLasPantallas();
+                const pantallaMapa = document.getElementById('pantalla-mapa');
+                pantallaMapa.classList.add('activa');
+                
+                setTimeout(() => { 
+                    inicializarMapa();
+                    map.invalidateSize(); 
 
-                const colegiosLista = getColegiosSafe();
-                const filtrados = colegiosLista.filter(c => extraerNumeroRed(c.red_educativa) === numeroRed);
-                mostrarColegiosEnMapa(filtrados);
+                    const colegiosLista = getColegiosSafe();
+                    const filtrados = colegiosLista.filter(c => extraerNumeroRed(c.red_educativa) === numeroRed);
+                    mostrarColegiosEnMapa(filtrados);
 
-                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-                }
-            }, 100);
+                    if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                        map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                    }
+                }, 100);
+            }, 1500);
         }
 
         function configurarAutocompletado(inputId, listaId, alSeleccionar) {
@@ -916,20 +941,22 @@
 
         function seleccionarColegioYIr(colegio) {
             ocultarTecladoMovil();
-            ocultarTodasLasPantallas();
-            const pantallaMapa = document.getElementById('pantalla-mapa');
-            pantallaMapa.classList.add('activa');
-            
-            setTimeout(() => { 
-                inicializarMapa();
-                map.invalidateSize(); 
+            abrirModalMapachito('saludando', `¡Encontré a ${colegio.nombre_colegio}! Te llevo directo.`, false, () => {
+                ocultarTodasLasPantallas();
+                const pantallaMapa = document.getElementById('pantalla-mapa');
+                pantallaMapa.classList.add('activa');
+                
+                setTimeout(() => { 
+                    inicializarMapa();
+                    map.invalidateSize(); 
 
-                mostrarColegiosEnMapa([colegio]);
-                if (colegio.latitud && colegio.longitud) {
-                    map.setView([colegio.latitud, colegio.longitud], 16);
-                }
-                abrirDetalle(colegio.nombre_colegio);
-            }, 100);
+                    mostrarColegiosEnMapa([colegio]);
+                    if (colegio.latitud && colegio.longitud) {
+                        map.setView([colegio.latitud, colegio.longitud], 16);
+                    }
+                    abrirDetalle(colegio.nombre_colegio);
+                }, 100);
+            }, 1500);
         }
 
         function seleccionarColegioEnMapa(colegio) {
@@ -1040,14 +1067,6 @@
 
         function cerrarFachadaFullscreen() { document.getElementById('modal-fachada-fullscreen').style.display = 'none'; }
 
-        function abrirPantallaVacantes(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            ocultarTodasLasPantallas();
-            document.getElementById('pantalla-vacantes').classList.add('activa');
-            renderizarListaVacantesGlobal(getColegiosSafe());
-        }
-
         function obtenerEtiquetaSemaforo(clave, valor) {
             let val = String(valor || '').toLowerCase();
             let clase = 'sem-rojo';
@@ -1134,13 +1153,6 @@
             renderizarListaVacantesGlobal(filtrados);
         }
 
-        function abrirPantallaDonaciones(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            ocultarTodasLasPantallas();
-            document.getElementById('pantalla-donaciones').classList.add('activa');
-        }
-
         function copiarCCI() {
             navigator.clipboard.writeText('002-191-000000000000-00');
             alert('¡Código CCI copiado al portapapeles!');
@@ -1199,7 +1211,7 @@
             }
         }
 
-        /* CONTROL DE INACTIVIDAD 30 SEGUNDOS */
+        /* CONTROL DE INACTIVIDAD 30 SEGUNDOS (MAPACHITO DURMIENDO) */
         function reiniciarTemporizadorInactividad() {
             const modalInactivo = document.getElementById('modal-inactividad-total');
             if (!modalInactivo) return;
