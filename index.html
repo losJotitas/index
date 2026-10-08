@@ -493,6 +493,17 @@
             return String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
         }
 
+        /* LIMPIEZA AVANZADA DE TEXTO PARA BÚSQUEDAS (Elimina N°, I.E., puntuación) */
+        function normalizarLimpio(txt) {
+            if (!txt) return '';
+            let s = String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            s = s.replace(/\b(colegio|colegios|i\.?e\.?[ip]?\.?)\b/g, ' ');
+            s = s.replace(/n[°º. ]*/g, ' ');
+            s = s.replace(/[^a-z0-9]/g, ' ');
+            s = s.replace(/\s+/g, ' ').trim();
+            return s;
+        }
+
         function ocultarTecladoMovil() {
             if (document.activeElement && typeof document.activeElement.blur === 'function') {
                 document.activeElement.blur();
@@ -545,7 +556,7 @@
             }
         }
 
-        /* PORTAL DE DIRECTORES: ACCESO FLEXIBLE POR NÚMERO, ID EXCEL O NOMBRE */
+        /* PORTAL DE DIRECTORES CON BÚSQUEDA ROBUSTA MULTI-PALABRA Y MULTI-FORMATO */
         function abrirModalDirector() {
             ocultarTecladoMovil();
             const modalHTML = `
@@ -584,10 +595,7 @@
             const codigoInput = document.getElementById('dir-codigo').value;
             const passwordInput = document.getElementById('dir-password').value.trim();
 
-            const codigoNorm = normalizarTexto(codigoInput);
-            const passNorm = passwordInput.toLowerCase();
-
-            if (!codigoNorm) { 
+            if (!codigoInput || !codigoInput.trim()) { 
                 alert("Por favor ingresa el número, nombre o N° de lista del colegio."); 
                 return; 
             }
@@ -597,15 +605,51 @@
                 return; 
             }
 
+            const inputOriginal = codigoInput.trim().toLowerCase();
+            const inputLimpio = normalizarLimpio(codigoInput);
+            const passNorm = passwordInput.toLowerCase();
+
+            // Palabras conectoras e ignorables
+            const palabrasIgnoradas = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'en', 'n', 'no', 'num', 'numero']);
+            const tokensUser = inputLimpio.split(' ')
+                .filter(t => t.length > 0 && !palabrasIgnoradas.has(t))
+                .map(t => t.replace(/s$/, '')); // Quita 's' final para igualar plurales (ej: coprodelis -> coprodeli)
+
+            const numerosUser = codigoInput.match(/\d+/g) || [];
+
             const colegiosLista = getColegiosSafe();
 
-            // Buscar todos los colegios que coincidan por ID Excel, Código o Nombre
+            // Filtrado inteligente de candidatos
             const candidatos = colegiosLista.filter(c => {
                 const idStr = String(c.id_colegio || '').trim().toLowerCase();
                 const codStr = String(c.codigo || '').trim().toLowerCase();
-                const nomNorm = normalizarTexto(c.nombre_colegio || '');
+                const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
 
-                return idStr === codigoNorm || codStr === codigoNorm || nomNorm.includes(codigoNorm);
+                // 1. Coincidencia exacta por ID o Código
+                if (inputOriginal === idStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
+                    return true;
+                }
+
+                // 2. Coincidencia si el número ingresado equivale al ID de lista Excel
+                if (numerosUser.some(num => num === idStr || num === codStr)) {
+                    return true;
+                }
+
+                // 3. Coincidencia por subcadena de texto continuo limpio
+                if (inputLimpio && (nomLimpio.includes(inputLimpio) || inputLimpio.includes(nomLimpio))) {
+                    return true;
+                }
+
+                // 4. Coincidencia por tokens (palabras clave) ignorando plurales
+                if (tokensUser.length > 0) {
+                    const tokensColegio = nomLimpio.split(' ').map(t => t.replace(/s$/, ''));
+                    const coincidenTodos = tokensUser.every(tok => 
+                        nomLimpio.includes(tok) || tokensColegio.some(tc => tc.includes(tok) || tok.includes(tc))
+                    );
+                    if (coincidenTodos) return true;
+                }
+
+                return false;
             });
 
             if (candidatos.length === 0) {
@@ -613,7 +657,7 @@
                 return;
             }
 
-            // Validar la contraseña entre los colegios candidatos
+            // Validar la contraseña entre los candidatos encontrados
             const colegioValido = candidatos.find(c => {
                 const cPass = String(c.password_director || '').trim().toLowerCase();
                 return cPass === passNorm;
