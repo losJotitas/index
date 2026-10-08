@@ -532,13 +532,71 @@
             }
         });
 
+        /* INDEXACIÓN MULTI-LLAVE DE COLEGIO */
+        function indexarVacantesColegio(colegioObj, datosGrados) {
+            if (!colegioObj || !datosGrados) return;
+            const keys = new Set();
+            
+            if (colegioObj.id_colegio !== undefined && colegioObj.id_colegio !== null) {
+                let idStr = String(colegioObj.id_colegio).trim();
+                keys.add(idStr);
+                if (!isNaN(idStr)) keys.add(String(Number(idStr)));
+            }
+            
+            if (colegioObj.codigo !== undefined && colegioObj.codigo !== null) {
+                let codStr = String(colegioObj.codigo).trim();
+                keys.add(codStr);
+                if (!isNaN(codStr)) keys.add(String(Number(codStr)));
+            }
+
+            if (colegioObj.nombre_colegio) {
+                let nomNorm = normalizarLimpio(colegioObj.nombre_colegio);
+                if (nomNorm) keys.add(nomNorm);
+            }
+
+            keys.forEach(k => {
+                if (k) datosVacantesEnVivo[k] = datosGrados;
+            });
+        }
+
+        /* RECUPERACIÓN ROBUSTA DE VACANTES PROBANDO TODAS LAS LLAVES */
+        function obtenerVacantesColegioRobust(colegioObj) {
+            if (!colegioObj) return {};
+
+            const probables = [];
+            
+            if (colegioObj.id_colegio !== undefined && colegioObj.id_colegio !== null) {
+                let idStr = String(colegioObj.id_colegio).trim();
+                probables.push(idStr);
+                if (!isNaN(idStr)) probables.push(String(Number(idStr)));
+            }
+
+            if (colegioObj.codigo !== undefined && colegioObj.codigo !== null) {
+                let codStr = String(colegioObj.codigo).trim();
+                probables.push(codStr);
+                if (!isNaN(codStr)) probables.push(String(Number(codStr)));
+            }
+
+            if (colegioObj.nombre_colegio) {
+                let nomNorm = normalizarLimpio(colegioObj.nombre_colegio);
+                if (nomNorm) probables.push(nomNorm);
+            }
+
+            for (let i = 0; i < probables.length; i++) {
+                let k = probables[i];
+                if (datosVacantesEnVivo[k] && Object.keys(datosVacantesEnVivo[k]).length > 0) {
+                    return datosVacantesEnVivo[k];
+                }
+            }
+
+            return {};
+        }
+
         /* REFRESCO DINÁMICO EN TIEMPO REAL DE LAS VISTAS ABIERTAS */
         function refrescarVistasVacantesActivas() {
-            // 1. Si la pantalla global de vacantes está abierta, volver a filtrar e imprimir
             if (document.getElementById('pantalla-vacantes').classList.contains('activa')) {
                 filtrarListaVacantes();
             }
-            // 2. Si el modal de detalle del colegio está abierto, actualizar sus datos
             const modalDetalle = document.getElementById('modal-detalle');
             if (modalDetalle && modalDetalle.style.display === 'flex') {
                 const tituloEl = modalDetalle.querySelector('h2');
@@ -548,24 +606,39 @@
             }
         }
 
-        /* CONSULTA CONTINUA CADA 5 SEGUNDOS A GOOGLE SHEETS PARA TODAS LAS PCS Y MOVILES */
+        /* CONSULTA CONTINUA SIN CACHÉ A GOOGLE SHEETS CADA 5 SEGUNDOS */
         async function cargarVacantesEnTiempoReal() {
             try {
-                const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime());
+                const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime(), { cache: 'no-store' });
                 const resultado = await respuesta.json();
                 
                 if (Array.isArray(resultado)) {
+                    const colegiosLista = getColegiosSafe();
+
                     resultado.forEach(item => {
-                        let idColegio = item.id_colegio || item.id || item.codigo;
-                        if (idColegio !== undefined && idColegio !== null) {
-                            let idLimpio = String(idColegio).trim();
-                            let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
-                            let datos = item.grados || item.vacantes || item;
-                            
-                            datosVacantesEnVivo[idLimpio] = datos;
-                            datosVacantesEnVivo[idNumLimpio] = datos;
+                        let rawId = String(item.id_colegio || item.codigo || item.id || '').trim();
+                        let rawNombre = String(item.nombre_colegio || '').trim();
+                        let datosGrados = item.grados || item.vacantes || item;
+
+                        // Buscar coincidencia en la lista oficial
+                        let colegioEncontrado = colegiosLista.find(c => {
+                            let cId = String(c.id_colegio || '').trim();
+                            let cCod = String(c.codigo || '').trim();
+                            let cNom = normalizarLimpio(c.nombre_colegio);
+
+                            if (rawId && (rawId === cId || rawId === cCod || (!isNaN(rawId) && (Number(rawId) === Number(cId) || Number(rawId) === Number(cCod))))) return true;
+                            if (rawNombre && normalizarLimpio(rawNombre) === cNom) return true;
+                            return false;
+                        });
+
+                        if (colegioEncontrado) {
+                            indexarVacantesColegio(colegioEncontrado, datosGrados);
+                        } else if (rawId) {
+                            datosVacantesEnVivo[rawId] = datosGrados;
+                            if (!isNaN(rawId)) datosVacantesEnVivo[String(Number(rawId))] = datosGrados;
                         }
                     });
+
                     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
                     refrescarVistasVacantesActivas();
                 }
@@ -576,7 +649,6 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             cargarVacantesEnTiempoReal();
-            // Muestreo frecuente cada 5 segundos para actualización instantánea multiterminal (PC y Celulares)
             setInterval(cargarVacantesEnTiempoReal, 5000);
             configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
             configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
@@ -590,7 +662,7 @@
             }
         }
 
-        /* PORTAL DE DIRECTORES CON BÚSQUEDA ROBUSTA MULTI-PALABRA Y MULTI-FORMATO */
+        /* PORTAL DE DIRECTORES CON BÚSQUEDA MULTI-PALABRA Y MULTI-FORMATO */
         function abrirModalDirector() {
             ocultarTecladoMovil();
             const modalHTML = `
@@ -643,7 +715,6 @@
             const inputLimpio = normalizarLimpio(codigoInput);
             const passNorm = passwordInput.toLowerCase();
 
-            // Palabras conectoras e ignorables
             const palabrasIgnoradas = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'en', 'n', 'no', 'num', 'numero']);
             const tokensUser = inputLimpio.split(' ')
                 .filter(t => t.length > 0 && !palabrasIgnoradas.has(t))
@@ -653,7 +724,6 @@
 
             const colegiosLista = getColegiosSafe();
 
-            // Filtrado inteligente de candidatos
             const candidatos = colegiosLista.filter(c => {
                 const idStr = String(c.id_colegio || '').trim().toLowerCase();
                 const codStr = String(c.codigo || '').trim().toLowerCase();
@@ -723,7 +793,7 @@
             const tienePrimaria = nivelesTexto.includes('primaria');
             const tieneSecundaria = nivelesTexto.includes('secundaria');
 
-            const actual = datosVacantesEnVivo[colegio.id_colegio] || datosVacantesEnVivo[String(Number(colegio.id_colegio))] || {};
+            const actual = obtenerVacantesColegioRobust(colegio);
 
             let formularioGradosHTML = '';
 
@@ -777,7 +847,7 @@
             document.body.insertAdjacentHTML('beforeend', panelHTML);
         }
 
-        /* GUARDAR CAMBIOS Y NOTIFICAR EN TIEMPO REAL A TODOS LOS NAVEGADORES/DISPOSITIVOS */
+        /* GUARDAR CAMBIOS E INDEXAR MULTI-LLAVE CON TRANSMISIÓN EN TIEMPO REAL */
         async function guardarVacantesGradosInstante(id_colegio, password) {
             ocultarTecladoMovil();
             const ahora = new Date();
@@ -791,24 +861,26 @@
                 objetoGrados[clave] = sel.value;
             });
 
-            let idLimpio = String(id_colegio).trim();
-            let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
+            const colegiosLista = getColegiosSafe();
+            const colegioObj = colegiosLista.find(c => String(c.id_colegio) === String(id_colegio) || String(c.codigo) === String(id_colegio));
 
-            // 1. Guardar localmente
-            datosVacantesEnVivo[idLimpio] = objetoGrados;
-            datosVacantesEnVivo[idNumLimpio] = objetoGrados;
+            if (colegioObj) {
+                indexarVacantesColegio(colegioObj, objetoGrados);
+            } else {
+                let idLimpio = String(id_colegio).trim();
+                datosVacantesEnVivo[idLimpio] = objetoGrados;
+            }
+
             localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
 
-            // 2. Refrescar vistas locales e informar a otras pestañas activas
             refrescarVistasVacantesActivas();
             if (canalVacantes) canalVacantes.postMessage('actualizado');
 
-            // 3. Transmitir a Google Sheets en la nube
             try {
                 const payload = {
                     action: 'updateVacantes',
-                    codigo: idLimpio,
-                    id_colegio: idLimpio,
+                    codigo: id_colegio,
+                    id_colegio: id_colegio,
                     password: password,
                     grados: objetoGrados,
                     datos: objetoGrados,
@@ -824,7 +896,6 @@
                 document.getElementById('modal-panel-vacantes').remove();
                 abrirModalMapachito('feliz', `¡Vacantes sincronizadas con Google Sheets!\nFecha: ${fechaHoraFormat}`, true);
                 
-                // Forzar sincronización inmediata desde la nube
                 cargarVacantesEnTiempoReal();
             } catch (error) {
                 console.error("Error enviando a Google Sheets:", error);
@@ -1198,7 +1269,8 @@
             contenedor.innerHTML = '';
 
             lista.forEach(colegio => {
-                const vacantes = datosVacantesEnVivo[colegio.id_colegio] || datosVacantesEnVivo[String(Number(colegio.id_colegio))] || {};
+                // Recuperar vacantes usando el método multi-llave
+                const vacantes = obtenerVacantesColegioRobust(colegio);
                 const nivelesTexto = normalizarTexto(colegio.niveles);
 
                 let htmlGrados = '';
