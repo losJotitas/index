@@ -29,16 +29,16 @@
             justify-content: center;
             align-items: center;
             background: radial-gradient(circle at center, #1b2a4a 0%, #0b1324 100%);
-            padding: 20px 0;
+            padding: 20px 10px;
         }
 
         .main-container { 
             position: relative;
             z-index: 2;
-            width: 100vw;
-            max-width: 420px; 
+            width: 100%;
+            max-width: 390px; 
             margin: 0 auto;
-            padding: 20px 16px;
+            padding: 10px 8px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -55,33 +55,28 @@
             width: 100%;
         }
 
-        /* CONTENEDOR PRINCIPAL DEL ENCABEZADO */
+        /* CONTENEDOR PRINCIPAL DEL ENCABEZADO (AJUSTADO PARA PANTALLAS MÓVILES) */
         .header-brand-container {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            gap: 10px;
+            width: 100%;
+            max-width: 100%;
         }
 
-        /* MAPACHITO GRANDE ABARCANDO DESDE EL TÍTULO HASTA EL LEMA */
+        /* MAPACHITO ESTÁTICO BIEN PEGADO A LA 'M' DEL TÍTULO */
         .img-mapache-hero {
             width: auto;
-            height: 155px; /* Abarca desde el título hasta el lema */
+            height: clamp(120px, 28vw, 155px);
             object-fit: contain;
-            margin-right: -12px; /* Hace que su manita se apoye directamente sobre el bloque */
-            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));
-            animation: floatHero 3.5s ease-in-out infinite;
+            margin-right: -22px; /* Pegado directamente apoyando la mano en las letras */
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+            flex-shrink: 0;
             z-index: 2;
         }
 
-        @keyframes floatHero {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* BLOQUE UNIFICADO DE TEXTOS (TÍTULO + SUBTÍTULO + LEMA) */
+        /* BLOQUE UNIFICADO DE TEXTOS ADAPTATIVO */
         .header-text-block {
             display: flex;
             flex-direction: column;
@@ -91,35 +86,38 @@
         }
 
         .titulo-app {
-            font-size: 2.6rem;
+            font-size: clamp(1.8rem, 7.5vw, 2.6rem); /* Escala suavemente para no desbordarse en móvil */
             font-weight: 800;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             margin: 0;
             line-height: 1;
             color: #ffffff;
             text-shadow: 0 3px 12px rgba(0,0,0,0.6);
+            white-space: nowrap;
         }
 
         .subtitulo-app {
-            font-size: 0.95rem;
+            font-size: clamp(0.75rem, 3.2vw, 0.95rem);
             color: #94a3b8;
             font-weight: 600;
             margin: 4px 0 2px 0;
+            white-space: nowrap;
         }
 
         .tagline-app {
-            font-size: 0.85rem;
+            font-size: clamp(0.68rem, 2.8vw, 0.85rem);
             color: #38bdf8;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             margin-top: 2px;
+            white-space: nowrap;
         }
 
         .linea-decorativa {
-            width: 45px;
+            width: 40px;
             height: 3px;
             background: #38bdf8;
-            margin-top: 8px;
+            margin-top: 6px;
             border-radius: 2px;
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
         }
@@ -304,7 +302,7 @@
 
         <div class="main-container">
             <div class="hero-header">
-                <!-- CONTENEDOR CON MAPACHITO A LA IZQUIERDA Y EL BLOQUE DE TEXTOS UNIFICADO -->
+                <!-- CONTENEDOR AJUSTADO: MAPACHITO ESTÁTICO PEGADO A LAS LETRAS -->
                 <div class="header-brand-container">
                     <img src="mapache_apoyado_en_la_pared.png" alt="Mapachito Mascot" class="img-mapache-hero">
                     <div class="header-text-block">
@@ -322,135 +320,4 @@
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
-                <button class="btn-opcion btn-verde" onclick="mostrarInfoTodosMapa(event)">Ver Todos los Colegios en el Mapa</button>
-                
-                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito(event)">
-                    Filtrar por Redes Educativas<br>
-                    <span style="font-size: 0.8rem; font-weight: 500; opacity: 0.9;">(1-9)</span>
-                </button>
-                
-                <div class="fila-botones-dividida">
-                    <button class="btn-opcion btn-estatales" onclick="mostrarInfoEstatales(event)">Colegios Estatales</button>
-                    <button class="btn-opcion btn-particulares" onclick="mostrarInfoParticulares(event)">Colegios Particulares</button>
-                </div>
-                
-                <button class="btn-opcion btn-naranja" onclick="abrirPantallaVacantes(event)">🚦 Buscar Vacantes Disponibles</button>
-                <button class="btn-opcion btn-diamante" onclick="abrirPantallaDonaciones(event)">💎 Colaboración y Membresía Digital</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= PANTALLA 2: MAPA LEAFLET ================= -->
-    <div id="pantalla-mapa" class="pantalla-secundaria">
-        <div class="top-bar">
-            <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
-            <div class="search-container-map">
-                <input type="text" id="searchInputMap" placeholder="Filtrar colegios en el mapa..." autocomplete="off">
-                <div id="sugerenciasMapa" class="sugerencias-lista"></div>
-            </div>
-        </div>
-        <div id="map"></div>
-    </div>
-
-    <!-- ================= PANTALLA 3: BUSCADOR GLOBAL DE VACANTES POR GRADO / EDAD ================= -->
-    <div id="pantalla-vacantes" class="pantalla-secundaria">
-        <div class="top-bar">
-            <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
-            <h3 style="font-size: 0.95rem;">🚦 Buscador Global de Vacantes</h3>
-        </div>
-        <div class="contenedor-central">
-            <div class="card-seccion">
-                <h2 style="color:#1a365d; margin-bottom:8px; font-size:1.2rem;">Vacantes por Grado y Edad en Tiempo Real</h2>
-                <div style="background:#f1f5f9; border-left:4px solid #38bdf8; padding:10px; border-radius:8px; font-size:0.8rem; color:#334155; margin-bottom:15px; font-weight:600;">
-                    <b>Leyenda del Semáforo:</b><br>
-                    🟢 <b>Verde:</b> Hay vacantes disponibles<br>
-                    🟡 <b>Amarillo:</b> Pocas vacantes disponibles<br>
-                    🔴 <b>Rojo:</b> Sin vacantes (Agotado)
-                </div>
-                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre, apellido (Ej. Cáceres), nivel o grado..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
-            </div>
-            
-            <div id="lista-vacantes"></div>
-        </div>
-    </div>
-
-    <!-- ================= PANTALLA 4: APORTE Y MEMBRESÍA DIGITAL ================= -->
-    <div id="pantalla-donaciones" class="pantalla-secundaria">
-        <div class="top-bar">
-            <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
-            <h3 style="font-size: 0.95rem;">💎 Desarrollo Tecnológico MAPACHE</h3>
-        </div>
-        <div class="contenedor-central">
-            <div class="card-seccion" style="text-align: center;">
-                <h2 style="color: #0284c7; margin-bottom:10px; font-size:1.3rem;">Sostenibilidad y Alianzas Educativas 🦝</h2>
-                <p style="font-size: 0.9rem; color:#475569; line-height:1.6; text-align: justify; margin-bottom:15px;">
-                    El Proyecto MAPACHE es el resultado de un dedicado esfuerzo técnico, recopilación de información en campo y constante coordinación con la comunidad de directores en Ventanilla y Mi Perú. 
-                </p>
-                <div style="background:#f1f5f9; padding:15px; border-radius:12px; text-align:left; margin-bottom:15px; border-left:4px solid #0284c7;">
-                    <p style="font-size:0.85rem; color:#0f172a; margin-bottom:6px;"><b>🏫 Colegios Particulares:</b> Acceso mediante suscripción/membresía digital institucional.</p>
-                    <p style="font-size:0.85rem; color:#0f172a;"><b>🏛️ Colegios Estatales y Directores:</b> Colaboración o aporte voluntario en reconocimiento al desarrollo tecnológico.</p>
-                </div>
-                <div style="background:#fef3c7; border:1px solid #fcd34d; padding:12px; border-radius:12px; font-size:0.85rem; color:#92400e; margin-bottom:20px; font-weight:600;">
-                    🏅 Las instituciones y directores colaboradores obtendrán la insignia oficial de "Sello Aliado Digital" dentro de la aplicación.
-                </div>
-                
-                <div class="grid-donacion">
-                    <div class="metodo-pago">
-                        <h3 style="color:#d946ef; margin-bottom:8px;">📲 Plin / Yape</h3>
-                        <p style="font-size: 0.8rem; color:#64748b; margin-bottom:8px;">Número oficial de contacto/coordinación:</p>
-                        <p style="font-size: 1.2rem; font-weight:bold; color:#0f172a;">999 999 999</p>
-                        <p style="font-size: 0.75rem; color:#64748b; margin-top:5px;">Proyecto MAPACHE</p>
-                    </div>
-                    <div class="metodo-pago">
-                        <h3 style="color:#0284c7; margin-bottom:8px;">🏦 Transferencia Bancaria</h3>
-                        <p style="font-size: 0.8rem; color:#64748b; margin-bottom:5px;">Cuenta de Ahorros / CCI:</p>
-                        <p style="font-size: 0.85rem; font-weight:bold; color:#0f172a; word-break: break-all;">CCI: 002-191-000000000000-00</p>
-                        <button onclick="copiarCCI()" style="margin-top:10px; background:#0284c7; color:white; border:none; padding:8px 14px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">📋 Copiar CCI</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= MODAL REDES EDUCATIVAS (RED 01 A RED 09) ================= -->
-    <div id="modal-redes" onclick="cerrarModalRedes(event)">
-        <div class="modal-redes-content" onclick="event.stopPropagation()">
-            <div class="modal-redes-header">
-                <h3>Selecciona una Red Educativa</h3>
-                <span style="cursor:pointer; font-size:1.4rem; color:#a0aec0;" onclick="forzarCierreModalRedes()">&times;</span>
-            </div>
-            <div class="redes-lista-vertical">
-                <button class="btn-red-item" style="background-color: #b91c1c;" onclick="filtrarPorRedConMapachito(1)"><span>RED N° 01 - PACHACÚTEC OESTE</span></button>
-                <button class="btn-red-item" style="background-color: #c2410c;" onclick="filtrarPorRedConMapachito(2)"><span>RED N° 02 - PACHACÚTEC SUR</span></button>
-                <button class="btn-red-item" style="background-color: #b45309;" onclick="filtrarPorRedConMapachito(3)"><span>RED N° 03 - PACHACÚTEC NORTE</span></button>
-                <button class="btn-red-item" style="background-color: #15803d;" onclick="filtrarPorRedConMapachito(4)"><span>RED N° 04 - PACHACÚTEC ESTE</span></button>
-                <button class="btn-red-item" style="background-color: #0f766e;" onclick="filtrarPorRedConMapachito(5)"><span>RED N° 05 - VILLA LOS REYES</span></button>
-                <button class="btn-red-item" style="background-color: #1d4ed8;" onclick="filtrarPorRedConMapachito(6)"><span>RED N° 06 - MI PERÚ</span></button>
-                <button class="btn-red-item" style="background-color: #4338ca;" onclick="filtrarPorRedConMapachito(7)"><span>RED N° 07 - SATÉLITE</span></button>
-                <button class="btn-red-item" style="background-color: #6b21a8;" onclick="filtrarPorRedConMapachito(8)"><span>RED N° 08 - ANTONIA MORENO DE CÁCERES</span></button>
-                <button class="btn-red-item" style="background-color: #be185d;" onclick="filtrarPorRedConMapachito(9)"><span>RED N° 09 - ANGAMOS</span></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= MODAL MAPACHITO REACTIVO ================= -->
-    <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
-        <div class="modal-content-comic" onclick="event.stopPropagation(); cerrarModalMapachito();">
-            <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
-            <div class="raccoon-avatar-box">
-                <img id="imgMapachitoModal" src="mapache_saludando.png" alt="Mapachito">
-            </div>
-            <button id="btnEntendidoModal" class="modal-btn" onclick="cerrarModalMapachito()">¡Entendido! 🚀</button>
-        </div>
-    </div>
-
-    <!-- ================= MODAL DETALLE COMPLETO DEL COLEGIO ================= -->
-    <div id="modal-detalle" onclick="cerrarDetalleExt(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="modal-close-destacado" onclick="cerrarDetalle()">&times;</span>
-            <div id="modal-body-content"></div>
-        </div>
-    </div>
-
-    <!-- ================= VISOR DE FACHADA FULLSCREEN ================= -->
-    <div id="modal-fachada-fullscreen" onclick="cerrarFachadaFullscreen
+                <button class="btn-opcion btn-verde" onclick="mostrarInfoTodosMapa(event)">Ver Todos los Colegios en el Mapa
