@@ -57,14 +57,14 @@
             width: 100%;
         }
 
-        /* ENCABEZADO CENTRADO LIGERAMENTE AJUSTADO A LA IZQUIERDA EN PC */
+        /* ENCABEZADO CENTRADO CON LIGERO DESPLAZAMIENTO A LA IZQUIERDA EN PC */
         .header-brand-container {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             margin: 0 auto;
-            transform: translateX(-10px); /* Centra el peso visual con respecto a la caja inferior */
+            transform: translateX(-10px);
         }
 
         /* MAPACHITO ESTÁTICO PEGADO A LA LETRA M */
@@ -72,7 +72,7 @@
             width: auto;
             height: clamp(135px, 29vw, 170px);
             object-fit: contain;
-            margin-right: -28px; /* Mano apoyada exactamente sobre la letra M */
+            margin-right: -28px;
             filter: drop-shadow(0 6px 14px rgba(0,0,0,0.65));
             flex-shrink: 0;
             z-index: 2;
@@ -545,13 +545,14 @@
             }
         }
 
+        /* PORTAL DE DIRECTORES: ACCESO FLEXIBLE POR NÚMERO, ID EXCEL O NOMBRE */
         function abrirModalDirector() {
             ocultarTecladoMovil();
             const modalHTML = `
                 <div id="modal-director" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
                     <div style="background:white; padding:25px; border-radius:14px; width:90%; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.3); color:#2d3748;">
                         <h3 style="color:#1a365d; margin-bottom:8px;">Portal de Directores</h3>
-                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:12px;">Ingresa para indicar las vacantes por grado con el sistema semáforo.</p>
+                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:12px;">Ingresa para gestionar la disponibilidad de vacantes.</p>
                         <div style="background:#f1f5f9; border-left:4px solid #38bdf8; padding:8px 10px; border-radius:6px; font-size:0.75rem; color:#334155; margin-bottom:15px; font-weight:600;">
                             <b>Leyenda del Semáforo:</b><br>
                             🟢 Hay vacantes disponibles<br>
@@ -559,8 +560,8 @@
                             🔴 Sin vacantes (Agotado)
                         </div>
                         
-                        <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Código o Número del Colegio:</label>
-                        <input type="text" id="dir-codigo" placeholder="Ej. 01, 5090 o 121" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
+                        <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Colegio (Número, Nombre o N° de lista Excel):</label>
+                        <input type="text" id="dir-codigo" placeholder="Ej. 126, Fe y Alegría 29, Coprodeli, 134..." style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
                         
                         <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Contraseña Asignada:</label>
                         <input type="password" id="dir-password" placeholder="Tu contraseña secreta" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
@@ -580,33 +581,51 @@
             const modal = document.getElementById('modal-director');
             if (!modal) return;
 
-            const codigoInput = normalizarTexto(document.getElementById('dir-codigo').value);
+            const codigoInput = document.getElementById('dir-codigo').value;
             const passwordInput = document.getElementById('dir-password').value.trim();
 
-            if (!codigoInput) { alert("Por favor ingresa un código o número de colegio."); return; }
+            const codigoNorm = normalizarTexto(codigoInput);
+            const passNorm = passwordInput.toLowerCase();
 
-            const codigoNum = Number(codigoInput);
+            if (!codigoNorm) { 
+                alert("Por favor ingresa el número, nombre o N° de lista del colegio."); 
+                return; 
+            }
+
+            if (!passwordInput) { 
+                alert("Por favor ingresa la contraseña asignada."); 
+                return; 
+            }
+
             const colegiosLista = getColegiosSafe();
-            const colegioEncontrado = colegiosLista.find(c => {
-                if (!isNaN(codigoNum) && Number(c.id_colegio) === codigoNum) return true;
-                if (normalizarTexto(c.id_colegio) === codigoInput) return true;
-                if (c.codigo && normalizarTexto(c.codigo) === codigoInput) return true;
-                if (c.nombre_colegio && normalizarTexto(c.nombre_colegio).includes(codigoInput)) return true;
-                return false;
+
+            // Buscar todos los colegios que coincidan por ID Excel, Código o Nombre
+            const candidatos = colegiosLista.filter(c => {
+                const idStr = String(c.id_colegio || '').trim().toLowerCase();
+                const codStr = String(c.codigo || '').trim().toLowerCase();
+                const nomNorm = normalizarTexto(c.nombre_colegio || '');
+
+                return idStr === codigoNorm || codStr === codigoNorm || nomNorm.includes(codigoNorm);
             });
 
-            if (!colegioEncontrado) {
-                alert("Error: Colegio no encontrado.");
+            if (candidatos.length === 0) {
+                alert("Error: No se encontró ningún colegio registrado con ese número, nombre o código.");
                 return;
             }
 
-            if (String(colegioEncontrado.password_director).trim().toLowerCase() !== passwordInput.toLowerCase()) {
-                alert("Error: Contraseña incorrecta.");
+            // Validar la contraseña entre los colegios candidatos
+            const colegioValido = candidatos.find(c => {
+                const cPass = String(c.password_director || '').trim().toLowerCase();
+                return cPass === passNorm;
+            });
+
+            if (!colegioValido) {
+                alert("Error: Contraseña incorrecta para el colegio ingresado.");
                 return;
             }
 
             modal.remove();
-            abrirPanelEdicionVacantesGrados(colegioEncontrado, passwordInput);
+            abrirPanelEdicionVacantesGrados(colegioValido, passwordInput);
         }
 
         function crearSelectSemaforo(idCampo, valActual) {
