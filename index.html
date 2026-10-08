@@ -36,7 +36,7 @@
             position: relative;
             z-index: 2;
             width: 100vw;
-            max-width: 390px; 
+            max-width: 420px; 
             margin: 0 auto;
             padding: 20px 16px;
             display: flex;
@@ -50,28 +50,27 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             position: relative;
             width: 100%;
         }
 
-        /* CONTENEDOR PARA ALINEAR MAPACHITO A LA IZQUIERDA DEL TÍTULO MAPACHE */
-        .titulo-wrapper {
+        /* CONTENEDOR PRINCIPAL DEL ENCABEZADO */
+        .header-brand-container {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            margin-bottom: 2px;
+            gap: 10px;
         }
 
+        /* MAPACHITO GRANDE ABARCANDO DESDE EL TÍTULO HASTA EL LEMA */
         .img-mapache-hero {
-            width: 95px;
-            height: auto;
-            max-height: 105px;
+            width: auto;
+            height: 155px; /* Abarca desde el título hasta el lema */
             object-fit: contain;
-            margin-right: -10px; /* Hace que su mano toque apoyándose en la M */
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+            margin-right: -12px; /* Hace que su manita se apoye directamente sobre el bloque */
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));
             animation: floatHero 3.5s ease-in-out infinite;
             z-index: 2;
         }
@@ -82,28 +81,37 @@
             100% { transform: translateY(0px); }
         }
 
+        /* BLOQUE UNIFICADO DE TEXTOS (TÍTULO + SUBTÍTULO + LEMA) */
+        .header-text-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            z-index: 1;
+        }
+
         .titulo-app {
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 800;
             letter-spacing: 2px;
             margin: 0;
+            line-height: 1;
             color: #ffffff;
             text-shadow: 0 3px 12px rgba(0,0,0,0.6);
-            z-index: 1;
         }
 
         .subtitulo-app {
             font-size: 0.95rem;
             color: #94a3b8;
             font-weight: 600;
-            margin: 2px 0;
+            margin: 4px 0 2px 0;
         }
 
         .tagline-app {
             font-size: 0.85rem;
             color: #38bdf8;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             margin-top: 2px;
         }
 
@@ -111,7 +119,7 @@
             width: 45px;
             height: 3px;
             background: #38bdf8;
-            margin: 8px auto 0;
+            margin-top: 8px;
             border-radius: 2px;
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
         }
@@ -296,14 +304,16 @@
 
         <div class="main-container">
             <div class="hero-header">
-                <!-- MAPACHITO APOCADO A LA IZQUIERDA DEL TÍTULO "MAPACHE" -->
-                <div class="titulo-wrapper">
+                <!-- CONTENEDOR CON MAPACHITO A LA IZQUIERDA Y EL BLOQUE DE TEXTOS UNIFICADO -->
+                <div class="header-brand-container">
                     <img src="mapache_apoyado_en_la_pared.png" alt="Mapachito Mascot" class="img-mapache-hero">
-                    <h1 class="titulo-app">MAPACHE</h1>
+                    <div class="header-text-block">
+                        <h1 class="titulo-app">MAPACHE</h1>
+                        <p class="subtitulo-app">Ventanilla &amp; Mi Perú</p>
+                        <p class="tagline-app">Rastrea, Encuentra, Matricula</p>
+                        <div class="linea-decorativa"></div>
+                    </div>
                 </div>
-                <p class="subtitulo-app">Ventanilla &amp; Mi Perú</p>
-                <p class="tagline-app">Rastrea, Encuentra, Matricula</p>
-                <div class="linea-decorativa"></div>
             </div>
 
             <div class="bloque-controles">
@@ -443,758 +453,4 @@
     </div>
 
     <!-- ================= VISOR DE FACHADA FULLSCREEN ================= -->
-    <div id="modal-fachada-fullscreen" onclick="cerrarFachadaFullscreen()">
-        <button class="btn-cerrar-fachada" onclick="cerrarFachadaFullscreen()">&times;</button>
-        <img id="imgFachadaFull" class="fachada-fullscreen-img" src="" alt="Fachada del Colegio">
-    </div>
-
-    <!-- ================= MODAL INACTIVIDAD 30S ================= -->
-    <div id="modal-inactividad-total" onclick="despertarMapachitoInactivo()">
-        <div class="inactivity-box" onclick="event.stopPropagation(); despertarMapachitoInactivo();">
-            <img src="mapache_durmiendo.png" alt="Mapachito durmiendo">
-            <h2 style="color:#38bdf8; font-size:1.1rem; margin-bottom:8px;">¡Zzz... Mapachito está durmiendo!</h2>
-            <p style="font-size:0.85rem; color:#cbd5e1;">Toca la pantalla o mueve el cursor para despertar al dueño de la app.</p>
-        </div>
-    </div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="colegios.js"></script>
-    <script>
-        var map = null;
-        let marcadoresCreados = [];
-        let accionPendiente = null;
-        let temporizadorInactividad = null;
-        let temporizadorAutoCierre = null;
-
-        const coloresRedes = {
-            1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
-            5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
-        };
-
-        function normalizarTexto(txt) {
-            if (!txt) return '';
-            return String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-        }
-
-        function ocultarTecladoMovil() {
-            if (document.activeElement && typeof document.activeElement.blur === 'function') {
-                document.activeElement.blur();
-            }
-            document.querySelectorAll('input').forEach(i => i.blur());
-        }
-
-        let datosVacantesEnVivo = JSON.parse(localStorage.getItem('mapache_vacantes') || '{}');
-        const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycby2Y6cDIBQj6lRkAc1eMlfrhMll99Y_LHgb8fkDYHVN66iRrvfiyij1eboTxvCKl_qw/exec";
-
-        async function cargarVacantesEnTiempoReal() {
-            try {
-                const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime());
-                const resultado = await respuesta.json();
-                
-                if (Array.isArray(resultado)) {
-                    resultado.forEach(item => {
-                        let idColegio = item.id_colegio || item.id || item.codigo;
-                        if (idColegio !== undefined && idColegio !== null) {
-                            let idLimpio = String(idColegio).trim();
-                            let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
-                            let datos = item.grados || item.vacantes || item;
-                            
-                            datosVacantesEnVivo[idLimpio] = datos;
-                            datosVacantesEnVivo[idNumLimpio] = datos;
-                        }
-                    });
-                    localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
-                    if (document.getElementById('pantalla-vacantes').classList.contains('activa')) {
-                        filtrarListaVacantes();
-                    }
-                }
-            } catch (error) {
-                console.log("Consulta en vivo activa.");
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            cargarVacantesEnTiempoReal();
-            setInterval(cargarVacantesEnTiempoReal, 20000);
-            configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
-            configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
-        });
-
-        function inicializarMapa() {
-            if (!map) {
-                map = L.map('map').setView([-11.875, -77.135], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
-            }
-        }
-
-        function abrirModalDirector() {
-            ocultarTecladoMovil();
-            const modalHTML = `
-                <div id="modal-director" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
-                    <div style="background:white; padding:25px; border-radius:14px; width:90%; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.3); color:#2d3748;">
-                        <h3 style="color:#1a365d; margin-bottom:8px;">Portal de Directores</h3>
-                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:12px;">Ingresa para indicar las vacantes por grado con el sistema semáforo.</p>
-                        <div style="background:#f1f5f9; border-left:4px solid #38bdf8; padding:8px 10px; border-radius:6px; font-size:0.75rem; color:#334155; margin-bottom:15px; font-weight:600;">
-                            <b>Leyenda del Semáforo:</b><br>
-                            🟢 Hay vacantes disponibles<br>
-                            🟡 Pocas vacantes disponibles<br>
-                            🔴 Sin vacantes (Agotado)
-                        </div>
-                        
-                        <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Código o Número del Colegio:</label>
-                        <input type="text" id="dir-codigo" placeholder="Ej. 01, 5090 o 121" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
-                        
-                        <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Contraseña Asignada:</label>
-                        <input type="password" id="dir-password" placeholder="Tu contraseña secreta" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
-                        
-                        <div style="display:flex; justify-content:space-between; gap:10px;">
-                            <button onclick="document.getElementById('modal-director').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
-                            <button onclick="autenticarDirector()" style="background:#2563eb; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Ingresar</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-        }
-
-        function autenticarDirector() {
-            ocultarTecladoMovil();
-            const modal = document.getElementById('modal-director');
-            if (!modal) return;
-
-            const codigoInput = normalizarTexto(document.getElementById('dir-codigo').value);
-            const passwordInput = document.getElementById('dir-password').value.trim();
-
-            if (!codigoInput) { alert("Por favor ingresa un código o número de colegio."); return; }
-
-            const codigoNum = Number(codigoInput);
-            const colegioEncontrado = colegios.find(c => {
-                if (!isNaN(codigoNum) && Number(c.id_colegio) === codigoNum) return true;
-                if (normalizarTexto(c.id_colegio) === codigoInput) return true;
-                if (c.codigo && normalizarTexto(c.codigo) === codigoInput) return true;
-                if (c.nombre_colegio && normalizarTexto(c.nombre_colegio).includes(codigoInput)) return true;
-                return false;
-            });
-
-            if (!colegioEncontrado) {
-                alert("Error: Colegio no encontrado.");
-                return;
-            }
-
-            if (String(colegioEncontrado.password_director).trim().toLowerCase() !== passwordInput.toLowerCase()) {
-                alert("Error: Contraseña incorrecta.");
-                return;
-            }
-
-            modal.remove();
-            abrirPanelEdicionVacantesGrados(colegioEncontrado, passwordInput);
-        }
-
-        function crearSelectSemaforo(idCampo, valActual) {
-            let val = String(valActual || '').toLowerCase();
-            let vSel = (val === 'verde' || parseInt(val) >= 10) ? 'selected' : '';
-            let aSel = (val === 'amarillo' || (parseInt(val) > 0 && parseInt(val) < 10)) ? 'selected' : '';
-            let rSel = (!vSel && !aSel) ? 'selected' : '';
-
-            return `
-                <select id="edit-${idCampo}" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:0.82rem; background:#ffffff; color:#0f172a; outline:none;">
-                    <option value="verde" ${vSel}>🟢 Hay vacantes</option>
-                    <option value="amarillo" ${aSel}>🟡 Pocas vacantes</option>
-                    <option value="rojo" ${rSel}>🔴 Sin vacantes</option>
-                </select>
-            `;
-        }
-
-        function abrirPanelEdicionVacantesGrados(colegio, password) {
-            const nivelesTexto = normalizarTexto(colegio.niveles);
-            const tieneCuna = nivelesTexto.includes('cuna');
-            const tieneInicial = nivelesTexto.includes('inicial');
-            const tienePrimaria = nivelesTexto.includes('primaria');
-            const tieneSecundaria = nivelesTexto.includes('secundaria');
-
-            const actual = datosVacantesEnVivo[colegio.id_colegio] || datosVacantesEnVivo[String(Number(colegio.id_colegio))] || {};
-
-            let formularioGradosHTML = '';
-
-            if (tieneCuna) {
-                formularioGradosHTML += `
-                    <div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">👶 CUNA</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">Cuna (0-3 años):</label>${crearSelectSemaforo('cuna_0_3', actual.cuna_0_3)}</div>
-                `;
-            }
-
-            if (tieneInicial) {
-                formularioGradosHTML += `
-                    <div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">🎨 INICIAL (EDADES)</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">3 Años:</label>${crearSelectSemaforo('ini_3a', actual.ini_3a)}</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">4 Años:</label>${crearSelectSemaforo('ini_4a', actual.ini_4a)}</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">5 Años:</label>${crearSelectSemaforo('ini_5a', actual.ini_5a)}</div>
-                `;
-            }
-
-            if (tienePrimaria) {
-                formularioGradosHTML += `<div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">📚 PRIMARIA (GRADOS)</div>`;
-                for (let g = 1; g <= 6; g++) {
-                    formularioGradosHTML += `<div><label style="font-size:0.75rem; font-weight:bold;">${g}° Primaria:</label>${crearSelectSemaforo('pri_' + g, actual['pri_' + g])}</div>`;
-                }
-            }
-
-            if (tieneSecundaria) {
-                formularioGradosHTML += `<div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">🎓 SECUNDARIA (AÑOS)</div>`;
-                for (let s = 1; s <= 5; s++) {
-                    formularioGradosHTML += `<div><label style="font-size:0.75rem; font-weight:bold;">${s}° Secundaria:</label>${crearSelectSemaforo('sec_' + s, actual['sec_' + s])}</div>`;
-                }
-            }
-
-            const panelHTML = `
-                <div id="modal-panel-vacantes" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
-                    <div style="background:white; padding:22px; border-radius:16px; width:92%; max-width:480px; max-height:85vh; overflow-y:auto; color:#2d3748; text-align:left;">
-                        <h3 style="color:#1a365d; margin-bottom:4px; font-size:1.1rem;">${colegio.nombre_colegio}</h3>
-                        <p style="font-size:0.8rem; color:#16a34a; margin-bottom:12px; font-weight:bold;">✔ Selecciona el estado de vacantes por nivel/grado:</p>
-                        
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-                            ${formularioGradosHTML}
-                        </div>
-
-                        <div style="display:flex; justify-content:space-between; gap:10px;">
-                            <button onclick="document.getElementById('modal-panel-vacantes').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
-                            <button onclick="guardarVacantesGradosInstante('${colegio.id_colegio}', '${password}')" style="background:#16a34a; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Guardar Cambios</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', panelHTML);
-        }
-
-        async function guardarVacantesGradosInstante(id_colegio, password) {
-            ocultarTecladoMovil();
-            const ahora = new Date();
-            const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
-
-            const objetoGrados = { actualizacion: fechaHoraFormat };
-            const selects = document.querySelectorAll('#modal-panel-vacantes select');
-
-            selects.forEach(sel => {
-                const clave = sel.id.replace('edit-', '');
-                objetoGrados[clave] = sel.value;
-            });
-
-            let idLimpio = String(id_colegio).trim();
-            let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
-
-            datosVacantesEnVivo[idLimpio] = objetoGrados;
-            datosVacantesEnVivo[idNumLimpio] = objetoGrados;
-            localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
-
-            if (document.getElementById('pantalla-vacantes').classList.contains('activa')) {
-                filtrarListaVacantes();
-            }
-
-            try {
-                const payload = {
-                    action: 'updateVacantes',
-                    codigo: idLimpio,
-                    id_colegio: idLimpio,
-                    password: password,
-                    grados: objetoGrados,
-                    datos: objetoGrados,
-                    ultima_actualizacion: fechaHoraFormat
-                };
-
-                await fetch(URL_API_GOOGLE, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
-                });
-
-                document.getElementById('modal-panel-vacantes').remove();
-                abrirModalMapachito('feliz', `¡Vacantes sincronizadas con Google Sheets!\nFecha: ${fechaHoraFormat}`, true);
-            } catch (error) {
-                console.error("Error enviando a Google Sheets:", error);
-                document.getElementById('modal-panel-vacantes').remove();
-                abrirModalMapachito('sorprendido', `Guardado localmente, pero hubo un detalle de red al sincronizar con Google Sheets.`, true);
-            }
-        }
-
-        function extraerNumeroRed(redStr) {
-            if (!redStr) return null;
-            const match = String(redStr).match(/\d+/);
-            return match ? parseInt(match[0], 10) : null;
-        }
-
-        function mostrarColegiosEnMapa(lista) {
-            marcadoresCreados.forEach(item => map.removeLayer(item.marker));
-            marcadoresCreados = [];
-
-            if (!lista || lista.length === 0) return;
-
-            lista.forEach(colegio => {
-                if (!colegio.latitud || !colegio.longitud) return;
-
-                const numRed = extraerNumeroRed(colegio.red_educativa);
-                const colorPin = (numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568";
-                const textoPin = numRed ? numRed : "🏫";
-
-                const iconoClasico = L.divIcon({
-                    className: 'custom-div-icon',
-                    html: `
-                        <div class="pin-clasico-container">
-                            <div class="pin-gota" style="background-color: ${colorPin};"></div>
-                            <div class="pin-texto">${textoPin}</div>
-                        </div>
-                    `,
-                    iconSize: [30, 42],
-                    iconAnchor: [15, 42],
-                    popupAnchor: [0, -38]
-                });
-
-                var marker = L.marker([colegio.latitud, colegio.longitud], { icon: iconoClasico }).addTo(map);
-
-                marker.bindTooltip(colegio.nombre_colegio, {
-                    permanent: true,
-                    direction: 'top',
-                    offset: [0, -38],
-                    className: 'pin-etiqueta-nombre'
-                });
-
-                marker.bindPopup(`
-                    <div style="min-width: 210px; color: #2d3748;">
-                        <b style="font-size: 0.95rem; color: #1a365d;">${colegio.nombre_colegio}</b><br>
-                        <span style="font-size:0.8rem; color: #4a5568;">Código: ${colegio.id_colegio}</span><br>
-                        <b>Gestión:</b> ${colegio.gestion}<br>
-                        <b>Red:</b> ${colegio.red_educativa || 'N/A'}<br>
-                        <hr style="margin: 6px 0; border:0; border-top:1px solid #cbd5e1;">
-                        <button onclick="abrirDetalle('${colegio.nombre_colegio.replace(/'/g, "\\'")}')" style="background:#2563eb; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; width:100%; font-weight:bold;">Ver Información General</button>
-                    </div>
-                `);
-
-                marcadoresCreados.push({ colegio, marker });
-            });
-        }
-
-        function mostrarInfoTodosMapa(e) {
-            e.stopPropagation();
-            ocultarTecladoMovil();
-            abrirModalMapachito('olfateando', "¡Olfateando todos los colegios para mostrarlos en el mapa!", false, () => { ejecutarIrAlMapa('todos'); }, 2000);
-        }
-
-        function mostrarInfoEstatales(e) {
-            e.stopPropagation();
-            ocultarTecladoMovil();
-            abrirModalMapachito('sorprendido', "¿Sabías que son 146 colegios estatales en Ventanilla y Mi Perú?", false, () => { ejecutarIrAlMapa('Estatal'); }, 2000);
-        }
-
-        function mostrarInfoParticulares(e) {
-            e.stopPropagation();
-            ocultarTecladoMovil();
-            abrirModalMapachito('feliz', "Aquí te mostraré los colegios Particulares registrados.", false, () => { ejecutarIrAlMapa('Particular'); }, 2000);
-        }
-
-        function ejecutarIrAlMapa(filtroTipo) {
-            ocultarTodasLasPantallas();
-            const pantallaMapa = document.getElementById('pantalla-mapa');
-            pantallaMapa.classList.add('activa');
-            
-            setTimeout(() => { 
-                inicializarMapa();
-                map.invalidateSize(); 
-            }, 200);
-
-            let filtrados = colegios;
-            if (filtroTipo === 'Estatal' || filtroTipo === 'Particular') {
-                filtrados = colegios.filter(c => c.gestion && c.gestion.toLowerCase() === filtroTipo.toLowerCase());
-            }
-
-            mostrarColegiosEnMapa(filtrados);
-        }
-
-        function abrirModalRedesConMapachito(e) {
-            e.stopPropagation();
-            ocultarTecladoMovil();
-            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál deseas explorar?", false, () => {
-                document.getElementById('modal-redes').style.display = 'flex';
-            }, 2000);
-        }
-
-        function cerrarModalRedes(e) { document.getElementById('modal-redes').style.display = 'none'; }
-        function forzarCierreModalRedes() { document.getElementById('modal-redes').style.display = 'none'; }
-
-        function filtrarPorRedConMapachito(numeroRed) {
-            document.getElementById('modal-redes').style.display = 'none';
-            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, false, () => {
-                ocultarTodasLasPantallas();
-                const pantallaMapa = document.getElementById('pantalla-mapa');
-                pantallaMapa.classList.add('activa');
-                
-                setTimeout(() => { 
-                    inicializarMapa();
-                    map.invalidateSize(); 
-                }, 200);
-
-                const filtrados = colegios.filter(c => extraerNumeroRed(c.red_educativa) === numeroRed);
-                mostrarColegiosEnMapa(filtrados);
-
-                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-                }
-            }, 2000);
-        }
-
-        function configurarAutocompletado(inputId, listaId, alSeleccionar) {
-            const input = document.getElementById(inputId);
-            const lista = document.getElementById(listaId);
-            if (!input || !lista) return;
-
-            input.addEventListener('input', function() {
-                const textoNorm = normalizarTexto(this.value);
-                lista.innerHTML = '';
-
-                if (textoNorm.length === 0) { lista.style.display = 'none'; return; }
-
-                const coincidencias = colegios.filter(c => {
-                    const nombreNorm = normalizarTexto(c.nombre_colegio);
-                    const idNorm = normalizarTexto(c.id_colegio);
-                    const dirNorm = normalizarTexto(c.direccion);
-                    const nivNorm = normalizarTexto(c.niveles);
-                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm);
-                }).slice(0, 8);
-
-                if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
-
-                coincidencias.forEach(c => {
-                    const div = document.createElement('div');
-                    div.className = 'sugerencia-item';
-                    div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(Cod: ${c.id_colegio})</span>`;
-                    div.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
-                        ocultarTecladoMovil();
-                        lista.style.display = 'none';
-                        alSeleccionar(c);
-                    });
-                    lista.appendChild(div);
-                });
-                lista.style.display = 'block';
-            });
-
-            input.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    ocultarTecladoMovil();
-                    lista.style.display = 'none';
-                }
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!input.contains(e.target) && !lista.contains(e.target)) {
-                    lista.style.display = 'none';
-                }
-            });
-        }
-
-        function seleccionarColegioYIr(colegio) {
-            ocultarTecladoMovil();
-            abrirModalMapachito('saludando', `¡Encontré a ${colegio.nombre_colegio}! Te llevo directo.`, false, () => {
-                ocultarTodasLasPantallas();
-                const pantallaMapa = document.getElementById('pantalla-mapa');
-                pantallaMapa.classList.add('activa');
-                
-                setTimeout(() => { 
-                    inicializarMapa();
-                    map.invalidateSize(); 
-                }, 200);
-
-                mostrarColegiosEnMapa([colegio]);
-                if (colegio.latitud && colegio.longitud) {
-                    map.setView([colegio.latitud, colegio.longitud], 16);
-                }
-                abrirDetalle(colegio.nombre_colegio);
-            }, 1800);
-        }
-
-        function seleccionarColegioEnMapa(colegio) {
-            ocultarTecladoMovil();
-            mostrarColegiosEnMapa([colegio]);
-            if (colegio.latitud && colegio.longitud) {
-                map.setView([colegio.latitud, colegio.longitud], 16);
-            }
-            abrirDetalle(colegio.nombre_colegio);
-        }
-
-        function abrirDetalle(nombreColegio) {
-            ocultarTecladoMovil();
-            const colegio = colegios.find(c => c.nombre_colegio === nombreColegio);
-            if (!colegio) return;
-
-            const tipoBadge = colegio.gestion && colegio.gestion.toLowerCase().includes('particular') ? 'badge-particular' : (colegio.gestion && colegio.gestion.toLowerCase().includes('convenio') ? 'badge-convenio' : 'badge-estatal');
-            const nivelesTexto = normalizarTexto(colegio.niveles);
-
-            let bloquesNivelesHTML = '';
-            if (nivelesTexto.includes('cuna')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Cuna</div>`;
-            if (nivelesTexto.includes('inicial')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Inicial</div>`;
-            if (nivelesTexto.includes('primaria')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Primaria</div>`;
-            if (nivelesTexto.includes('secundaria')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Secundaria</div>`;
-            if (bloquesNivelesHTML === '') {
-                bloquesNivelesHTML = `<div class="tag-verde-limpio" style="grid-column: span 2;">Información Registrada</div>`;
-            }
-
-            const nombreLimpio = colegio.nombre_colegio.replace(/'/g, "\\'");
-
-            const contenido = `
-                <h2 style="color: #1a365d; margin-bottom: 6px; font-size:1.15rem; padding-right: 35px;">${colegio.nombre_colegio}</h2>
-                <span class="school-badge ${tipoBadge}">${colegio.gestion || 'Estatal'}</span> | <b>Distrito:</b> ${colegio.distrito || 'Ventanilla'}
-                
-                <div style="font-size:0.85rem; line-height:1.6; margin-top:10px;">
-                    <p><b>Código:</b> ${colegio.id_colegio}</p>
-                    <p><b>Red Educativa:</b> ${colegio.red_educativa || 'N/A'}</p>
-                    <p><b>Turnos:</b> ${colegio.TURNOS || 'Mañana y Tarde'}</p>
-                    <p><b>Dirección:</b> ${colegio.direccion || 'No especificada'}</p>
-                    <p><b>Requisitos para Matrícula:</b> ${colegio.requisitos_de_matricula || 'DNI del estudiante y apoderado'}</p>
-                </div>
-
-                <h4 style="margin-top: 15px; color: #1a365d; font-size:0.95rem;">Niveles Impartidos:</h4>
-                <div class="niveles-grid">
-                    ${bloquesNivelesHTML}
-                </div>
-
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:11px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:0.82rem;">🗺️ Iniciar viaje</a>
-                    <button onclick="intentarAbrirFachadaConAlternativas('${colegio.id_colegio}', '${nombreLimpio}')" style="flex:1; background:#0284c7; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:0.82rem; cursor:pointer;">🏫 Fachada de Colegio</button>
-                </div>
-
-                <button onclick="redirigirABuscadorVacantesColegio('${nombreLimpio}')" style="width:100%; margin-top:10px; background:#f59e0b; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; font-size:0.85rem; cursor:pointer; box-shadow:0 3px 8px rgba(245, 158, 11, 0.3);">
-                    🚦 Buscar Vacantes Disponibles
-                </button>
-            `;
-
-            document.getElementById('modal-body-content').innerHTML = contenido;
-            document.getElementById('modal-detalle').style.display = 'flex';
-        }
-
-        function cerrarDetalle() { document.getElementById('modal-detalle').style.display = 'none'; }
-        function cerrarDetalleExt(e) { if (e.target.id === 'modal-detalle') cerrarDetalle(); }
-
-        function redirigirABuscadorVacantesColegio(nombreColegio) {
-            cerrarDetalle();
-            ocultarTodasLasPantallas();
-            document.getElementById('pantalla-vacantes').classList.add('activa');
-            document.getElementById('inputBuscadorVacantes').value = nombreColegio;
-            filtrarListaVacantes();
-        }
-
-        function intentarAbrirFachadaConAlternativas(idColegio, nombreColegio) {
-            let idStr = String(idColegio || '').trim();
-            let idNumLimpio = !isNaN(idStr) ? String(Number(idStr)) : idStr;
-            let nombreNorm = normalizarTexto(nombreColegio);
-
-            let candidatos = [];
-            if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) {
-                candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
-            }
-
-            candidatos.push(`fotos/${idNumLimpio}.jpeg`);
-            candidatos.push(`fotos/${idStr}.jpeg`);
-            candidatos.push(`fotos/${idNumLimpio}.jpg`);
-            candidatos.push(`fotos/${idStr}.jpg`);
-            candidatos = [...new Set(candidatos)];
-
-            let indiceActual = 0;
-            const imgFull = document.getElementById('imgFachadaFull');
-
-            function probarSiguiente() {
-                if (indiceActual >= candidatos.length) {
-                    abrirModalMapachito('pensando', `¡Pronto actualizaremos la foto de la fachada de ${nombreColegio}! Estamos recopilando más imágenes en campo.`, true);
-                    return;
-                }
-                let urlActual = candidatos[indiceActual];
-                indiceActual++;
-
-                imgFull.onload = function() { document.getElementById('modal-fachada-fullscreen').style.display = 'flex'; };
-                imgFull.onerror = function() { probarSiguiente(); };
-                imgFull.src = urlActual;
-            }
-
-            probarSiguiente();
-        }
-
-        function cerrarFachadaFullscreen() { document.getElementById('modal-fachada-fullscreen').style.display = 'none'; }
-
-        function abrirPantallaVacantes(e) {
-            e.stopPropagation();
-            ocultarTecladoMovil();
-            ocultarTodasLasPantallas();
-            document.getElementById('pantalla-vacantes').classList.add('activa');
-            renderizarListaVacantesGlobal(colegios);
-            abrirModalMapachito('pensando', "Revisa la disponibilidad de vacantes por grado y edad reportada en vivo.", false, null, 2500);
-        }
-
-        function obtenerEtiquetaSemaforo(clave, valor) {
-            let val = String(valor || '').toLowerCase();
-            let clase = 'sem-rojo';
-            let icono = '🔴';
-            let textoEstado = 'Sin vacantes';
-
-            if (val === 'verde' || parseInt(val) >= 10) {
-                clase = 'sem-verde';
-                icono = '🟢';
-                textoEstado = 'Hay vacantes';
-            } else if (val === 'amarillo' || (parseInt(val) > 0 && parseInt(val) < 10)) {
-                clase = 'sem-amarillo';
-                icono = '🟡';
-                textoEstado = 'Pocas vacantes';
-            }
-
-            const nombresBonitos = {
-                'cuna_0_3': 'Cuna (0-3a)',
-                'ini_3a': 'Inicial 3a', 'ini_4a': 'Inicial 4a', 'ini_5a': 'Inicial 5a',
-                'pri_1': '1° Primaria', 'pri_2': '2° Primaria', 'pri_3': '3° Primaria', 'pri_4': '4° Primaria', 'pri_5': '5° Primaria', 'pri_6': '6° Primaria',
-                'sec_1': '1° Secundaria', 'sec_2': '2° Secundaria', 'sec_3': '3° Secundaria', 'sec_4': '4° Secundaria', 'sec_5': '5° Secundaria'
-            };
-
-            let etiquetaNombre = nombresBonitos[clave] || clave;
-            return `<div class="item-grado-semaforo ${clase}">${icono} ${etiquetaNombre}: <b>${textoEstado}</b></div>`;
-        }
-
-        function renderizarListaVacantesGlobal(lista) {
-            const contenedor = document.getElementById('lista-vacantes');
-            if (!contenedor) return;
-            contenedor.innerHTML = '';
-
-            lista.forEach(colegio => {
-                const vacantes = datosVacantesEnVivo[colegio.id_colegio] || datosVacantesEnVivo[String(Number(colegio.id_colegio))] || {};
-                const nivelesTexto = normalizarTexto(colegio.niveles);
-
-                let htmlGrados = '';
-                if (nivelesTexto.includes('cuna')) htmlGrados += obtenerEtiquetaSemaforo('cuna_0_3', vacantes.cuna_0_3 || 'rojo');
-                if (nivelesTexto.includes('inicial')) {
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_3a', vacantes.ini_3a || 'rojo');
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_4a', vacantes.ini_4a || 'rojo');
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_5a', vacantes.ini_5a || 'rojo');
-                }
-                if (nivelesTexto.includes('primaria')) {
-                    for (let g = 1; g <= 6; g++) htmlGrados += obtenerEtiquetaSemaforo('pri_' + g, vacantes['pri_' + g] || 'rojo');
-                }
-                if (nivelesTexto.includes('secundaria')) {
-                    for (let s = 1; s <= 5; s++) htmlGrados += obtenerEtiquetaSemaforo('sec_' + s, vacantes['sec_' + s] || 'rojo');
-                }
-
-                const card = `
-                    <div class="card-seccion" style="margin-bottom:12px; padding:15px;">
-                        <h3 style="color:#1a365d; font-size:1rem; margin-bottom:4px;">${colegio.nombre_colegio}</h3>
-                        <p style="font-size:0.8rem; color:#64748b; margin-bottom:8px;">${colegio.distrito} | ${colegio.gestion} | ${colegio.red_educativa || 'Red N/A'}</p>
-                        
-                        <div class="grados-semaforo-grid">
-                            ${htmlGrados || '<div class="item-grado-semaforo sem-verde">🟢 Vacantes en Consulta</div>'}
-                        </div>
-
-                        <div style="display:flex; gap:8px; margin-top:10px;">
-                            <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:8px; border-radius:6px; text-decoration:none; font-size:0.8rem; font-weight:bold;">🗺️ Ir al mapa</a>
-                            <button onclick="abrirDetalle('${colegio.nombre_colegio.replace(/'/g, "\\'")}')" style="flex:1; background:#2563eb; color:white; border:none; padding:8px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">Ver Información</button>
-                        </div>
-                    </div>
-                `;
-                contenedor.innerHTML += card;
-            });
-        }
-
-        function filtrarListaVacantes() {
-            const input = document.getElementById('inputBuscadorVacantes');
-            if (!input) return;
-            const textoNorm = normalizarTexto(input.value);
-            
-            const filtrados = colegios.filter(c => {
-                const nombreNorm = normalizarTexto(c.nombre_colegio);
-                const nivNorm = normalizarTexto(c.niveles);
-                const idNorm = normalizarTexto(c.id_colegio);
-                const distNorm = normalizarTexto(c.distrito);
-                const redNorm = normalizarTexto(c.red_educativa);
-                return nombreNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || idNorm.includes(textoNorm) || distNorm.includes(textoNorm) || redNorm.includes(textoNorm);
-            });
-            renderizarListaVacantesGlobal(filtrados);
-        }
-
-        function abrirPantallaDonaciones(e) {
-            e.stopPropagation();
-            ocultarTecladoMovil();
-            ocultarTodasLasPantallas();
-            document.getElementById('pantalla-donaciones').classList.add('activa');
-        }
-
-        function copiarCCI() {
-            navigator.clipboard.writeText('002-191-000000000000-00');
-            alert('¡Código CCI copiado al portapapeles!');
-        }
-
-        function ocultarTodasLasPantallas() {
-            document.getElementById('pantalla-portada').style.display = 'none';
-            document.querySelectorAll('.pantalla-secundaria').forEach(p => {
-                p.classList.remove('activa');
-            });
-        }
-
-        function volverAPortada() {
-            ocultarTecladoMovil();
-            ocultarTodasLasPantallas();
-            document.getElementById('pantalla-portada').style.display = 'flex';
-            
-            document.getElementById('inputPortada').value = '';
-            document.getElementById('searchInputMap').value = '';
-            document.getElementById('sugerenciasPortada').style.display = 'none';
-            document.getElementById('sugerenciasMapa').style.display = 'none';
-        }
-
-        function abrirModalMapachito(emocion, texto, conBoton = false, callback = null, autoCierreMs = null) {
-            const modal = document.getElementById('modalMapachito');
-            document.getElementById('textoMapachito').innerText = texto;
-            document.getElementById('btnEntendidoModal').style.display = conBoton ? 'inline-block' : 'none';
-
-            const imagenesEmocion = {
-                'saludando': 'mapache_saludando.png',
-                'pensando': 'mapache_pensativo.png',
-                'olfateando': 'mapache_buscando.png',
-                'buscando': 'mapache_buscando.png',
-                'feliz': 'mapache_saludando_en_un_pie.png',
-                'sorprendido': 'mapache_sorprendido.png',
-                'durmiendo': 'mapache_durmiendo.png',
-                'preocupado': 'mapache_preocupado.png',
-                'guiñando': 'mapache_guiñando_ojo.png'
-            };
-
-            const imgElement = document.getElementById('imgMapachitoModal');
-            imgElement.src = imagenesEmocion[emocion] || 'mapache_saludando.png';
-
-            modal.style.display = 'flex';
-            accionPendiente = callback;
-            if (temporizadorAutoCierre) clearTimeout(temporizadorAutoCierre);
-            if (autoCierreMs) temporizadorAutoCierre = setTimeout(cerrarModalMapachito, autoCierreMs);
-        }
-
-        function cerrarModalMapachito() {
-            document.getElementById('modalMapachito').style.display = 'none';
-            if (accionPendiente) {
-                const fn = accionPendiente;
-                accionPendiente = null;
-                fn();
-            }
-        }
-
-        function reiniciarTemporizadorInactividad() {
-            const modalInactivo = document.getElementById('modal-inactividad-total');
-            if (modalInactivo.style.display === 'flex') return;
-            if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
-            temporizadorInactividad = setTimeout(() => {
-                modalInactivo.style.display = 'flex';
-            }, 30000);
-        }
-
-        function despertarMapachitoInactivo() {
-            document.getElementById('modal-inactividad-total').style.display = 'none';
-            reiniciarTemporizadorInactividad();
-        }
-
-        ['click', 'mousemove', 'keypress', 'touchstart', 'scroll'].forEach(evento => {
-            window.addEventListener(evento, reiniciarTemporizadorInactividad, true);
-        });
-
-        reiniciarTemporizadorInactividad();
-    </script>
-</body>
-</html>
+    <div id="modal-fachada-fullscreen" onclick="cerrarFachadaFullscreen
