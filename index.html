@@ -514,6 +514,41 @@
         let datosVacantesEnVivo = JSON.parse(localStorage.getItem('mapache_vacantes') || '{}');
         const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycby2Y6cDIBQj6lRkAc1eMlfrhMll99Y_LHgb8fkDYHVN66iRrvfiyij1eboTxvCKl_qw/exec";
 
+        /* CANAL DE TRANSMISIÓN DE EVENTOS LOCALES PARA MULTI-TAB EN MISMO DISPOSITIVO */
+        const canalVacantes = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel('mapache_sync_vacantes') : null;
+        if (canalVacantes) {
+            canalVacantes.onmessage = (event) => {
+                if (event.data === 'actualizado') {
+                    datosVacantesEnVivo = JSON.parse(localStorage.getItem('mapache_vacantes') || '{}');
+                    refrescarVistasVacantesActivas();
+                }
+            };
+        }
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'mapache_vacantes') {
+                datosVacantesEnVivo = JSON.parse(e.newValue || '{}');
+                refrescarVistasVacantesActivas();
+            }
+        });
+
+        /* REFRESCO DINÁMICO EN TIEMPO REAL DE LAS VISTAS ABIERTAS */
+        function refrescarVistasVacantesActivas() {
+            // 1. Si la pantalla global de vacantes está abierta, volver a filtrar e imprimir
+            if (document.getElementById('pantalla-vacantes').classList.contains('activa')) {
+                filtrarListaVacantes();
+            }
+            // 2. Si el modal de detalle del colegio está abierto, actualizar sus datos
+            const modalDetalle = document.getElementById('modal-detalle');
+            if (modalDetalle && modalDetalle.style.display === 'flex') {
+                const tituloEl = modalDetalle.querySelector('h2');
+                if (tituloEl && tituloEl.innerText) {
+                    abrirDetalle(tituloEl.innerText);
+                }
+            }
+        }
+
+        /* CONSULTA CONTINUA CADA 5 SEGUNDOS A GOOGLE SHEETS PARA TODAS LAS PCS Y MOVILES */
         async function cargarVacantesEnTiempoReal() {
             try {
                 const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime());
@@ -532,9 +567,7 @@
                         }
                     });
                     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
-                    if (document.getElementById('pantalla-vacantes').classList.contains('activa')) {
-                        filtrarListaVacantes();
-                    }
+                    refrescarVistasVacantesActivas();
                 }
             } catch (error) {
                 console.log("Consulta en vivo activa.");
@@ -543,7 +576,8 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             cargarVacantesEnTiempoReal();
-            setInterval(cargarVacantesEnTiempoReal, 20000);
+            // Muestreo frecuente cada 5 segundos para actualización instantánea multiterminal (PC y Celulares)
+            setInterval(cargarVacantesEnTiempoReal, 5000);
             configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
             configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
             reiniciarTemporizadorInactividad();
@@ -613,7 +647,7 @@
             const palabrasIgnoradas = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'en', 'n', 'no', 'num', 'numero']);
             const tokensUser = inputLimpio.split(' ')
                 .filter(t => t.length > 0 && !palabrasIgnoradas.has(t))
-                .map(t => t.replace(/s$/, '')); // Quita 's' final para igualar plurales (ej: coprodelis -> coprodeli)
+                .map(t => t.replace(/s$/, ''));
 
             const numerosUser = codigoInput.match(/\d+/g) || [];
 
@@ -625,22 +659,18 @@
                 const codStr = String(c.codigo || '').trim().toLowerCase();
                 const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
 
-                // 1. Coincidencia exacta por ID o Código
                 if (inputOriginal === idStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
                     return true;
                 }
 
-                // 2. Coincidencia si el número ingresado equivale al ID de lista Excel
                 if (numerosUser.some(num => num === idStr || num === codStr)) {
                     return true;
                 }
 
-                // 3. Coincidencia por subcadena de texto continuo limpio
                 if (inputLimpio && (nomLimpio.includes(inputLimpio) || inputLimpio.includes(nomLimpio))) {
                     return true;
                 }
 
-                // 4. Coincidencia por tokens (palabras clave) ignorando plurales
                 if (tokensUser.length > 0) {
                     const tokensColegio = nomLimpio.split(' ').map(t => t.replace(/s$/, ''));
                     const coincidenTodos = tokensUser.every(tok => 
@@ -657,7 +687,6 @@
                 return;
             }
 
-            // Validar la contraseña entre los candidatos encontrados
             const colegioValido = candidatos.find(c => {
                 const cPass = String(c.password_director || '').trim().toLowerCase();
                 return cPass === passNorm;
@@ -748,6 +777,7 @@
             document.body.insertAdjacentHTML('beforeend', panelHTML);
         }
 
+        /* GUARDAR CAMBIOS Y NOTIFICAR EN TIEMPO REAL A TODOS LOS NAVEGADORES/DISPOSITIVOS */
         async function guardarVacantesGradosInstante(id_colegio, password) {
             ocultarTecladoMovil();
             const ahora = new Date();
@@ -764,14 +794,16 @@
             let idLimpio = String(id_colegio).trim();
             let idNumLimpio = !isNaN(idLimpio) ? String(Number(idLimpio)) : idLimpio;
 
+            // 1. Guardar localmente
             datosVacantesEnVivo[idLimpio] = objetoGrados;
             datosVacantesEnVivo[idNumLimpio] = objetoGrados;
             localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
 
-            if (document.getElementById('pantalla-vacantes').classList.contains('activa')) {
-                filtrarListaVacantes();
-            }
+            // 2. Refrescar vistas locales e informar a otras pestañas activas
+            refrescarVistasVacantesActivas();
+            if (canalVacantes) canalVacantes.postMessage('actualizado');
 
+            // 3. Transmitir a Google Sheets en la nube
             try {
                 const payload = {
                     action: 'updateVacantes',
@@ -791,6 +823,9 @@
 
                 document.getElementById('modal-panel-vacantes').remove();
                 abrirModalMapachito('feliz', `¡Vacantes sincronizadas con Google Sheets!\nFecha: ${fechaHoraFormat}`, true);
+                
+                // Forzar sincronización inmediata desde la nube
+                cargarVacantesEnTiempoReal();
             } catch (error) {
                 console.error("Error enviando a Google Sheets:", error);
                 document.getElementById('modal-panel-vacantes').remove();
