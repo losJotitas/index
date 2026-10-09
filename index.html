@@ -193,6 +193,7 @@
             text-align: center; text-decoration: none; display: inline-block;
         }
         .btn-opcion:hover { transform: translateY(-1px); filter: brightness(1.08); }
+        .btn-tour { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 0 14px rgba(139, 92, 246, 0.5); border: 1px solid #a78bfa; }
         .btn-verde { background-color: #729b79; box-shadow: 0 0 12px rgba(114, 155, 121, 0.4); }
         .btn-azul { background-color: #7b8db9; box-shadow: 0 0 12px rgba(123, 141, 185, 0.4); }
         .btn-estatales { background-color: #d18b6d; box-shadow: 0 0 12px rgba(209, 139, 109, 0.4); }
@@ -240,7 +241,7 @@
 
         /* MODALES Y CAPAS SUPERIORES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; cursor: pointer; }
-        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 310px; width: 90%; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 320px; width: 92%; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
         .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; width: 100%; line-height: 1.4; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         
         .raccoon-avatar-box { 
@@ -248,6 +249,17 @@
         }
         .raccoon-avatar-box img { width: 110px; height: 110px; object-fit: contain; position: absolute; z-index: 2; }
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+
+        /* ESTILOS ESPECÍFICOS DEL TOUR INTERACTIVO */
+        #modal-tour-interactivo { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.94); z-index: 40000; justify-content: center; align-items: center; padding: 15px; }
+        .box-tour-card { background: #1e293b; border: 3px solid #a78bfa; border-radius: 24px; padding: 22px 18px; max-width: 350px; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; }
+        .tour-indicador-paso { background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid #8b5cf6; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; margin-bottom: 10px; }
+        .tour-titulo { color: #38bdf8; font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
+        .tour-texto { background: #ffffff; color: #0f172a; padding: 12px 14px; border-radius: 16px; font-size: 0.83rem; font-weight: 600; line-height: 1.4; margin-bottom: 12px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .tour-botones-navegacion { display: flex; justify-content: space-between; width: 100%; gap: 10px; margin-top: 5px; }
+        .btn-tour-nav { flex: 1; padding: 10px; border-radius: 12px; border: none; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+        .btn-tour-ant { background: #475569; color: white; }
+        .btn-tour-sig { background: #8b5cf6; color: white; box-shadow: 0 3px 10px rgba(139, 92, 246, 0.4); }
 
         #modal-redes { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.88); z-index: 25000; justify-content: center; align-items: center; }
         .modal-redes-content { background: #1e293b; width: 92%; max-width: 420px; border-radius: 20px; border: 2px solid #38bdf8; padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto; }
@@ -383,8 +395,12 @@
                 </div>
             </div>
 
-            <!-- BLOQUE DE CONTROLES -->
+            <!-- BLOQUE DE CONTROLES CON TOUR INTERACTIVO DESTACADO -->
             <div class="bloque-controles">
+                <button class="btn-opcion btn-tour" onclick="iniciarTourMapachito(event)">
+                    🦝 Tour Interactivo: ¿Cómo buscar un colegio?
+                </button>
+
                 <div class="search-box-wrapper">
                     <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, 5090)..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
@@ -480,6 +496,24 @@
         </div>
     </div>
 
+    <!-- ================= MODAL DEL TOUR INTERACTIVO DE MAPACHITO ================= -->
+    <div id="modal-tour-interactivo" onclick="cerrarTourMapachito(event)">
+        <div class="box-tour-card" onclick="event.stopPropagation()">
+            <div id="tourPasoIndicador" class="tour-indicador-paso">PASO 1 DE 5</div>
+            <div id="tourTitulo" class="tour-titulo">¡Bienvenido a MAPACHE!</div>
+            <div id="tourTexto" class="tour-texto">¡Hola! Soy Mapachito 🦝. Te guiaré paso a paso para que encuentres el colegio ideal en Ventanilla y Mi Perú de la forma más rápida.</div>
+            
+            <div class="raccoon-avatar-box">
+                <img id="imgTourMapachito" src="mapache_saludando.png" alt="Mapachito Guía">
+            </div>
+
+            <div class="tour-botones-navegacion">
+                <button id="btnTourAnterior" class="btn-tour-nav btn-tour-ant" onclick="anteriorPasoTour()" style="display:none;">⬅ Anterior</button>
+                <button id="btnTourSiguiente" class="btn-tour-nav btn-tour-sig" onclick="siguientePasoTour()">¡Empezar! ➔</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= MODAL REDES EDUCATIVAS ================= -->
     <div id="modal-redes" onclick="cerrarModalRedes(event)">
         <div class="modal-redes-content" onclick="event.stopPropagation()">
@@ -501,7 +535,7 @@
         </div>
     </div>
 
-    <!-- ================= MODAL MAPACHITO REACTIVO (CIERRE AL TOCAR EN CUALQUIER LUGAR) ================= -->
+    <!-- ================= MODAL MAPACHITO REACTIVO ================= -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="cerrarModalMapachito()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
@@ -557,7 +591,7 @@
             5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
         };
 
-        /* LISTA DE IMÁGENES PARA PRECARGA INSTANTÁNEA EN MEMORIA DE MAPACHITO */
+        /* LISTA DE IMÁGENES PARA PRECARGA INSTANTÁNEA EN MEMORIA */
         const imagenesMapachitoPrecarga = [
             'mapache_saludando.png',
             'mapache_pensativo.png',
@@ -575,6 +609,96 @@
                 const img = new Image();
                 img.src = src;
             });
+        }
+
+        /* LÓGICA DEL TOUR INTERACTIVO PASO A PASO CON MAPACHITO */
+        let pasoTourActual = 0;
+        const pasosTourData = [
+            {
+                emocion: 'saludando',
+                titulo: '¡Bienvenido a MAPACHE!',
+                texto: '¡Hola! Soy Mapachito 🦝. Te guiaré en 4 sencillos pasos para que busques y encuentres tu colegio ideal.'
+            },
+            {
+                emocion: 'buscando',
+                titulo: '1. Buscador Directo e Inteligente',
+                texto: 'Escribe en la barra de búsqueda el <b>número del colegio</b> (Ej: 113, 5090), el <b>nombre</b> o el <b>apellido del ilustre</b> (Ej: Cáceres, Chapi). ¡Te dará sugerencias instantáneas!'
+            },
+            {
+                emocion: 'olfateando',
+                titulo: '2. Mapa y Redes Educativas',
+                texto: 'Usa el botón <b>"Ver Todos los Colegios en el Mapa"</b> o filtra por tu <b>Red Educativa (1 al 9)</b> para ubicar geográficamente las escuelas cercanas a tu hogar.'
+            },
+            {
+                emocion: 'sorprendido',
+                titulo: '3. Vacantes en Tiempo Real',
+                texto: 'En el botón <b>"🚦 Buscar Vacantes Disponibles"</b> consultarás si hay vacantes por grado o edad:<br>🟢 <b>Verde:</b> Hay vacantes.<br>🟡 <b>Amarillo:</b> Pocas vacantes.<br>🔴 <b>Rojo:</b> Sin vacantes.'
+            },
+            {
+                emocion: 'guiñando',
+                titulo: '4. Fotos y Cómo Llegar',
+                texto: 'Al seleccionar un colegio, presiona <b>"Fachada"</b> para ver su foto panorámica con zoom o <b>"Iniciar viaje"</b> para trazar la ruta en Google Maps. ¡Listo para empezar!'
+            }
+        ];
+
+        function iniciarTourMapachito(e) {
+            if(e) e.stopPropagation();
+            ocultarTecladoMovil();
+            pasoTourActual = 0;
+            actualizarVistaTour();
+            document.getElementById('modal-tour-interactivo').style.display = 'flex';
+        }
+
+        function actualizarVistaTour() {
+            const paso = pasosTourData[pasoTourActual];
+            document.getElementById('tourPasoIndicador').innerText = `PASO ${pasoTourActual + 1} DE ${pasosTourData.length}`;
+            document.getElementById('tourTitulo').innerHTML = paso.titulo;
+            document.getElementById('tourTexto').innerHTML = paso.texto;
+
+            const imagenesEmocion = {
+                'saludando': 'mapache_saludando.png',
+                'pensando': 'mapache_pensativo.png',
+                'olfateando': 'mapache_buscando.png',
+                'buscando': 'mapache_buscando.png',
+                'feliz': 'mapache_saludando_en_un_pie.png',
+                'sorprendido': 'mapache_sorprendido.png',
+                'guiñando': 'mapache_guiñando_ojo.png'
+            };
+
+            document.getElementById('imgTourMapachito').src = imagenesEmocion[paso.emocion] || 'mapache_saludando.png';
+
+            const btnAnt = document.getElementById('btnTourAnterior');
+            const btnSig = document.getElementById('btnTourSiguiente');
+
+            btnAnt.style.display = (pasoTourActual > 0) ? 'block' : 'none';
+
+            if (pasoTourActual === pasosTourData.length - 1) {
+                btnSig.innerText = '¡Empezar a Buscar! 🚀';
+                btnSig.style.background = '#16a34a';
+            } else {
+                btnSig.innerText = (pasoTourActual === 0) ? '¡Empezar Tour! ➔' : 'Siguiente ➔';
+                btnSig.style.background = '#8b5cf6';
+            }
+        }
+
+        function siguientePasoTour() {
+            if (pasoTourActual < pasosTourData.length - 1) {
+                pasoTourActual++;
+                actualizarVistaTour();
+            } else {
+                cerrarTourMapachito();
+            }
+        }
+
+        function anteriorPasoTour() {
+            if (pasoTourActual > 0) {
+                pasoTourActual--;
+                actualizarVistaTour();
+            }
+        }
+
+        function cerrarTourMapachito(e) {
+            document.getElementById('modal-tour-interactivo').style.display = 'none';
         }
 
         function getColegiosSafe() {
