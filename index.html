@@ -250,7 +250,7 @@
         .raccoon-avatar-box img { width: 110px; height: 110px; object-fit: contain; position: absolute; z-index: 2; }
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
 
-        /* ESTILOS ESPECÍFICOS DEL TOUR INTERACTIVO */
+        /* ESTILOS DEL TOUR INTERACTIVO */
         #modal-tour-interactivo { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.94); z-index: 40000; justify-content: center; align-items: center; padding: 15px; }
         .box-tour-card { background: #1e293b; border: 3px solid #a78bfa; border-radius: 24px; padding: 22px 18px; max-width: 350px; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; }
         .tour-indicador-paso { background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid #8b5cf6; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; margin-bottom: 10px; }
@@ -395,7 +395,6 @@
                 </div>
             </div>
 
-            <!-- BLOQUE DE CONTROLES CON TOUR INTERACTIVO DESTACADO -->
             <div class="bloque-controles">
                 <button class="btn-opcion btn-tour" onclick="iniciarTourMapachito(event)">
                     🦝 Tour Interactivo: ¿Cómo buscar un colegio?
@@ -586,12 +585,14 @@
         let temporizadorAutoCierre = null;
         let escalaZoomActual = 1;
 
+        /* VARIABLE BASE DE DATOS DINÁMICA DESDE GOOGLE SHEETS */
+        let colegiosBaseGoogle = [];
+
         const coloresRedes = {
             1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
             5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
         };
 
-        /* LISTA DE IMÁGENES PARA PRECARGA INSTANTÁNEA EN MEMORIA */
         const imagenesMapachitoPrecarga = [
             'mapache_saludando.png',
             'mapache_pensativo.png',
@@ -611,7 +612,14 @@
             });
         }
 
-        /* LÓGICA DEL TOUR INTERACTIVO PASO A PASO CON MAPACHITO */
+        /* OBTENER LISTA MASTER: PRIORIZA GOOGLE SHEETS Y USA COLEGIOS.JS COMO RESPALDO */
+        function getColegiosSafe() {
+            if (Array.isArray(colegiosBaseGoogle) && colegiosBaseGoogle.length > 0) {
+                return colegiosBaseGoogle;
+            }
+            return (typeof colegios !== 'undefined' && Array.isArray(colegios)) ? colegios : [];
+        }
+
         let pasoTourActual = 0;
         const pasosTourData = [
             {
@@ -699,10 +707,6 @@
 
         function cerrarTourMapachito(e) {
             document.getElementById('modal-tour-interactivo').style.display = 'none';
-        }
-
-        function getColegiosSafe() {
-            return (typeof colegios !== 'undefined' && Array.isArray(colegios)) ? colegios : [];
         }
 
         function normalizarTexto(txt) {
@@ -818,12 +822,26 @@
             }
         }
 
+        /* LECTURA COMPLETA Y CONVERSIÓN DE GOOGLE SHEETS COMO BASE DE DATOS PRINCIPAL */
         async function cargarVacantesEnTiempoReal() {
             try {
                 const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime(), { cache: 'no-store' });
                 const resultado = await respuesta.json();
                 
-                if (Array.isArray(resultado)) {
+                if (Array.isArray(resultado) && resultado.length > 0) {
+                    
+                    // Procesar y formatear colegios leídos desde Google Sheets
+                    let colegiosDesdeSheets = resultado.map(item => {
+                        let colObj = Object.assign({}, item);
+                        if (colObj.latitud) colObj.latitud = parseFloat(colObj.latitud);
+                        if (colObj.longitud) colObj.longitud = parseFloat(colObj.longitud);
+                        return colObj;
+                    }).filter(col => col.nombre_colegio && (col.id_colegio || col.codigo));
+
+                    if (colegiosDesdeSheets.length > 0) {
+                        colegiosBaseGoogle = colegiosDesdeSheets;
+                    }
+
                     const colegiosLista = getColegiosSafe();
 
                     resultado.forEach(item => {
@@ -851,6 +869,10 @@
 
                     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
                     refrescarVistasVacantesActivas();
+
+                    if (map && document.getElementById('pantalla-mapa').classList.contains('activa')) {
+                        mostrarColegiosEnMapa(getColegiosSafe());
+                    }
                 }
             } catch (error) {
                 console.log("Consulta en vivo activa.");
