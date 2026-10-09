@@ -273,7 +273,7 @@
         .sem-amarillo { background-color: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
         .sem-rojo { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
-        /* VISOR DE FACHADA CON SOPORTE DE ZOOM TÁCTIL Y BOTONES INTERACTIVOS */
+        /* VISOR DE FACHADA FULLSCREEN CON ZOOM Y CONTROLES */
         #modal-fachada-fullscreen { 
             display: none; 
             position: fixed; 
@@ -501,9 +501,9 @@
         </div>
     </div>
 
-    <!-- ================= MODAL MAPACHITO REACTIVO ================= -->
+    <!-- ================= MODAL MAPACHITO REACTIVO (CIERRE AL TOCAR EN CUALQUIER LUGAR) ================= -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
-        <div class="modal-content-comic" onclick="event.stopPropagation(); cerrarModalMapachito();">
+        <div class="modal-content-comic" onclick="cerrarModalMapachito()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
             <div class="raccoon-avatar-box">
                 <img id="imgMapachitoModal" src="mapache_saludando.png" alt="Mapachito">
@@ -556,6 +556,26 @@
             1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
             5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
         };
+
+        /* LISTA DE IMÁGENES PARA PRECARGA INSTANTÁNEA EN MEMORIA DE MAPACHITO */
+        const imagenesMapachitoPrecarga = [
+            'mapache_saludando.png',
+            'mapache_pensativo.png',
+            'mapache_buscando.png',
+            'mapache_saludando_en_un_pie.png',
+            'mapache_sorprendido.png',
+            'mapache_durmiendo.png',
+            'mapache_preocupado.png',
+            'mapache_guiñando_ojo.png',
+            'mapache_apoyado_en_la_pared.png'
+        ];
+
+        function precargarImagenesMapachito() {
+            imagenesMapachitoPrecarga.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
 
         function getColegiosSafe() {
             return (typeof colegios !== 'undefined' && Array.isArray(colegios)) ? colegios : [];
@@ -714,6 +734,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            precargarImagenesMapachito();
             cargarVacantesEnTiempoReal();
             setInterval(cargarVacantesEnTiempoReal, 5000);
             configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
@@ -1264,7 +1285,6 @@
             filtrarListaVacantes();
         }
 
-        /* BÚSQUEDA INTELIGENTE DE FACHADAS PRIORIZANDO EL NÚMERO DEL COLEGIO */
         function intentarAbrirFachadaConAlternativas(idColegio, codigoColegio, nombreColegio) {
             let idStr = String(idColegio || '').trim();
             let codStr = String(codigoColegio || '').trim();
@@ -1278,7 +1298,6 @@
                 candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
             }
 
-            // 1. Probar PRIMERO los números del colegio extraídos del nombre o del campo código (Ej: 113)
             numerosEnNombre.forEach(num => {
                 let numLimpio = String(Number(num));
                 candidatos.push(`fotos/${numLimpio}.jpeg`);
@@ -1293,7 +1312,6 @@
                 candidatos.push(`fotos/${codStr}.jpg`);
             }
 
-            // 2. Probar finalmente el ID de orden/fila (Ej: 125)
             if (idStr) {
                 let idNum = !isNaN(idStr) ? String(Number(idStr)) : idStr;
                 candidatos.push(`fotos/${idNum}.jpeg`);
@@ -1326,7 +1344,6 @@
             probarSiguiente();
         }
 
-        /* FUNCIONES INTERACTIVAS DE ZOOM Y RESET PARA CELULAR Y PC */
         function zoomFachada(delta) {
             escalaZoomActual = Math.min(Math.max(0.7, escalaZoomActual + delta), 3.5);
             const img = document.getElementById('imgFachadaFull');
