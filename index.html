@@ -830,7 +830,6 @@
                 
                 if (Array.isArray(resultado) && resultado.length > 0) {
                     
-                    // Procesar y formatear colegios leídos desde Google Sheets
                     let colegiosDesdeSheets = resultado.map(item => {
                         let colObj = Object.assign({}, item);
                         if (colObj.latitud) colObj.latitud = parseFloat(colObj.latitud);
@@ -1304,7 +1303,8 @@
                     const idNorm = normalizarTexto(c.id_colegio);
                     const dirNorm = normalizarTexto(c.direccion);
                     const nivNorm = normalizarTexto(c.niveles);
-                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm);
+                    const zonaNorm = normalizarTexto(c.zona || c.ZONA);
+                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || zonaNorm.includes(textoNorm);
                 }).slice(0, 8);
 
                 if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
@@ -1395,7 +1395,8 @@
                 
                 <div style="font-size:0.85rem; line-height:1.6; margin-top:10px;">
                     <p><b>Código:</b> ${colegio.id_colegio}</p>
-                    <p><b>Red Educativa:</b> ${colegio.red_educativa || 'N/A'}</p>
+                    <p><b>Zona / Sector:</b> ${colegio.zona || colegio.ZONA || 'No especificada'}</p>
+                    <p><b>Red Educativa:</b> ${colegio.red_educativa || 'Particular / Independiente'}</p>
                     <p><b>Turnos:</b> ${colegio.TURNOS || 'Mañana y Tarde'}</p>
                     <p><b>Dirección:</b> ${colegio.direccion || 'No especificada'}</p>
                     <p><b>Requisitos para Matrícula:</b> ${colegio.requisitos_de_matricula || 'DNI del estudiante y apoderado'}</p>
@@ -1588,7 +1589,8 @@
                 const idNorm = normalizarTexto(c.id_colegio);
                 const distNorm = normalizarTexto(c.distrito);
                 const redNorm = normalizarTexto(c.red_educativa);
-                return nombreNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || idNorm.includes(textoNorm) || distNorm.includes(textoNorm) || redNorm.includes(textoNorm);
+                const zonaNorm = normalizarTexto(c.zona || c.ZONA);
+                return nombreNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || idNorm.includes(textoNorm) || distNorm.includes(textoNorm) || redNorm.includes(textoNorm) || zonaNorm.includes(textoNorm);
             });
             renderizarListaVacantesGlobal(filtrados);
         }
