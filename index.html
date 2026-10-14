@@ -197,7 +197,7 @@
         .btn-verde { background-color: #729b79; box-shadow: 0 0 12px rgba(114, 155, 121, 0.4); }
         .btn-azul { background-color: #7b8db9; box-shadow: 0 0 12px rgba(123, 141, 185, 0.4); }
         .btn-estatales { background-color: #d18b6d; box-shadow: 0 0 12px rgba(209, 139, 109, 0.4); }
-        .btn-particulares { background-color: #a8a697; color: #1e293b; box-shadow: 0 0 12px rgba(168, 166, 151, 0.4); }
+        .btn-particulares { background-color: #d97706; color: #ffffff; box-shadow: 0 0 12px rgba(217, 119, 6, 0.5); border: 1px solid #fbbf24; }
         .btn-naranja { background-color: #f59e0b; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
         .btn-diamante { background-color: #0284c7; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4); }
 
@@ -227,6 +227,7 @@
         .pin-clasico-container { position: relative; width: 30px; height: 42px; }
         .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
         .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+        
         .pin-etiqueta-nombre {
             background: rgba(15, 23, 42, 0.92) !important;
             color: #38bdf8 !important;
@@ -237,6 +238,20 @@
             font-weight: 700 !important;
             box-shadow: 0 2px 6px rgba(0,0,0,0.5) !important;
             white-space: nowrap !important;
+        }
+
+        /* DISEÑO EXCLUSIVO DORADO PARA COLEGIOS PARTICULARES */
+        .pin-etiqueta-particular {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%) !important;
+            color: #fbbf24 !important;
+            border: 1.5px solid #f59e0b !important;
+            border-radius: 6px !important;
+            padding: 3px 8px !important;
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.6) !important;
+            white-space: nowrap !important;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
 
         /* MODALES Y CAPAS SUPERIORES */
@@ -585,6 +600,9 @@
         let temporizadorAutoCierre = null;
         let escalaZoomActual = 1;
 
+        /* VARIABLE PARA GUARDAR EL FILTRO Y EVITAR SOBRESCRIBIR CADA 5 SEGUNDOS */
+        let filtroActualMapa = 'todos'; // Puede ser: 'todos', 'Estatal', 'Particular', 'red_X', 'especifico'
+
         /* VARIABLE BASE DE DATOS DINÁMICA DESDE GOOGLE SHEETS */
         let colegiosBaseGoogle = [];
 
@@ -869,8 +887,19 @@
                     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
                     refrescarVistasVacantesActivas();
 
+                    /* MANTENER EL FILTRO PERSISTENTE EN EL MAPA CADA 5 SEGUNDOS */
                     if (map && document.getElementById('pantalla-mapa').classList.contains('activa')) {
-                        mostrarColegiosEnMapa(getColegiosSafe());
+                        const todos = getColegiosSafe();
+                        if (filtroActualMapa === 'Particular') {
+                            mostrarColegiosEnMapa(todos.filter(c => c.gestion && c.gestion.toLowerCase().includes('particular')));
+                        } else if (filtroActualMapa === 'Estatal') {
+                            mostrarColegiosEnMapa(todos.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal')));
+                        } else if (filtroActualMapa.startsWith('red_')) {
+                            let numRed = parseInt(filtroActualMapa.replace('red_', ''));
+                            mostrarColegiosEnMapa(todos.filter(c => extraerNumeroRed(c.red_educativa) === numRed));
+                        } else if (filtroActualMapa === 'todos') {
+                            mostrarColegiosEnMapa(todos);
+                        }
                     }
                 }
             } catch (error) {
@@ -1140,6 +1169,7 @@
             return match ? parseInt(match[0], 10) : null;
         }
 
+        /* MOSTRAR COLEGIOS EN EL MAPA CON PIN DORADO PARA PARTICULARES */
         function mostrarColegiosEnMapa(lista) {
             if (!map) return;
             marcadoresCreados.forEach(item => map.removeLayer(item.marker));
@@ -1150,15 +1180,19 @@
             lista.forEach(colegio => {
                 if (!colegio.latitud || !colegio.longitud) return;
 
+                const esParticular = colegio.gestion && colegio.gestion.toLowerCase().includes('particular');
                 const numRed = extraerNumeroRed(colegio.red_educativa);
-                const colorPin = (numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568";
-                const textoPin = numRed ? numRed : "🏫";
+
+                /* COLOR DORADO PARA PARTICULARES Y COLOR DE RED O GRIS PARA ESTATALES */
+                const colorPin = esParticular ? "#d97706" : ((numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568");
+                const textoPin = esParticular ? "⭐" : (numRed ? numRed : "🏫");
+                const claseEtiqueta = esParticular ? "pin-etiqueta-particular" : "pin-etiqueta-nombre";
 
                 const iconoClasico = L.divIcon({
                     className: 'custom-div-icon',
                     html: `
                         <div class="pin-clasico-container">
-                            <div class="pin-gota" style="background-color: ${colorPin};"></div>
+                            <div class="pin-gota" style="background-color: ${colorPin}; border: 2px solid ${esParticular ? '#f59e0b' : '#ffffff'};"></div>
                             <div class="pin-texto">${textoPin}</div>
                         </div>
                     `,
@@ -1173,7 +1207,7 @@
                     permanent: true,
                     direction: 'top',
                     offset: [0, -38],
-                    className: 'pin-etiqueta-nombre'
+                    className: claseEtiqueta
                 });
 
                 marker.bindPopup(`
@@ -1181,7 +1215,7 @@
                         <b style="font-size: 0.95rem; color: #1a365d;">${colegio.nombre_colegio}</b><br>
                         <span style="font-size:0.8rem; color: #4a5568;">Código: ${colegio.id_colegio}</span><br>
                         <b>Gestión:</b> ${colegio.gestion}<br>
-                        <b>Red:</b> ${colegio.red_educativa || 'N/A'}<br>
+                        <b>Red:</b> ${colegio.red_educativa || 'Particular / Independiente'}<br>
                         <hr style="margin: 6px 0; border:0; border-top:1px solid #cbd5e1;">
                         <button onclick="abrirDetalle('${colegio.nombre_colegio.replace(/'/g, "\\'")}')" style="background:#2563eb; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; width:100%; font-weight:bold;">Ver Información General</button>
                     </div>
@@ -1194,6 +1228,7 @@
         function mostrarInfoTodosMapa(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
+            filtroActualMapa = 'todos';
             abrirModalMapachito('olfateando', "¡Olfateando todos los colegios para mostrarlos en el mapa! 🦝🔍", false, () => {
                 ejecutarIrAlMapa('todos');
             }, 1800);
@@ -1202,6 +1237,7 @@
         function mostrarInfoEstatales(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
+            filtroActualMapa = 'Estatal';
             abrirModalMapachito('sorprendido', "¿Sabías que son 146 colegios estatales en Ventanilla y Mi Perú? 🏛️✨", false, () => {
                 ejecutarIrAlMapa('Estatal');
             }, 1800);
@@ -1210,7 +1246,8 @@
         function mostrarInfoParticulares(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
-            abrirModalMapachito('feliz', "¡Aquí te mostraré los colegios Particulares registrados! 🏫🎉", false, () => {
+            filtroActualMapa = 'Particular';
+            abrirModalMapachito('feliz', "¡Te mostraré únicamente los colegios Particulares con sus distintivos dorados! 🏫⭐", false, () => {
                 ejecutarIrAlMapa('Particular');
             }, 1800);
         }
@@ -1254,10 +1291,14 @@
                 const colegiosLista = getColegiosSafe();
                 let filtrados = colegiosLista;
                 if (filtroTipo === 'Estatal' || filtroTipo === 'Particular') {
-                    filtrados = colegiosLista.filter(c => c.gestion && c.gestion.toLowerCase() === filtroTipo.toLowerCase());
+                    filtrados = colegiosLista.filter(c => c.gestion && c.gestion.toLowerCase().includes(filtroTipo.toLowerCase()));
                 }
 
                 mostrarColegiosEnMapa(filtrados);
+
+                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                }
             }, 100);
         }
 
@@ -1266,6 +1307,7 @@
 
         function filtrarPorRedConMapachito(numeroRed) {
             document.getElementById('modal-redes').style.display = 'none';
+            filtroActualMapa = 'red_' + numeroRed;
             abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, false, () => {
                 ocultarTodasLasPantallas();
                 const pantallaMapa = document.getElementById('pantalla-mapa');
@@ -1340,6 +1382,7 @@
 
         function seleccionarColegioYIr(colegio) {
             ocultarTecladoMovil();
+            filtroActualMapa = 'especifico';
             abrirModalMapachito('saludando', `¡Encontré a ${colegio.nombre_colegio}! Te llevo directo.`, false, () => {
                 ocultarTodasLasPantallas();
                 const pantallaMapa = document.getElementById('pantalla-mapa');
@@ -1360,6 +1403,7 @@
 
         function seleccionarColegioEnMapa(colegio) {
             ocultarTecladoMovil();
+            filtroActualMapa = 'especifico';
             mostrarColegiosEnMapa([colegio]);
             if (colegio.latitud && colegio.longitud) {
                 map.setView([colegio.latitud, colegio.longitud], 16);
