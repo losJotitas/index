@@ -20,7 +20,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* PANTALLA 1: PORTADA PRINCIPAL */
         #pantalla-portada {
             position: relative;
             width: 100vw; 
@@ -204,7 +203,6 @@
         .fila-botones-dividida { display: flex; gap: 8px; width: 100%; }
         .fila-botones-dividida .btn-opcion { flex: 1; }
 
-        /* PANTALLAS SECUNDARIAS */
         .pantalla-secundaria {
             display: none !important;
             position: fixed;
@@ -223,7 +221,6 @@
         .search-container-map input { width: 100%; padding: 10px 15px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; outline: none; background: #fff; color: #2d3748; }
         #map { flex: 1; width: 100%; min-height: 300px; }
 
-        /* PINES EN EL MAPA CON ETIQUETAS PERMANENTES */
         .pin-clasico-container { position: relative; width: 30px; height: 42px; }
         .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
         .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
@@ -240,7 +237,6 @@
             white-space: nowrap !important;
         }
 
-        /* DISEÑO EXCLUSIVO DORADO PARA COLEGIOS PARTICULARES */
         .pin-etiqueta-particular {
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%) !important;
             color: #fbbf24 !important;
@@ -254,7 +250,6 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
 
-        /* MODALES Y CAPAS SUPERIORES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; cursor: pointer; }
         .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 320px; width: 92%; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
         .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; width: 100%; line-height: 1.4; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
@@ -265,7 +260,6 @@
         .raccoon-avatar-box img { width: 110px; height: 110px; object-fit: contain; position: absolute; z-index: 2; }
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
 
-        /* ESTILOS DEL TOUR INTERACTIVO */
         #modal-tour-interactivo { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.94); z-index: 40000; justify-content: center; align-items: center; padding: 15px; }
         .box-tour-card { background: #1e293b; border: 3px solid #a78bfa; border-radius: 24px; padding: 22px 18px; max-width: 350px; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; }
         .tour-indicador-paso { background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid #8b5cf6; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; margin-bottom: 10px; }
@@ -300,7 +294,6 @@
         .sem-amarillo { background-color: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
         .sem-rojo { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
-        /* VISOR DE FACHADA FULLSCREEN CON ZOOM Y CONTROLES */
         #modal-fachada-fullscreen { 
             display: none; 
             position: fixed; 
@@ -374,7 +367,6 @@
             touch-action: pan-x pan-y pinch-zoom;
         }
 
-        /* MODAL INACTIVIDAD MAPACHITO DURMIENDO */
         #modal-inactividad-total { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.96); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; cursor: pointer; }
         .inactivity-box { background: #1e293b; border: 3px solid #38bdf8; border-radius: 28px; padding: 30px 20px; max-width: 320px; width: 90%; display: flex; flex-direction: column; align-items: center; }
         .inactivity-box img { width: 140px; height: 140px; object-fit: contain; margin-bottom: 15px; }
@@ -391,7 +383,6 @@
 </head>
 <body>
 
-    <!-- ================= PANTALLA 1: PORTADA PRINCIPAL ================= -->
     <div id="pantalla-portada">
         <button class="btn-acceso-directores-flotante" onclick="abrirModalDirector()">
             🔐 Acceso Directores
@@ -438,7 +429,6 @@
         </div>
     </div>
 
-    <!-- ================= PANTALLA 2: MAPA LEAFLET ================= -->
     <div id="pantalla-mapa" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
@@ -450,7 +440,6 @@
         <div id="map"></div>
     </div>
 
-    <!-- ================= PANTALLA 3: BUSCADOR GLOBAL DE VACANTES POR GRADO / EDAD ================= -->
     <div id="pantalla-vacantes" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
@@ -472,7 +461,6 @@
         </div>
     </div>
 
-    <!-- ================= PANTALLA 4: APORTE Y MEMBRESÍA DIGITAL ================= -->
     <div id="pantalla-donaciones" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
@@ -486,7 +474,7 @@
                 </p>
                 <div style="background:#f1f5f9; padding:15px; border-radius:12px; text-align:left; margin-bottom:15px; border-left:4px solid #0284c7;">
                     <p style="font-size:0.85rem; color:#0f172a; margin-bottom:6px;"><b>🏫 Colegios Particulares:</b> Acceso mediante suscripción/membresía digital institucional.</p>
-                    <p style="font-size:0.85rem; color:#0f172a;"><b>🏛️ Colegios Estatales y Directores:</b> Colaboración o aporte voluntario en reconocimiento al desarrollo tecnológico.</p>
+                    <p style="font-size:0.85rem; color:#0f172a;"><b>🏛️ Colegios Estatales y Directores:</b> Colaboración o convenio de desarrollo tecnológico.</p>
                 </div>
                 <div style="background:#fef3c7; border:1px solid #fcd34d; padding:12px; border-radius:12px; font-size:0.85rem; color:#92400e; margin-bottom:20px; font-weight:600;">
                     🏅 Las instituciones y directores colaboradores obtendrán la insignia oficial de "Sello Aliado Digital" dentro de la aplicación.
@@ -510,7 +498,6 @@
         </div>
     </div>
 
-    <!-- ================= MODAL DEL TOUR INTERACTIVO DE MAPACHITO ================= -->
     <div id="modal-tour-interactivo" onclick="cerrarTourMapachito(event)">
         <div class="box-tour-card" onclick="event.stopPropagation()">
             <div id="tourPasoIndicador" class="tour-indicador-paso">PASO 1 DE 5</div>
@@ -528,7 +515,6 @@
         </div>
     </div>
 
-    <!-- ================= MODAL REDES EDUCATIVAS ================= -->
     <div id="modal-redes" onclick="cerrarModalRedes(event)">
         <div class="modal-redes-content" onclick="event.stopPropagation()">
             <div class="modal-redes-header">
@@ -549,7 +535,6 @@
         </div>
     </div>
 
-    <!-- ================= MODAL MAPACHITO REACTIVO ================= -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
         <div class="modal-content-comic" onclick="cerrarModalMapachito()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
@@ -560,7 +545,6 @@
         </div>
     </div>
 
-    <!-- ================= MODAL DETALLE COMPLETO DEL COLEGIO ================= -->
     <div id="modal-detalle" onclick="cerrarDetalleExt(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close-destacado" onclick="cerrarDetalle()">&times;</span>
@@ -568,7 +552,6 @@
         </div>
     </div>
 
-    <!-- ================= VISOR DE FACHADA FULLSCREEN CON ZOOM Y CONTROLES ================= -->
     <div id="modal-fachada-fullscreen" onclick="cerrarFachadaFullscreen()">
         <div class="barramenu-zoom-fachada" onclick="event.stopPropagation()">
             <button class="btn-zoom-accion" onclick="zoomFachada(0.3)">🔍 + Ampliar</button>
@@ -581,7 +564,6 @@
         </div>
     </div>
 
-    <!-- ================= MODAL INACTIVIDAD MAPACHITO DURMIENDO ================= -->
     <div id="modal-inactividad-total" onclick="despertarMapachitoInactivo()">
         <div class="inactivity-box" onclick="event.stopPropagation(); despertarMapachitoInactivo();">
             <img src="mapache_durmiendo.png" alt="Mapachito durmiendo">
@@ -600,10 +582,7 @@
         let temporizadorAutoCierre = null;
         let escalaZoomActual = 1;
 
-        /* VARIABLE PARA GUARDAR EL FILTRO Y EVITAR SOBRESCRIBIR CADA 5 SEGUNDOS */
-        let filtroActualMapa = 'todos'; // Puede ser: 'todos', 'Estatal', 'Particular', 'red_X', 'especifico'
-
-        /* VARIABLE BASE DE DATOS DINÁMICA DESDE GOOGLE SHEETS */
+        let filtroActualMapa = 'todos';
         let colegiosBaseGoogle = [];
 
         const coloresRedes = {
@@ -630,7 +609,6 @@
             });
         }
 
-        /* OBTENER LISTA MASTER: PRIORIZA GOOGLE SHEETS Y USA COLEGIOS.JS COMO RESPALDO */
         function getColegiosSafe() {
             if (Array.isArray(colegiosBaseGoogle) && colegiosBaseGoogle.length > 0) {
                 return colegiosBaseGoogle;
@@ -840,7 +818,6 @@
             }
         }
 
-        /* LECTURA COMPLETA Y CONVERSIÓN DE GOOGLE SHEETS COMO BASE DE DATOS PRINCIPAL */
         async function cargarVacantesEnTiempoReal() {
             try {
                 const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime(), { cache: 'no-store' });
@@ -887,7 +864,6 @@
                     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
                     refrescarVistasVacantesActivas();
 
-                    /* MANTENER EL FILTRO PERSISTENTE EN EL MAPA CADA 5 SEGUNDOS */
                     if (map && document.getElementById('pantalla-mapa').classList.contains('activa')) {
                         const todos = getColegiosSafe();
                         if (filtroActualMapa === 'Particular') {
@@ -941,7 +917,10 @@
                         <input type="text" id="dir-codigo" placeholder="Ej. 126, Fe y Alegría 29, Coprodeli, 134..." style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
                         
                         <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Contraseña Asignada:</label>
-                        <input type="password" id="dir-password" placeholder="Tu contraseña secreta" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
+                        <div style="position:relative; width:100%; margin:5px 0 15px 0;">
+                            <input type="password" id="dir-password" placeholder="Tu contraseña secreta" style="width:100%; padding:10px 40px 10px 10px; border:1px solid #cbd5e1; border-radius:6px; outline:none;">
+                            <button type="button" onclick="alternarVisibilidadPassword()" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:1.1rem; padding:4px;" title="Ver/Ocultar contraseña">👁️</button>
+                        </div>
                         
                         <div style="display:flex; justify-content:space-between; gap:10px;">
                             <button onclick="document.getElementById('modal-director').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
@@ -951,6 +930,16 @@
                 </div>
             `;
             document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function alternarVisibilidadPassword() {
+            const inputPass = document.getElementById('dir-password');
+            if (!inputPass) return;
+            if (inputPass.type === 'password') {
+                inputPass.type = 'text';
+            } else {
+                inputPass.type = 'password';
+            }
         }
 
         function autenticarDirector() {
@@ -1024,6 +1013,13 @@
 
             if (!colegioValido) {
                 alert("Error: Contraseña incorrecta para el colegio ingresado.");
+                return;
+            }
+
+            // Validar bloqueo o suspensión administrativa previa
+            const estadoAcceso = String(colegioValido.estado_membresia || colegioValido.estado_acceso || '').toLowerCase();
+            if (estadoAcceso === 'bloqueado' || estadoAcceso === 'suspendido' || estadoAcceso === 'inactivo') {
+                alert("El acceso a la plataforma para esta institución se encuentra suspendido. Por favor comuníquese con la administración del Proyecto MAPACHE.");
                 return;
             }
 
@@ -1146,11 +1142,19 @@
                     ultima_actualizacion: fechaHoraFormat
                 };
 
-                await fetch(URL_API_GOOGLE, {
+                const res = await fetch(URL_API_GOOGLE, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
+                
+                const resJson = await res.json();
+
+                if (resJson && resJson.status === 'bloqueado') {
+                    document.getElementById('modal-panel-vacantes').remove();
+                    alert(resJson.message);
+                    return;
+                }
 
                 document.getElementById('modal-panel-vacantes').remove();
                 abrirModalMapachito('feliz', `¡Vacantes sincronizadas con Google Sheets!\nFecha: ${fechaHoraFormat}`, true);
@@ -1169,7 +1173,6 @@
             return match ? parseInt(match[0], 10) : null;
         }
 
-        /* MOSTRAR COLEGIOS EN EL MAPA CON PIN DORADO PARA PARTICULARES */
         function mostrarColegiosEnMapa(lista) {
             if (!map) return;
             marcadoresCreados.forEach(item => map.removeLayer(item.marker));
@@ -1183,7 +1186,6 @@
                 const esParticular = colegio.gestion && colegio.gestion.toLowerCase().includes('particular');
                 const numRed = extraerNumeroRed(colegio.red_educativa);
 
-                /* COLOR DORADO PARA PARTICULARES Y COLOR DE RED O GRIS PARA ESTATALES */
                 const colorPin = esParticular ? "#d97706" : ((numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568");
                 const textoPin = esParticular ? "⭐" : (numRed ? numRed : "🏫");
                 const claseEtiqueta = esParticular ? "pin-etiqueta-particular" : "pin-etiqueta-nombre";
