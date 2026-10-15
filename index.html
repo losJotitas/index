@@ -964,38 +964,26 @@
             const inputLimpio = normalizarLimpio(codigoInput);
             const passNorm = passwordInput.toLowerCase();
 
-            const palabrasIgnoradas = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'en', 'n', 'no', 'num', 'numero']);
-            const tokensUser = inputLimpio.split(' ')
-                .filter(t => t.length > 0 && !palabrasIgnoradas.has(t))
-                .map(t => t.replace(/s$/, ''));
-
             const numerosUser = codigoInput.match(/\d+/g) || [];
-
             const colegiosLista = getColegiosSafe();
 
+            // 1. BÚSQUEDA DEL COLEGIO
             const candidatos = colegiosLista.filter(c => {
-                const idStr = String(c.id_colegio || '').trim().toLowerCase();
-                const codStr = String(c.codigo || '').trim().toLowerCase();
+                const idStr = String(c.id_colegio || c.codigo || '').trim().toLowerCase();
+                const idNumStr = !isNaN(idStr) ? String(Number(idStr)) : idStr;
+                const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
                 const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
 
-                if (inputOriginal === idStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
+                if (inputOriginal === idStr || inputOriginal === idNumStr || inputLimpio === idStr) {
                     return true;
                 }
 
-                if (numerosUser.some(num => num === idStr || num === codStr)) {
+                if (numerosUser.some(num => String(Number(num)) === idNumStr || num === idStr)) {
                     return true;
                 }
 
-                if (inputLimpio && (nomLimpio.includes(inputLimpio) || inputLimpio.includes(nomLimpio))) {
+                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio)) {
                     return true;
-                }
-
-                if (tokensUser.length > 0) {
-                    const tokensColegio = nomLimpio.split(' ').map(t => t.replace(/s$/, ''));
-                    const coincidenTodos = tokensUser.every(tok => 
-                        nomLimpio.includes(tok) || tokensColegio.some(tc => tc.includes(tok) || tok.includes(tc))
-                    );
-                    if (coincidenTodos) return true;
                 }
 
                 return false;
@@ -1006,25 +994,26 @@
                 return;
             }
 
-            const colegioValido = candidatos.find(c => {
-                const cPass = String(c.password_director || '').trim().toLowerCase();
-                return cPass === passNorm;
-            });
+            const colegioEncontrado = candidatos[0];
 
-            if (!colegioValido) {
-                alert("Error: Contraseña incorrecta para el colegio ingresado.");
-                return;
-            }
-
-            // Validar bloqueo o suspensión administrativa previa
-            const estadoAcceso = String(colegioValido.estado_membresia || colegioValido.estado_acceso || '').toLowerCase();
-            if (estadoAcceso === 'bloqueado' || estadoAcceso === 'suspendido' || estadoAcceso === 'inactivo') {
+            // 2. VERIFICACIÓN DE BLOQUEO (EVALÚA COLUMNA V: estado_vigencia)
+            const estadoVigencia = String(colegioEncontrado.estado_vigencia || colegioEncontrado.estado_membresia || colegioEncontrado.estado_acceso || '').trim().toLowerCase();
+            
+            if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
                 alert("El acceso a la plataforma para esta institución se encuentra suspendido. Por favor comuníquese con la administración del Proyecto MAPACHE.");
                 return;
             }
 
+            // 3. VALIDACIÓN DE CONTRASEÑA
+            const claveRegistrada = String(colegioEncontrado.password_director || '').trim().toLowerCase();
+
+            if (claveRegistrada !== passNorm) {
+                alert("Error: Contraseña incorrecta para el colegio ingresado.");
+                return;
+            }
+
             modal.remove();
-            abrirPanelEdicionVacantesGrados(colegioValido, passwordInput);
+            abrirPanelEdicionVacantesGrados(colegioEncontrado, passwordInput);
         }
 
         function crearSelectSemaforo(idCampo, valActual) {
