@@ -942,79 +942,74 @@
             }
         }
 
-        function autenticarDirector() {
-            ocultarTecladoMovil();
-            const modal = document.getElementById('modal-director');
-            if (!modal) return;
+      function autenticarDirector() {
+    ocultarTecladoMovil();
+    const modal = document.getElementById('modal-director');
+    if (!modal) return;
 
-            const codigoInput = document.getElementById('dir-codigo').value;
-            const passwordInput = document.getElementById('dir-password').value.trim();
+    const codigoInput = document.getElementById('dir-codigo').value;
+    const passwordInput = document.getElementById('dir-password').value.trim();
 
-            if (!codigoInput || !codigoInput.trim()) { 
-                alert("Por favor ingresa el número, nombre o N° de lista del colegio."); 
-                return; 
-            }
+    if (!codigoInput || !codigoInput.trim()) { 
+        alert("Por favor ingresa el número, nombre o N° de lista del colegio."); 
+        return; 
+    }
 
-            if (!passwordInput) { 
-                alert("Por favor ingresa la contraseña asignada."); 
-                return; 
-            }
+    if (!passwordInput) { 
+        alert("Por favor ingresa la contraseña asignada."); 
+        return; 
+    }
 
-            const inputOriginal = codigoInput.trim().toLowerCase();
-            const inputLimpio = normalizarLimpio(codigoInput);
-            const passNorm = passwordInput.toLowerCase();
+    const inputOriginal = codigoInput.trim().toLowerCase();
+    const inputLimpio = normalizarLimpio(codigoInput);
+    const passNorm = passwordInput.toLowerCase();
 
-            const numerosUser = codigoInput.match(/\d+/g) || [];
-            const colegiosLista = getColegiosSafe();
+    const colegiosLista = getColegiosSafe();
 
-            // 1. BÚSQUEDA DEL COLEGIO
-            const candidatos = colegiosLista.filter(c => {
-                const idStr = String(c.id_colegio || c.codigo || '').trim().toLowerCase();
-                const idNumStr = !isNaN(idStr) ? String(Number(idStr)) : idStr;
-                const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
-                const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
+    // 1. BÚSQUEDA FLEXIBLE (Reconoce por ID, Código, o parte del Nombre como "elim" o "121")
+    const candidato = colegiosLista.find(c => {
+        const idStr = String(c.id_colegio || '').trim().toLowerCase();
+        const codStr = String(c.codigo || '').trim().toLowerCase();
+        const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
+        const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
 
-                if (inputOriginal === idStr || inputOriginal === idNumStr || inputLimpio === idStr) {
-                    return true;
-                }
-
-                if (numerosUser.some(num => String(Number(num)) === idNumStr || num === idStr)) {
-                    return true;
-                }
-
-                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio)) {
-                    return true;
-                }
-
-                return false;
-            });
-
-            if (candidatos.length === 0) {
-                alert("Error: No se encontró ningún colegio registrado con ese número, nombre o código.");
-                return;
-            }
-
-            const colegioEncontrado = candidatos[0];
-
-            // 2. VERIFICACIÓN DE BLOQUEO (EVALÚA COLUMNA V: estado_vigencia)
-            const estadoVigencia = String(colegioEncontrado.estado_vigencia || colegioEncontrado.estado_membresia || colegioEncontrado.estado_acceso || '').trim().toLowerCase();
-            
-            if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
-                alert("El acceso a la plataforma para esta institución se encuentra suspendido. Por favor comuníquese con la administración del Proyecto MAPACHE.");
-                return;
-            }
-
-            // 3. VALIDACIÓN DE CONTRASEÑA
-            const claveRegistrada = String(colegioEncontrado.password_director || '').trim().toLowerCase();
-
-            if (claveRegistrada !== passNorm) {
-                alert("Error: Contraseña incorrecta para el colegio ingresado.");
-                return;
-            }
-
-            modal.remove();
-            abrirPanelEdicionVacantesGrados(colegioEncontrado, passwordInput);
+        // Coincidencia exacta por ID o Código
+        if (inputOriginal === idStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
+            return true;
         }
+
+        // Coincidencia parcial por nombre (ej: buscar "elim" encuentra "i.e.p elim", buscar "121" encuentra "121 angelitos")
+        if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomOriginal)) {
+            return true;
+        }
+
+        return false;
+    });
+
+    if (!candidato) {
+        alert("Error: No se encontró ningún colegio registrado con ese número, nombre o código.");
+        return;
+    }
+
+    // 2. BARRERA DE BLOQUEO ESTRICTA (Revisa estado_vigencia en la fila)
+    const estadoVigencia = String(candidato.estado_vigencia || candidato.estado_membresia || candidato.estado_acceso || '').trim().toLowerCase();
+    
+    if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
+        alert("El acceso a la plataforma para esta institución se encuentra suspendido. Por favor comuníquese con la administración del Proyecto MAPACHE.");
+        return;
+    }
+
+    // 3. VALIDACIÓN DE CONTRASEÑA
+    const claveRegistrada = String(candidato.password_director || '').trim().toLowerCase();
+
+    if (claveRegistrada !== passNorm) {
+        alert("Error: Contraseña incorrecta para el colegio ingresado.");
+        return;
+    }
+
+    modal.remove();
+    abrirPanelEdicionVacantesGrados(candidato, passwordInput);
+}
 
         function crearSelectSemaforo(idCampo, valActual) {
             let val = String(valActual || '').toLowerCase();
