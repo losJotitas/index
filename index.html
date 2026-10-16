@@ -930,6 +930,15 @@
                 </div>
             `;
             document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            setTimeout(() => {
+                const passInput = document.getElementById('dir-password');
+                if (passInput) {
+                    passInput.addEventListener('keyup', (e) => {
+                        if (e.key === 'Enter') autenticarDirector();
+                    });
+                }
+            }, 100);
         }
 
         function alternarVisibilidadPassword() {
@@ -942,74 +951,72 @@
             }
         }
 
-      function autenticarDirector() {
-    ocultarTecladoMovil();
-    const modal = document.getElementById('modal-director');
-    if (!modal) return;
+        function autenticarDirector() {
+            ocultarTecladoMovil();
+            const modal = document.getElementById('modal-director');
+            if (!modal) return;
 
-    const codigoInput = document.getElementById('dir-codigo').value;
-    const passwordInput = document.getElementById('dir-password').value.trim();
+            const codigoInput = document.getElementById('dir-codigo').value;
+            const passwordInput = document.getElementById('dir-password').value.trim();
 
-    if (!codigoInput || !codigoInput.trim()) { 
-        alert("Por favor ingresa el número, nombre o N° de lista del colegio."); 
-        return; 
-    }
+            if (!codigoInput || !codigoInput.trim()) { 
+                alert("Por favor ingresa el número, nombre o N° de lista del colegio."); 
+                return; 
+            }
 
-    if (!passwordInput) { 
-        alert("Por favor ingresa la contraseña asignada."); 
-        return; 
-    }
+            if (!passwordInput) { 
+                alert("Por favor ingresa la contraseña asignada."); 
+                return; 
+            }
 
-    const inputOriginal = codigoInput.trim().toLowerCase();
-    const inputLimpio = normalizarLimpio(codigoInput);
-    const passNorm = passwordInput.toLowerCase();
+            const inputOriginal = codigoInput.trim().toLowerCase();
+            const inputLimpio = normalizarLimpio(codigoInput);
+            const passNorm = passwordInput.toLowerCase();
 
-    const colegiosLista = getColegiosSafe();
+            const colegiosLista = getColegiosSafe();
 
-    // 1. BÚSQUEDA FLEXIBLE (Reconoce por ID, Código, o parte del Nombre como "elim" o "121")
-    const candidato = colegiosLista.find(c => {
-        const idStr = String(c.id_colegio || '').trim().toLowerCase();
-        const codStr = String(c.codigo || '').trim().toLowerCase();
-        const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
-        const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
+            // Búsqueda inteligente por ID, número o texto en nombre
+            const candidato = colegiosLista.find(c => {
+                const idStr = String(c.id_colegio || '').trim().toLowerCase();
+                const codStr = String(c.codigo || '').trim().toLowerCase();
+                const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
+                const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
 
-        // Coincidencia exacta por ID o Código
-        if (inputOriginal === idStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
-            return true;
+                if (inputOriginal === idStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
+                    return true;
+                }
+
+                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomOriginal)) {
+                    return true;
+                }
+
+                return false;
+            });
+
+            if (!candidato) {
+                alert("Error: No se encontró ningún colegio registrado con ese número, nombre o código.");
+                return;
+            }
+
+            // BARRERA DE BLOQUEO ESTRICTA (evalúa estado_vigencia)
+            const estadoVigencia = String(candidato.estado_vigencia || candidato.estado_membresia || candidato.estado_acceso || '').trim().toLowerCase();
+            
+            if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
+                alert("El acceso a la plataforma para esta institución se encuentra suspendido. Por favor comuníquese con la administración del Proyecto MAPACHE.");
+                return;
+            }
+
+            // VALIDACIÓN DE CONTRASEÑA
+            const claveRegistrada = String(candidato.password_director || '').trim().toLowerCase();
+
+            if (claveRegistrada !== passNorm) {
+                alert("Error: Contraseña incorrecta para el colegio ingresado.");
+                return;
+            }
+
+            modal.remove();
+            abrirPanelEdicionVacantesGrados(candidato, passwordInput);
         }
-
-        // Coincidencia parcial por nombre (ej: buscar "elim" encuentra "i.e.p elim", buscar "121" encuentra "121 angelitos")
-        if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomOriginal)) {
-            return true;
-        }
-
-        return false;
-    });
-
-    if (!candidato) {
-        alert("Error: No se encontró ningún colegio registrado con ese número, nombre o código.");
-        return;
-    }
-
-    // 2. BARRERA DE BLOQUEO ESTRICTA (Revisa estado_vigencia en la fila)
-    const estadoVigencia = String(candidato.estado_vigencia || candidato.estado_membresia || candidato.estado_acceso || '').trim().toLowerCase();
-    
-    if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
-        alert("El acceso a la plataforma para esta institución se encuentra suspendido. Por favor comuníquese con la administración del Proyecto MAPACHE.");
-        return;
-    }
-
-    // 3. VALIDACIÓN DE CONTRASEÑA
-    const claveRegistrada = String(candidato.password_director || '').trim().toLowerCase();
-
-    if (claveRegistrada !== passNorm) {
-        alert("Error: Contraseña incorrecta para el colegio ingresado.");
-        return;
-    }
-
-    modal.remove();
-    abrirPanelEdicionVacantesGrados(candidato, passwordInput);
-}
 
         function crearSelectSemaforo(idCampo, valActual) {
             let val = String(valActual || '').toLowerCase();
@@ -1314,14 +1321,18 @@
             }, 1500);
         }
 
+        // BÚSQUEDA AUTOCOMPLETADA + ENTER AUTOMÁTICO
         function configurarAutocompletado(inputId, listaId, alSeleccionar) {
             const input = document.getElementById(inputId);
             const lista = document.getElementById(listaId);
             if (!input || !lista) return;
 
+            let primeraCoincidencia = null;
+
             input.addEventListener('input', function() {
                 const textoNorm = normalizarTexto(this.value);
                 lista.innerHTML = '';
+                primeraCoincidencia = null;
 
                 if (textoNorm.length === 0) { lista.style.display = 'none'; return; }
 
@@ -1336,6 +1347,8 @@
                 }).slice(0, 8);
 
                 if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
+
+                primeraCoincidencia = coincidencias[0];
 
                 coincidencias.forEach(c => {
                     const div = document.createElement('div');
@@ -1352,10 +1365,14 @@
                 lista.style.display = 'block';
             });
 
+            // SOPORTE ENTER TECLADO PC Y MÓVIL
             input.addEventListener('keyup', function(e) {
                 if (e.key === 'Enter') {
                     ocultarTecladoMovil();
                     lista.style.display = 'none';
+                    if (primeraCoincidencia) {
+                        alSeleccionar(primeraCoincidencia);
+                    }
                 }
             });
 
@@ -1462,25 +1479,48 @@
             filtrarListaVacantes();
         }
 
+        // MOTOR DE FACHADAS: BUSCA POR NÚMERO, ID Y NOMBRE LIMPIO DE FOTO
         function intentarAbrirFachadaConAlternativas(idColegio, codigoColegio, nombreColegio) {
             let idStr = String(idColegio || '').trim();
             let codStr = String(codigoColegio || '').trim();
             let nombreNorm = normalizarTexto(nombreColegio);
 
-            let numerosEnNombre = nombreColegio.match(/\d+/g) || [];
-
             let candidatos = [];
 
+            // 1. Nombre formateado con guiones bajos o espacios (Ej. I_E_P_ELIM.jpeg, ELIM.jpg)
+            let nombreArchivo1 = nombreColegio.trim().replace(/\s+/g, '_');
+            let nombreArchivo2 = nombreColegio.trim().replace(/[^a-zA-Z0-9]/g, '_');
+            let nombreArchivo3 = nombreColegio.trim();
+
+            candidatos.push(`fotos/${nombreArchivo1}.jpeg`);
+            candidatos.push(`fotos/${nombreArchivo1}.jpg`);
+            candidatos.push(`fotos/${nombreArchivo1}.png`);
+            candidatos.push(`fotos/${nombreArchivo2}.jpeg`);
+            candidatos.push(`fotos/${nombreArchivo2}.jpg`);
+            candidatos.push(`fotos/${nombreArchivo3}.jpeg`);
+            candidatos.push(`fotos/${nombreArchivo3}.jpg`);
+
+            // 2. Coincidencias especiales por palabras clave
             if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) {
                 candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
             }
+            if (nombreNorm.includes('elim')) {
+                candidatos.push("fotos/ELIM.jpeg");
+                candidatos.push("fotos/ELIM.jpg");
+                candidatos.push("fotos/IEP_ELIM.jpeg");
+                candidatos.push("fotos/I_E_P_ELIM.jpeg");
+            }
 
+            // 3. Extracción de números en el nombre
+            let numerosEnNombre = nombreColegio.match(/\d+/g) || [];
             numerosEnNombre.forEach(num => {
                 let numLimpio = String(Number(num));
                 candidatos.push(`fotos/${numLimpio}.jpeg`);
                 candidatos.push(`fotos/${numLimpio}.jpg`);
+                candidatos.push(`fotos/${numLimpio}.png`);
             });
 
+            // 4. Códigos e IDs
             if (codStr) {
                 let codNum = !isNaN(codStr) ? String(Number(codStr)) : codStr;
                 candidatos.push(`fotos/${codNum}.jpeg`);
