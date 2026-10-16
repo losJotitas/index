@@ -184,7 +184,7 @@
         }
         .sugerencia-item:hover { background-color: #e2e8f0; }
 
-        /* NUEVA PALETA CROMÁTICA ARMÓNICA Y DIFERENCIADA */
+        /* PALETA DE COLORES 100% DIFERENCIADA Y SIN COINCIDENCIAS */
         .btn-opcion {
             width: 100%; padding: 12px 14px;
             color: #ffffff; border: none;
@@ -194,37 +194,44 @@
         }
         .btn-opcion:hover { transform: translateY(-2px); filter: brightness(1.12); }
         
+        /* 1. Tour Interactivo: Morado Neón */
         .btn-tour { 
             background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
             box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4); 
             border: 1px solid #a78bfa; 
         }
+        /* 2. Ver Todos en Mapa: Verde Esmeralda */
         .btn-verde { 
-            background: linear-gradient(135deg, #059669, #047857); 
-            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4); 
+            background: linear-gradient(135deg, #10b981, #059669); 
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); 
             border: 1px solid #34d399;
         }
+        /* 3. Redes Educativas: Azul Rey / Índigo */
         .btn-azul { 
-            background: linear-gradient(135deg, #2563eb, #1d4ed8); 
+            background: linear-gradient(135deg, #2563eb, #1e40af); 
             box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); 
             border: 1px solid #60a5fa;
         }
+        /* 4. Colegios Estatales: Ámbar / Terracota */
         .btn-estatales { 
             background: linear-gradient(135deg, #d97706, #b45309); 
             box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); 
             border: 1px solid #fbbf24;
         }
+        /* 5. Colegios Particulares: Violeta Oscuro / Magenta */
         .btn-particulares { 
-            background: linear-gradient(135deg, #7c3aed, #5b21b6); 
+            background: linear-gradient(135deg, #7c3aed, #581c87); 
             color: #ffffff; 
             box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4); 
-            border: 1px solid #c084fc;
+            border: 1px solid #fbbf24;
         }
+        /* 6. Buscar Vacantes: Naranja Fuego Vivo */
         .btn-naranja { 
-            background: linear-gradient(135deg, #ea580c, #c2410c); 
+            background: linear-gradient(135deg, #ea580c, #9a3412); 
             box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4); 
-            border: 1px solid #fb923c;
+            border: 1px solid #fdba74;
         }
+        /* 7. Colaboración y Membresía: Celeste Cian */
         .btn-diamante { 
             background: linear-gradient(135deg, #0284c7, #0369a1); 
             box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4); 
@@ -897,7 +904,7 @@
                     if (map && document.getElementById('pantalla-mapa').classList.contains('activa')) {
                         const todos = getColegiosSafe();
                         if (filtroActualMapa === 'Particular') {
-                            mostrarColegiosEnMapa(todos.filter(c => c.gestion && (c.gestion.toLowerCase().includes('particular') || c.gestion.toLowerCase().includes('privad'))));
+                            mostrarColegiosEnMapa(todos.filter(c => c.gestion && (c.gestion.toLowerCase().includes('particular') || c.gestion.toLowerCase().includes('privad') || c.gestion.toLowerCase().includes('convenio'))));
                         } else if (filtroActualMapa === 'Estatal') {
                             mostrarColegiosEnMapa(todos.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal')));
                         } else if (filtroActualMapa.startsWith('red_')) {
@@ -981,7 +988,7 @@
             }
         }
 
-        // BARRERA DE BLOQUEO Y AUTENTICACIÓN MEJORADA
+        // BARRERA DE BLOQUEO ESTRICTA Y AUTENTICACIÓN
         function autenticarDirector() {
             ocultarTecladoMovil();
             const modal = document.getElementById('modal-director');
@@ -1030,15 +1037,15 @@
                 return;
             }
 
-            // 2. PRIMERA REGLA CRÍTICA: EVALUAR BLOQUEO ANTES DE LA CONTRASEÑA
+            // 2. REGLA INQUEBRANTABLE DE BLOQUEO
             const estadoVigencia = String(candidato.estado_vigencia || candidato.estado_membresia || candidato.estado_acceso || '').trim().toLowerCase();
             
             if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
-                alert("El acceso a la plataforma para esta institución se encuentra suspendido. Por favor comuníquese con la administración del Proyecto MAPACHE.");
+                alert("ACCESO DENEGADO: El colegio seleccionado se encuentra BLOQUEADO o SUSPENDIDO en la plataforma. Comuníquese con la administración del Proyecto MAPACHE.");
                 return;
             }
 
-            // 3. SEGUNDA REGLA: VALIDACIÓN DE CONTRASEÑA
+            // 3. VALIDACIÓN DE CONTRASEÑA
             const claveRegistrada = String(candidato.password_director || '').trim().toLowerCase();
 
             if (claveRegistrada !== passNorm) {
@@ -1206,10 +1213,11 @@
             lista.forEach(colegio => {
                 if (!colegio.latitud || !colegio.longitud) return;
 
-                const esParticular = colegio.gestion && (colegio.gestion.toLowerCase().includes('particular') || colegio.gestion.toLowerCase().includes('privad'));
+                const gestionStr = String(colegio.gestion || '').toLowerCase();
+                const esParticular = gestionStr.includes('particular') || gestionStr.includes('privad') || gestionStr.includes('convenio');
                 const numRed = extraerNumeroRed(colegio.red_educativa);
 
-                const colorPin = esParticular ? "#d97706" : ((numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568");
+                const colorPin = esParticular ? "#7c3aed" : ((numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568");
                 const textoPin = esParticular ? "⭐" : (numRed ? numRed : "🏫");
                 const claseEtiqueta = esParticular ? "pin-etiqueta-particular" : "pin-etiqueta-nombre";
 
@@ -1217,7 +1225,7 @@
                     className: 'custom-div-icon',
                     html: `
                         <div class="pin-clasico-container">
-                            <div class="pin-gota" style="background-color: ${colorPin}; border: 2px solid ${esParticular ? '#f59e0b' : '#ffffff'};"></div>
+                            <div class="pin-gota" style="background-color: ${colorPin}; border: 2px solid ${esParticular ? '#fbbf24' : '#ffffff'};"></div>
                             <div class="pin-texto">${textoPin}</div>
                         </div>
                     `,
@@ -1272,7 +1280,7 @@
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
             filtroActualMapa = 'Particular';
-            abrirModalMapachito('feliz', "¡Te mostraré únicamente los colegios Particulares con sus distintivos dorados! 🏫⭐", false, () => {
+            abrirModalMapachito('feliz', "¡Te mostraré únicamente los colegios Particulares y Privados con sus distintivos dorados! 🏫⭐", false, () => {
                 ejecutarIrAlMapa('Particular');
             }, 1800);
         }
@@ -1318,7 +1326,10 @@
                 if (filtroTipo === 'Estatal') {
                     filtrados = colegiosLista.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal'));
                 } else if (filtroTipo === 'Particular') {
-                    filtrados = colegiosLista.filter(c => c.gestion && (c.gestion.toLowerCase().includes('particular') || c.gestion.toLowerCase().includes('privad')));
+                    filtrados = colegiosLista.filter(c => {
+                        const g = String(c.gestion || '').toLowerCase();
+                        return g.includes('particular') || g.includes('privad') || g.includes('convenio');
+                    });
                 }
 
                 mostrarColegiosEnMapa(filtrados);
@@ -1355,7 +1366,7 @@
             }, 1500);
         }
 
-        // BÚSQUEDA AUTOCOMPLETADA ROBUSTA + SELECCIÓN POR ENTER
+        // AUTOCOMPLETADO EXPANDIDO Y ULTRA FLEXIBLE PARA "ELIM" Y OTROS
         function configurarAutocompletado(inputId, listaId, alSeleccionar) {
             const input = document.getElementById(inputId);
             const lista = document.getElementById(listaId);
@@ -1377,8 +1388,9 @@
                     const dirNorm = normalizarTexto(c.direccion);
                     const nivNorm = normalizarTexto(c.niveles);
                     const zonaNorm = normalizarTexto(c.zona || c.ZONA);
-                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || zonaNorm.includes(textoNorm);
-                }).slice(0, 8);
+                    const gestNorm = normalizarTexto(c.gestion);
+                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || zonaNorm.includes(textoNorm) || gestNorm.includes(textoNorm);
+                }).slice(0, 10);
 
                 if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
 
@@ -1387,7 +1399,7 @@
                 coincidencias.forEach(c => {
                     const div = document.createElement('div');
                     div.className = 'sugerencia-item';
-                    div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(Cod: ${c.id_colegio})</span>`;
+                    div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(Cod: ${c.id_colegio} - ${c.gestion || ''})</span>`;
                     div.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         ocultarTecladoMovil();
@@ -1453,8 +1465,9 @@
             const colegio = colegiosLista.find(c => c.nombre_colegio === nombreColegio);
             if (!colegio) return;
 
-            const esPart = colegio.gestion && (colegio.gestion.toLowerCase().includes('particular') || colegio.gestion.toLowerCase().includes('privad'));
-            const tipoBadge = esPart ? 'badge-particular' : (colegio.gestion && colegio.gestion.toLowerCase().includes('convenio') ? 'badge-convenio' : 'badge-estatal');
+            const gestionStr = String(colegio.gestion || '').toLowerCase();
+            const esPart = gestionStr.includes('particular') || gestionStr.includes('privad') || gestionStr.includes('convenio');
+            const tipoBadge = esPart ? 'badge-particular' : (gestionStr.includes('convenio') ? 'badge-convenio' : 'badge-estatal');
             const nivelesTexto = normalizarTexto(colegio.niveles);
 
             let bloquesNivelesHTML = '';
