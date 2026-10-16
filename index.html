@@ -140,13 +140,13 @@
 
         .bloque-controles {
             width: 100%;                    
-            max-width: 350px;              
+            max-width: 360px;              
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 11px;
             background: rgba(15, 23, 42, 0.88);
-            padding: 16px;
-            border-radius: 22px;
+            padding: 18px 16px;
+            border-radius: 24px;
             backdrop-filter: blur(8px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
             border: 2px solid rgba(56, 189, 248, 0.3); 
@@ -161,10 +161,10 @@
             color: #0f172a;
             border: none;
             border-radius: 14px;
-            font-size: 13px;
+            font-size: 13.5px;
             outline: none;
-            font-weight: 600;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+            font-weight: 700;
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.3);
         }
 
         .sugerencias-lista {
@@ -173,34 +173,65 @@
             background: #ffffff; color: #0f172a;
             border-radius: 0 0 14px 14px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            z-index: 1000; max-height: 200px;
+            z-index: 1000; max-height: 220px;
             overflow-y: auto; display: none;
         }
 
         .sugerencia-item {
-            padding: 10px 14px; font-size: 12px;
+            padding: 11px 14px; font-size: 12px;
             border-bottom: 1px solid #f1f5f9;
             cursor: pointer; font-weight: 600;
         }
         .sugerencia-item:hover { background-color: #e2e8f0; }
 
+        /* NUEVA PALETA CROMÁTICA ARMÓNICA Y DIFERENCIADA */
         .btn-opcion {
             width: 100%; padding: 12px 14px;
-            color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff; border: none;
             border-radius: 14px; font-size: 13px; font-weight: 700;
             cursor: pointer; transition: all 0.2s ease;
             text-align: center; text-decoration: none; display: inline-block;
         }
-        .btn-opcion:hover { transform: translateY(-1px); filter: brightness(1.08); }
-        .btn-tour { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 0 14px rgba(139, 92, 246, 0.5); border: 1px solid #a78bfa; }
-        .btn-verde { background-color: #729b79; box-shadow: 0 0 12px rgba(114, 155, 121, 0.4); }
-        .btn-azul { background-color: #7b8db9; box-shadow: 0 0 12px rgba(123, 141, 185, 0.4); }
-        .btn-estatales { background-color: #d18b6d; box-shadow: 0 0 12px rgba(209, 139, 109, 0.4); }
-        .btn-particulares { background-color: #d97706; color: #ffffff; box-shadow: 0 0 12px rgba(217, 119, 6, 0.5); border: 1px solid #fbbf24; }
-        .btn-naranja { background-color: #f59e0b; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
-        .btn-diamante { background-color: #0284c7; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4); }
+        .btn-opcion:hover { transform: translateY(-2px); filter: brightness(1.12); }
+        
+        .btn-tour { 
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4); 
+            border: 1px solid #a78bfa; 
+        }
+        .btn-verde { 
+            background: linear-gradient(135deg, #059669, #047857); 
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4); 
+            border: 1px solid #34d399;
+        }
+        .btn-azul { 
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); 
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); 
+            border: 1px solid #60a5fa;
+        }
+        .btn-estatales { 
+            background: linear-gradient(135deg, #d97706, #b45309); 
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); 
+            border: 1px solid #fbbf24;
+        }
+        .btn-particulares { 
+            background: linear-gradient(135deg, #7c3aed, #5b21b6); 
+            color: #ffffff; 
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4); 
+            border: 1px solid #c084fc;
+        }
+        .btn-naranja { 
+            background: linear-gradient(135deg, #ea580c, #c2410c); 
+            box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4); 
+            border: 1px solid #fb923c;
+        }
+        .btn-diamante { 
+            background: linear-gradient(135deg, #0284c7, #0369a1); 
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4); 
+            border: 1px solid #38bdf8;
+        }
 
-        .fila-botones-dividida { display: flex; gap: 8px; width: 100%; }
+        .fila-botones-dividida { display: flex; gap: 9px; width: 100%; }
         .fila-botones-dividida .btn-opcion { flex: 1; }
 
         .pantalla-secundaria {
@@ -407,7 +438,7 @@
                 </button>
 
                 <div class="search-box-wrapper">
-                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, 5090)..." autocomplete="off">
+                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, Elim, 5090)..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
@@ -420,7 +451,7 @@
                 
                 <div class="fila-botones-dividida">
                     <button class="btn-opcion btn-estatales" onclick="mostrarInfoEstatales(event)">Colegios Estatales</button>
-                    <button class="btn-opcion btn-particulares" onclick="mostrarInfoParticulares(event)">Colegios Particulares</button>
+                    <button class="btn-opcion btn-particulares" onclick="mostrarInfoParticulares(event)">Colegios Particulares ⭐</button>
                 </div>
                 
                 <button class="btn-opcion btn-naranja" onclick="abrirPantallaVacantes(event)">🚦 Buscar Vacantes Disponibles</button>
@@ -454,7 +485,7 @@
                     🟡 <b>Amarillo:</b> Pocas vacantes disponibles<br>
                     🔴 <b>Rojo:</b> Sin vacantes (Agotado)
                 </div>
-                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre, apellido (Ej. Cáceres), nivel o grado..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
+                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre, apellido (Ej. Cáceres, Elim), nivel o grado..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
             </div>
             
             <div id="lista-vacantes"></div>
@@ -626,7 +657,7 @@
             {
                 emocion: 'buscando',
                 titulo: '1. Buscador Directo e Inteligente',
-                texto: 'Escribe en la barra de búsqueda el <b>número del colegio</b> (Ej: 113, 5090), el <b>nombre</b> o el <b>apellido del ilustre</b> (Ej: Cáceres, Chapi). ¡Te dará sugerencias instantáneas!'
+                texto: 'Escribe en la barra de búsqueda el <b>número del colegio</b> (Ej: 113, 5090), el <b>nombre</b> o el <b>apellido del ilustre</b> (Ej: Cáceres, Elim). ¡Te dará sugerencias instantáneas!'
             },
             {
                 emocion: 'olfateando',
@@ -713,7 +744,6 @@
         function normalizarLimpio(txt) {
             if (!txt) return '';
             let s = String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            s = s.replace(/\b(colegio|colegios|i\.?e\.?[ip]?\.?)\b/g, ' ');
             s = s.replace(/n[°º. ]*/g, ' ');
             s = s.replace(/[^a-z0-9]/g, ' ');
             s = s.replace(/\s+/g, ' ').trim();
@@ -867,7 +897,7 @@
                     if (map && document.getElementById('pantalla-mapa').classList.contains('activa')) {
                         const todos = getColegiosSafe();
                         if (filtroActualMapa === 'Particular') {
-                            mostrarColegiosEnMapa(todos.filter(c => c.gestion && c.gestion.toLowerCase().includes('particular')));
+                            mostrarColegiosEnMapa(todos.filter(c => c.gestion && (c.gestion.toLowerCase().includes('particular') || c.gestion.toLowerCase().includes('privad'))));
                         } else if (filtroActualMapa === 'Estatal') {
                             mostrarColegiosEnMapa(todos.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal')));
                         } else if (filtroActualMapa.startsWith('red_')) {
@@ -914,7 +944,7 @@
                         </div>
                         
                         <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Colegio (Número, Nombre o N° de lista Excel):</label>
-                        <input type="text" id="dir-codigo" placeholder="Ej. 126, Fe y Alegría 29, Coprodeli, 134..." style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
+                        <input type="text" id="dir-codigo" placeholder="Ej. 126, Fe y Alegría 29, Elim, 147..." style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
                         
                         <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Contraseña Asignada:</label>
                         <div style="position:relative; width:100%; margin:5px 0 15px 0;">
@@ -951,6 +981,7 @@
             }
         }
 
+        // BARRERA DE BLOQUEO Y AUTENTICACIÓN MEJORADA
         function autenticarDirector() {
             ocultarTecladoMovil();
             const modal = document.getElementById('modal-director');
@@ -975,18 +1006,19 @@
 
             const colegiosLista = getColegiosSafe();
 
-            // Búsqueda inteligente por ID, número o texto en nombre
+            // 1. Localizar colegio objetivo en la lista
             const candidato = colegiosLista.find(c => {
                 const idStr = String(c.id_colegio || '').trim().toLowerCase();
+                const idNumStr = !isNaN(idStr) ? String(Number(idStr)) : idStr;
                 const codStr = String(c.codigo || '').trim().toLowerCase();
                 const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
                 const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
 
-                if (inputOriginal === idStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
+                if (inputOriginal === idStr || inputOriginal === idNumStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
                     return true;
                 }
 
-                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomOriginal)) {
+                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomLimpio)) {
                     return true;
                 }
 
@@ -998,7 +1030,7 @@
                 return;
             }
 
-            // BARRERA DE BLOQUEO ESTRICTA (evalúa estado_vigencia)
+            // 2. PRIMERA REGLA CRÍTICA: EVALUAR BLOQUEO ANTES DE LA CONTRASEÑA
             const estadoVigencia = String(candidato.estado_vigencia || candidato.estado_membresia || candidato.estado_acceso || '').trim().toLowerCase();
             
             if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
@@ -1006,7 +1038,7 @@
                 return;
             }
 
-            // VALIDACIÓN DE CONTRASEÑA
+            // 3. SEGUNDA REGLA: VALIDACIÓN DE CONTRASEÑA
             const claveRegistrada = String(candidato.password_director || '').trim().toLowerCase();
 
             if (claveRegistrada !== passNorm) {
@@ -1174,7 +1206,7 @@
             lista.forEach(colegio => {
                 if (!colegio.latitud || !colegio.longitud) return;
 
-                const esParticular = colegio.gestion && colegio.gestion.toLowerCase().includes('particular');
+                const esParticular = colegio.gestion && (colegio.gestion.toLowerCase().includes('particular') || colegio.gestion.toLowerCase().includes('privad'));
                 const numRed = extraerNumeroRed(colegio.red_educativa);
 
                 const colorPin = esParticular ? "#d97706" : ((numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568");
@@ -1283,8 +1315,10 @@
                 
                 const colegiosLista = getColegiosSafe();
                 let filtrados = colegiosLista;
-                if (filtroTipo === 'Estatal' || filtroTipo === 'Particular') {
-                    filtrados = colegiosLista.filter(c => c.gestion && c.gestion.toLowerCase().includes(filtroTipo.toLowerCase()));
+                if (filtroTipo === 'Estatal') {
+                    filtrados = colegiosLista.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal'));
+                } else if (filtroTipo === 'Particular') {
+                    filtrados = colegiosLista.filter(c => c.gestion && (c.gestion.toLowerCase().includes('particular') || c.gestion.toLowerCase().includes('privad')));
                 }
 
                 mostrarColegiosEnMapa(filtrados);
@@ -1321,7 +1355,7 @@
             }, 1500);
         }
 
-        // BÚSQUEDA AUTOCOMPLETADA + ENTER AUTOMÁTICO
+        // BÚSQUEDA AUTOCOMPLETADA ROBUSTA + SELECCIÓN POR ENTER
         function configurarAutocompletado(inputId, listaId, alSeleccionar) {
             const input = document.getElementById(inputId);
             const lista = document.getElementById(listaId);
@@ -1365,7 +1399,6 @@
                 lista.style.display = 'block';
             });
 
-            // SOPORTE ENTER TECLADO PC Y MÓVIL
             input.addEventListener('keyup', function(e) {
                 if (e.key === 'Enter') {
                     ocultarTecladoMovil();
@@ -1420,7 +1453,8 @@
             const colegio = colegiosLista.find(c => c.nombre_colegio === nombreColegio);
             if (!colegio) return;
 
-            const tipoBadge = colegio.gestion && colegio.gestion.toLowerCase().includes('particular') ? 'badge-particular' : (colegio.gestion && colegio.gestion.toLowerCase().includes('convenio') ? 'badge-convenio' : 'badge-estatal');
+            const esPart = colegio.gestion && (colegio.gestion.toLowerCase().includes('particular') || colegio.gestion.toLowerCase().includes('privad'));
+            const tipoBadge = esPart ? 'badge-particular' : (colegio.gestion && colegio.gestion.toLowerCase().includes('convenio') ? 'badge-convenio' : 'badge-estatal');
             const nivelesTexto = normalizarTexto(colegio.niveles);
 
             let bloquesNivelesHTML = '';
@@ -1479,7 +1513,6 @@
             filtrarListaVacantes();
         }
 
-        // MOTOR DE FACHADAS: BUSCA POR NÚMERO, ID Y NOMBRE LIMPIO DE FOTO
         function intentarAbrirFachadaConAlternativas(idColegio, codigoColegio, nombreColegio) {
             let idStr = String(idColegio || '').trim();
             let codStr = String(codigoColegio || '').trim();
@@ -1487,7 +1520,6 @@
 
             let candidatos = [];
 
-            // 1. Nombre formateado con guiones bajos o espacios (Ej. I_E_P_ELIM.jpeg, ELIM.jpg)
             let nombreArchivo1 = nombreColegio.trim().replace(/\s+/g, '_');
             let nombreArchivo2 = nombreColegio.trim().replace(/[^a-zA-Z0-9]/g, '_');
             let nombreArchivo3 = nombreColegio.trim();
@@ -1500,7 +1532,6 @@
             candidatos.push(`fotos/${nombreArchivo3}.jpeg`);
             candidatos.push(`fotos/${nombreArchivo3}.jpg`);
 
-            // 2. Coincidencias especiales por palabras clave
             if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) {
                 candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
             }
@@ -1511,7 +1542,6 @@
                 candidatos.push("fotos/I_E_P_ELIM.jpeg");
             }
 
-            // 3. Extracción de números en el nombre
             let numerosEnNombre = nombreColegio.match(/\d+/g) || [];
             numerosEnNombre.forEach(num => {
                 let numLimpio = String(Number(num));
@@ -1520,7 +1550,6 @@
                 candidatos.push(`fotos/${numLimpio}.png`);
             });
 
-            // 4. Códigos e IDs
             if (codStr) {
                 let codNum = !isNaN(codStr) ? String(Number(codStr)) : codStr;
                 candidatos.push(`fotos/${codNum}.jpeg`);
