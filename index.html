@@ -20,7 +20,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* PANTALLA 1: PORTADA PRINCIPAL */
         #pantalla-portada {
             position: relative;
             width: 100vw; 
@@ -141,13 +140,13 @@
 
         .bloque-controles {
             width: 100%;                    
-            max-width: 350px;              
+            max-width: 360px;              
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 11px;
             background: rgba(15, 23, 42, 0.88);
-            padding: 16px;
-            border-radius: 22px;
+            padding: 18px 16px;
+            border-radius: 24px;
             backdrop-filter: blur(8px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
             border: 2px solid rgba(56, 189, 248, 0.3); 
@@ -162,10 +161,10 @@
             color: #0f172a;
             border: none;
             border-radius: 14px;
-            font-size: 13px;
+            font-size: 13.5px;
             outline: none;
-            font-weight: 600;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+            font-weight: 700;
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.3);
         }
 
         .sugerencias-lista {
@@ -174,36 +173,74 @@
             background: #ffffff; color: #0f172a;
             border-radius: 0 0 14px 14px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            z-index: 1000; max-height: 200px;
+            z-index: 1000; max-height: 220px;
             overflow-y: auto; display: none;
         }
 
         .sugerencia-item {
-            padding: 10px 14px; font-size: 12px;
+            padding: 11px 14px; font-size: 12px;
             border-bottom: 1px solid #f1f5f9;
             cursor: pointer; font-weight: 600;
         }
         .sugerencia-item:hover { background-color: #e2e8f0; }
 
+        /* PALETA DE COLORES TOTALMENTE DIFERENCIADA Y ARMÓNICA */
         .btn-opcion {
             width: 100%; padding: 12px 14px;
-            color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff; border: none;
             border-radius: 14px; font-size: 13px; font-weight: 700;
             cursor: pointer; transition: all 0.2s ease;
             text-align: center; text-decoration: none; display: inline-block;
         }
-        .btn-opcion:hover { transform: translateY(-1px); filter: brightness(1.08); }
-        .btn-verde { background-color: #729b79; box-shadow: 0 0 12px rgba(114, 155, 121, 0.4); }
-        .btn-azul { background-color: #7b8db9; box-shadow: 0 0 12px rgba(123, 141, 185, 0.4); }
-        .btn-estatales { background-color: #d18b6d; box-shadow: 0 0 12px rgba(209, 139, 109, 0.4); }
-        .btn-particulares { background-color: #a8a697; color: #1e293b; box-shadow: 0 0 12px rgba(168, 166, 151, 0.4); }
-        .btn-naranja { background-color: #f59e0b; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
-        .btn-diamante { background-color: #0284c7; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4); }
+        .btn-opcion:hover { transform: translateY(-2px); filter: brightness(1.12); }
+        
+        /* 1. Tour Interactivo: Morado Neón */
+        .btn-tour { 
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4); 
+            border: 1px solid #a78bfa; 
+        }
+        /* 2. Ver Todos en Mapa: Verde Esmeralda */
+        .btn-verde { 
+            background: linear-gradient(135deg, #10b981, #059669); 
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); 
+            border: 1px solid #34d399;
+        }
+        /* 3. Redes Educativas: Azul Cobalto */
+        .btn-azul { 
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); 
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); 
+            border: 1px solid #60a5fa;
+        }
+        /* 4. Colegios Estatales: Terracota CÁLIDO */
+        .btn-estatales { 
+            background: linear-gradient(135deg, #d97706, #b45309); 
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); 
+            border: 1px solid #fbbf24;
+        }
+        /* 5. Colegios Particulares: Azul Zafiro CIAN LUMINOSO (UNICO) */
+        .btn-particulares { 
+            background: linear-gradient(135deg, #0284c7, #0369a1); 
+            color: #ffffff; 
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.5); 
+            border: 1.5px solid #fbbf24;
+        }
+        /* 6. Buscar Vacantes: Naranja Fuego Vivo */
+        .btn-naranja { 
+            background: linear-gradient(135deg, #ea580c, #c2410c); 
+            box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4); 
+            border: 1px solid #fdba74;
+        }
+        /* 7. Colaboración y Membresía: Magenta Rápido */
+        .btn-diamante { 
+            background: linear-gradient(135deg, #7c3aed, #6d28d9); 
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4); 
+            border: 1px solid #c084fc;
+        }
 
-        .fila-botones-dividida { display: flex; gap: 8px; width: 100%; }
+        .fila-botones-dividida { display: flex; gap: 9px; width: 100%; }
         .fila-botones-dividida .btn-opcion { flex: 1; }
 
-        /* PANTALLAS SECUNDARIAS */
         .pantalla-secundaria {
             display: none !important;
             position: fixed;
@@ -222,10 +259,10 @@
         .search-container-map input { width: 100%; padding: 10px 15px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; outline: none; background: #fff; color: #2d3748; }
         #map { flex: 1; width: 100%; min-height: 300px; }
 
-        /* PINES EN EL MAPA CON ETIQUETAS PERMANENTES */
         .pin-clasico-container { position: relative; width: 30px; height: 42px; }
         .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
         .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+        
         .pin-etiqueta-nombre {
             background: rgba(15, 23, 42, 0.92) !important;
             color: #38bdf8 !important;
@@ -238,9 +275,21 @@
             white-space: nowrap !important;
         }
 
-        /* MODALES Y CAPAS SUPERIORES */
+        .pin-etiqueta-particular {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%) !important;
+            color: #fbbf24 !important;
+            border: 1.5px solid #f59e0b !important;
+            border-radius: 6px !important;
+            padding: 3px 8px !important;
+            font-size: 10.5px !important;
+            font-weight: 800 !important;
+            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.6) !important;
+            white-space: nowrap !important;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; cursor: pointer; }
-        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 310px; width: 90%; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 320px; width: 92%; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
         .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; width: 100%; line-height: 1.4; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         
         .raccoon-avatar-box { 
@@ -248,6 +297,16 @@
         }
         .raccoon-avatar-box img { width: 110px; height: 110px; object-fit: contain; position: absolute; z-index: 2; }
         .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+
+        #modal-tour-interactivo { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.94); z-index: 40000; justify-content: center; align-items: center; padding: 15px; }
+        .box-tour-card { background: #1e293b; border: 3px solid #a78bfa; border-radius: 24px; padding: 22px 18px; max-width: 350px; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; }
+        .tour-indicador-paso { background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid #8b5cf6; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; margin-bottom: 10px; }
+        .tour-titulo { color: #38bdf8; font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
+        .tour-texto { background: #ffffff; color: #0f172a; padding: 12px 14px; border-radius: 16px; font-size: 0.83rem; font-weight: 600; line-height: 1.4; margin-bottom: 12px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .tour-botones-navegacion { display: flex; justify-content: space-between; width: 100%; gap: 10px; margin-top: 5px; }
+        .btn-tour-nav { flex: 1; padding: 10px; border-radius: 12px; border: none; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+        .btn-tour-ant { background: #475569; color: white; }
+        .btn-tour-sig { background: #8b5cf6; color: white; box-shadow: 0 3px 10px rgba(139, 92, 246, 0.4); }
 
         #modal-redes { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.88); z-index: 25000; justify-content: center; align-items: center; }
         .modal-redes-content { background: #1e293b; width: 92%; max-width: 420px; border-radius: 20px; border: 2px solid #38bdf8; padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto; }
@@ -273,7 +332,6 @@
         .sem-amarillo { background-color: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
         .sem-rojo { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
-        /* VISOR DE FACHADA CON SOPORTE DE ZOOM TÁCTIL Y BOTONES INTERACTIVOS */
         #modal-fachada-fullscreen { 
             display: none; 
             position: fixed; 
@@ -347,7 +405,6 @@
             touch-action: pan-x pan-y pinch-zoom;
         }
 
-        /* MODAL INACTIVIDAD MAPACHITO DURMIENDO */
         #modal-inactividad-total { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.96); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; cursor: pointer; }
         .inactivity-box { background: #1e293b; border: 3px solid #38bdf8; border-radius: 28px; padding: 30px 20px; max-width: 320px; width: 90%; display: flex; flex-direction: column; align-items: center; }
         .inactivity-box img { width: 140px; height: 140px; object-fit: contain; margin-bottom: 15px; }
@@ -364,7 +421,6 @@
 </head>
 <body>
 
-    <!-- ================= PANTALLA 1: PORTADA PRINCIPAL ================= -->
     <div id="pantalla-portada">
         <button class="btn-acceso-directores-flotante" onclick="abrirModalDirector()">
             🔐 Acceso Directores
@@ -383,10 +439,13 @@
                 </div>
             </div>
 
-            <!-- BLOQUE DE CONTROLES -->
             <div class="bloque-controles">
+                <button class="btn-opcion btn-tour" onclick="iniciarTourMapachito(event)">
+                    🦝 Tour Interactivo: ¿Cómo buscar un colegio?
+                </button>
+
                 <div class="search-box-wrapper">
-                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, 5090)..." autocomplete="off">
+                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, Elim, 5090)..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
@@ -399,7 +458,7 @@
                 
                 <div class="fila-botones-dividida">
                     <button class="btn-opcion btn-estatales" onclick="mostrarInfoEstatales(event)">Colegios Estatales</button>
-                    <button class="btn-opcion btn-particulares" onclick="mostrarInfoParticulares(event)">Colegios Particulares</button>
+                    <button class="btn-opcion btn-particulares" onclick="mostrarInfoParticulares(event)">Colegios Particulares ⭐</button>
                 </div>
                 
                 <button class="btn-opcion btn-naranja" onclick="abrirPantallaVacantes(event)">🚦 Buscar Vacantes Disponibles</button>
@@ -408,7 +467,6 @@
         </div>
     </div>
 
-    <!-- ================= PANTALLA 2: MAPA LEAFLET ================= -->
     <div id="pantalla-mapa" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
@@ -420,7 +478,6 @@
         <div id="map"></div>
     </div>
 
-    <!-- ================= PANTALLA 3: BUSCADOR GLOBAL DE VACANTES POR GRADO / EDAD ================= -->
     <div id="pantalla-vacantes" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
@@ -435,14 +492,13 @@
                     🟡 <b>Amarillo:</b> Pocas vacantes disponibles<br>
                     🔴 <b>Rojo:</b> Sin vacantes (Agotado)
                 </div>
-                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre, apellido (Ej. Cáceres), nivel o grado..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
+                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre, apellido (Ej. Cáceres, Elim), nivel o grado..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
             </div>
             
             <div id="lista-vacantes"></div>
         </div>
     </div>
 
-    <!-- ================= PANTALLA 4: APORTE Y MEMBRESÍA DIGITAL ================= -->
     <div id="pantalla-donaciones" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
@@ -456,7 +512,7 @@
                 </p>
                 <div style="background:#f1f5f9; padding:15px; border-radius:12px; text-align:left; margin-bottom:15px; border-left:4px solid #0284c7;">
                     <p style="font-size:0.85rem; color:#0f172a; margin-bottom:6px;"><b>🏫 Colegios Particulares:</b> Acceso mediante suscripción/membresía digital institucional.</p>
-                    <p style="font-size:0.85rem; color:#0f172a;"><b>🏛️ Colegios Estatales y Directores:</b> Colaboración o aporte voluntario en reconocimiento al desarrollo tecnológico.</p>
+                    <p style="font-size:0.85rem; color:#0f172a;"><b>🏛️ Colegios Estatales y Directores:</b> Colaboración o convenio de desarrollo tecnológico.</p>
                 </div>
                 <div style="background:#fef3c7; border:1px solid #fcd34d; padding:12px; border-radius:12px; font-size:0.85rem; color:#92400e; margin-bottom:20px; font-weight:600;">
                     🏅 Las instituciones y directores colaboradores obtendrán la insignia oficial de "Sello Aliado Digital" dentro de la aplicación.
@@ -480,7 +536,23 @@
         </div>
     </div>
 
-    <!-- ================= MODAL REDES EDUCATIVAS ================= -->
+    <div id="modal-tour-interactivo" onclick="cerrarTourMapachito(event)">
+        <div class="box-tour-card" onclick="event.stopPropagation()">
+            <div id="tourPasoIndicador" class="tour-indicador-paso">PASO 1 DE 5</div>
+            <div id="tourTitulo" class="tour-titulo">¡Bienvenido a MAPACHE!</div>
+            <div id="tourTexto" class="tour-texto">¡Hola! Soy Mapachito 🦝. Te guiaré paso a paso para que encuentres el colegio ideal en Ventanilla y Mi Perú de la forma más rápida.</div>
+            
+            <div class="raccoon-avatar-box">
+                <img id="imgTourMapachito" src="mapache_saludando.png" alt="Mapachito Guía">
+            </div>
+
+            <div class="tour-botones-navegacion">
+                <button id="btnTourAnterior" class="btn-tour-nav btn-tour-ant" onclick="anteriorPasoTour()" style="display:none;">⬅ Anterior</button>
+                <button id="btnTourSiguiente" class="btn-tour-nav btn-tour-sig" onclick="siguientePasoTour()">¡Empezar! ➔</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-redes" onclick="cerrarModalRedes(event)">
         <div class="modal-redes-content" onclick="event.stopPropagation()">
             <div class="modal-redes-header">
@@ -501,9 +573,8 @@
         </div>
     </div>
 
-    <!-- ================= MODAL MAPACHITO REACTIVO ================= -->
     <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
-        <div class="modal-content-comic" onclick="event.stopPropagation(); cerrarModalMapachito();">
+        <div class="modal-content-comic" onclick="cerrarModalMapachito()">
             <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
             <div class="raccoon-avatar-box">
                 <img id="imgMapachitoModal" src="mapache_saludando.png" alt="Mapachito">
@@ -512,7 +583,6 @@
         </div>
     </div>
 
-    <!-- ================= MODAL DETALLE COMPLETO DEL COLEGIO ================= -->
     <div id="modal-detalle" onclick="cerrarDetalleExt(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close-destacado" onclick="cerrarDetalle()">&times;</span>
@@ -520,7 +590,6 @@
         </div>
     </div>
 
-    <!-- ================= VISOR DE FACHADA FULLSCREEN CON ZOOM Y CONTROLES ================= -->
     <div id="modal-fachada-fullscreen" onclick="cerrarFachadaFullscreen()">
         <div class="barramenu-zoom-fachada" onclick="event.stopPropagation()">
             <button class="btn-zoom-accion" onclick="zoomFachada(0.3)">🔍 + Ampliar</button>
@@ -533,7 +602,6 @@
         </div>
     </div>
 
-    <!-- ================= MODAL INACTIVIDAD MAPACHITO DURMIENDO ================= -->
     <div id="modal-inactividad-total" onclick="despertarMapachitoInactivo()">
         <div class="inactivity-box" onclick="event.stopPropagation(); despertarMapachitoInactivo();">
             <img src="mapache_durmiendo.png" alt="Mapachito durmiendo">
@@ -552,13 +620,127 @@
         let temporizadorAutoCierre = null;
         let escalaZoomActual = 1;
 
+        let filtroActualMapa = 'todos';
+        let colegiosBaseGoogle = [];
+
         const coloresRedes = {
             1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
             5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
         };
 
+        const imagenesMapachitoPrecarga = [
+            'mapache_saludando.png',
+            'mapache_pensativo.png',
+            'mapache_buscando.png',
+            'mapache_saludando_en_un_pie.png',
+            'mapache_sorprendido.png',
+            'mapache_durmiendo.png',
+            'mapache_preocupado.png',
+            'mapache_guiñando_ojo.png',
+            'mapache_apoyado_en_la_pared.png'
+        ];
+
+        function precargarImagenesMapachito() {
+            imagenesMapachitoPrecarga.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
+
         function getColegiosSafe() {
+            if (Array.isArray(colegiosBaseGoogle) && colegiosBaseGoogle.length > 0) {
+                return colegiosBaseGoogle;
+            }
             return (typeof colegios !== 'undefined' && Array.isArray(colegios)) ? colegios : [];
+        }
+
+        let pasoTourActual = 0;
+        const pasosTourData = [
+            {
+                emocion: 'saludando',
+                titulo: '¡Bienvenido a MAPACHE!',
+                texto: '¡Hola! Soy Mapachito 🦝. Te guiaré en 4 sencillos pasos para que busques y encuentres tu colegio ideal.'
+            },
+            {
+                emocion: 'buscando',
+                titulo: '1. Buscador Directo e Inteligente',
+                texto: 'Escribe en la barra de búsqueda el <b>número del colegio</b> (Ej: 113, 5090), el <b>nombre</b> o el <b>apellido del ilustre</b> (Ej: Cáceres, Elim). ¡Te dará sugerencias instantáneas!'
+            },
+            {
+                emocion: 'olfateando',
+                titulo: '2. Mapa y Redes Educativas',
+                texto: 'Usa el botón <b>"Ver Todos los Colegios en el Mapa"</b> o filtra por tu <b>Red Educativa (1 al 9)</b> para ubicar geográficamente las escuelas cercanas a tu hogar.'
+            },
+            {
+                emocion: 'sorprendido',
+                titulo: '3. Vacantes en Tiempo Real',
+                texto: 'En el botón <b>"🚦 Buscar Vacantes Disponibles"</b> consultarás si hay vacantes por grado o edad:<br>🟢 <b>Verde:</b> Hay vacantes.<br>🟡 <b>Amarillo:</b> Pocas vacantes.<br>🔴 <b>Rojo:</b> Sin vacantes.'
+            },
+            {
+                emocion: 'guiñando',
+                titulo: '4. Fotos y Cómo Llegar',
+                texto: 'Al seleccionar un colegio, presiona <b>"Fachada"</b> para ver su foto panorámica con zoom o <b>"Iniciar viaje"</b> para trazar la ruta en Google Maps. ¡Listo para empezar!'
+            }
+        ];
+
+        function iniciarTourMapachito(e) {
+            if(e) e.stopPropagation();
+            ocultarTecladoMovil();
+            pasoTourActual = 0;
+            actualizarVistaTour();
+            document.getElementById('modal-tour-interactivo').style.display = 'flex';
+        }
+
+        function actualizarVistaTour() {
+            const paso = pasosTourData[pasoTourActual];
+            document.getElementById('tourPasoIndicador').innerText = `PASO ${pasoTourActual + 1} DE ${pasosTourData.length}`;
+            document.getElementById('tourTitulo').innerHTML = paso.titulo;
+            document.getElementById('tourTexto').innerHTML = paso.texto;
+
+            const imagenesEmocion = {
+                'saludando': 'mapache_saludando.png',
+                'pensando': 'mapache_pensativo.png',
+                'olfateando': 'mapache_buscando.png',
+                'buscando': 'mapache_buscando.png',
+                'feliz': 'mapache_saludando_en_un_pie.png',
+                'sorprendido': 'mapache_sorprendido.png',
+                'guiñando': 'mapache_guiñando_ojo.png'
+            };
+
+            document.getElementById('imgTourMapachito').src = imagenesEmocion[paso.emocion] || 'mapache_saludando.png';
+
+            const btnAnt = document.getElementById('btnTourAnterior');
+            const btnSig = document.getElementById('btnTourSiguiente');
+
+            btnAnt.style.display = (pasoTourActual > 0) ? 'block' : 'none';
+
+            if (pasoTourActual === pasosTourData.length - 1) {
+                btnSig.innerText = '¡Empezar a Buscar! 🚀';
+                btnSig.style.background = '#16a34a';
+            } else {
+                btnSig.innerText = (pasoTourActual === 0) ? '¡Empezar Tour! ➔' : 'Siguiente ➔';
+                btnSig.style.background = '#8b5cf6';
+            }
+        }
+
+        function siguientePasoTour() {
+            if (pasoTourActual < pasosTourData.length - 1) {
+                pasoTourActual++;
+                actualizarVistaTour();
+            } else {
+                cerrarTourMapachito();
+            }
+        }
+
+        function anteriorPasoTour() {
+            if (pasoTourActual > 0) {
+                pasoTourActual--;
+                actualizarVistaTour();
+            }
+        }
+
+        function cerrarTourMapachito(e) {
+            document.getElementById('modal-tour-interactivo').style.display = 'none';
         }
 
         function normalizarTexto(txt) {
@@ -569,7 +751,6 @@
         function normalizarLimpio(txt) {
             if (!txt) return '';
             let s = String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            s = s.replace(/\b(colegio|colegios|i\.?e\.?[ip]?\.?)\b/g, ' ');
             s = s.replace(/n[°º. ]*/g, ' ');
             s = s.replace(/[^a-z0-9]/g, ' ');
             s = s.replace(/\s+/g, ' ').trim();
@@ -679,7 +860,19 @@
                 const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime(), { cache: 'no-store' });
                 const resultado = await respuesta.json();
                 
-                if (Array.isArray(resultado)) {
+                if (Array.isArray(resultado) && resultado.length > 0) {
+                    
+                    let colegiosDesdeSheets = resultado.map(item => {
+                        let colObj = Object.assign({}, item);
+                        if (colObj.latitud) colObj.latitud = parseFloat(colObj.latitud);
+                        if (colObj.longitud) colObj.longitud = parseFloat(colObj.longitud);
+                        return colObj;
+                    }).filter(col => col.nombre_colegio && (col.id_colegio || col.codigo));
+
+                    if (colegiosDesdeSheets.length > 0) {
+                        colegiosBaseGoogle = colegiosDesdeSheets;
+                    }
+
                     const colegiosLista = getColegiosSafe();
 
                     resultado.forEach(item => {
@@ -707,6 +900,23 @@
 
                     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
                     refrescarVistasVacantesActivas();
+
+                    if (map && document.getElementById('pantalla-mapa').classList.contains('activa')) {
+                        const todos = getColegiosSafe();
+                        if (filtroActualMapa === 'Particular') {
+                            mostrarColegiosEnMapa(todos.filter(c => {
+                                const g = String(c.gestion || '').toLowerCase();
+                                return g.includes('particular') || g.includes('privad');
+                            }));
+                        } else if (filtroActualMapa === 'Estatal') {
+                            mostrarColegiosEnMapa(todos.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal')));
+                        } else if (filtroActualMapa.startsWith('red_')) {
+                            let numRed = parseInt(filtroActualMapa.replace('red_', ''));
+                            mostrarColegiosEnMapa(todos.filter(c => extraerNumeroRed(c.red_educativa) === numRed));
+                        } else if (filtroActualMapa === 'todos') {
+                            mostrarColegiosEnMapa(todos);
+                        }
+                    }
                 }
             } catch (error) {
                 console.log("Consulta en vivo activa.");
@@ -714,6 +924,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            precargarImagenesMapachito();
             cargarVacantesEnTiempoReal();
             setInterval(cargarVacantesEnTiempoReal, 5000);
             configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
@@ -743,10 +954,13 @@
                         </div>
                         
                         <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Colegio (Número, Nombre o N° de lista Excel):</label>
-                        <input type="text" id="dir-codigo" placeholder="Ej. 126, Fe y Alegría 29, Coprodeli, 134..." style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
+                        <input type="text" id="dir-codigo" placeholder="Ej. 126, Fe y Alegría 29, Elim, 147..." style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
                         
                         <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Contraseña Asignada:</label>
-                        <input type="password" id="dir-password" placeholder="Tu contraseña secreta" style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
+                        <div style="position:relative; width:100%; margin:5px 0 15px 0;">
+                            <input type="password" id="dir-password" placeholder="Tu contraseña secreta" style="width:100%; padding:10px 40px 10px 10px; border:1px solid #cbd5e1; border-radius:6px; outline:none;">
+                            <button type="button" onclick="alternarVisibilidadPassword()" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:1.1rem; padding:4px;" title="Ver/Ocultar contraseña">👁️</button>
+                        </div>
                         
                         <div style="display:flex; justify-content:space-between; gap:10px;">
                             <button onclick="document.getElementById('modal-director').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
@@ -756,8 +970,28 @@
                 </div>
             `;
             document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            setTimeout(() => {
+                const passInput = document.getElementById('dir-password');
+                if (passInput) {
+                    passInput.addEventListener('keyup', (e) => {
+                        if (e.key === 'Enter') autenticarDirector();
+                    });
+                }
+            }, 100);
         }
 
+        function alternarVisibilidadPassword() {
+            const inputPass = document.getElementById('dir-password');
+            if (!inputPass) return;
+            if (inputPass.type === 'password') {
+                inputPass.type = 'text';
+            } else {
+                inputPass.type = 'password';
+            }
+        }
+
+        // AUTENTICACIÓN Y SISTEMA DE BLOQUEO DE ACCESO
         function autenticarDirector() {
             ocultarTecladoMovil();
             const modal = document.getElementById('modal-director');
@@ -780,60 +1014,50 @@
             const inputLimpio = normalizarLimpio(codigoInput);
             const passNorm = passwordInput.toLowerCase();
 
-            const palabrasIgnoradas = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'en', 'n', 'no', 'num', 'numero']);
-            const tokensUser = inputLimpio.split(' ')
-                .filter(t => t.length > 0 && !palabrasIgnoradas.has(t))
-                .map(t => t.replace(/s$/, ''));
-
-            const numerosUser = codigoInput.match(/\d+/g) || [];
-
             const colegiosLista = getColegiosSafe();
 
-            const candidatos = colegiosLista.filter(c => {
+            // Localizar colegio objetivo
+            const candidato = colegiosLista.find(c => {
                 const idStr = String(c.id_colegio || '').trim().toLowerCase();
+                const idNumStr = !isNaN(idStr) ? String(Number(idStr)) : idStr;
                 const codStr = String(c.codigo || '').trim().toLowerCase();
+                const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
                 const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
 
-                if (inputOriginal === idStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
+                if (inputOriginal === idStr || inputOriginal === idNumStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
                     return true;
                 }
 
-                if (numerosUser.some(num => num === idStr || num === codStr)) {
+                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomLimpio)) {
                     return true;
-                }
-
-                if (inputLimpio && (nomLimpio.includes(inputLimpio) || inputLimpio.includes(nomLimpio))) {
-                    return true;
-                }
-
-                if (tokensUser.length > 0) {
-                    const tokensColegio = nomLimpio.split(' ').map(t => t.replace(/s$/, ''));
-                    const coincidenTodos = tokensUser.every(tok => 
-                        nomLimpio.includes(tok) || tokensColegio.some(tc => tc.includes(tok) || tok.includes(tc))
-                    );
-                    if (coincidenTodos) return true;
                 }
 
                 return false;
             });
 
-            if (candidatos.length === 0) {
+            if (!candidato) {
                 alert("Error: No se encontró ningún colegio registrado con ese número, nombre o código.");
                 return;
             }
 
-            const colegioValido = candidatos.find(c => {
-                const cPass = String(c.password_director || '').trim().toLowerCase();
-                return cPass === passNorm;
-            });
+            // EVALUACIÓN DE BLOQUEO DE SEGURIDAD
+            const estadoVigencia = String(candidato.estado_vigencia || candidato.ESTADO_VIGENCIA || candidato.estado_membresia || candidato.estado_acceso || '').trim().toLowerCase();
+            
+            if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
+                alert("⛔ ACCESO DENEGADO: El colegio " + candidato.nombre_colegio + " se encuentra BLOQUEADO en la plataforma. Comuníquese con la administración del Proyecto MAPACHE.");
+                return;
+            }
 
-            if (!colegioValido) {
-                alert("Error: Contraseña incorrecta para el colegio ingresado.");
+            // VALIDACIÓN DE CONTRASEÑA
+            const claveRegistrada = String(candidato.password_director || candidato.PASSWORD_DIRECTOR || '').trim().toLowerCase();
+
+            if (claveRegistrada !== passNorm) {
+                alert("Error: Contraseña incorrecta para " + candidato.nombre_colegio + ".");
                 return;
             }
 
             modal.remove();
-            abrirPanelEdicionVacantesGrados(colegioValido, passwordInput);
+            abrirPanelEdicionVacantesGrados(candidato, passwordInput);
         }
 
         function crearSelectSemaforo(idCampo, valActual) {
@@ -951,11 +1175,19 @@
                     ultima_actualizacion: fechaHoraFormat
                 };
 
-                await fetch(URL_API_GOOGLE, {
+                const res = await fetch(URL_API_GOOGLE, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
+                
+                const resJson = await res.json();
+
+                if (resJson && resJson.status === 'bloqueado') {
+                    document.getElementById('modal-panel-vacantes').remove();
+                    alert(resJson.message);
+                    return;
+                }
 
                 document.getElementById('modal-panel-vacantes').remove();
                 abrirModalMapachito('feliz', `¡Vacantes sincronizadas con Google Sheets!\nFecha: ${fechaHoraFormat}`, true);
@@ -984,15 +1216,19 @@
             lista.forEach(colegio => {
                 if (!colegio.latitud || !colegio.longitud) return;
 
+                const gestionStr = String(colegio.gestion || '').toLowerCase();
+                const esParticular = gestionStr.includes('particular') || gestionStr.includes('privad');
                 const numRed = extraerNumeroRed(colegio.red_educativa);
-                const colorPin = (numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568";
-                const textoPin = numRed ? numRed : "🏫";
+
+                const colorPin = esParticular ? "#0284c7" : ((numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568");
+                const textoPin = esParticular ? "⭐" : (numRed ? numRed : "🏫");
+                const claseEtiqueta = esParticular ? "pin-etiqueta-particular" : "pin-etiqueta-nombre";
 
                 const iconoClasico = L.divIcon({
                     className: 'custom-div-icon',
                     html: `
                         <div class="pin-clasico-container">
-                            <div class="pin-gota" style="background-color: ${colorPin};"></div>
+                            <div class="pin-gota" style="background-color: ${colorPin}; border: 2px solid ${esParticular ? '#fbbf24' : '#ffffff'};"></div>
                             <div class="pin-texto">${textoPin}</div>
                         </div>
                     `,
@@ -1007,7 +1243,7 @@
                     permanent: true,
                     direction: 'top',
                     offset: [0, -38],
-                    className: 'pin-etiqueta-nombre'
+                    className: claseEtiqueta
                 });
 
                 marker.bindPopup(`
@@ -1015,7 +1251,7 @@
                         <b style="font-size: 0.95rem; color: #1a365d;">${colegio.nombre_colegio}</b><br>
                         <span style="font-size:0.8rem; color: #4a5568;">Código: ${colegio.id_colegio}</span><br>
                         <b>Gestión:</b> ${colegio.gestion}<br>
-                        <b>Red:</b> ${colegio.red_educativa || 'N/A'}<br>
+                        <b>Red:</b> ${colegio.red_educativa || 'Particular / Independiente'}<br>
                         <hr style="margin: 6px 0; border:0; border-top:1px solid #cbd5e1;">
                         <button onclick="abrirDetalle('${colegio.nombre_colegio.replace(/'/g, "\\'")}')" style="background:#2563eb; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; width:100%; font-weight:bold;">Ver Información General</button>
                     </div>
@@ -1028,6 +1264,7 @@
         function mostrarInfoTodosMapa(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
+            filtroActualMapa = 'todos';
             abrirModalMapachito('olfateando', "¡Olfateando todos los colegios para mostrarlos en el mapa! 🦝🔍", false, () => {
                 ejecutarIrAlMapa('todos');
             }, 1800);
@@ -1036,15 +1273,18 @@
         function mostrarInfoEstatales(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
+            filtroActualMapa = 'Estatal';
             abrirModalMapachito('sorprendido', "¿Sabías que son 146 colegios estatales en Ventanilla y Mi Perú? 🏛️✨", false, () => {
                 ejecutarIrAlMapa('Estatal');
             }, 1800);
         }
 
+        /* FILTRADO EXCLUSIVO PARA COLEGIOS PARTICULARES */
         function mostrarInfoParticulares(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
-            abrirModalMapachito('feliz', "¡Aquí te mostraré los colegios Particulares registrados! 🏫🎉", false, () => {
+            filtroActualMapa = 'Particular';
+            abrirModalMapachito('feliz', "¡Te mostraré los Colegios Particulares y Privados (incluyendo ELIM) con sus pines dorados! 🏫⭐", false, () => {
                 ejecutarIrAlMapa('Particular');
             }, 1800);
         }
@@ -1087,11 +1327,20 @@
                 
                 const colegiosLista = getColegiosSafe();
                 let filtrados = colegiosLista;
-                if (filtroTipo === 'Estatal' || filtroTipo === 'Particular') {
-                    filtrados = colegiosLista.filter(c => c.gestion && c.gestion.toLowerCase() === filtroTipo.toLowerCase());
+                if (filtroTipo === 'Estatal') {
+                    filtrados = colegiosLista.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal'));
+                } else if (filtroTipo === 'Particular') {
+                    filtrados = colegiosLista.filter(c => {
+                        const g = String(c.gestion || '').toLowerCase();
+                        return g.includes('particular') || g.includes('privad');
+                    });
                 }
 
                 mostrarColegiosEnMapa(filtrados);
+
+                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
+                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
+                }
             }, 100);
         }
 
@@ -1100,6 +1349,7 @@
 
         function filtrarPorRedConMapachito(numeroRed) {
             document.getElementById('modal-redes').style.display = 'none';
+            filtroActualMapa = 'red_' + numeroRed;
             abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, false, () => {
                 ocultarTodasLasPantallas();
                 const pantallaMapa = document.getElementById('pantalla-mapa');
@@ -1120,14 +1370,18 @@
             }, 1500);
         }
 
+        // BUSCADOR FLEXIBLE CON RECONOCIMIENTO DE "ELIM" Y PALABRAS CORTAS
         function configurarAutocompletado(inputId, listaId, alSeleccionar) {
             const input = document.getElementById(inputId);
             const lista = document.getElementById(listaId);
             if (!input || !lista) return;
 
+            let primeraCoincidencia = null;
+
             input.addEventListener('input', function() {
                 const textoNorm = normalizarTexto(this.value);
                 lista.innerHTML = '';
+                primeraCoincidencia = null;
 
                 if (textoNorm.length === 0) { lista.style.display = 'none'; return; }
 
@@ -1137,15 +1391,19 @@
                     const idNorm = normalizarTexto(c.id_colegio);
                     const dirNorm = normalizarTexto(c.direccion);
                     const nivNorm = normalizarTexto(c.niveles);
-                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm);
-                }).slice(0, 8);
+                    const zonaNorm = normalizarTexto(c.zona || c.ZONA);
+                    const gestNorm = normalizarTexto(c.gestion);
+                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || zonaNorm.includes(textoNorm) || gestNorm.includes(textoNorm);
+                }).slice(0, 10);
 
                 if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
+
+                primeraCoincidencia = coincidencias[0];
 
                 coincidencias.forEach(c => {
                     const div = document.createElement('div');
                     div.className = 'sugerencia-item';
-                    div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(Cod: ${c.id_colegio})</span>`;
+                    div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(Cod: ${c.id_colegio} - ${c.gestion || ''})</span>`;
                     div.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         ocultarTecladoMovil();
@@ -1161,6 +1419,9 @@
                 if (e.key === 'Enter') {
                     ocultarTecladoMovil();
                     lista.style.display = 'none';
+                    if (primeraCoincidencia) {
+                        alSeleccionar(primeraCoincidencia);
+                    }
                 }
             });
 
@@ -1173,6 +1434,7 @@
 
         function seleccionarColegioYIr(colegio) {
             ocultarTecladoMovil();
+            filtroActualMapa = 'especifico';
             abrirModalMapachito('saludando', `¡Encontré a ${colegio.nombre_colegio}! Te llevo directo.`, false, () => {
                 ocultarTodasLasPantallas();
                 const pantallaMapa = document.getElementById('pantalla-mapa');
@@ -1193,6 +1455,7 @@
 
         function seleccionarColegioEnMapa(colegio) {
             ocultarTecladoMovil();
+            filtroActualMapa = 'especifico';
             mostrarColegiosEnMapa([colegio]);
             if (colegio.latitud && colegio.longitud) {
                 map.setView([colegio.latitud, colegio.longitud], 16);
@@ -1206,7 +1469,9 @@
             const colegio = colegiosLista.find(c => c.nombre_colegio === nombreColegio);
             if (!colegio) return;
 
-            const tipoBadge = colegio.gestion && colegio.gestion.toLowerCase().includes('particular') ? 'badge-particular' : (colegio.gestion && colegio.gestion.toLowerCase().includes('convenio') ? 'badge-convenio' : 'badge-estatal');
+            const gestionStr = String(colegio.gestion || '').toLowerCase();
+            const esPart = gestionStr.includes('particular') || gestionStr.includes('privad');
+            const tipoBadge = esPart ? 'badge-particular' : (gestionStr.includes('convenio') ? 'badge-convenio' : 'badge-estatal');
             const nivelesTexto = normalizarTexto(colegio.niveles);
 
             let bloquesNivelesHTML = '';
@@ -1228,7 +1493,8 @@
                 
                 <div style="font-size:0.85rem; line-height:1.6; margin-top:10px;">
                     <p><b>Código:</b> ${colegio.id_colegio}</p>
-                    <p><b>Red Educativa:</b> ${colegio.red_educativa || 'N/A'}</p>
+                    <p><b>Zona / Sector:</b> ${colegio.zona || colegio.ZONA || 'No especificada'}</p>
+                    <p><b>Red Educativa:</b> ${colegio.red_educativa || 'Particular / Independiente'}</p>
                     <p><b>Turnos:</b> ${colegio.TURNOS || 'Mañana y Tarde'}</p>
                     <p><b>Dirección:</b> ${colegio.direccion || 'No especificada'}</p>
                     <p><b>Requisitos para Matrícula:</b> ${colegio.requisitos_de_matricula || 'DNI del estudiante y apoderado'}</p>
@@ -1264,25 +1530,41 @@
             filtrarListaVacantes();
         }
 
-        /* BÚSQUEDA INTELIGENTE DE FACHADAS PRIORIZANDO EL NÚMERO DEL COLEGIO */
         function intentarAbrirFachadaConAlternativas(idColegio, codigoColegio, nombreColegio) {
             let idStr = String(idColegio || '').trim();
             let codStr = String(codigoColegio || '').trim();
             let nombreNorm = normalizarTexto(nombreColegio);
 
-            let numerosEnNombre = nombreColegio.match(/\d+/g) || [];
-
             let candidatos = [];
+
+            let nombreArchivo1 = nombreColegio.trim().replace(/\s+/g, '_');
+            let nombreArchivo2 = nombreColegio.trim().replace(/[^a-zA-Z0-9]/g, '_');
+            let nombreArchivo3 = nombreColegio.trim();
+
+            candidatos.push(`fotos/${nombreArchivo1}.jpeg`);
+            candidatos.push(`fotos/${nombreArchivo1}.jpg`);
+            candidatos.push(`fotos/${nombreArchivo1}.png`);
+            candidatos.push(`fotos/${nombreArchivo2}.jpeg`);
+            candidatos.push(`fotos/${nombreArchivo2}.jpg`);
+            candidatos.push(`fotos/${nombreArchivo3}.jpeg`);
+            candidatos.push(`fotos/${nombreArchivo3}.jpg`);
 
             if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) {
                 candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
             }
+            if (nombreNorm.includes('elim')) {
+                candidatos.push("fotos/ELIM.jpeg");
+                candidatos.push("fotos/ELIM.jpg");
+                candidatos.push("fotos/IEP_ELIM.jpeg");
+                candidatos.push("fotos/I_E_P_ELIM.jpeg");
+            }
 
-            // 1. Probar PRIMERO los números del colegio extraídos del nombre o del campo código (Ej: 113)
+            let numerosEnNombre = nombreColegio.match(/\d+/g) || [];
             numerosEnNombre.forEach(num => {
                 let numLimpio = String(Number(num));
                 candidatos.push(`fotos/${numLimpio}.jpeg`);
                 candidatos.push(`fotos/${numLimpio}.jpg`);
+                candidatos.push(`fotos/${numLimpio}.png`);
             });
 
             if (codStr) {
@@ -1293,7 +1575,6 @@
                 candidatos.push(`fotos/${codStr}.jpg`);
             }
 
-            // 2. Probar finalmente el ID de orden/fila (Ej: 125)
             if (idStr) {
                 let idNum = !isNaN(idStr) ? String(Number(idStr)) : idStr;
                 candidatos.push(`fotos/${idNum}.jpeg`);
@@ -1326,7 +1607,6 @@
             probarSiguiente();
         }
 
-        /* FUNCIONES INTERACTIVAS DE ZOOM Y RESET PARA CELULAR Y PC */
         function zoomFachada(delta) {
             escalaZoomActual = Math.min(Math.max(0.7, escalaZoomActual + delta), 3.5);
             const img = document.getElementById('imgFachadaFull');
@@ -1425,7 +1705,8 @@
                 const idNorm = normalizarTexto(c.id_colegio);
                 const distNorm = normalizarTexto(c.distrito);
                 const redNorm = normalizarTexto(c.red_educativa);
-                return nombreNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || idNorm.includes(textoNorm) || distNorm.includes(textoNorm) || redNorm.includes(textoNorm);
+                const zonaNorm = normalizarTexto(c.zona || c.ZONA);
+                return nombreNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || idNorm.includes(textoNorm) || distNorm.includes(textoNorm) || redNorm.includes(textoNorm) || zonaNorm.includes(textoNorm);
             });
             renderizarListaVacantesGlobal(filtrados);
         }
