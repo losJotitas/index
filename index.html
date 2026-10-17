@@ -184,7 +184,6 @@
         }
         .sugerencia-item:hover { background-color: #e2e8f0; }
 
-        /* PALETA DE COLORES TOTALMENTE DIFERENCIADA Y ARMÓNICA */
         .btn-opcion {
             width: 100%; padding: 12px 14px;
             color: #ffffff; border: none;
@@ -194,44 +193,37 @@
         }
         .btn-opcion:hover { transform: translateY(-2px); filter: brightness(1.12); }
         
-        /* 1. Tour Interactivo: Morado Neón */
         .btn-tour { 
             background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
             box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4); 
             border: 1px solid #a78bfa; 
         }
-        /* 2. Ver Todos en Mapa: Verde Esmeralda */
         .btn-verde { 
             background: linear-gradient(135deg, #10b981, #059669); 
             box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); 
             border: 1px solid #34d399;
         }
-        /* 3. Redes Educativas: Azul Cobalto */
         .btn-azul { 
             background: linear-gradient(135deg, #2563eb, #1d4ed8); 
             box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); 
             border: 1px solid #60a5fa;
         }
-        /* 4. Colegios Estatales: Terracota CÁLIDO */
         .btn-estatales { 
             background: linear-gradient(135deg, #d97706, #b45309); 
             box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); 
             border: 1px solid #fbbf24;
         }
-        /* 5. Colegios Particulares: Azul Zafiro CIAN LUMINOSO (UNICO) */
         .btn-particulares { 
             background: linear-gradient(135deg, #0284c7, #0369a1); 
             color: #ffffff; 
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.5); 
             border: 1.5px solid #fbbf24;
         }
-        /* 6. Buscar Vacantes: Naranja Fuego Vivo */
         .btn-naranja { 
             background: linear-gradient(135deg, #ea580c, #c2410c); 
             box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4); 
             border: 1px solid #fdba74;
         }
-        /* 7. Colaboración y Membresía: Magenta Rápido */
         .btn-diamante { 
             background: linear-gradient(135deg, #7c3aed, #6d28d9); 
             box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4); 
@@ -253,8 +245,9 @@
             display: flex !important;
         }
 
-        .top-bar { background: #1a365d; color: white; padding: 10px 15px; display: flex; align-items: center; gap: 15px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .btn-volver { background: #2b6cb0; border: 1px solid #4299e1; color: white; padding: 8px 15px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; cursor: pointer; }
+        .top-bar { background: #1a365d; color: white; padding: 10px 15px; display: flex; align-items: center; gap: 10px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .btn-volver { background: #2b6cb0; border: 1px solid #4299e1; color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; }
+        .btn-sincronizar-top { background: #16a34a; border: 1px solid #4ade80; color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
         .search-container-map { flex: 1; position: relative; }
         .search-container-map input { width: 100%; padding: 10px 15px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; outline: none; background: #fff; color: #2d3748; }
         #map { flex: 1; width: 100%; min-height: 300px; }
@@ -470,6 +463,7 @@
     <div id="pantalla-mapa" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
+            <button class="btn-sincronizar-top" onclick="forzarSincronizacionNubeManual()">🔄 Sincronizar Nube</button>
             <div class="search-container-map">
                 <input type="text" id="searchInputMap" placeholder="Filtrar colegios en el mapa..." autocomplete="off">
                 <div id="sugerenciasMapa" class="sugerencias-lista"></div>
@@ -481,7 +475,8 @@
     <div id="pantalla-vacantes" class="pantalla-secundaria">
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
-            <h3 style="font-size: 0.95rem;">🚦 Buscador Global de Vacantes</h3>
+            <button class="btn-sincronizar-top" onclick="forzarSincronizacionNubeManual()">🔄 Sincronizar Nube</button>
+            <h3 style="font-size: 0.95rem; margin-left: 5px;">🚦 Buscador Global</h3>
         </div>
         <div class="contenedor-central">
             <div class="card-seccion">
@@ -857,11 +852,24 @@
 
         async function cargarVacantesEnTiempoReal() {
             try {
-                const respuesta = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime(), { cache: 'no-store' });
+                // Parámetro dinámico anti-caché de navegador móvil
+                const timestampUnico = new Date().getTime() + '_' + Math.random().toString(36).substring(2, 9);
+                const urlSinCache = URL_API_GOOGLE + '?t=' + timestampUnico;
+
+                const respuesta = await fetch(urlSinCache, { 
+                    method: 'GET',
+                    cache: 'no-store',
+                    headers: {
+                        'Pragma': 'no-cache',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate'
+                    }
+                });
+
+                if (!respuesta.ok) throw new Error('Error al conectar con la base de datos');
+
                 const resultado = await respuesta.json();
                 
                 if (Array.isArray(resultado) && resultado.length > 0) {
-                    
                     let colegiosDesdeSheets = resultado.map(item => {
                         let colObj = Object.assign({}, item);
                         if (colObj.latitud) colObj.latitud = parseFloat(colObj.latitud);
@@ -900,33 +908,22 @@
 
                     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
                     refrescarVistasVacantesActivas();
-
-                    if (map && document.getElementById('pantalla-mapa').classList.contains('activa')) {
-                        const todos = getColegiosSafe();
-                        if (filtroActualMapa === 'Particular') {
-                            mostrarColegiosEnMapa(todos.filter(c => {
-                                const g = String(c.gestion || '').toLowerCase();
-                                return g.includes('particular') || g.includes('privad');
-                            }));
-                        } else if (filtroActualMapa === 'Estatal') {
-                            mostrarColegiosEnMapa(todos.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal')));
-                        } else if (filtroActualMapa.startsWith('red_')) {
-                            let numRed = parseInt(filtroActualMapa.replace('red_', ''));
-                            mostrarColegiosEnMapa(todos.filter(c => extraerNumeroRed(c.red_educativa) === numRed));
-                        } else if (filtroActualMapa === 'todos') {
-                            mostrarColegiosEnMapa(todos);
-                        }
-                    }
                 }
             } catch (error) {
-                console.log("Consulta en vivo activa.");
+                console.warn("Dificultad temporal de sincronización:", error);
             }
+        }
+
+        function forzarSincronizacionNubeManual() {
+            cargarVacantesEnTiempoReal().then(() => {
+                abrirModalMapachito('feliz', "¡Datos sincronizados exitosamente desde la nube de Google Sheets! ☁️✨", true);
+            });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             precargarImagenesMapachito();
             cargarVacantesEnTiempoReal();
-            setInterval(cargarVacantesEnTiempoReal, 5000);
+            setInterval(cargarVacantesEnTiempoReal, 6000); // Polling cada 6 segundos
             configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
             configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
             reiniciarTemporizadorInactividad();
@@ -984,14 +981,9 @@
         function alternarVisibilidadPassword() {
             const inputPass = document.getElementById('dir-password');
             if (!inputPass) return;
-            if (inputPass.type === 'password') {
-                inputPass.type = 'text';
-            } else {
-                inputPass.type = 'password';
-            }
+            inputPass.type = (inputPass.type === 'password') ? 'text' : 'password';
         }
 
-        // AUTENTICACIÓN Y SISTEMA DE BLOQUEO DE ACCESO
         function autenticarDirector() {
             ocultarTecladoMovil();
             const modal = document.getElementById('modal-director');
@@ -1000,15 +992,8 @@
             const codigoInput = document.getElementById('dir-codigo').value;
             const passwordInput = document.getElementById('dir-password').value.trim();
 
-            if (!codigoInput || !codigoInput.trim()) { 
-                alert("Por favor ingresa el número, nombre o N° de lista del colegio."); 
-                return; 
-            }
-
-            if (!passwordInput) { 
-                alert("Por favor ingresa la contraseña asignada."); 
-                return; 
-            }
+            if (!codigoInput || !codigoInput.trim()) { alert("Por favor ingresa el número, nombre o N° de lista del colegio."); return; }
+            if (!passwordInput) { alert("Por favor ingresa la contraseña asignada."); return; }
 
             const inputOriginal = codigoInput.trim().toLowerCase();
             const inputLimpio = normalizarLimpio(codigoInput);
@@ -1016,7 +1001,6 @@
 
             const colegiosLista = getColegiosSafe();
 
-            // Localizar colegio objetivo
             const candidato = colegiosLista.find(c => {
                 const idStr = String(c.id_colegio || '').trim().toLowerCase();
                 const idNumStr = !isNaN(idStr) ? String(Number(idStr)) : idStr;
@@ -1024,14 +1008,8 @@
                 const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
                 const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
 
-                if (inputOriginal === idStr || inputOriginal === idNumStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) {
-                    return true;
-                }
-
-                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomLimpio)) {
-                    return true;
-                }
-
+                if (inputOriginal === idStr || inputOriginal === idNumStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) return true;
+                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomLimpio)) return true;
                 return false;
             });
 
@@ -1040,17 +1018,13 @@
                 return;
             }
 
-            // EVALUACIÓN DE BLOQUEO DE SEGURIDAD
             const estadoVigencia = String(candidato.estado_vigencia || candidato.ESTADO_VIGENCIA || candidato.estado_membresia || candidato.estado_acceso || '').trim().toLowerCase();
-            
             if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
-                alert("⛔ ACCESO DENEGADO: El colegio " + candidato.nombre_colegio + " se encuentra BLOQUEADO en la plataforma. Comuníquese con la administración del Proyecto MAPACHE.");
+                alert("⛔ ACCESO DENEGADO: El colegio " + candidato.nombre_colegio + " se encuentra BLOQUEADO en la plataforma.");
                 return;
             }
 
-            // VALIDACIÓN DE CONTRASEÑA
             const claveRegistrada = String(candidato.password_director || candidato.PASSWORD_DIRECTOR || '').trim().toLowerCase();
-
             if (claveRegistrada !== passNorm) {
                 alert("Error: Contraseña incorrecta para " + candidato.nombre_colegio + ".");
                 return;
@@ -1083,7 +1057,6 @@
             const tieneSecundaria = nivelesTexto.includes('secundaria');
 
             const actual = obtenerVacantesColegioRobust(colegio);
-
             let formularioGradosHTML = '';
 
             if (tieneCuna) {
@@ -1128,7 +1101,7 @@
 
                         <div style="display:flex; justify-content:space-between; gap:10px;">
                             <button onclick="document.getElementById('modal-panel-vacantes').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
-                            <button onclick="guardarVacantesGradosInstante('${colegio.id_colegio}', '${password}')" style="background:#16a34a; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Guardar Cambios</button>
+                            <button onclick="guardarVacantesGradosInstante('${colegio.id_colegio}', '${password}')" style="background:#16a34a; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Guardar y Sincronizar Nube</button>
                         </div>
                     </div>
                 </div>
@@ -1160,7 +1133,6 @@
             }
 
             localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
-
             refrescarVistasVacantesActivas();
             if (canalVacantes) canalVacantes.postMessage('actualizado');
 
@@ -1190,13 +1162,14 @@
                 }
 
                 document.getElementById('modal-panel-vacantes').remove();
-                abrirModalMapachito('feliz', `¡Vacantes sincronizadas con Google Sheets!\nFecha: ${fechaHoraFormat}`, true);
+                abrirModalMapachito('feliz', `¡Vacantes guardadas y sincronizadas en la nube!\nFecha: ${fechaHoraFormat}`, true);
                 
+                // Forzar sincronización inmediata
                 cargarVacantesEnTiempoReal();
             } catch (error) {
-                console.error("Error enviando a Google Sheets:", error);
+                console.error("Error al guardar en Google Sheets:", error);
                 document.getElementById('modal-panel-vacantes').remove();
-                abrirModalMapachito('sorprendido', `Guardado localmente, pero hubo un detalle de red al sincronizar con Google Sheets.`, true);
+                abrirModalMapachito('sorprendido', `Guardado localmente. Presiona "🔄 Sincronizar Nube" si lo requieres.`, true);
             }
         }
 
@@ -1279,7 +1252,6 @@
             }, 1800);
         }
 
-        /* FILTRADO EXCLUSIVO PARA COLEGIOS PARTICULARES */
         function mostrarInfoParticulares(e) {
             if(e) e.stopPropagation();
             ocultarTecladoMovil();
@@ -1303,7 +1275,9 @@
             abrirModalMapachito('buscando', "🚦 ¡Revisando disponibilidad de vacantes por grado en tiempo real!", false, () => {
                 ocultarTodasLasPantallas();
                 document.getElementById('pantalla-vacantes').classList.add('activa');
-                renderizarListaVacantesGlobal(getColegiosSafe());
+                cargarVacantesEnTiempoReal().then(() => {
+                    renderizarListaVacantesGlobal(getColegiosSafe());
+                });
             }, 1800);
         }
 
@@ -1370,7 +1344,6 @@
             }, 1500);
         }
 
-        // BUSCADOR FLEXIBLE CON RECONOCIMIENTO DE "ELIM" Y PALABRAS CORTAS
         function configurarAutocompletado(inputId, listaId, alSeleccionar) {
             const input = document.getElementById(inputId);
             const lista = document.getElementById(listaId);
