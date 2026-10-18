@@ -6,424 +6,72 @@
     <title>Plataforma MAPACHE - Ventanilla & Mi Perú</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
-        
-        html, body {
-            width: 100vw;
-            min-height: 100vh;
-            color: #ffffff;
-            background-color: #0b1324;
-            overflow-y: auto; 
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        #pantalla-portada {
-            position: relative;
-            width: 100vw; 
-            min-height: 100vh;
-            height: auto; 
-            z-index: 10;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle at center, #1b2a4a 0%, #0b1324 100%);
-            padding: 30px 12px;
-        }
-
-        .main-container { 
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 420px; 
-            margin: 0 auto;
-            padding: 10px 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hero-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 18px;
-            position: relative;
-            width: 100%;
-        }
-
-        .header-brand-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin: 0 auto;
-            transform: translateX(-10px);
-        }
-
-        .img-mapache-hero {
-            width: auto;
-            height: clamp(135px, 29vw, 170px);
-            object-fit: contain;
-            margin-right: -28px;
-            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.65));
-            flex-shrink: 0;
-            z-index: 2;
-        }
-
-        .header-text-block {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
-            z-index: 1;
-        }
-
-        .titulo-app {
-            font-size: clamp(2rem, 7.8vw, 3rem);
-            font-weight: 800;
-            letter-spacing: 1px;
-            margin: 0;
-            line-height: 1;
-            color: #ffffff;
-            text-shadow: 0 4px 14px rgba(0,0,0,0.6);
-            white-space: nowrap;
-        }
-
-        .subtitulo-app {
-            font-size: clamp(0.8rem, 3.2vw, 1rem);
-            color: #94a3b8;
-            font-weight: 600;
-            margin: 5px 0 2px 0;
-            white-space: nowrap;
-        }
-
-        .tagline-app {
-            font-size: clamp(0.72rem, 2.8vw, 0.88rem);
-            color: #38bdf8;
-            font-weight: 700;
-            letter-spacing: 0.4px;
-            margin-top: 2px;
-            white-space: nowrap;
-        }
-
-        .linea-decorativa {
-            width: 45px;
-            height: 3px;
-            background: #38bdf8;
-            margin-top: 7px;
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
-        }
-
-        .btn-acceso-directores-flotante {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 100;
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 9px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 700;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-            transition: transform 0.2s;
-        }
-        .btn-acceso-directores-flotante:hover { transform: scale(1.04); }
-
-        .bloque-controles {
-            width: 100%;                    
-            max-width: 360px;              
-            display: flex;
-            flex-direction: column;
-            gap: 11px;
-            background: rgba(15, 23, 42, 0.88);
-            padding: 18px 16px;
-            border-radius: 24px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(56, 189, 248, 0.3); 
-        }
-
-        .search-box-wrapper { position: relative; width: 100%; }
-        
-        .input-busqueda {
-            width: 100%;
-            padding: 14px 16px;
-            background-color: #ffffff;
-            color: #0f172a;
-            border: none;
-            border-radius: 14px;
-            font-size: 13.5px;
-            outline: none;
-            font-weight: 700;
-            box-shadow: 0 0 14px rgba(255, 255, 255, 0.3);
-        }
-
-        .sugerencias-lista {
-            position: absolute;
-            top: 100%; left: 0; width: 100%;
-            background: #ffffff; color: #0f172a;
-            border-radius: 0 0 14px 14px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            z-index: 1000; max-height: 220px;
-            overflow-y: auto; display: none;
-        }
-
-        .sugerencia-item {
-            padding: 11px 14px; font-size: 12px;
-            border-bottom: 1px solid #f1f5f9;
-            cursor: pointer; font-weight: 600;
-        }
+        html, body { width: 100vw; min-height: 100vh; color: #ffffff; background-color: #0b1324; overflow-y: auto; overflow-x: hidden; }
+        #pantalla-portada { position: relative; width: 100vw; min-height: 100vh; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at center, #1b2a4a 0%, #0b1324 100%); padding: 30px 12px; }
+        .main-container { width: 100%; max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .hero-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 18px; width: 100%; }
+        .header-brand-container { display: flex; align-items: center; justify-content: center; }
+        .titulo-app { font-size: clamp(2rem, 7.8vw, 3rem); font-weight: 800; color: #ffffff; text-shadow: 0 4px 14px rgba(0,0,0,0.6); }
+        .subtitulo-app { font-size: 0.9rem; color: #94a3b8; font-weight: 600; }
+        .tagline-app { font-size: 0.8rem; color: #38bdf8; font-weight: 700; }
+        .linea-decorativa { width: 45px; height: 3px; background: #38bdf8; margin-top: 7px; border-radius: 2px; }
+        .btn-acceso-directores-flotante { position: absolute; top: 15px; right: 15px; z-index: 100; background: #2563eb; color: white; border: none; padding: 9px 14px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 700; box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+        .btn-admin-flotante { position: absolute; top: 15px; left: 15px; z-index: 100; background: #334155; color: #38bdf8; border: 1px solid #38bdf8; padding: 9px 14px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
+        .bloque-controles { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 11px; background: rgba(15, 23, 42, 0.88); padding: 18px 16px; border-radius: 24px; border: 2px solid rgba(56, 189, 248, 0.3); }
+        .input-busqueda { width: 100%; padding: 14px 16px; background-color: #ffffff; color: #0f172a; border: none; border-radius: 14px; font-size: 13.5px; font-weight: 700; outline: none; }
+        .sugerencias-lista { position: absolute; top: 100%; left: 0; width: 100%; background: #ffffff; color: #0f172a; border-radius: 0 0 14px 14px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); z-index: 1000; max-height: 220px; overflow-y: auto; display: none; }
+        .sugerencia-item { padding: 11px 14px; font-size: 12px; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-weight: 600; }
         .sugerencia-item:hover { background-color: #e2e8f0; }
-
-        .btn-opcion {
-            width: 100%; padding: 12px 14px;
-            color: #ffffff; border: none;
-            border-radius: 14px; font-size: 13px; font-weight: 700;
-            cursor: pointer; transition: all 0.2s ease;
-            text-align: center; text-decoration: none; display: inline-block;
-        }
-        .btn-opcion:hover { transform: translateY(-2px); filter: brightness(1.12); }
-        
-        .btn-tour { 
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
-            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4); 
-            border: 1px solid #a78bfa; 
-        }
-        .btn-verde { 
-            background: linear-gradient(135deg, #10b981, #059669); 
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); 
-            border: 1px solid #34d399;
-        }
-        .btn-azul { 
-            background: linear-gradient(135deg, #2563eb, #1d4ed8); 
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); 
-            border: 1px solid #60a5fa;
-        }
-        .btn-estatales { 
-            background: linear-gradient(135deg, #d97706, #b45309); 
-            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); 
-            border: 1px solid #fbbf24;
-        }
-        .btn-particulares { 
-            background: linear-gradient(135deg, #0284c7, #0369a1); 
-            color: #ffffff; 
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.5); 
-            border: 1.5px solid #fbbf24;
-        }
-        .btn-naranja { 
-            background: linear-gradient(135deg, #ea580c, #c2410c); 
-            box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4); 
-            border: 1px solid #fdba74;
-        }
-        .btn-diamante { 
-            background: linear-gradient(135deg, #7c3aed, #6d28d9); 
-            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4); 
-            border: 1px solid #c084fc;
-        }
-
+        .btn-opcion { width: 100%; padding: 12px 14px; color: #ffffff; border: none; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
+        .btn-tour { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+        .btn-verde { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-azul { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .btn-estatales { background: linear-gradient(135deg, #d97706, #b45309); }
+        .btn-particulares { background: linear-gradient(135deg, #0284c7, #0369a1); border: 1.5px solid #fbbf24; }
+        .btn-naranja { background: linear-gradient(135deg, #ea580c, #c2410c); }
+        .btn-diamante { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
         .fila-botones-dividida { display: flex; gap: 9px; width: 100%; }
         .fila-botones-dividida .btn-opcion { flex: 1; }
-
-        .pantalla-secundaria {
-            display: none !important;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            flex-direction: column; z-index: 50;
-            background-color: #f4f6f9; overflow-y: auto;
-        }
-
-        .pantalla-secundaria.activa {
-            display: flex !important;
-        }
-
-        .top-bar { background: #1a365d; color: white; padding: 10px 15px; display: flex; align-items: center; gap: 10px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .pantalla-secundaria { display: none !important; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; flex-direction: column; z-index: 50; background-color: #f4f6f9; overflow-y: auto; }
+        .pantalla-secundaria.activa { display: flex !important; }
+        .top-bar { background: #1a365d; color: white; padding: 10px 15px; display: flex; align-items: center; gap: 10px; z-index: 1000; }
         .btn-volver { background: #2b6cb0; border: 1px solid #4299e1; color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; }
-        .btn-sincronizar-top { background: #16a34a; border: 1px solid #4ade80; color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-        .search-container-map { flex: 1; position: relative; }
-        .search-container-map input { width: 100%; padding: 10px 15px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; outline: none; background: #fff; color: #2d3748; }
+        .btn-sincronizar-top { background: #16a34a; border: 1px solid #4ade80; color: white; padding: 8px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: bold; cursor: pointer; }
         #map { flex: 1; width: 100%; min-height: 300px; }
-
-        .pin-clasico-container { position: relative; width: 30px; height: 42px; }
-        .pin-gota { position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.4); border: 2px solid #ffffff; }
-        .pin-texto { position: absolute; top: 4px; left: 0; width: 30px; height: 30px; transform: rotate(0deg); color: #ffffff; font-weight: bold; font-size: 13px; display: flex; align-items: center; justify-content: center; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
-        
-        .pin-etiqueta-nombre {
-            background: rgba(15, 23, 42, 0.92) !important;
-            color: #38bdf8 !important;
-            border: 1px solid #38bdf8 !important;
-            border-radius: 6px !important;
-            padding: 2px 7px !important;
-            font-size: 10px !important;
-            font-weight: 700 !important;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.5) !important;
-            white-space: nowrap !important;
-        }
-
-        .pin-etiqueta-particular {
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%) !important;
-            color: #fbbf24 !important;
-            border: 1.5px solid #f59e0b !important;
-            border-radius: 6px !important;
-            padding: 3px 8px !important;
-            font-size: 10.5px !important;
-            font-weight: 800 !important;
-            box-shadow: 0 3px 10px rgba(245, 158, 11, 0.6) !important;
-            white-space: nowrap !important;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-        }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; cursor: pointer; }
-        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); max-width: 320px; width: 92%; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
-        .thought-bubble { position: relative; background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; width: 100%; line-height: 1.4; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        
-        .raccoon-avatar-box { 
-            width: 130px; height: 130px; margin-bottom: 14px; background: #0f172a; border-radius: 50%; border: 3px solid #38bdf8; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-        }
-        .raccoon-avatar-box img { width: 110px; height: 110px; object-fit: contain; position: absolute; z-index: 2; }
-        .modal-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
-
-        #modal-tour-interactivo { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.94); z-index: 40000; justify-content: center; align-items: center; padding: 15px; }
-        .box-tour-card { background: #1e293b; border: 3px solid #a78bfa; border-radius: 24px; padding: 22px 18px; max-width: 350px; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; }
-        .tour-indicador-paso { background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid #8b5cf6; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; margin-bottom: 10px; }
-        .tour-titulo { color: #38bdf8; font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
-        .tour-texto { background: #ffffff; color: #0f172a; padding: 12px 14px; border-radius: 16px; font-size: 0.83rem; font-weight: 600; line-height: 1.4; margin-bottom: 12px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .tour-botones-navegacion { display: flex; justify-content: space-between; width: 100%; gap: 10px; margin-top: 5px; }
-        .btn-tour-nav { flex: 1; padding: 10px; border-radius: 12px; border: none; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
-        .btn-tour-ant { background: #475569; color: white; }
-        .btn-tour-sig { background: #8b5cf6; color: white; box-shadow: 0 3px 10px rgba(139, 92, 246, 0.4); }
-
-        #modal-redes { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.88); z-index: 25000; justify-content: center; align-items: center; }
-        .modal-redes-content { background: #1e293b; width: 92%; max-width: 420px; border-radius: 20px; border: 2px solid #38bdf8; padding: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto; }
-        .modal-redes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .modal-redes-header h3 { color: #38bdf8; font-size: 1rem; }
-        .redes-lista-vertical { display: flex; flex-direction: column; gap: 8px; }
-        .btn-red-item { padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 600; font-size: 0.82rem; cursor: pointer; text-align: left; display: flex; align-items: center; justify-content: space-between; }
-
+        .pin-etiqueta-nombre { background: rgba(15, 23, 42, 0.92) !important; color: #38bdf8 !important; border: 1px solid #38bdf8 !important; border-radius: 6px !important; padding: 2px 7px !important; font-size: 10px !important; font-weight: 700 !important; white-space: nowrap !important; }
+        .pin-etiqueta-particular { background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%) !important; color: #fbbf24 !important; border: 1.5px solid #f59e0b !important; border-radius: 6px !important; padding: 3px 8px !important; font-size: 10.5px !important; font-weight: 800 !important; white-space: nowrap !important; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.92); z-index: 20002; justify-content: center; align-items: center; }
+        .modal-content-comic { background: #1e293b; padding: 22px 18px; border-radius: 24px; border: 3px solid #38bdf8; text-align: center; max-width: 320px; width: 92%; display: flex; flex-direction: column; align-items: center; }
+        .thought-bubble { background: #ffffff; color: #0f172a; padding: 12px 16px; border-radius: 18px; font-weight: 700; font-size: 13px; margin-bottom: 12px; width: 100%; }
+        .modal-btn { background: #2563eb; color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 600; cursor: pointer; }
         #modal-detalle { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 20000; justify-content: center; align-items: center; }
-        .modal-content { background: white; width: 92%; max-width: 550px; max-height: 85vh; border-radius: 18px; overflow-y: auto; padding: 22px 20px 20px 20px; position: relative; color: #2d3748; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .modal-close-destacado { position: absolute; top: 12px; right: 14px; background: #ef4444; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4); z-index: 1000; }
-
+        .modal-content { background: white; width: 92%; max-width: 550px; max-height: 85vh; border-radius: 18px; overflow-y: auto; padding: 22px 20px; position: relative; color: #2d3748; }
+        .modal-close-destacado { position: absolute; top: 12px; right: 14px; background: #ef4444; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 800; cursor: pointer; }
         .school-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; margin-bottom: 10px; }
         .badge-estatal { background: #fee2e2; color: #991b1b; }
         .badge-particular { background: #fef3c7; color: #92400e; }
         .badge-convenio { background: #e0e7ff; color: #3730a3; }
-        .niveles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin: 12px 0; }
-        .tag-verde-limpio { background-color: #dcfce7; color: #15803d; border: 1.5px solid #86efac; padding: 10px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; text-align: center; }
-
         .grados-semaforo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; margin: 10px 0; }
-        .item-grado-semaforo { padding: 8px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .item-grado-semaforo { padding: 8px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-align: center; }
         .sem-verde { background-color: #dcfce7; color: #166534; border: 1px solid #86efac; }
         .sem-amarillo { background-color: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
         .sem-rojo { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-
-        #modal-fachada-fullscreen { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100vw; height: 100vh; 
-            background: rgba(0, 0, 0, 0.95); 
-            z-index: 30000; 
-            justify-content: center; 
-            align-items: center; 
-            flex-direction: column;
-            overflow: hidden;
-            touch-action: pan-x pan-y pinch-zoom;
-        }
-
-        .barramenu-zoom-fachada {
-            position: absolute;
-            top: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 30005;
-            background: rgba(15, 23, 42, 0.85);
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-        }
-
-        .btn-zoom-accion {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-        }
-
-        .btn-cerrar-fachada { 
-            background: #ef4444; 
-            color: #ffffff; 
-            border: none; 
-            font-size: 1.2rem; 
-            width: 36px; height: 36px; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            font-weight: 800;
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
-        }
-
-        .visor-img-wrapper {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: auto;
-            touch-action: pan-x pan-y pinch-zoom;
-        }
-
-        .fachada-fullscreen-img { 
-            max-width: 90%; 
-            max-height: 80vh; 
-            object-fit: contain; 
-            border-radius: 12px; 
-            transition: transform 0.2s ease-out;
-            transform-origin: center center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            touch-action: pan-x pan-y pinch-zoom;
-        }
-
-        #modal-inactividad-total { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 19, 36, 0.96); z-index: 999999; justify-content: center; align-items: center; flex-direction: column; text-align: center; padding: 20px; cursor: pointer; }
-        .inactivity-box { background: #1e293b; border: 3px solid #38bdf8; border-radius: 28px; padding: 30px 20px; max-width: 320px; width: 90%; display: flex; flex-direction: column; align-items: center; }
-        .inactivity-box img { width: 140px; height: 140px; object-fit: contain; margin-bottom: 15px; }
-
+        .card-seccion { background: white; padding: 20px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #cbd5e1; }
         .contenedor-central { padding: 20px; color: #1e293b; max-width: 700px; margin: 0 auto; }
-        .card-seccion { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 15px; border: 1px solid #cbd5e1; }
-        .grid-donacion { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
-        .metodo-pago { background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: center; }
-
-        @media (min-width: 769px) {
-            .grid-donacion { grid-template-columns: 1fr 1fr; }
-        }
     </style>
 </head>
 <body>
-
     <div id="pantalla-portada">
-        <button class="btn-acceso-directores-flotante" onclick="abrirModalDirector()">
-            🔐 Acceso Directores
-        </button>
+        <button class="btn-admin-flotante" onclick="abrirAdminDashboard()">⚙️ Admin</button>
+        <button class="btn-acceso-directores-flotante" onclick="abrirModalDirector()">🔐 Acceso Directores</button>
 
         <div class="main-container">
             <div class="hero-header">
                 <div class="header-brand-container">
-                    <img src="mapache_apoyado_en_la_pared.png" alt="Mapachito Mascot" class="img-mapache-hero">
-                    <div class="header-text-block">
+                    <div style="font-size: 3.5rem; margin-right: 10px;">🦝</div>
+                    <div>
                         <h1 class="titulo-app">MAPACHE</h1>
                         <p class="subtitulo-app">Ventanilla &amp; Mi Perú</p>
                         <p class="tagline-app">Rastrea, Encuentra, Matricula</p>
@@ -437,17 +85,13 @@
                     🦝 Tour Interactivo: ¿Cómo buscar un colegio?
                 </button>
 
-                <div class="search-box-wrapper">
-                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, Elim, 5090)..." autocomplete="off">
+                <div style="position:relative; width:100%;">
+                    <input type="text" id="inputPortada" class="input-busqueda" placeholder="🔍 Nombre o número (Ej: Elim, 121, 5090, Cáceres)..." autocomplete="off">
                     <div id="sugerenciasPortada" class="sugerencias-lista"></div>
                 </div>
                 
                 <button class="btn-opcion btn-verde" onclick="mostrarInfoTodosMapa(event)">Ver Todos los Colegios en el Mapa</button>
-                
-                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito(event)">
-                    Filtrar por Redes Educativas<br>
-                    <span style="font-size: 0.8rem; font-weight: 500; opacity: 0.9;">(1-9)</span>
-                </button>
+                <button class="btn-opcion btn-azul" onclick="abrirModalRedesConMapachito(event)">Filtrar por Redes Educativas (1-9)</button>
                 
                 <div class="fila-botones-dividida">
                     <button class="btn-opcion btn-estatales" onclick="mostrarInfoEstatales(event)">Colegios Estatales</button>
@@ -464,8 +108,8 @@
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
             <button class="btn-sincronizar-top" onclick="forzarSincronizacionNubeManual()">🔄 Sincronizar Nube</button>
-            <div class="search-container-map">
-                <input type="text" id="searchInputMap" placeholder="Filtrar colegios en el mapa..." autocomplete="off">
+            <div style="flex:1; position:relative;">
+                <input type="text" id="searchInputMap" placeholder="Filtrar en mapa (nombre o número)..." style="width:100%; padding:10px; border-radius:6px; border:1px solid #cbd5e0;">
                 <div id="sugerenciasMapa" class="sugerencias-lista"></div>
             </div>
         </div>
@@ -476,105 +120,14 @@
         <div class="top-bar">
             <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
             <button class="btn-sincronizar-top" onclick="forzarSincronizacionNubeManual()">🔄 Sincronizar Nube</button>
-            <h3 style="font-size: 0.95rem; margin-left: 5px;">🚦 Buscador Global</h3>
+            <h3 style="font-size:0.95rem; margin-left:5px;">🚦 Buscador Global</h3>
         </div>
         <div class="contenedor-central">
             <div class="card-seccion">
-                <h2 style="color:#1a365d; margin-bottom:8px; font-size:1.2rem;">Vacantes por Grado y Edad en Tiempo Real</h2>
-                <div style="background:#f1f5f9; border-left:4px solid #38bdf8; padding:10px; border-radius:8px; font-size:0.8rem; color:#334155; margin-bottom:15px; font-weight:600;">
-                    <b>Leyenda del Semáforo:</b><br>
-                    🟢 <b>Verde:</b> Hay vacantes disponibles<br>
-                    🟡 <b>Amarillo:</b> Pocas vacantes disponibles<br>
-                    🔴 <b>Rojo:</b> Sin vacantes (Agotado)
-                </div>
-                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre, apellido (Ej. Cáceres, Elim), nivel o grado..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.9rem;">
+                <h2 style="color:#1a365d; font-size:1.2rem; margin-bottom:8px;">Vacantes por Grado y Edad en Tiempo Real</h2>
+                <input type="text" id="inputBuscadorVacantes" onkeyup="filtrarListaVacantes()" placeholder="🔍 Filtra por nombre, número (Ej. Elim, 121, 5090)..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
             </div>
-            
             <div id="lista-vacantes"></div>
-        </div>
-    </div>
-
-    <div id="pantalla-donaciones" class="pantalla-secundaria">
-        <div class="top-bar">
-            <button class="btn-volver" onclick="volverAPortada()">⬅ Volver</button>
-            <h3 style="font-size: 0.95rem;">💎 Desarrollo Tecnológico MAPACHE</h3>
-        </div>
-        <div class="contenedor-central">
-            <div class="card-seccion" style="text-align: center;">
-                <h2 style="color: #0284c7; margin-bottom:10px; font-size:1.3rem;">Sostenibilidad y Alianzas Educativas 🦝</h2>
-                <p style="font-size: 0.9rem; color:#475569; line-height:1.6; text-align: justify; margin-bottom:15px;">
-                    El Proyecto MAPACHE es el resultado de un dedicado esfuerzo técnico, recopilación de información en campo y constante coordinación con la comunidad de directores en Ventanilla y Mi Perú. 
-                </p>
-                <div style="background:#f1f5f9; padding:15px; border-radius:12px; text-align:left; margin-bottom:15px; border-left:4px solid #0284c7;">
-                    <p style="font-size:0.85rem; color:#0f172a; margin-bottom:6px;"><b>🏫 Colegios Particulares:</b> Acceso mediante suscripción/membresía digital institucional.</p>
-                    <p style="font-size:0.85rem; color:#0f172a;"><b>🏛️ Colegios Estatales y Directores:</b> Colaboración o convenio de desarrollo tecnológico.</p>
-                </div>
-                <div style="background:#fef3c7; border:1px solid #fcd34d; padding:12px; border-radius:12px; font-size:0.85rem; color:#92400e; margin-bottom:20px; font-weight:600;">
-                    🏅 Las instituciones y directores colaboradores obtendrán la insignia oficial de "Sello Aliado Digital" dentro de la aplicación.
-                </div>
-                
-                <div class="grid-donacion">
-                    <div class="metodo-pago">
-                        <h3 style="color:#d946ef; margin-bottom:8px;">📲 Plin / Yape</h3>
-                        <p style="font-size: 0.8rem; color:#64748b; margin-bottom:8px;">Número oficial de contacto/coordinación:</p>
-                        <p style="font-size: 1.2rem; font-weight:bold; color:#0f172a;">999 999 999</p>
-                        <p style="font-size: 0.75rem; color:#64748b; margin-top:5px;">Proyecto MAPACHE</p>
-                    </div>
-                    <div class="metodo-pago">
-                        <h3 style="color:#0284c7; margin-bottom:8px;">🏦 Transferencia Bancaria</h3>
-                        <p style="font-size: 0.8rem; color:#64748b; margin-bottom:5px;">Cuenta de Ahorros / CCI:</p>
-                        <p style="font-size: 0.85rem; font-weight:bold; color:#0f172a; word-break: break-all;">CCI: 002-191-000000000000-00</p>
-                        <button onclick="copiarCCI()" style="margin-top:10px; background:#0284c7; color:white; border:none; padding:8px 14px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">📋 Copiar CCI</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-tour-interactivo" onclick="cerrarTourMapachito(event)">
-        <div class="box-tour-card" onclick="event.stopPropagation()">
-            <div id="tourPasoIndicador" class="tour-indicador-paso">PASO 1 DE 5</div>
-            <div id="tourTitulo" class="tour-titulo">¡Bienvenido a MAPACHE!</div>
-            <div id="tourTexto" class="tour-texto">¡Hola! Soy Mapachito 🦝. Te guiaré paso a paso para que encuentres el colegio ideal en Ventanilla y Mi Perú de la forma más rápida.</div>
-            
-            <div class="raccoon-avatar-box">
-                <img id="imgTourMapachito" src="mapache_saludando.png" alt="Mapachito Guía">
-            </div>
-
-            <div class="tour-botones-navegacion">
-                <button id="btnTourAnterior" class="btn-tour-nav btn-tour-ant" onclick="anteriorPasoTour()" style="display:none;">⬅ Anterior</button>
-                <button id="btnTourSiguiente" class="btn-tour-nav btn-tour-sig" onclick="siguientePasoTour()">¡Empezar! ➔</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-redes" onclick="cerrarModalRedes(event)">
-        <div class="modal-redes-content" onclick="event.stopPropagation()">
-            <div class="modal-redes-header">
-                <h3>Selecciona una Red Educativa</h3>
-                <span style="cursor:pointer; font-size:1.4rem; color:#a0aec0;" onclick="forzarCierreModalRedes()">&times;</span>
-            </div>
-            <div class="redes-lista-vertical">
-                <button class="btn-red-item" style="background-color: #b91c1c;" onclick="filtrarPorRedConMapachito(1)"><span>RED N° 01 - PACHACÚTEC OESTE</span></button>
-                <button class="btn-red-item" style="background-color: #c2410c;" onclick="filtrarPorRedConMapachito(2)"><span>RED N° 02 - PACHACÚTEC SUR</span></button>
-                <button class="btn-red-item" style="background-color: #b45309;" onclick="filtrarPorRedConMapachito(3)"><span>RED N° 03 - PACHACÚTEC NORTE</span></button>
-                <button class="btn-red-item" style="background-color: #15803d;" onclick="filtrarPorRedConMapachito(4)"><span>RED N° 04 - PACHACÚTEC ESTE</span></button>
-                <button class="btn-red-item" style="background-color: #0f766e;" onclick="filtrarPorRedConMapachito(5)"><span>RED N° 05 - VILLA LOS REYES</span></button>
-                <button class="btn-red-item" style="background-color: #1d4ed8;" onclick="filtrarPorRedConMapachito(6)"><span>RED N° 06 - MI PERÚ</span></button>
-                <button class="btn-red-item" style="background-color: #4338ca;" onclick="filtrarPorRedConMapachito(7)"><span>RED N° 07 - SATÉLITE</span></button>
-                <button class="btn-red-item" style="background-color: #6b21a8;" onclick="filtrarPorRedConMapachito(8)"><span>RED N° 08 - ANTONIA MORENO DE CÁCERES</span></button>
-                <button class="btn-red-item" style="background-color: #be185d;" onclick="filtrarPorRedConMapachito(9)"><span>RED N° 09 - ANGAMOS</span></button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
-        <div class="modal-content-comic" onclick="cerrarModalMapachito()">
-            <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
-            <div class="raccoon-avatar-box">
-                <img id="imgMapachitoModal" src="mapache_saludando.png" alt="Mapachito">
-            </div>
-            <button id="btnEntendidoModal" class="modal-btn" onclick="cerrarModalMapachito()">¡Entendido! 🚀</button>
         </div>
     </div>
 
@@ -585,158 +138,65 @@
         </div>
     </div>
 
-    <div id="modal-fachada-fullscreen" onclick="cerrarFachadaFullscreen()">
-        <div class="barramenu-zoom-fachada" onclick="event.stopPropagation()">
-            <button class="btn-zoom-accion" onclick="zoomFachada(0.3)">🔍 + Ampliar</button>
-            <button class="btn-zoom-accion" onclick="zoomFachada(-0.3)">🔍 - Alejar</button>
-            <button class="btn-zoom-accion" style="background:#64748b;" onclick="resetZoomFachada()">🔄 Restablecer</button>
-            <button class="btn-cerrar-fachada" onclick="cerrarFachadaFullscreen()">&times;</button>
-        </div>
-        <div class="visor-img-wrapper" onclick="event.stopPropagation()">
-            <img id="imgFachadaFull" class="fachada-fullscreen-img" src="" alt="Fachada del Colegio">
-        </div>
-    </div>
-
-    <div id="modal-inactividad-total" onclick="despertarMapachitoInactivo()">
-        <div class="inactivity-box" onclick="event.stopPropagation(); despertarMapachitoInactivo();">
-            <img src="mapache_durmiendo.png" alt="Mapachito durmiendo">
-            <h2 style="color:#38bdf8; font-size:1.1rem; margin-bottom:8px;">¡Zzz... Mapachito está durmiendo!</h2>
-            <p style="font-size:0.85rem; color:#cbd5e1;">Toca la pantalla o mueve el cursor para despertar al dueño de la app.</p>
+    <div id="modalMapachito" class="modal-overlay" onclick="cerrarModalMapachito()">
+        <div class="modal-content-comic" onclick="cerrarModalMapachito()">
+            <div id="textoMapachito" class="thought-bubble">¡Hola!</div>
+            <div style="font-size:4rem; margin:10px 0;">🦝</div>
+            <button id="btnEntendidoModal" class="modal-btn">¡Entendido! 🚀</button>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="colegios.js"></script>
     <script>
-        var map = null;
-        let marcadoresCreados = [];
-        let accionPendiente = null;
-        let temporizadorInactividad = null;
-        let temporizadorAutoCierre = null;
-        let escalaZoomActual = 1;
-
-        let filtroActualMapa = 'todos';
-        let colegiosBaseGoogle = [];
-
-        const coloresRedes = {
-            1: "#b91c1c", 2: "#c2410c", 3: "#b45309", 4: "#15803d",
-            5: "#0f766e", 6: "#1d4ed8", 7: "#4338ca", 8: "#6b21a8", 9: "#be185d"
-        };
-
-        const imagenesMapachitoPrecarga = [
-            'mapache_saludando.png',
-            'mapache_pensativo.png',
-            'mapache_buscando.png',
-            'mapache_saludando_en_un_pie.png',
-            'mapache_sorprendido.png',
-            'mapache_durmiendo.png',
-            'mapache_preocupado.png',
-            'mapache_guiñando_ojo.png',
-            'mapache_apoyado_en_la_pared.png'
-        ];
-
-        function precargarImagenesMapachito() {
-            imagenesMapachitoPrecarga.forEach(src => {
-                const img = new Image();
-                img.src = src;
-            });
-        }
-
-        function getColegiosSafe() {
-            if (Array.isArray(colegiosBaseGoogle) && colegiosBaseGoogle.length > 0) {
-                return colegiosBaseGoogle;
-            }
-            return (typeof colegios !== 'undefined' && Array.isArray(colegios)) ? colegios : [];
-        }
-
-        let pasoTourActual = 0;
-        const pasosTourData = [
+        // CONFIGURACIÓN DE URL DE GOOGLE APPS SCRIPT
+        const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycby2Y6cDIBQj6lRkAc1eMlfrhMll99Y_LHgb8fkDYHVN66iRrvfiyij1eboTxvCKl_qw/exec";
+        
+        let colegiosBase = [
             {
-                emocion: 'saludando',
-                titulo: '¡Bienvenido a MAPACHE!',
-                texto: '¡Hola! Soy Mapachito 🦝. Te guiaré en 4 sencillos pasos para que busques y encuentres tu colegio ideal.'
+                id_colegio: "147",
+                codigo: "ELIM",
+                nombre_colegio: "I.E.P. ELIM",
+                latitud: -11.8712,
+                longitud: -77.1265,
+                gestion: "Particular",
+                distrito: "Ventanilla",
+                red_educativa: "Particular / Independiente",
+                niveles: "Inicial, Primaria, Secundaria",
+                direccion: "Mz. K Lote 12, Satélite, Ventanilla",
+                password_director: "in-el",
+                estado_vigencia: "Activo"
             },
             {
-                emocion: 'buscando',
-                titulo: '1. Buscador Directo e Inteligente',
-                texto: 'Escribe en la barra de búsqueda el <b>número del colegio</b> (Ej: 113, 5090), el <b>nombre</b> o el <b>apellido del ilustre</b> (Ej: Cáceres, Elim). ¡Te dará sugerencias instantáneas!'
+                id_colegio: "1",
+                codigo: "121",
+                nombre_colegio: "I.E.I N°121 ANGELITOS DE PACHACÚTEC",
+                latitud: -11.8542,
+                longitud: -77.1624,
+                gestion: "Estatal",
+                distrito: "Ventanilla",
+                red_educativa: "RED N° 01 - PACHACÚTEC OESTE",
+                niveles: "Inicial",
+                password_director: "dir-121",
+                estado_vigencia: "Activo"
             },
             {
-                emocion: 'olfateando',
-                titulo: '2. Mapa y Redes Educativas',
-                texto: 'Usa el botón <b>"Ver Todos los Colegios en el Mapa"</b> o filtra por tu <b>Red Educativa (1 al 9)</b> para ubicar geográficamente las escuelas cercanas a tu hogar.'
-            },
-            {
-                emocion: 'sorprendido',
-                titulo: '3. Vacantes en Tiempo Real',
-                texto: 'En el botón <b>"🚦 Buscar Vacantes Disponibles"</b> consultarás si hay vacantes por grado o edad:<br>🟢 <b>Verde:</b> Hay vacantes.<br>🟡 <b>Amarillo:</b> Pocas vacantes.<br>🔴 <b>Rojo:</b> Sin vacantes.'
-            },
-            {
-                emocion: 'guiñando',
-                titulo: '4. Fotos y Cómo Llegar',
-                texto: 'Al seleccionar un colegio, presiona <b>"Fachada"</b> para ver su foto panorámica con zoom o <b>"Iniciar viaje"</b> para trazar la ruta en Google Maps. ¡Listo para empezar!'
+                id_colegio: "14",
+                codigo: "5090",
+                nombre_colegio: "I.E. N° 5090 ANTONIA MORENO DE CÁCERES",
+                latitud: -11.8845,
+                longitud: -77.1352,
+                gestion: "Estatal",
+                distrito: "Ventanilla",
+                red_educativa: "RED N° 08 - ANTONIA MORENO DE CÁCERES",
+                niveles: "Primaria, Secundaria",
+                password_director: "dir-5090",
+                estado_vigencia: "Activo"
             }
         ];
 
-        function iniciarTourMapachito(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            pasoTourActual = 0;
-            actualizarVistaTour();
-            document.getElementById('modal-tour-interactivo').style.display = 'flex';
-        }
-
-        function actualizarVistaTour() {
-            const paso = pasosTourData[pasoTourActual];
-            document.getElementById('tourPasoIndicador').innerText = `PASO ${pasoTourActual + 1} DE ${pasosTourData.length}`;
-            document.getElementById('tourTitulo').innerHTML = paso.titulo;
-            document.getElementById('tourTexto').innerHTML = paso.texto;
-
-            const imagenesEmocion = {
-                'saludando': 'mapache_saludando.png',
-                'pensando': 'mapache_pensativo.png',
-                'olfateando': 'mapache_buscando.png',
-                'buscando': 'mapache_buscando.png',
-                'feliz': 'mapache_saludando_en_un_pie.png',
-                'sorprendido': 'mapache_sorprendido.png',
-                'guiñando': 'mapache_guiñando_ojo.png'
-            };
-
-            document.getElementById('imgTourMapachito').src = imagenesEmocion[paso.emocion] || 'mapache_saludando.png';
-
-            const btnAnt = document.getElementById('btnTourAnterior');
-            const btnSig = document.getElementById('btnTourSiguiente');
-
-            btnAnt.style.display = (pasoTourActual > 0) ? 'block' : 'none';
-
-            if (pasoTourActual === pasosTourData.length - 1) {
-                btnSig.innerText = '¡Empezar a Buscar! 🚀';
-                btnSig.style.background = '#16a34a';
-            } else {
-                btnSig.innerText = (pasoTourActual === 0) ? '¡Empezar Tour! ➔' : 'Siguiente ➔';
-                btnSig.style.background = '#8b5cf6';
-            }
-        }
-
-        function siguientePasoTour() {
-            if (pasoTourActual < pasosTourData.length - 1) {
-                pasoTourActual++;
-                actualizarVistaTour();
-            } else {
-                cerrarTourMapachito();
-            }
-        }
-
-        function anteriorPasoTour() {
-            if (pasoTourActual > 0) {
-                pasoTourActual--;
-                actualizarVistaTour();
-            }
-        }
-
-        function cerrarTourMapachito(e) {
-            document.getElementById('modal-tour-interactivo').style.display = 'none';
-        }
+        let map = null;
+        let marcadores = [];
+        let datosVacantesEnVivo = JSON.parse(localStorage.getItem('mapache_vacantes') || '{}');
 
         function normalizarTexto(txt) {
             if (!txt) return '';
@@ -745,1024 +205,152 @@
 
         function normalizarLimpio(txt) {
             if (!txt) return '';
-            let s = String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            s = s.replace(/n[°º. ]*/g, ' ');
-            s = s.replace(/[^a-z0-9]/g, ' ');
-            s = s.replace(/\s+/g, ' ').trim();
-            return s;
-        }
-
-        function ocultarTecladoMovil() {
-            if (document.activeElement && typeof document.activeElement.blur === 'function') {
-                document.activeElement.blur();
-            }
-            document.querySelectorAll('input').forEach(i => i.blur());
-        }
-
-        let datosVacantesEnVivo = JSON.parse(localStorage.getItem('mapache_vacantes') || '{}');
-        const URL_API_GOOGLE = "https://script.google.com/macros/s/AKfycby2Y6cDIBQj6lRkAc1eMlfrhMll99Y_LHgb8fkDYHVN66iRrvfiyij1eboTxvCKl_qw/exec";
-
-        const canalVacantes = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel('mapache_sync_vacantes') : null;
-        if (canalVacantes) {
-            canalVacantes.onmessage = (event) => {
-                if (event.data === 'actualizado') {
-                    datosVacantesEnVivo = JSON.parse(localStorage.getItem('mapache_vacantes') || '{}');
-                    refrescarVistasVacantesActivas();
-                }
-            };
-        }
-
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'mapache_vacantes') {
-                datosVacantesEnVivo = JSON.parse(e.newValue || '{}');
-                refrescarVistasVacantesActivas();
-            }
-        });
-
-        function indexarVacantesColegio(colegioObj, datosGrados) {
-            if (!colegioObj || !datosGrados) return;
-            const keys = new Set();
-            
-            if (colegioObj.id_colegio !== undefined && colegioObj.id_colegio !== null) {
-                let idStr = String(colegioObj.id_colegio).trim();
-                keys.add(idStr);
-                if (!isNaN(idStr)) keys.add(String(Number(idStr)));
-            }
-            
-            if (colegioObj.codigo !== undefined && colegioObj.codigo !== null) {
-                let codStr = String(colegioObj.codigo).trim();
-                keys.add(codStr);
-                if (!isNaN(codStr)) keys.add(String(Number(codStr)));
-            }
-
-            if (colegioObj.nombre_colegio) {
-                let nomNorm = normalizarLimpio(colegioObj.nombre_colegio);
-                if (nomNorm) keys.add(nomNorm);
-            }
-
-            keys.forEach(k => {
-                if (k) datosVacantesEnVivo[k] = datosGrados;
-            });
-        }
-
-        function obtenerVacantesColegioRobust(colegioObj) {
-            if (!colegioObj) return {};
-
-            const probables = [];
-            
-            if (colegioObj.id_colegio !== undefined && colegioObj.id_colegio !== null) {
-                let idStr = String(colegioObj.id_colegio).trim();
-                probables.push(idStr);
-                if (!isNaN(idStr)) probables.push(String(Number(idStr)));
-            }
-
-            if (colegioObj.codigo !== undefined && colegioObj.codigo !== null) {
-                let codStr = String(colegioObj.codigo).trim();
-                probables.push(codStr);
-                if (!isNaN(codStr)) probables.push(String(Number(codStr)));
-            }
-
-            if (colegioObj.nombre_colegio) {
-                let nomNorm = normalizarLimpio(colegioObj.nombre_colegio);
-                if (nomNorm) probables.push(nomNorm);
-            }
-
-            for (let i = 0; i < probables.length; i++) {
-                let k = probables[i];
-                if (datosVacantesEnVivo[k] && Object.keys(datosVacantesEnVivo[k]).length > 0) {
-                    return datosVacantesEnVivo[k];
-                }
-            }
-
-            return {};
-        }
-
-        function refrescarVistasVacantesActivas() {
-            if (document.getElementById('pantalla-vacantes').classList.contains('activa')) {
-                filtrarListaVacantes();
-            }
-            const modalDetalle = document.getElementById('modal-detalle');
-            if (modalDetalle && modalDetalle.style.display === 'flex') {
-                const tituloEl = modalDetalle.querySelector('h2');
-                if (tituloEl && tituloEl.innerText) {
-                    abrirDetalle(tituloEl.innerText);
-                }
-            }
+            return String(txt).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+                .replace(/\bi\.?\s*e\.?\s*p\.?\b/g, '')
+                .replace(/\bi\.?\s*e\.?\b/g, '')
+                .replace(/n[°º. ]*/g, '')
+                .replace(/[^a-z0-9]/g, '')
+                .trim();
         }
 
         async function cargarVacantesEnTiempoReal() {
             try {
-                // Parámetro dinámico anti-caché de navegador móvil
-                const timestampUnico = new Date().getTime() + '_' + Math.random().toString(36).substring(2, 9);
-                const urlSinCache = URL_API_GOOGLE + '?t=' + timestampUnico;
-
-                const respuesta = await fetch(urlSinCache, { 
-                    method: 'GET',
-                    cache: 'no-store',
-                    headers: {
-                        'Pragma': 'no-cache',
-                        'Cache-Control': 'no-cache, no-store, must-revalidate'
-                    }
-                });
-
-                if (!respuesta.ok) throw new Error('Error al conectar con la base de datos');
-
-                const resultado = await respuesta.json();
-                
-                if (Array.isArray(resultado) && resultado.length > 0) {
-                    let colegiosDesdeSheets = resultado.map(item => {
-                        let colObj = Object.assign({}, item);
-                        if (colObj.latitud) colObj.latitud = parseFloat(colObj.latitud);
-                        if (colObj.longitud) colObj.longitud = parseFloat(colObj.longitud);
-                        return colObj;
-                    }).filter(col => col.nombre_colegio && (col.id_colegio || col.codigo));
-
-                    if (colegiosDesdeSheets.length > 0) {
-                        colegiosBaseGoogle = colegiosDesdeSheets;
-                    }
-
-                    const colegiosLista = getColegiosSafe();
-
-                    resultado.forEach(item => {
-                        let rawId = String(item.id_colegio || item.codigo || item.id || '').trim();
-                        let rawNombre = String(item.nombre_colegio || '').trim();
-                        let datosGrados = item.grados || item.vacantes || item;
-
-                        let colegioEncontrado = colegiosLista.find(c => {
-                            let cId = String(c.id_colegio || '').trim();
-                            let cCod = String(c.codigo || '').trim();
-                            let cNom = normalizarLimpio(c.nombre_colegio);
-
-                            if (rawId && (rawId === cId || rawId === cCod || (!isNaN(rawId) && (Number(rawId) === Number(cId) || Number(rawId) === Number(cCod))))) return true;
-                            if (rawNombre && normalizarLimpio(rawNombre) === cNom) return true;
-                            return false;
-                        });
-
-                        if (colegioEncontrado) {
-                            indexarVacantesColegio(colegioEncontrado, datosGrados);
-                        } else if (rawId) {
-                            datosVacantesEnVivo[rawId] = datosGrados;
-                            if (!isNaN(rawId)) datosVacantesEnVivo[String(Number(rawId))] = datosGrados;
-                        }
+                const res = await fetch(URL_API_GOOGLE + '?t=' + new Date().getTime(), { cache: 'no-store' });
+                const data = await res.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    // Mapeo sin descartar colegios con nombre
+                    colegiosBase = data.map((item, idx) => {
+                        let c = Object.assign({}, item);
+                        if (!c.id_colegio) c.id_colegio = 'COL_' + idx;
+                        if (!c.codigo) c.codigo = c.id_colegio;
+                        if (c.latitud) c.latitud = parseFloat(c.latitud);
+                        if (c.longitud) c.longitud = parseFloat(c.longitud);
+                        if (item.grados) datosVacantesEnVivo[c.id_colegio] = item.grados;
+                        return c;
                     });
-
                     localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
-                    refrescarVistasVacantesActivas();
                 }
-            } catch (error) {
-                console.warn("Dificultad temporal de sincronización:", error);
+            } catch (e) {
+                console.log("Cargado desde respaldo local:", e);
             }
-        }
-
-        function forzarSincronizacionNubeManual() {
-            cargarVacantesEnTiempoReal().then(() => {
-                abrirModalMapachito('feliz', "¡Datos sincronizados exitosamente desde la nube de Google Sheets! ☁️✨", true);
-            });
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            precargarImagenesMapachito();
-            cargarVacantesEnTiempoReal();
-            setInterval(cargarVacantesEnTiempoReal, 6000); // Polling cada 6 segundos
-            configurarAutocompletado('inputPortada', 'sugerenciasPortada', seleccionarColegioYIr);
-            configurarAutocompletado('searchInputMap', 'sugerenciasMapa', seleccionarColegioEnMapa);
-            reiniciarTemporizadorInactividad();
-        });
-
-        function inicializarMapa() {
-            if (!map) {
-                map = L.map('map').setView([-11.875, -77.135], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
-            }
-        }
-
-        function abrirModalDirector() {
-            ocultarTecladoMovil();
-            const modalHTML = `
-                <div id="modal-director" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
-                    <div style="background:white; padding:25px; border-radius:14px; width:90%; max-width:400px; box-shadow:0 4px 20px rgba(0,0,0,0.3); color:#2d3748;">
-                        <h3 style="color:#1a365d; margin-bottom:8px;">Portal de Directores</h3>
-                        <p style="font-size:0.85rem; color:#64748b; margin-bottom:12px;">Ingresa para gestionar la disponibilidad de vacantes.</p>
-                        <div style="background:#f1f5f9; border-left:4px solid #38bdf8; padding:8px 10px; border-radius:6px; font-size:0.75rem; color:#334155; margin-bottom:15px; font-weight:600;">
-                            <b>Leyenda del Semáforo:</b><br>
-                            🟢 Hay vacantes disponibles<br>
-                            🟡 Pocas vacantes disponibles<br>
-                            🔴 Sin vacantes (Agotado)
-                        </div>
-                        
-                        <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Colegio (Número, Nombre o N° de lista Excel):</label>
-                        <input type="text" id="dir-codigo" placeholder="Ej. 126, Fe y Alegría 29, Elim, 147..." style="width:100%; padding:10px; margin:5px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px;">
-                        
-                        <label style="font-size:0.8rem; font-weight:bold; display:block; text-align:left;">Contraseña Asignada:</label>
-                        <div style="position:relative; width:100%; margin:5px 0 15px 0;">
-                            <input type="password" id="dir-password" placeholder="Tu contraseña secreta" style="width:100%; padding:10px 40px 10px 10px; border:1px solid #cbd5e1; border-radius:6px; outline:none;">
-                            <button type="button" onclick="alternarVisibilidadPassword()" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:1.1rem; padding:4px;" title="Ver/Ocultar contraseña">👁️</button>
-                        </div>
-                        
-                        <div style="display:flex; justify-content:space-between; gap:10px;">
-                            <button onclick="document.getElementById('modal-director').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
-                            <button onclick="autenticarDirector()" style="background:#2563eb; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Ingresar</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-            setTimeout(() => {
-                const passInput = document.getElementById('dir-password');
-                if (passInput) {
-                    passInput.addEventListener('keyup', (e) => {
-                        if (e.key === 'Enter') autenticarDirector();
-                    });
-                }
-            }, 100);
-        }
-
-        function alternarVisibilidadPassword() {
-            const inputPass = document.getElementById('dir-password');
-            if (!inputPass) return;
-            inputPass.type = (inputPass.type === 'password') ? 'text' : 'password';
-        }
-
-        function autenticarDirector() {
-            ocultarTecladoMovil();
-            const modal = document.getElementById('modal-director');
-            if (!modal) return;
-
-            const codigoInput = document.getElementById('dir-codigo').value;
-            const passwordInput = document.getElementById('dir-password').value.trim();
-
-            if (!codigoInput || !codigoInput.trim()) { alert("Por favor ingresa el número, nombre o N° de lista del colegio."); return; }
-            if (!passwordInput) { alert("Por favor ingresa la contraseña asignada."); return; }
-
-            const inputOriginal = codigoInput.trim().toLowerCase();
-            const inputLimpio = normalizarLimpio(codigoInput);
-            const passNorm = passwordInput.toLowerCase();
-
-            const colegiosLista = getColegiosSafe();
-
-            const candidato = colegiosLista.find(c => {
-                const idStr = String(c.id_colegio || '').trim().toLowerCase();
-                const idNumStr = !isNaN(idStr) ? String(Number(idStr)) : idStr;
-                const codStr = String(c.codigo || '').trim().toLowerCase();
-                const nomOriginal = String(c.nombre_colegio || '').trim().toLowerCase();
-                const nomLimpio = normalizarLimpio(c.nombre_colegio || '');
-
-                if (inputOriginal === idStr || inputOriginal === idNumStr || inputOriginal === codStr || inputLimpio === idStr || inputLimpio === codStr) return true;
-                if (nomOriginal.includes(inputOriginal) || nomLimpio.includes(inputLimpio) || inputOriginal.includes(nomLimpio)) return true;
-                return false;
-            });
-
-            if (!candidato) {
-                alert("Error: No se encontró ningún colegio registrado con ese número, nombre o código.");
-                return;
-            }
-
-            const estadoVigencia = String(candidato.estado_vigencia || candidato.ESTADO_VIGENCIA || candidato.estado_membresia || candidato.estado_acceso || '').trim().toLowerCase();
-            if (estadoVigencia === 'bloqueado' || estadoVigencia === 'suspendido' || estadoVigencia === 'inactivo') {
-                alert("⛔ ACCESO DENEGADO: El colegio " + candidato.nombre_colegio + " se encuentra BLOQUEADO en la plataforma.");
-                return;
-            }
-
-            const claveRegistrada = String(candidato.password_director || candidato.PASSWORD_DIRECTOR || '').trim().toLowerCase();
-            if (claveRegistrada !== passNorm) {
-                alert("Error: Contraseña incorrecta para " + candidato.nombre_colegio + ".");
-                return;
-            }
-
-            modal.remove();
-            abrirPanelEdicionVacantesGrados(candidato, passwordInput);
-        }
-
-        function crearSelectSemaforo(idCampo, valActual) {
-            let val = String(valActual || '').toLowerCase();
-            let vSel = (val === 'verde' || parseInt(val) >= 10) ? 'selected' : '';
-            let aSel = (val === 'amarillo' || (parseInt(val) > 0 && parseInt(val) < 10)) ? 'selected' : '';
-            let rSel = (!vSel && !aSel) ? 'selected' : '';
-
-            return `
-                <select id="edit-${idCampo}" style="width:100%; padding:8px; border:1.5px solid #cbd5e1; border-radius:8px; font-weight:700; font-size:0.82rem; background:#ffffff; color:#0f172a; outline:none;">
-                    <option value="verde" ${vSel}>🟢 Hay vacantes</option>
-                    <option value="amarillo" ${aSel}>🟡 Pocas vacantes</option>
-                    <option value="rojo" ${rSel}>🔴 Sin vacantes</option>
-                </select>
-            `;
-        }
-
-        function abrirPanelEdicionVacantesGrados(colegio, password) {
-            const nivelesTexto = normalizarTexto(colegio.niveles);
-            const tieneCuna = nivelesTexto.includes('cuna');
-            const tieneInicial = nivelesTexto.includes('inicial');
-            const tienePrimaria = nivelesTexto.includes('primaria');
-            const tieneSecundaria = nivelesTexto.includes('secundaria');
-
-            const actual = obtenerVacantesColegioRobust(colegio);
-            let formularioGradosHTML = '';
-
-            if (tieneCuna) {
-                formularioGradosHTML += `
-                    <div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">👶 CUNA</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">Cuna (0-3 años):</label>${crearSelectSemaforo('cuna_0_3', actual.cuna_0_3)}</div>
-                `;
-            }
-
-            if (tieneInicial) {
-                formularioGradosHTML += `
-                    <div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">🎨 INICIAL (EDADES)</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">3 Años:</label>${crearSelectSemaforo('ini_3a', actual.ini_3a)}</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">4 Años:</label>${crearSelectSemaforo('ini_4a', actual.ini_4a)}</div>
-                    <div><label style="font-size:0.75rem; font-weight:bold;">5 Años:</label>${crearSelectSemaforo('ini_5a', actual.ini_5a)}</div>
-                `;
-            }
-
-            if (tienePrimaria) {
-                formularioGradosHTML += `<div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">📚 PRIMARIA (GRADOS)</div>`;
-                for (let g = 1; g <= 6; g++) {
-                    formularioGradosHTML += `<div><label style="font-size:0.75rem; font-weight:bold;">${g}° Primaria:</label>${crearSelectSemaforo('pri_' + g, actual['pri_' + g])}</div>`;
-                }
-            }
-
-            if (tieneSecundaria) {
-                formularioGradosHTML += `<div style="grid-column: span 2; background:#f1f5f9; padding:6px 10px; border-radius:6px; font-weight:bold; color:#0f172a; margin-top:5px; font-size:0.8rem;">🎓 SECUNDARIA (AÑOS)</div>`;
-                for (let s = 1; s <= 5; s++) {
-                    formularioGradosHTML += `<div><label style="font-size:0.75rem; font-weight:bold;">${s}° Secundaria:</label>${crearSelectSemaforo('sec_' + s, actual['sec_' + s])}</div>`;
-                }
-            }
-
-            const panelHTML = `
-                <div id="modal-panel-vacantes" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); display:flex; justify-content:center; align-items:center; z-index:99999;">
-                    <div style="background:white; padding:22px; border-radius:16px; width:92%; max-width:480px; max-height:85vh; overflow-y:auto; color:#2d3748; text-align:left;">
-                        <h3 style="color:#1a365d; margin-bottom:4px; font-size:1.1rem;">${colegio.nombre_colegio}</h3>
-                        <p style="font-size:0.8rem; color:#16a34a; margin-bottom:12px; font-weight:bold;">✔ Selecciona el estado de vacantes por nivel/grado:</p>
-                        
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-                            ${formularioGradosHTML}
-                        </div>
-
-                        <div style="display:flex; justify-content:space-between; gap:10px;">
-                            <button onclick="document.getElementById('modal-panel-vacantes').remove()" style="background:#e2e8f0; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Cancelar</button>
-                            <button onclick="guardarVacantesGradosInstante('${colegio.id_colegio}', '${password}')" style="background:#16a34a; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; flex:1; font-weight:bold;">Guardar y Sincronizar Nube</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', panelHTML);
-        }
-
-        async function guardarVacantesGradosInstante(id_colegio, password) {
-            ocultarTecladoMovil();
-            const ahora = new Date();
-            const fechaHoraFormat = ahora.toLocaleDateString('es-PE') + ' ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
-
-            const objetoGrados = { actualizacion: fechaHoraFormat };
-            const selects = document.querySelectorAll('#modal-panel-vacantes select');
-
-            selects.forEach(sel => {
-                const clave = sel.id.replace('edit-', '');
-                objetoGrados[clave] = sel.value;
-            });
-
-            const colegiosLista = getColegiosSafe();
-            const colegioObj = colegiosLista.find(c => String(c.id_colegio) === String(id_colegio) || String(c.codigo) === String(id_colegio));
-
-            if (colegioObj) {
-                indexarVacantesColegio(colegioObj, objetoGrados);
-            } else {
-                let idLimpio = String(id_colegio).trim();
-                datosVacantesEnVivo[idLimpio] = objetoGrados;
-            }
-
-            localStorage.setItem('mapache_vacantes', JSON.stringify(datosVacantesEnVivo));
-            refrescarVistasVacantesActivas();
-            if (canalVacantes) canalVacantes.postMessage('actualizado');
-
-            try {
-                const payload = {
-                    action: 'updateVacantes',
-                    codigo: id_colegio,
-                    id_colegio: id_colegio,
-                    password: password,
-                    grados: objetoGrados,
-                    datos: objetoGrados,
-                    ultima_actualizacion: fechaHoraFormat
-                };
-
-                const res = await fetch(URL_API_GOOGLE, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
-                });
-                
-                const resJson = await res.json();
-
-                if (resJson && resJson.status === 'bloqueado') {
-                    document.getElementById('modal-panel-vacantes').remove();
-                    alert(resJson.message);
-                    return;
-                }
-
-                document.getElementById('modal-panel-vacantes').remove();
-                abrirModalMapachito('feliz', `¡Vacantes guardadas y sincronizadas en la nube!\nFecha: ${fechaHoraFormat}`, true);
-                
-                // Forzar sincronización inmediata
-                cargarVacantesEnTiempoReal();
-            } catch (error) {
-                console.error("Error al guardar en Google Sheets:", error);
-                document.getElementById('modal-panel-vacantes').remove();
-                abrirModalMapachito('sorprendido', `Guardado localmente. Presiona "🔄 Sincronizar Nube" si lo requieres.`, true);
-            }
-        }
-
-        function extraerNumeroRed(redStr) {
-            if (!redStr) return null;
-            const match = String(redStr).match(/\d+/);
-            return match ? parseInt(match[0], 10) : null;
-        }
-
-        function mostrarColegiosEnMapa(lista) {
-            if (!map) return;
-            marcadoresCreados.forEach(item => map.removeLayer(item.marker));
-            marcadoresCreados = [];
-
-            if (!lista || lista.length === 0) return;
-
-            lista.forEach(colegio => {
-                if (!colegio.latitud || !colegio.longitud) return;
-
-                const gestionStr = String(colegio.gestion || '').toLowerCase();
-                const esParticular = gestionStr.includes('particular') || gestionStr.includes('privad');
-                const numRed = extraerNumeroRed(colegio.red_educativa);
-
-                const colorPin = esParticular ? "#0284c7" : ((numRed && coloresRedes[numRed]) ? coloresRedes[numRed] : "#4a5568");
-                const textoPin = esParticular ? "⭐" : (numRed ? numRed : "🏫");
-                const claseEtiqueta = esParticular ? "pin-etiqueta-particular" : "pin-etiqueta-nombre";
-
-                const iconoClasico = L.divIcon({
-                    className: 'custom-div-icon',
-                    html: `
-                        <div class="pin-clasico-container">
-                            <div class="pin-gota" style="background-color: ${colorPin}; border: 2px solid ${esParticular ? '#fbbf24' : '#ffffff'};"></div>
-                            <div class="pin-texto">${textoPin}</div>
-                        </div>
-                    `,
-                    iconSize: [30, 42],
-                    iconAnchor: [15, 42],
-                    popupAnchor: [0, -38]
-                });
-
-                var marker = L.marker([colegio.latitud, colegio.longitud], { icon: iconoClasico }).addTo(map);
-
-                marker.bindTooltip(colegio.nombre_colegio, {
-                    permanent: true,
-                    direction: 'top',
-                    offset: [0, -38],
-                    className: claseEtiqueta
-                });
-
-                marker.bindPopup(`
-                    <div style="min-width: 210px; color: #2d3748;">
-                        <b style="font-size: 0.95rem; color: #1a365d;">${colegio.nombre_colegio}</b><br>
-                        <span style="font-size:0.8rem; color: #4a5568;">Código: ${colegio.id_colegio}</span><br>
-                        <b>Gestión:</b> ${colegio.gestion}<br>
-                        <b>Red:</b> ${colegio.red_educativa || 'Particular / Independiente'}<br>
-                        <hr style="margin: 6px 0; border:0; border-top:1px solid #cbd5e1;">
-                        <button onclick="abrirDetalle('${colegio.nombre_colegio.replace(/'/g, "\\'")}')" style="background:#2563eb; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; width:100%; font-weight:bold;">Ver Información General</button>
-                    </div>
-                `);
-
-                marcadoresCreados.push({ colegio, marker });
-            });
-        }
-
-        function mostrarInfoTodosMapa(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            filtroActualMapa = 'todos';
-            abrirModalMapachito('olfateando', "¡Olfateando todos los colegios para mostrarlos en el mapa! 🦝🔍", false, () => {
-                ejecutarIrAlMapa('todos');
-            }, 1800);
-        }
-
-        function mostrarInfoEstatales(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            filtroActualMapa = 'Estatal';
-            abrirModalMapachito('sorprendido', "¿Sabías que son 146 colegios estatales en Ventanilla y Mi Perú? 🏛️✨", false, () => {
-                ejecutarIrAlMapa('Estatal');
-            }, 1800);
         }
 
         function mostrarInfoParticulares(e) {
             if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            filtroActualMapa = 'Particular';
-            abrirModalMapachito('feliz', "¡Te mostraré los Colegios Particulares y Privados (incluyendo ELIM) con sus pines dorados! 🏫⭐", false, () => {
-                ejecutarIrAlMapa('Particular');
-            }, 1800);
-        }
-
-        function abrirModalRedesConMapachito(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            abrirModalMapachito('pensando', "¡Las Redes Educativas organizan el distrito! ¿Cuál deseas explorar? 🤔", false, () => {
-                document.getElementById('modal-redes').style.display = 'flex';
-            }, 1800);
-        }
-
-        function abrirPantallaVacantes(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            abrirModalMapachito('buscando', "🚦 ¡Revisando disponibilidad de vacantes por grado en tiempo real!", false, () => {
-                ocultarTodasLasPantallas();
-                document.getElementById('pantalla-vacantes').classList.add('activa');
-                cargarVacantesEnTiempoReal().then(() => {
-                    renderizarListaVacantesGlobal(getColegiosSafe());
-                });
-            }, 1800);
-        }
-
-        function abrirPantallaDonaciones(e) {
-            if(e) e.stopPropagation();
-            ocultarTecladoMovil();
-            abrirModalMapachito('guiñando', "💎 ¡Conoce la sostenibilidad y alianzas del Proyecto MAPACHE!", false, () => {
-                ocultarTodasLasPantallas();
-                document.getElementById('pantalla-donaciones').classList.add('activa');
-            }, 1800);
-        }
-
-        function ejecutarIrAlMapa(filtroTipo) {
             ocultarTodasLasPantallas();
-            const pantallaMapa = document.getElementById('pantalla-mapa');
-            pantallaMapa.classList.add('activa');
-            
-            setTimeout(() => { 
-                inicializarMapa();
-                map.invalidateSize(); 
-                
-                const colegiosLista = getColegiosSafe();
-                let filtrados = colegiosLista;
-                if (filtroTipo === 'Estatal') {
-                    filtrados = colegiosLista.filter(c => c.gestion && c.gestion.toLowerCase().includes('estatal'));
-                } else if (filtroTipo === 'Particular') {
-                    filtrados = colegiosLista.filter(c => {
-                        const g = String(c.gestion || '').toLowerCase();
-                        return g.includes('particular') || g.includes('privad');
-                    });
-                }
-
-                mostrarColegiosEnMapa(filtrados);
-
-                if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                    map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-                }
+            document.getElementById('pantalla-mapa').classList.add('activa');
+            setTimeout(() => {
+                if(!map) inicializarMapa();
+                map.invalidateSize();
+                const parts = colegiosBase.filter(c => {
+                    const g = normalizarTexto(c.gestion);
+                    return g.includes('particular') || g.includes('privad');
+                });
+                mostrarColegiosEnMapa(parts);
             }, 100);
         }
 
-        function cerrarModalRedes(e) { document.getElementById('modal-redes').style.display = 'none'; }
-        function forzarCierreModalRedes() { document.getElementById('modal-redes').style.display = 'none'; }
-
-        function filtrarPorRedConMapachito(numeroRed) {
-            document.getElementById('modal-redes').style.display = 'none';
-            filtroActualMapa = 'red_' + numeroRed;
-            abrirModalMapachito('buscando', `¡Buscando colegios de la Red N° ${numeroRed}! 🔍`, false, () => {
-                ocultarTodasLasPantallas();
-                const pantallaMapa = document.getElementById('pantalla-mapa');
-                pantallaMapa.classList.add('activa');
-                
-                setTimeout(() => { 
-                    inicializarMapa();
-                    map.invalidateSize(); 
-
-                    const colegiosLista = getColegiosSafe();
-                    const filtrados = colegiosLista.filter(c => extraerNumeroRed(c.red_educativa) === numeroRed);
-                    mostrarColegiosEnMapa(filtrados);
-
-                    if (filtrados.length > 0 && filtrados[0].latitud && filtrados[0].longitud) {
-                        map.setView([filtrados[0].latitud, filtrados[0].longitud], 14);
-                    }
-                }, 100);
-            }, 1500);
-        }
-
-        function configurarAutocompletado(inputId, listaId, alSeleccionar) {
-            const input = document.getElementById(inputId);
-            const lista = document.getElementById(listaId);
-            if (!input || !lista) return;
-
-            let primeraCoincidencia = null;
-
-            input.addEventListener('input', function() {
-                const textoNorm = normalizarTexto(this.value);
-                lista.innerHTML = '';
-                primeraCoincidencia = null;
-
-                if (textoNorm.length === 0) { lista.style.display = 'none'; return; }
-
-                const colegiosLista = getColegiosSafe();
-                const coincidencias = colegiosLista.filter(c => {
-                    const nombreNorm = normalizarTexto(c.nombre_colegio);
-                    const idNorm = normalizarTexto(c.id_colegio);
-                    const dirNorm = normalizarTexto(c.direccion);
-                    const nivNorm = normalizarTexto(c.niveles);
-                    const zonaNorm = normalizarTexto(c.zona || c.ZONA);
-                    const gestNorm = normalizarTexto(c.gestion);
-                    return nombreNorm.includes(textoNorm) || idNorm.includes(textoNorm) || dirNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || zonaNorm.includes(textoNorm) || gestNorm.includes(textoNorm);
-                }).slice(0, 10);
-
-                if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
-
-                primeraCoincidencia = coincidencias[0];
-
-                coincidencias.forEach(c => {
-                    const div = document.createElement('div');
-                    div.className = 'sugerencia-item';
-                    div.innerHTML = `<b>${c.nombre_colegio}</b> <span style="color:#64748b;">(Cod: ${c.id_colegio} - ${c.gestion || ''})</span>`;
-                    div.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
-                        ocultarTecladoMovil();
-                        lista.style.display = 'none';
-                        alSeleccionar(c);
-                    });
-                    lista.appendChild(div);
-                });
-                lista.style.display = 'block';
-            });
-
-            input.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    ocultarTecladoMovil();
-                    lista.style.display = 'none';
-                    if (primeraCoincidencia) {
-                        alSeleccionar(primeraCoincidencia);
-                    }
-                }
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!input.contains(e.target) && !lista.contains(e.target)) {
-                    lista.style.display = 'none';
-                }
-            });
-        }
-
-        function seleccionarColegioYIr(colegio) {
-            ocultarTecladoMovil();
-            filtroActualMapa = 'especifico';
-            abrirModalMapachito('saludando', `¡Encontré a ${colegio.nombre_colegio}! Te llevo directo.`, false, () => {
-                ocultarTodasLasPantallas();
-                const pantallaMapa = document.getElementById('pantalla-mapa');
-                pantallaMapa.classList.add('activa');
-                
-                setTimeout(() => { 
-                    inicializarMapa();
-                    map.invalidateSize(); 
-
-                    mostrarColegiosEnMapa([colegio]);
-                    if (colegio.latitud && colegio.longitud) {
-                        map.setView([colegio.latitud, colegio.longitud], 16);
-                    }
-                    abrirDetalle(colegio.nombre_colegio);
-                }, 100);
-            }, 1500);
-        }
-
-        function seleccionarColegioEnMapa(colegio) {
-            ocultarTecladoMovil();
-            filtroActualMapa = 'especifico';
-            mostrarColegiosEnMapa([colegio]);
-            if (colegio.latitud && colegio.longitud) {
-                map.setView([colegio.latitud, colegio.longitud], 16);
-            }
-            abrirDetalle(colegio.nombre_colegio);
-        }
-
-        function abrirDetalle(nombreColegio) {
-            ocultarTecladoMovil();
-            const colegiosLista = getColegiosSafe();
-            const colegio = colegiosLista.find(c => c.nombre_colegio === nombreColegio);
-            if (!colegio) return;
-
-            const gestionStr = String(colegio.gestion || '').toLowerCase();
-            const esPart = gestionStr.includes('particular') || gestionStr.includes('privad');
-            const tipoBadge = esPart ? 'badge-particular' : (gestionStr.includes('convenio') ? 'badge-convenio' : 'badge-estatal');
-            const nivelesTexto = normalizarTexto(colegio.niveles);
-
-            let bloquesNivelesHTML = '';
-            if (nivelesTexto.includes('cuna')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Cuna</div>`;
-            if (nivelesTexto.includes('inicial')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Inicial</div>`;
-            if (nivelesTexto.includes('primaria')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Primaria</div>`;
-            if (nivelesTexto.includes('secundaria')) bloquesNivelesHTML += `<div class="tag-verde-limpio">Secundaria</div>`;
-            if (bloquesNivelesHTML === '') {
-                bloquesNivelesHTML = `<div class="tag-verde-limpio" style="grid-column: span 2;">Información Registrada</div>`;
-            }
-
-            const nombreLimpio = colegio.nombre_colegio.replace(/'/g, "\\'");
-            const idColegioLimpio = String(colegio.id_colegio || '').replace(/'/g, "\\'");
-            const codigoColegioLimpio = String(colegio.codigo || '').replace(/'/g, "\\'");
-
-            const contenido = `
-                <h2 style="color: #1a365d; margin-bottom: 6px; font-size:1.15rem; padding-right: 35px;">${colegio.nombre_colegio}</h2>
-                <span class="school-badge ${tipoBadge}">${colegio.gestion || 'Estatal'}</span> | <b>Distrito:</b> ${colegio.distrito || 'Ventanilla'}
-                
-                <div style="font-size:0.85rem; line-height:1.6; margin-top:10px;">
-                    <p><b>Código:</b> ${colegio.id_colegio}</p>
-                    <p><b>Zona / Sector:</b> ${colegio.zona || colegio.ZONA || 'No especificada'}</p>
-                    <p><b>Red Educativa:</b> ${colegio.red_educativa || 'Particular / Independiente'}</p>
-                    <p><b>Turnos:</b> ${colegio.TURNOS || 'Mañana y Tarde'}</p>
-                    <p><b>Dirección:</b> ${colegio.direccion || 'No especificada'}</p>
-                    <p><b>Requisitos para Matrícula:</b> ${colegio.requisitos_de_matricula || 'DNI del estudiante y apoderado'}</p>
-                </div>
-
-                <h4 style="margin-top: 15px; color: #1a365d; font-size:0.95rem;">Niveles Impartidos:</h4>
-                <div class="niveles-grid">
-                    ${bloquesNivelesHTML}
-                </div>
-
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:11px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:0.82rem;">🗺️ Iniciar viaje</a>
-                    <button onclick="intentarAbrirFachadaConAlternativas('${idColegioLimpio}', '${codigoColegioLimpio}', '${nombreLimpio}')" style="flex:1; background:#0284c7; color:white; border:none; padding:11px; border-radius:8px; font-weight:bold; font-size:0.82rem; cursor:pointer;">🏫 Fachada de Colegio</button>
-                </div>
-
-                <button onclick="redirigirABuscadorVacantesColegio('${nombreLimpio}')" style="width:100%; margin-top:10px; background:#f59e0b; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; font-size:0.85rem; cursor:pointer; box-shadow:0 3px 8px rgba(245, 158, 11, 0.3);">
-                    🚦 Buscar Vacantes Disponibles
-                </button>
-            `;
-
-            document.getElementById('modal-body-content').innerHTML = contenido;
-            document.getElementById('modal-detalle').style.display = 'flex';
-        }
-
-        function cerrarDetalle() { document.getElementById('modal-detalle').style.display = 'none'; }
-        function cerrarDetalleExt(e) { if (e.target.id === 'modal-detalle') cerrarDetalle(); }
-
-        function redirigirABuscadorVacantesColegio(nombreColegio) {
-            cerrarDetalle();
+        function mostrarInfoTodosMapa(e) {
+            if(e) e.stopPropagation();
             ocultarTodasLasPantallas();
-            document.getElementById('pantalla-vacantes').classList.add('activa');
-            document.getElementById('inputBuscadorVacantes').value = nombreColegio;
-            filtrarListaVacantes();
+            document.getElementById('pantalla-mapa').classList.add('activa');
+            setTimeout(() => {
+                if(!map) inicializarMapa();
+                map.invalidateSize();
+                mostrarColegiosEnMapa(colegiosBase);
+            }, 100);
         }
 
-        function intentarAbrirFachadaConAlternativas(idColegio, codigoColegio, nombreColegio) {
-            let idStr = String(idColegio || '').trim();
-            let codStr = String(codigoColegio || '').trim();
-            let nombreNorm = normalizarTexto(nombreColegio);
+        function mostrarInfoEstatales(e) {
+            if(e) e.stopPropagation();
+            ocultarTodasLasPantallas();
+            document.getElementById('pantalla-mapa').classList.add('activa');
+            setTimeout(() => {
+                if(!map) inicializarMapa();
+                map.invalidateSize();
+                const est = colegiosBase.filter(c => normalizarTexto(c.gestion).includes('estatal'));
+                mostrarColegiosEnMapa(est);
+            }, 100);
+        }
 
-            let candidatos = [];
+        function inicializarMapa() {
+            map = L.map('map').setView([-11.872, -77.135], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        }
 
-            let nombreArchivo1 = nombreColegio.trim().replace(/\s+/g, '_');
-            let nombreArchivo2 = nombreColegio.trim().replace(/[^a-zA-Z0-9]/g, '_');
-            let nombreArchivo3 = nombreColegio.trim();
+        function mostrarColegiosEnMapa(lista) {
+            if(!map) return;
+            marcadores.forEach(m => map.removeLayer(m));
+            marcadores = [];
+            if(!lista || lista.length === 0) return;
 
-            candidatos.push(`fotos/${nombreArchivo1}.jpeg`);
-            candidatos.push(`fotos/${nombreArchivo1}.jpg`);
-            candidatos.push(`fotos/${nombreArchivo1}.png`);
-            candidatos.push(`fotos/${nombreArchivo2}.jpeg`);
-            candidatos.push(`fotos/${nombreArchivo2}.jpg`);
-            candidatos.push(`fotos/${nombreArchivo3}.jpeg`);
-            candidatos.push(`fotos/${nombreArchivo3}.jpg`);
-
-            if (nombreNorm.includes('chapi') || nombreNorm.includes('coprodeli')) {
-                candidatos.push("fotos/Coprodeli_Virgen_de_Chapi.jpeg");
-            }
-            if (nombreNorm.includes('elim')) {
-                candidatos.push("fotos/ELIM.jpeg");
-                candidatos.push("fotos/ELIM.jpg");
-                candidatos.push("fotos/IEP_ELIM.jpeg");
-                candidatos.push("fotos/I_E_P_ELIM.jpeg");
-            }
-
-            let numerosEnNombre = nombreColegio.match(/\d+/g) || [];
-            numerosEnNombre.forEach(num => {
-                let numLimpio = String(Number(num));
-                candidatos.push(`fotos/${numLimpio}.jpeg`);
-                candidatos.push(`fotos/${numLimpio}.jpg`);
-                candidatos.push(`fotos/${numLimpio}.png`);
+            lista.forEach(col => {
+                if(!col.latitud || !col.longitud) return;
+                const esPart = normalizarTexto(col.gestion).includes('particular');
+                const color = esPart ? '#0284c7' : '#15803d';
+                const m = L.marker([col.latitud, col.longitud]).addTo(map);
+                m.bindTooltip(col.nombre_colegio, {
+                    permanent: true,
+                    direction: 'top',
+                    className: esPart ? 'pin-etiqueta-particular' : 'pin-etiqueta-nombre'
+                });
+                m.bindPopup('<b>' + col.nombre_colegio + '</b><br>' + col.gestion);
+                marcadores.push(m);
             });
-
-            if (codStr) {
-                let codNum = !isNaN(codStr) ? String(Number(codStr)) : codStr;
-                candidatos.push(`fotos/${codNum}.jpeg`);
-                candidatos.push(`fotos/${codStr}.jpeg`);
-                candidatos.push(`fotos/${codNum}.jpg`);
-                candidatos.push(`fotos/${codStr}.jpg`);
+            if(lista.length > 0 && lista[0].latitud) {
+                map.setView([lista[0].latitud, lista[0].longitud], 14);
             }
-
-            if (idStr) {
-                let idNum = !isNaN(idStr) ? String(Number(idStr)) : idStr;
-                candidatos.push(`fotos/${idNum}.jpeg`);
-                candidatos.push(`fotos/${idStr}.jpeg`);
-                candidatos.push(`fotos/${idNum}.jpg`);
-                candidatos.push(`fotos/${idStr}.jpg`);
-            }
-
-            candidatos = [...new Set(candidatos)];
-
-            let indiceActual = 0;
-            const imgFull = document.getElementById('imgFachadaFull');
-
-            function probarSiguiente() {
-                if (indiceActual >= candidatos.length) {
-                    abrirModalMapachito('pensando', `¡Pronto actualizaremos la foto de la fachada de ${nombreColegio}! Estamos recopilando más imágenes en campo.`, true);
-                    return;
-                }
-                let urlActual = candidatos[indiceActual];
-                indiceActual++;
-
-                imgFull.onload = function() { 
-                    resetZoomFachada();
-                    document.getElementById('modal-fachada-fullscreen').style.display = 'flex'; 
-                };
-                imgFull.onerror = function() { probarSiguiente(); };
-                imgFull.src = urlActual;
-            }
-
-            probarSiguiente();
         }
 
-        function zoomFachada(delta) {
-            escalaZoomActual = Math.min(Math.max(0.7, escalaZoomActual + delta), 3.5);
-            const img = document.getElementById('imgFachadaFull');
-            if (img) img.style.transform = `scale(${escalaZoomActual})`;
-        }
-
-        function resetZoomFachada() {
-            escalaZoomActual = 1;
-            const img = document.getElementById('imgFachadaFull');
-            if (img) img.style.transform = `scale(1)`;
-        }
-
-        function cerrarFachadaFullscreen() { 
-            resetZoomFachada();
-            document.getElementById('modal-fachada-fullscreen').style.display = 'none'; 
-        }
-
-        function obtenerEtiquetaSemaforo(clave, valor) {
-            let val = String(valor || '').toLowerCase();
-            let clase = 'sem-rojo';
-            let icono = '🔴';
-            let textoEstado = 'Sin vacantes';
-
-            if (val === 'verde' || parseInt(val) >= 10) {
-                clase = 'sem-verde';
-                icono = '🟢';
-                textoEstado = 'Hay vacantes';
-            } else if (val === 'amarillo' || (parseInt(val) > 0 && parseInt(val) < 10)) {
-                clase = 'sem-amarillo';
-                icono = '🟡';
-                textoEstado = 'Pocas vacantes';
-            }
-
-            const nombresBonitos = {
-                'cuna_0_3': 'Cuna (0-3a)',
-                'ini_3a': 'Inicial 3a', 'ini_4a': 'Inicial 4a', 'ini_5a': 'Inicial 5a',
-                'pri_1': '1° Primaria', 'pri_2': '2° Primaria', 'pri_3': '3° Primaria', 'pri_4': '4° Primaria', 'pri_5': '5° Primaria', 'pri_6': '6° Primaria',
-                'sec_1': '1° Secundaria', 'sec_2': '2° Secundaria', 'sec_3': '3° Secundaria', 'sec_4': '4° Secundaria', 'sec_5': '5° Secundaria'
-            };
-
-            let etiquetaNombre = nombresBonitos[clave] || clave;
-            return `<div class="item-grado-semaforo ${clase}">${icono} ${etiquetaNombre}: <b>${textoEstado}</b></div>`;
-        }
-
-        function renderizarListaVacantesGlobal(lista) {
-            const contenedor = document.getElementById('lista-vacantes');
-            if (!contenedor) return;
-            contenedor.innerHTML = '';
-
-            lista.forEach(colegio => {
-                const vacantes = obtenerVacantesColegioRobust(colegio);
-                const nivelesTexto = normalizarTexto(colegio.niveles);
-
-                let htmlGrados = '';
-                if (nivelesTexto.includes('cuna')) htmlGrados += obtenerEtiquetaSemaforo('cuna_0_3', vacantes.cuna_0_3 || 'rojo');
-                if (nivelesTexto.includes('inicial')) {
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_3a', vacantes.ini_3a || 'rojo');
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_4a', vacantes.ini_4a || 'rojo');
-                    htmlGrados += obtenerEtiquetaSemaforo('ini_5a', vacantes.ini_5a || 'rojo');
-                }
-                if (nivelesTexto.includes('primaria')) {
-                    for (let g = 1; g <= 6; g++) htmlGrados += obtenerEtiquetaSemaforo('pri_' + g, vacantes['pri_' + g] || 'rojo');
-                }
-                if (nivelesTexto.includes('secundaria')) {
-                    for (let s = 1; s <= 5; s++) htmlGrados += obtenerEtiquetaSemaforo('sec_' + s, vacantes['sec_' + s] || 'rojo');
-                }
-
-                const card = `
-                    <div class="card-seccion" style="margin-bottom:12px; padding:15px;">
-                        <h3 style="color:#1a365d; font-size:1rem; margin-bottom:4px;">${colegio.nombre_colegio}</h3>
-                        <p style="font-size:0.8rem; color:#64748b; margin-bottom:8px;">${colegio.distrito} | ${colegio.gestion} | ${colegio.red_educativa || 'Red N/A'}</p>
-                        
-                        <div class="grados-semaforo-grid">
-                            ${htmlGrados || '<div class="item-grado-semaforo sem-verde">🟢 Vacantes en Consulta</div>'}
-                        </div>
-
-                        <div style="display:flex; gap:8px; margin-top:10px;">
-                            <a href="https://www.google.com/maps/dir/?api=1&destination=${colegio.latitud},${colegio.longitud}" target="_blank" style="flex:1; text-align:center; background:#16a34a; color:white; padding:8px; border-radius:6px; text-decoration:none; font-size:0.8rem; font-weight:bold;">🗺️ Ir al mapa</a>
-                            <button onclick="abrirDetalle('${colegio.nombre_colegio.replace(/'/g, "\\'")}')" style="flex:1; background:#2563eb; color:white; border:none; padding:8px; border-radius:6px; font-size:0.8rem; font-weight:bold; cursor:pointer;">Ver Información</button>
-                        </div>
-                    </div>
-                `;
-                contenedor.innerHTML += card;
+        function abrirModalDirector() {
+            const nom = prompt("Ingresa el Nombre o Número de tu colegio (Ej. ELIM, 121, 5090):");
+            if (!nom) return;
+            const col = colegiosBase.find(c => {
+                const q = normalizarLimpio(nom);
+                return normalizarLimpio(c.nombre_colegio).includes(q) || normalizarLimpio(c.codigo).includes(q) || normalizarLimpio(c.id_colegio).includes(q);
             });
+            if(!col) {
+                alert("Error: No se encontró ningún colegio registrado con ese número, nombre o código.");
+                return;
+            }
+            if(col.estado_vigencia === 'Bloqueado') {
+                alert("⛔ ACCESO SUSPENDIDO: El colegio se encuentra bloqueado por regularización de aportación económica.");
+                return;
+            }
+            const pass = prompt("Contraseña de Director para " + col.nombre_colegio + ":");
+            if(pass && pass.toLowerCase().trim() === String(col.password_director || '').toLowerCase().trim()) {
+                alert("✔ ¡Acceso concedido para " + col.nombre_colegio + "!");
+            } else {
+                alert("Contraseña incorrecta.");
+            }
         }
 
-        function filtrarListaVacantes() {
-            const input = document.getElementById('inputBuscadorVacantes');
-            if (!input) return;
-            const textoNorm = normalizarTexto(input.value);
-            
-            const colegiosLista = getColegiosSafe();
-            const filtrados = colegiosLista.filter(c => {
-                const nombreNorm = normalizarTexto(c.nombre_colegio);
-                const nivNorm = normalizarTexto(c.niveles);
-                const idNorm = normalizarTexto(c.id_colegio);
-                const distNorm = normalizarTexto(c.distrito);
-                const redNorm = normalizarTexto(c.red_educativa);
-                const zonaNorm = normalizarTexto(c.zona || c.ZONA);
-                return nombreNorm.includes(textoNorm) || nivNorm.includes(textoNorm) || idNorm.includes(textoNorm) || distNorm.includes(textoNorm) || redNorm.includes(textoNorm) || zonaNorm.includes(textoNorm);
-            });
-            renderizarListaVacantesGlobal(filtrados);
+        function abrirAdminDashboard() {
+            const clave = prompt("Ingresa la Contraseña Maestra de Administrador:");
+            if(clave === 'mapache2026') {
+                alert("Bienvenido al Dashboard Administrativo de MAPACHE.");
+            } else {
+                alert("Clave incorrecta.");
+            }
         }
 
-        function copiarCCI() {
-            navigator.clipboard.writeText('002-191-000000000000-00');
-            alert('¡Código CCI copiado al portapapeles!');
+        function volverAPortada() {
+            ocultarTodasLasPantallas();
+            document.getElementById('pantalla-portada').style.display = 'flex';
         }
 
         function ocultarTodasLasPantallas() {
             document.getElementById('pantalla-portada').style.display = 'none';
-            document.querySelectorAll('.pantalla-secundaria').forEach(p => {
-                p.classList.remove('activa');
-            });
+            document.querySelectorAll('.pantalla-secundaria').forEach(p => p.classList.remove('activa'));
         }
 
-        function volverAPortada() {
-            ocultarTecladoMovil();
-            ocultarTodasLasPantallas();
-            document.getElementById('pantalla-portada').style.display = 'flex';
-            
-            document.getElementById('inputPortada').value = '';
-            document.getElementById('searchInputMap').value = '';
-            document.getElementById('sugerenciasPortada').style.display = 'none';
-            document.getElementById('sugerenciasMapa').style.display = 'none';
+        function forzarSincronizacionNubeManual() {
+            cargarVacantesEnTiempoReal().then(() => alert("Sincronización completada."));
         }
 
-        function abrirModalMapachito(emocion, texto, conBoton = false, callback = null, autoCierreMs = null) {
-            const modal = document.getElementById('modalMapachito');
-            document.getElementById('textoMapachito').innerText = texto;
-            document.getElementById('btnEntendidoModal').style.display = conBoton ? 'inline-block' : 'none';
-
-            const imagenesEmocion = {
-                'saludando': 'mapache_saludando.png',
-                'pensando': 'mapache_pensativo.png',
-                'olfateando': 'mapache_buscando.png',
-                'buscando': 'mapache_buscando.png',
-                'feliz': 'mapache_saludando_en_un_pie.png',
-                'sorprendido': 'mapache_sorprendido.png',
-                'durmiendo': 'mapache_durmiendo.png',
-                'preocupado': 'mapache_preocupado.png',
-                'guiñando': 'mapache_guiñando_ojo.png'
-            };
-
-            const imgElement = document.getElementById('imgMapachitoModal');
-            imgElement.src = imagenesEmocion[emocion] || 'mapache_saludando.png';
-
-            modal.style.display = 'flex';
-            accionPendiente = callback;
-            if (temporizadorAutoCierre) clearTimeout(temporizadorAutoCierre);
-            if (autoCierreMs) temporizadorAutoCierre = setTimeout(cerrarModalMapachito, autoCierreMs);
-        }
-
-        function cerrarModalMapachito() {
-            document.getElementById('modalMapachito').style.display = 'none';
-            if (accionPendiente) {
-                const fn = accionPendiente;
-                accionPendiente = null;
-                fn();
-            }
-        }
-
-        function reiniciarTemporizadorInactividad() {
-            const modalInactivo = document.getElementById('modal-inactividad-total');
-            if (!modalInactivo) return;
-            if (modalInactivo.style.display === 'flex') return;
-
-            if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
-
-            temporizadorInactividad = setTimeout(() => {
-                modalInactivo.style.display = 'flex';
-            }, 30000);
-        }
-
-        function despertarMapachitoInactivo() {
-            const modalInactivo = document.getElementById('modal-inactividad-total');
-            if (modalInactivo) modalInactivo.style.display = 'none';
-            reiniciarTemporizadorInactividad();
-        }
-
-        ['click', 'mousemove', 'keydown', 'touchstart', 'scroll', 'pointerdown'].forEach(evento => {
-            window.addEventListener(evento, reiniciarTemporizadorInactividad, { passive: true });
-        });
+        window.onload = function() {
+            cargarVacantesEnTiempoReal();
+        };
     </script>
 </body>
 </html>
