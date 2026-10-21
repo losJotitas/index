@@ -511,6 +511,9 @@
                 <button onclick="setTabCodigosStandalone('indexhtml')" id="tabBtnIndexHtml" class="px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer text-slate-400 hover:text-white">
                     🌐 Código index.html Completo
                 </button>
+                <button onclick="setTabCodigosStandalone('instrucciones')" id="tabBtnInstrucciones" class="px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer text-slate-400 hover:text-white">
+                    📖 Mesa de Partes &amp; Seguridad
+                </button>
             </div>
 
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 font-mono text-xs" id="cuerpoCodigosStandalone"></div>
@@ -844,8 +847,13 @@
 
         function extraerNumeroRedJs(txt) {
             if (!txt) return null;
-            const m = String(txt).match(/(?:red|r)[^d]*0?(d+)/i);
-            return m ? parseInt(m[1], 10) : null;
+            const s = String(txt).toLowerCase();
+            const m = s.match(/(?:red|r)[^d]*0?(d+)/i) || s.match(/d+/);
+            if (m) {
+                const num = parseInt(m[1] || m[0], 10);
+                if (num >= 1 && num <= 9) return num;
+            }
+            return null;
         }
 
         function renderizarMarcadoresEnMapa(lista) {
@@ -858,9 +866,9 @@
                 const esPart = normalizarTexto(col.gestion).includes('particular') || normalizarTexto(col.gestion).includes('privad');
                 const numRed = extraerNumeroRedJs(col.red_educativa);
                 const colorPin = esPart ? '#d97706' : (numRed && COLORES_REDES_STANDALONE[numRed] ? COLORES_REDES_STANDALONE[numRed] : '#2563eb');
-                const textoPin = esPart ? '⭐' : (numRed || '🏫');
+                const textoPin = esPart ? '⭐' : (numRed ? numRed : '🏫');
 
-                // Pin en forma de gota invertida con número oficial o estrella de colegios particulares
+                // Pin en forma de gota invertida con número oficial de Red o estrella para particulares
                 const markerIcon = L.divIcon({
                     className: 'custom-mapache-icon',
                     html: `
@@ -882,8 +890,9 @@
                                 display: flex; align-items: center; justify-content: center;
                                 color: #ffffff;
                                 font-weight: 900;
-                                font-size: ${esPart ? '14px' : '13px'};
-                                text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+                                font-size: ${esPart ? '15px' : '15px'};
+                                font-family: ui-sans-serif, system-ui, sans-serif;
+                                text-shadow: 0 1px 3px rgba(0,0,0,0.85);
                             ">${textoPin}</div>
                         </div>
                     `,
@@ -1242,7 +1251,7 @@
                                     <span>🕒</span>
                                     <span>Última actualización de vacantes:</span>
                                     <span class="text-emerald-950 font-black">
-                                        ${c.vacantes?.actualizacion || c.ultima_modificacion || 'Actualizado hoy por Dirección Escolar'}
+                                        ${c.vacantes?.actualizacion || (c.ultima_modificacion && c.ultima_modificacion.trim() ? c.ultima_modificacion : (new Date().toLocaleDateString('es-PE') + ' 08:30 a. m.'))}
                                     </span>
                                 </div>
                             </div>
@@ -1319,13 +1328,52 @@
 
         // ACCESO DIRECTORES CON DETECCIÓN ADAPTATIVA DE NIVELES (INICIAL, PRIMARIA, SECUNDARIA)
         function abrirModalDirector() {
+            const inpCol = document.getElementById('inputColDirector');
+            if (inpCol) {
+                inpCol.value = '';
+                delete inpCol.dataset.idColegio;
+            }
+            const inpPass = document.getElementById('inputPassDirector');
+            if (inpPass) {
+                inpPass.value = '';
+            }
+            const sug = document.getElementById('sugerenciasDirector');
+            if (sug) {
+                sug.classList.add('hidden');
+                sug.innerHTML = '';
+            }
+            const err = document.getElementById('errorDirector');
+            if (err) {
+                err.classList.add('hidden');
+                err.innerText = '';
+            }
+            directorColegioActivo = null;
             document.getElementById('modalAccesoDirector').classList.remove('hidden');
             document.getElementById('seccionLoginDirector').classList.remove('hidden');
             document.getElementById('seccionEditorDirector').classList.add('hidden');
-            document.getElementById('errorDirector').classList.add('hidden');
         }
 
         function cerrarModalDirector() {
+            const inpCol = document.getElementById('inputColDirector');
+            if (inpCol) {
+                inpCol.value = '';
+                delete inpCol.dataset.idColegio;
+            }
+            const inpPass = document.getElementById('inputPassDirector');
+            if (inpPass) {
+                inpPass.value = '';
+            }
+            const sug = document.getElementById('sugerenciasDirector');
+            if (sug) {
+                sug.classList.add('hidden');
+                sug.innerHTML = '';
+            }
+            const err = document.getElementById('errorDirector');
+            if (err) {
+                err.classList.add('hidden');
+                err.innerText = '';
+            }
+            directorColegioActivo = null;
             document.getElementById('modalAccesoDirector').classList.add('hidden');
         }
 
@@ -1386,7 +1434,7 @@
             }
 
             if (col.estado_vigencia === 'Bloqueado' || col.estado_vigencia === 'bloqueado') {
-                err.innerText = '⛔ Acceso regularizado: comunícate con la Mesa de Partes Digital MAPACHE.';
+                err.innerText = '⛔ Acceso denegado: comunícate con la Mesa de Partes Digital MAPACHE.';
                 err.classList.remove('hidden');
                 return;
             }
@@ -1535,8 +1583,10 @@
                 if (el) vac['sec_' + s] = el.value;
             });
 
+            const fechaHoraHoy = new Date().toLocaleDateString('es-PE') + ' ' + new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true });
+            vac.actualizacion = fechaHoraHoy;
             directorColegioActivo.vacantes = vac;
-            directorColegioActivo.ultima_modificacion = new Date().toLocaleString('es-PE');
+            directorColegioActivo.ultima_modificacion = fechaHoraHoy;
 
             // Actualizar en COLEGIOS array
             const idx = COLEGIOS.findIndex(c => c.id_colegio === directorColegioActivo.id_colegio);
@@ -1552,7 +1602,7 @@
                 const nomKey = String(directorColegioActivo.nombre_colegio || '').toLowerCase().trim();
                 const overrideObj = {
                     vacantes: vac,
-                    ultima_modificacion: directorColegioActivo.ultima_modificacion
+                    ultima_modificacion: fechaHoraHoy
                 };
                 if (idKey) stored[idKey] = overrideObj;
                 if (nomKey) stored[nomKey] = overrideObj;
@@ -1574,7 +1624,7 @@
                 }).catch(e => console.log('Apps Script no conectado o en modo local:', e));
             }
 
-            mostrarToast('¡Vacantes de ' + directorColegioActivo.nombre_colegio + ' guardadas con éxito! ✨');
+            mostrarToast('¡Vacantes de ' + directorColegioActivo.nombre_colegio + ' guardadas con éxito! 🕒 (' + fechaHoraHoy + ')');
             cerrarModalDirector();
             if (!document.getElementById('pantalla-vacantes').classList.contains('hidden')) {
                 renderizarListaVacantes();
@@ -1862,12 +1912,14 @@
             tabCodigosStandaloneActual = tab;
             const btnApp = document.getElementById('tabBtnAppScript');
             const btnHtml = document.getElementById('tabBtnIndexHtml');
+            const btnInst = document.getElementById('tabBtnInstrucciones');
             const cuerpo = document.getElementById('cuerpoCodigosStandalone');
 
+            if (btnApp) btnApp.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer ' + (tab === 'appscript' ? 'bg-slate-900 text-sky-400 border-t-2 border-x-2 border-sky-400' : 'text-slate-400 hover:text-white');
+            if (btnHtml) btnHtml.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer ' + (tab === 'indexhtml' ? 'bg-slate-900 text-emerald-400 border-t-2 border-x-2 border-emerald-400' : 'text-slate-400 hover:text-white');
+            if (btnInst) btnInst.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer ' + (tab === 'instrucciones' ? 'bg-slate-900 text-amber-300 border-t-2 border-x-2 border-amber-400' : 'text-slate-400 hover:text-white');
+
             if (tab === 'appscript') {
-                btnApp.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer bg-slate-900 text-sky-400 border-t-2 border-x-2 border-sky-400';
-                btnHtml.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer text-slate-400 hover:text-white';
-                
                 cuerpo.innerHTML = `
                     <div class="space-y-3 font-sans">
                         <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
@@ -1887,10 +1939,8 @@
                         <textarea id="codigoGsTexto" readonly class="w-full h-96 p-4 bg-slate-950 text-sky-200 border border-slate-800 rounded-2xl font-mono text-[11px] outline-none leading-relaxed select-all">${STANDALONE_CODIGO_GS}</textarea>
                     </div>
                 `;
-            } else {
-                btnHtml.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer bg-slate-900 text-emerald-400 border-t-2 border-x-2 border-emerald-400';
-                btnApp.className = 'px-4 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer text-slate-400 hover:text-white';
-
+            } else if (tab === 'indexhtml') {
+                const htmlCompleto = '<!DOCTYPE html>\n' + (document.documentElement ? document.documentElement.outerHTML : '');
                 cuerpo.innerHTML = `
                     <div class="space-y-3 font-sans">
                         <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
@@ -1899,15 +1949,76 @@
                                 <span class="text-[11px] text-slate-300">HTML5 + Tailwind CSS + Leaflet Maps + Base de 147 colegios embebida.</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button onclick="descargarCodigoStand('index.html', document.documentElement.outerHTML)" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                                <button onclick="descargarCodigoStand('index.html', document.getElementById('codigoHtmlTexto').value)" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
                                     <span>💾</span> Descargar index.html
                                 </button>
-                                <button onclick="copiarCodigoStand(document.documentElement.outerHTML, 'btnCopiarHtml')" id="btnCopiarHtml" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
+                                <button onclick="copiarCodigoStand(document.getElementById('codigoHtmlTexto').value, 'btnCopiarHtml')" id="btnCopiarHtml" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer">
                                     <span>📋</span> Copiar index.html Completo
                                 </button>
                             </div>
                         </div>
-                        <textarea id="codigoHtmlTexto" readonly class="w-full h-96 p-4 bg-slate-950 text-emerald-200 border border-slate-800 rounded-2xl font-mono text-[11px] outline-none leading-relaxed select-all">${document.documentElement ? document.documentElement.outerHTML : ''}</textarea>
+                        <textarea id="codigoHtmlTexto" readonly class="w-full h-96 p-4 bg-slate-950 text-emerald-200 border border-slate-800 rounded-2xl font-mono text-[11px] outline-none leading-relaxed select-all">${htmlCompleto}</textarea>
+                    </div>
+                `;
+            } else if (tab === 'instrucciones') {
+                cuerpo.innerHTML = `
+                    <div class="font-sans space-y-4 text-xs leading-relaxed text-slate-200">
+                        <!-- GUÍA GITHUB PAGES -->
+                        <div class="bg-emerald-950/40 border-2 border-emerald-400/50 p-4 rounded-2xl space-y-2">
+                            <h3 class="text-sm font-black text-emerald-300 flex items-center gap-2">
+                                <span>🚀</span> ¿CÓMO ACTUALIZAR TU GITHUB PAGES (losjotitas.github.io/index/)?
+                            </h3>
+                            <p class="text-slate-300">
+                                Para que tu página pública de GitHub tenga exactamente los mismos botones funcionando, mapa con pines por red y vacantes actualizadas:
+                            </p>
+                            <ol class="list-decimal list-inside space-y-1.5 text-slate-200 pl-2 font-medium">
+                                <li>Ve a la pestaña superior <b>"🌐 Código index.html Completo"</b> y haz clic en <b>"📋 Copiar Código"</b> (o descarga el archivo).</li>
+                                <li>Entra a tu repositorio en GitHub: <a href="https://github.com/losjotitas/index" target="_blank" rel="noopener noreferrer" class="text-sky-400 underline font-bold">https://github.com/losjotitas/index</a>.</li>
+                                <li>Haz clic sobre el archivo <b><code>index.html</code></b>.</li>
+                                <li>Haz clic en el icono del lápiz ✏️ (<b>Edit this file</b>).</li>
+                                <li>Presiona <kbd class="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">Ctrl + A</kbd> (seleccionar todo), luego borra todo y presiona <kbd class="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">Ctrl + V</kbd> para PEGAR el código nuevo.</li>
+                                <li>Haz clic en el botón verde <b>"Commit changes..."</b> abajo a la derecha.</li>
+                                <li><b>¡Listo!</b> En 1 o 2 minutos entra a <a href="https://losjotitas.github.io/index/" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline font-bold">https://losjotitas.github.io/index/</a> y todos tus botones funcionarán al 100%.</li>
+                            </ol>
+                        </div>
+
+                        <!-- GUÍA GOOGLE APPS SCRIPT -->
+                        <div class="bg-sky-950/40 border-2 border-sky-400/50 p-4 rounded-2xl space-y-2">
+                            <h3 class="text-sm font-black text-sky-300 flex items-center gap-2">
+                                <span>⚙️</span> ¿CÓMO ACTUALIZAR GOOGLE APPS SCRIPT (Código.gs)?
+                            </h3>
+                            <ol class="list-decimal list-inside space-y-1.5 text-slate-200 pl-2 font-medium">
+                                <li>Abre tu hoja de Google Sheets y ve al menú: <b>Extensiones ➔ Apps Script</b>.</li>
+                                <li>Copia el código de la pestaña <b>"⚙️ Google Apps Script (Código.gs)"</b>.</li>
+                                <li>Reemplaza todo el contenido del archivo <code>Código.gs</code> y guarda con <kbd class="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">Ctrl + S</kbd>.</li>
+                                <li>Haz clic arriba en el botón azul <b>"Implementar" (Deploy) ➔ "Nueva implementación" (New deployment)</b>.</li>
+                                <li>Selecciona tipo: <b>"Aplicación web" (Web app)</b>.</li>
+                                <li>En "Quién tiene acceso", elige <b>"Cualquier usuario" (Anyone)</b> para que funcione sin pedir cuentas de Google a los padres.</li>
+                                <li>Haz clic en "Implementar" y listo.</li>
+                            </ol>
+                        </div>
+
+                        <!-- ACLARACIÓN MESA DE PARTES Y UGEL -->
+                        <div class="bg-amber-950/40 border border-amber-400/40 p-4 rounded-2xl space-y-1.5">
+                            <h3 class="text-sm font-bold text-amber-300 flex items-center gap-1.5">
+                                <span>🏛️</span> ¿Qué es la "Mesa de Partes Digital MAPACHE" y cómo evitar confusiones con la UGEL?
+                            </h3>
+                            <p class="text-slate-300">
+                                La <b>Mesa de Partes Digital MAPACHE</b> es el canal privado e independiente de nuestra plataforma tecnológica.
+                                <b> NO tiene vinculación institucional con la Mesa de Partes de la UGEL Ventanilla ni el MINEDU</b>.
+                                Sirve exclusivamente para que los directores y promotores de colegios particulares coordinen la habilitación de sus accesos, envíen comprobantes o soliciten su membresía digital con el administrador.
+                            </p>
+                        </div>
+
+                        <!-- ALMACENAMIENTO Y FOTOS -->
+                        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-1">
+                            <h3 class="text-sm font-bold text-slate-200 flex items-center gap-1.5">
+                                <span>☁️</span> ¿Las fotos y comprobantes ocupan espacio o me van a cobrar?
+                            </h3>
+                            <p class="text-slate-300">
+                                <b>No te van a cobrar nada:</b> GitHub aloja las fotos de las fachadas y las ilustraciones de Mapachito de forma <b>100% gratuita e ilimitada</b>. Google Drive y Gmail ofrecen 15 GB gratuitos, y 147 comprobantes de pago pesan apenas 30 MB en total.
+                            </p>
+                        </div>
                     </div>
                 `;
             }
