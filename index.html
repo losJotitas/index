@@ -1307,10 +1307,10 @@
                                 '</span>' +
                             '</div>' +
                             '<div class="grid grid-cols-4 gap-1.5 pt-1">' +
-                                '<button onclick="enfocarEnMapa('' + idCol + '')" class="py-1 px-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black rounded-lg text-[10px] transition text-center cursor-pointer">🗺️ Ver</button>' +
-                                '<button onclick="abrirModalFachada('' + idCol + '')" class="py-1 px-1 bg-sky-600 hover:bg-sky-500 text-white font-extrabold rounded-lg text-[10px] transition text-center cursor-pointer">🏫 Fachada</button>' +
+                                '<button data-id="' + idCol + '" onclick="enfocarEnMapa(this.dataset.id)" class="py-1 px-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black rounded-lg text-[10px] transition text-center cursor-pointer">🗺️ Ver</button>' +
+                                '<button data-id="' + idCol + '" onclick="abrirModalFachada(this.dataset.id)" class="py-1 px-1 bg-sky-600 hover:bg-sky-500 text-white font-extrabold rounded-lg text-[10px] transition text-center cursor-pointer">🏫 Fachada</button>' +
                                 '<a href="https://www.google.com/maps/dir/?api=1&destination=' + latCol + ',' + lngCol + '" target="_blank" class="py-1 px-1 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-lg text-[10px] transition text-center flex items-center justify-center">🧭 Viaje</a>' +
-                                '<button onclick="abrirPantallaVacantes('' + nomColEsc + '')" class="py-1 px-1 bg-orange-600 hover:bg-orange-500 text-white font-black rounded-lg text-[10px] transition text-center cursor-pointer">🚦 Cupos</button>' +
+                                '<button data-nom="' + nomColEsc + '" onclick="abrirPantallaVacantes(this.dataset.nom)" class="py-1 px-1 bg-orange-600 hover:bg-orange-500 text-white font-black rounded-lg text-[10px] transition text-center cursor-pointer">🚦 Cupos</button>' +
                             '</div>' +
                         '</div>';
                     }).join('');
