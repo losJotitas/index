@@ -375,7 +375,21 @@
         <!-- Contenedor de la Imagen -->
         <div class="w-full h-full flex items-center justify-center overflow-auto p-4">
             <div id="contenedorZoomFachada" style="transform: scale(1); transition: transform 0.15s ease-out;" class="relative max-w-4xl max-h-[85vh] flex flex-col items-center justify-center">
-                <img id="imgFachada" src="" alt="Fachada del Colegio" class="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl border-2 border-slate-700" />
+                <!-- Indicador de Carga -->
+                <div id="cargandoFotoFachada" class="hidden flex flex-col items-center justify-center p-8 bg-slate-900/90 border border-sky-400/50 rounded-3xl shadow-2xl space-y-3">
+                    <div class="w-10 h-10 border-4 border-sky-400 border-t-transparent rounded-full animate-spin"></div>
+                    <span class="text-xs text-sky-200 font-bold">Verificando fotografía oficial...</span>
+                </div>
+
+                <!-- Imagen Fachada Oficial -->
+                <div id="cajaFotoFachada" class="hidden flex flex-col items-center space-y-2">
+                    <img id="imgFachada" alt="Fachada del Colegio" class="max-w-[92vw] max-h-[72vh] object-contain rounded-2xl border-2 border-sky-400 shadow-2xl bg-slate-900" />
+                    <div class="text-center px-4 py-1.5 bg-slate-900/90 border border-sky-500/40 rounded-xl text-sky-200 text-xs font-bold shadow-md">
+                        📸 Fachada Oficial: <span id="pieFotoNombre" class="text-white font-extrabold">Colegio</span>
+                    </div>
+                </div>
+
+                <!-- Aviso Sin Foto con Mapachito -->
                 <div id="avisoSinFotoFachada" class="hidden text-center p-6 sm:p-7 bg-slate-900 border-2 border-sky-400/60 rounded-3xl max-w-sm sm:max-w-md shadow-2xl space-y-3.5 flex flex-col items-center">
                     <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-950 border-2 border-sky-400 flex items-center justify-center p-2 shadow-[0_0_20px_rgba(56,189,248,0.35)] overflow-hidden">
                         <img src="./mapache_pensativo.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_pensativo.png';" alt="Mapachito trabajando" class="w-full h-full object-contain drop-shadow-md" />
@@ -1475,15 +1489,18 @@
             return null;
         }
 
+        let tokenCargaFotoFachada = 0;
+
         function obtenerUrlsFotoFachadaJs(nombreColegio) {
             const fn = obtenerNombreArchivoFotoJs(nombreColegio);
             if (!fn) return [];
             const enc = encodeURIComponent(fn);
             return [
-                'https://raw.githubusercontent.com/losJotitas/index/main/fotos/' + enc,
-                'https://losjotitas.github.io/index/fotos/' + enc,
                 './fotos/' + fn,
-                '/fotos/' + fn
+                'fotos/' + fn,
+                'https://losjotitas.github.io/index/fotos/' + enc,
+                '/fotos/' + fn,
+                'https://raw.githubusercontent.com/losJotitas/index/main/fotos/' + enc
             ];
         }
 
@@ -1500,36 +1517,66 @@
             const avisoNom = document.getElementById('avisoSinFotoNombre');
             if (avisoNom) avisoNom.innerText = col.nombre_colegio;
 
+            const pieNom = document.getElementById('pieFotoNombre');
+            if (pieNom) pieNom.innerText = col.nombre_colegio;
+
             zoomFachada = 1;
             document.getElementById('contenedorZoomFachada').style.transform = 'scale(1)';
 
-            const urls = obtenerUrlsFotoFachadaJs(col.nombre_colegio);
+            const cargandoEl = document.getElementById('cargandoFotoFachada');
+            const cajaFotoEl = document.getElementById('cajaFotoFachada');
             const imgEl = document.getElementById('imgFachada');
             const sinFotoEl = document.getElementById('avisoSinFotoFachada');
 
-            if (urls && urls.length > 0) {
-                sinFotoEl.classList.add('hidden');
-                imgEl.classList.remove('hidden');
+            // Limpiar estados previos
+            if (cajaFotoEl) cajaFotoEl.classList.add('hidden');
+            if (sinFotoEl) sinFotoEl.classList.add('hidden');
+            if (cargandoEl) cargandoEl.classList.remove('hidden');
 
-                let idxUrl = 0;
-                function intentarCargarUrl() {
-                    if (idxUrl < urls.length) {
-                        imgEl.src = urls[idxUrl];
-                        idxUrl++;
-                    } else {
-                        // Todas las fuentes fallaron -> mostrar Mapachito con el mensaje oficial
-                        imgEl.classList.add('hidden');
-                        sinFotoEl.classList.remove('hidden');
-                    }
-                }
+            const tokenActual = ++tokenCargaFotoFachada;
+            const urls = obtenerUrlsFotoFachadaJs(col.nombre_colegio);
 
-                imgEl.onerror = intentarCargarUrl;
-                intentarCargarUrl();
-            } else {
-                imgEl.classList.add('hidden');
-                sinFotoEl.classList.remove('hidden');
+            if (!urls || urls.length === 0) {
+                if (cargandoEl) cargandoEl.classList.add('hidden');
+                if (sinFotoEl) sinFotoEl.classList.remove('hidden');
+                document.getElementById('modalFachadaColegio').classList.remove('hidden');
+                return;
             }
 
+            let idx = 0;
+            function probarSiguienteUrl() {
+                if (tokenActual !== tokenCargaFotoFachada) return;
+
+                if (idx >= urls.length) {
+                    // Todas las fuentes fallaron -> mostrar Mapachito con el mensaje oficial
+                    if (cargandoEl) cargandoEl.classList.add('hidden');
+                    if (cajaFotoEl) cajaFotoEl.classList.add('hidden');
+                    if (sinFotoEl) sinFotoEl.classList.remove('hidden');
+                    return;
+                }
+
+                const urlCandidata = urls[idx++];
+                const probador = new Image();
+
+                probador.onload = function() {
+                    if (tokenActual !== tokenCargaFotoFachada) return;
+                    if (imgEl) {
+                        imgEl.src = urlCandidata;
+                    }
+                    if (cargandoEl) cargandoEl.classList.add('hidden');
+                    if (sinFotoEl) sinFotoEl.classList.add('hidden');
+                    if (cajaFotoEl) cajaFotoEl.classList.remove('hidden');
+                };
+
+                probador.onerror = function() {
+                    if (tokenActual !== tokenCargaFotoFachada) return;
+                    probarSiguienteUrl();
+                };
+
+                probador.src = urlCandidata;
+            }
+
+            probarSiguienteUrl();
             document.getElementById('modalFachadaColegio').classList.remove('hidden');
         }
 
@@ -1544,6 +1591,9 @@
         }
 
         function cerrarModalFachada() {
+            tokenCargaFotoFachada++;
+            const imgEl = document.getElementById('imgFachada');
+            if (imgEl) imgEl.src = '';
             document.getElementById('modalFachadaColegio').classList.add('hidden');
         }
 
