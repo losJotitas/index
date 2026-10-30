@@ -178,6 +178,7 @@
                     type="text"
                     id="inputBusquedaMapa"
                     oninput="onBuscarMapaInput(this.value)"
+                    onkeydown="onBuscarMapaKeydown(event)"
                     placeholder="Filtrar en mapa (Elim, 121, 5090)..."
                     class="w-full px-3 py-2 bg-white text-slate-900 rounded-lg text-xs font-bold outline-none"
                     autocomplete="off"
@@ -241,6 +242,7 @@
                     type="text"
                     id="inputFiltroVacantes"
                     oninput="renderizarListaVacantes()"
+                    onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}"
                     placeholder="🔍 Filtra por nombre o número (Elim, 121, 5090, Coprodeli)..."
                     class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl font-bold text-xs outline-none focus:border-sky-500"
                 />
@@ -440,6 +442,7 @@
                             type="text"
                             id="inputColDirector"
                             oninput="onDirectorBuscarColegio(this.value)"
+                            onkeydown="onDirectorKeydown(event)"
                             placeholder="Ej. ELIM, 121, 5090, Coprodeli..."
                             class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-sky-400 font-bold"
                             autocomplete="off"
@@ -454,6 +457,7 @@
                         <input
                             type="password"
                             id="inputPassDirector"
+                            onkeydown="if(event.key==='Enter'){event.preventDefault(); verificarLoginDirector();}"
                             placeholder="Ingresa tu clave asignada..."
                             class="w-full px-3.5 py-2.5 pr-10 bg-slate-950 border border-slate-700 rounded-xl text-amber-300 font-mono font-bold outline-none focus:border-sky-400"
                         />
@@ -495,6 +499,7 @@
                         <input
                             type="password"
                             id="inputPassAdmin"
+                            onkeydown="if(event.key==='Enter'){event.preventDefault(); verificarLoginAdmin();}"
                             placeholder="Ingresa clave maestra..."
                             class="w-full px-3 py-2.5 pr-10 rounded-xl bg-slate-800 border border-slate-600 text-white text-sm focus:border-sky-400 outline-none font-mono"
                         />
@@ -1161,6 +1166,22 @@
                 attribution: '&copy; OpenStreetMap | Proyecto MAPACHE',
                 maxZoom: 19
             }).addTo(mapa);
+
+            // Ocultar teclado virtual en celular al tocar o mover el mapa
+            mapa.on('dragstart', function() {
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                }
+                const list = document.getElementById('listaSugerenciasMapa');
+                if (list) list.classList.add('hidden');
+            });
+            mapa.on('click', function() {
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                }
+                const list = document.getElementById('listaSugerenciasMapa');
+                if (list) list.classList.add('hidden');
+            });
         }
 
         const COLORES_REDES_STANDALONE = {
@@ -1746,7 +1767,15 @@
         function onBuscarPortadaKeydown(e) {
             const list = document.getElementById('listaSugerenciasPortada');
             const items = list.querySelectorAll('div[id^="sug-portada-"]');
-            if (items.length === 0) return;
+            if (items.length === 0) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                        document.activeElement.blur();
+                    }
+                }
+                return;
+            }
 
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
@@ -1758,6 +1787,9 @@
                 resaltarSugerencia(items);
             } else if (e.key === 'Enter') {
                 e.preventDefault();
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                }
                 if (indiceSugerencia >= 0 && items[indiceSugerencia]) {
                     items[indiceSugerencia].click();
                 } else if (items[0]) {
@@ -1765,6 +1797,9 @@
                 }
             } else if (e.key === 'Escape') {
                 list.classList.add('hidden');
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                }
             }
         }
 
@@ -1778,10 +1813,19 @@
         function seleccionarColegioDesdeBusqueda(id) {
             const col = COLEGIOS.find(c => c.id_colegio === id);
             document.getElementById('listaSugerenciasPortada').classList.add('hidden');
+            const inp = document.getElementById('inputBusquedaPortada');
+            if (inp) {
+                inp.value = '';
+                inp.blur();
+            }
+            if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                document.activeElement.blur();
+            }
             if (col) abrirModalDetalle(col);
         }
 
-        // Búsqueda en Mapa
+        // Búsqueda en Mapa con flechas y auto-desvanecimiento de teclado en celular
+        let indiceSugerenciaMapa = -1;
         function onBuscarMapaInput(val) {
             const list = document.getElementById('listaSugerenciasMapa');
             const txt = normalizarTexto(val);
@@ -1790,24 +1834,88 @@
                 return;
             }
 
-            const coinc = COLEGIOS.filter(c => normalizarTexto(c.nombre_colegio).includes(txt)).slice(0, 6);
+            const coinc = COLEGIOS.filter(c => {
+                return normalizarTexto(c.nombre_colegio).includes(txt) ||
+                       normalizarTexto(c.id_colegio).includes(txt) ||
+                       normalizarTexto(c.codigo).includes(txt);
+            }).slice(0, 6);
+
             if (coinc.length === 0) {
                 list.classList.add('hidden');
                 return;
             }
 
-            list.innerHTML = coinc.map(c => `
-                <div onclick="enfocarEnMapa('${c.id_colegio}')" class="p-2 hover:bg-slate-100 cursor-pointer font-bold text-slate-900">
-                    ${c.nombre_colegio}
+            indiceSugerenciaMapa = -1;
+            list.innerHTML = coinc.map((c, i) => `
+                <div onclick="enfocarEnMapa('${c.id_colegio}')" id="sug-mapa-${i}" class="p-2.5 hover:bg-slate-100 cursor-pointer font-bold text-slate-900 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs">${c.nombre_colegio}</div>
+                        <div class="text-[10px] text-slate-500 font-mono">${c.distrito} - ${c.gestion}</div>
+                    </div>
+                    <span class="text-sky-600 text-xs font-black">Ver ➔</span>
                 </div>
             `).join('');
             list.classList.remove('hidden');
+        }
+
+        function onBuscarMapaKeydown(e) {
+            const list = document.getElementById('listaSugerenciasMapa');
+            const items = list.querySelectorAll('div[id^="sug-mapa-"]');
+            if (items.length === 0) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                        document.activeElement.blur();
+                    }
+                }
+                return;
+            }
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                indiceSugerenciaMapa = (indiceSugerenciaMapa + 1) % items.length;
+                resaltarSugerenciaMapa(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                indiceSugerenciaMapa = (indiceSugerenciaMapa - 1 + items.length) % items.length;
+                resaltarSugerenciaMapa(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                }
+                if (indiceSugerenciaMapa >= 0 && items[indiceSugerenciaMapa]) {
+                    items[indiceSugerenciaMapa].click();
+                } else if (items[0]) {
+                    items[0].click();
+                }
+            } else if (e.key === 'Escape') {
+                list.classList.add('hidden');
+                if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                    document.activeElement.blur();
+                }
+            }
+        }
+
+        function resaltarSugerenciaMapa(items) {
+            items.forEach((it, idx) => {
+                if (idx === indiceSugerenciaMapa) it.classList.add('bg-sky-100');
+                else it.classList.remove('bg-sky-100');
+            });
         }
 
         function enfocarEnMapa(id) {
             const col = COLEGIOS.find(c => c.id_colegio === id || c.codigo === id);
             const list = document.getElementById('listaSugerenciasMapa');
             if (list) list.classList.add('hidden');
+            const inp = document.getElementById('inputBusquedaMapa');
+            if (inp) {
+                inp.value = '';
+                inp.blur();
+            }
+            if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                document.activeElement.blur();
+            }
             if (col) {
                 ocultarPantallas();
                 document.getElementById('pantalla-mapa').classList.remove('hidden');
@@ -1873,27 +1981,29 @@
                     </div>
                 </div>
 
-                <!-- Ficha Informativa Unificada y Organizada -->
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs space-y-2 text-slate-700 leading-relaxed">
-                    <div class="flex items-start gap-2">
-                        <b class="text-slate-900 min-w-[130px]">📍 Zona / Sector:</b>
-                        <span class="font-semibold text-slate-800">${col.zona || col.distrito || 'Ventanilla'}</span>
+                <!-- Ficha Informativa Unificada y Organizada Compacta (Encabezado arriba, valor debajo) -->
+                <div class="mt-3.5 space-y-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">📍 Zona / Sector:</span>
+                            <span class="font-black text-slate-900 text-xs block">${col.zona || col.distrito || 'Ventanilla'}</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">🌐 Red Educativa:</span>
+                            <span class="font-black text-sky-800 text-xs block">${col.red_educativa || 'Particular / Independiente'}</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">⏰ Turnos de Atención:</span>
+                            <span class="font-bold text-slate-800 text-xs block">${col.TURNOS || 'Mañana, Tarde'}</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">🏢 Dirección:</span>
+                            <span class="font-bold text-slate-800 text-xs block">${col.direccion || 'Ventanilla / Mi Perú'}</span>
+                        </div>
                     </div>
-                    <div class="flex items-start gap-2">
-                        <b class="text-slate-900 min-w-[130px]">🌐 Red Educativa:</b>
-                        <span class="font-semibold text-sky-800">${col.red_educativa || 'Particular / Independiente'}</span>
-                    </div>
-                    <div class="flex items-start gap-2">
-                        <b class="text-slate-900 min-w-[130px]">⏰ Turnos de Atención:</b>
-                        <span class="font-semibold text-slate-800">${col.TURNOS || 'Mañana, Tarde'}</span>
-                    </div>
-                    <div class="flex items-start gap-2">
-                        <b class="text-slate-900 min-w-[130px]">🏢 Dirección:</b>
-                        <span class="font-semibold text-slate-800">${col.direccion || 'Ventanilla / Mi Perú'}</span>
-                    </div>
-                    <div class="flex items-start gap-2 pt-1 border-t border-slate-200">
-                        <b class="text-slate-900 min-w-[130px]">📝 Requisitos:</b>
-                        <span class="text-slate-700">${col.requisitos_de_matricula || 'DNI de alumno y apoderado, FUM SIAGIE'}</span>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs">
+                        <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">📝 Requisitos de Matrícula:</span>
+                        <p class="text-slate-700 text-[11px] leading-snug font-medium">${col.requisitos_de_matricula || 'DNI del estudiante y apoderado, FUM SIAGIE'}</p>
                     </div>
                 </div>
 
@@ -2144,6 +2254,7 @@
             inp.type = inp.type === 'password' ? 'text' : 'password';
         }
 
+        let indiceSugerenciaDirector = -1;
         function onDirectorBuscarColegio(val) {
             const list = document.getElementById('sugerenciasDirector');
             const txt = normalizarTexto(val);
@@ -2163,24 +2274,74 @@
                 return;
             }
 
-            list.innerHTML = coinc.map(c => `
-                <div onclick="seleccionarColegioDirector('${c.id_colegio}')" class="p-2.5 hover:bg-slate-100 cursor-pointer font-bold">
-                    <div class="text-slate-900">${c.nombre_colegio}</div>
-                    <div class="text-[10px] text-slate-500">${c.gestion} - ${c.distrito}</div>
+            indiceSugerenciaDirector = -1;
+            list.innerHTML = coinc.map((c, i) => `
+                <div onclick="seleccionarColegioDirector('${c.id_colegio}')" id="sug-director-${i}" class="p-2.5 hover:bg-slate-100 cursor-pointer font-bold flex items-center justify-between">
+                    <div>
+                        <div class="text-slate-900">${c.nombre_colegio}</div>
+                        <div class="text-[10px] text-slate-500 font-mono">${c.gestion} - ${c.distrito}</div>
+                    </div>
+                    <span class="text-sky-600 text-xs font-black">Seleccionar ➔</span>
                 </div>
             `).join('');
             list.classList.remove('hidden');
         }
 
+        function onDirectorKeydown(e) {
+            const list = document.getElementById('sugerenciasDirector');
+            const items = list.querySelectorAll('div[id^="sug-director-"]');
+            if (items.length === 0) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('inputPassDirector')?.focus();
+                }
+                return;
+            }
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                indiceSugerenciaDirector = (indiceSugerenciaDirector + 1) % items.length;
+                resaltarSugerenciaDirector(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                indiceSugerenciaDirector = (indiceSugerenciaDirector - 1 + items.length) % items.length;
+                resaltarSugerenciaDirector(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (indiceSugerenciaDirector >= 0 && items[indiceSugerenciaDirector]) {
+                    items[indiceSugerenciaDirector].click();
+                } else if (items[0]) {
+                    items[0].click();
+                }
+            } else if (e.key === 'Escape') {
+                list.classList.add('hidden');
+            }
+        }
+
+        function resaltarSugerenciaDirector(items) {
+            items.forEach((it, idx) => {
+                if (idx === indiceSugerenciaDirector) it.classList.add('bg-sky-100');
+                else it.classList.remove('bg-sky-100');
+            });
+        }
+
         function seleccionarColegioDirector(id) {
             const col = COLEGIOS.find(c => c.id_colegio === id);
             if (!col) return;
-            document.getElementById('inputColDirector').value = col.nombre_colegio;
-            document.getElementById('inputColDirector').dataset.idColegio = col.id_colegio;
+            const inp = document.getElementById('inputColDirector');
+            if (inp) {
+                inp.value = col.nombre_colegio;
+                inp.dataset.idColegio = col.id_colegio;
+            }
             document.getElementById('sugerenciasDirector').classList.add('hidden');
+            const passInp = document.getElementById('inputPassDirector');
+            if (passInp) passInp.focus();
         }
 
         function verificarLoginDirector() {
+            if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                document.activeElement.blur();
+            }
             const inpNom = document.getElementById('inputColDirector');
             const pass = document.getElementById('inputPassDirector').value.trim();
             const err = document.getElementById('errorDirector');
@@ -2589,6 +2750,9 @@
         }
 
         function verificarLoginAdmin() {
+            if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                document.activeElement.blur();
+            }
             const pass = document.getElementById('inputPassAdmin').value.trim();
             const err = document.getElementById('errorAdmin');
             const master = localStorage.getItem('mapache_admin_master_password') || 'mapache2026';
@@ -2712,6 +2876,7 @@
                                 type="text"
                                 id="inputFiltroAdminColegios"
                                 oninput="filtrarColegiosAdmin(this.value)"
+                                onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}"
                                 value="${filtroAdminTexto}"
                                 placeholder="🔍 Filtrar por nombre, ID, código o red..."
                                 class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white text-xs outline-none focus:border-sky-400 font-bold placeholder-slate-500"
