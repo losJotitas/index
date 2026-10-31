@@ -1620,6 +1620,7 @@
             const urls = [];
             fns.forEach(fn => {
                 const enc = encodeURIComponent(fn);
+                urls.push('https://cdn.jsdelivr.net/gh/losjotitas/index@main/fotos/' + enc);
                 urls.push('https://losjotitas.github.io/index/fotos/' + enc);
                 urls.push('https://raw.githubusercontent.com/losJotitas/index/main/fotos/' + enc);
                 urls.push('./fotos/' + enc);
