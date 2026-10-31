@@ -4215,6 +4215,16 @@
                         <input type="text" id="editColPass" value="${col.password_director || 'mapache123'}" class="w-full px-3 py-2 bg-slate-950 border border-amber-500/60 rounded-xl text-amber-300 font-mono font-bold" />
                     </div>
                 </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Latitud GPS:</label>
+                        <input type="number" step="any" id="editColLat" value="${col.latitud || -11.8712}" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono text-xs" />
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Longitud GPS:</label>
+                        <input type="number" step="any" id="editColLng" value="${col.longitud || -77.1352}" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono text-xs" />
+                    </div>
+                </div>
                 <div>
                     <label class="block font-bold text-slate-300 mb-1">Requisitos de Matrícula:</label>
                     <input type="text" id="editColRequisitos" value="${col.requisitos_de_matricula || ''}" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-white" />
@@ -4266,6 +4276,8 @@
             c.direccion = document.getElementById('editColDireccion').value.trim();
             c.turnos = document.getElementById('editColTurnos').value.trim();
             c.TURNOS = document.getElementById('editColTurnos').value.trim();
+            c.latitud = parseFloat(document.getElementById('editColLat').value) || c.latitud;
+            c.longitud = parseFloat(document.getElementById('editColLng').value) || c.longitud;
             c.password_director = document.getElementById('editColPass').value.trim();
             c.requisitos_de_matricula = document.getElementById('editColRequisitos').value.trim();
             c.enlace_web_o_whatsapp = document.getElementById('editColWa').value.trim();
