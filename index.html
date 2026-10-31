@@ -292,38 +292,9 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <!-- Yape / Plin -->
-                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex flex-col items-center text-center space-y-2">
-                        <b class="text-purple-700 font-black text-sm">📱 Plin / Yape Oficial</b>
-                        <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">🛡️ Pago Seguro sin Teléfono Visible</span>
-                        <p class="text-[10px] text-slate-500">Escanea directamente el <b>Código QR Oficial</b> de la Plataforma MAPACHE desde tu app:</p>
-                        <div id="qrYapeContainer" class="w-24 h-24 bg-white border-2 border-slate-300 rounded-xl flex items-center justify-center my-1 shadow-inner">
-                            <span class="text-3xl">📲</span>
-                        </div>
-                        <span id="txtTitularPago" class="text-[10px] text-slate-600 font-bold">Titular: Coordinación Proyecto MAPACHE Ventanilla</span>
-                    </div>
-
-                    <!-- Transferencia Bancaria -->
-                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex flex-col justify-between text-left space-y-2">
-                        <div class="text-center">
-                            <b id="txtBancoPago" class="text-sky-700 font-black text-sm block">🏦 BCP - Banco de Crédito del Perú</b>
-                            <span id="txtMontoMembresia" class="text-[10px] text-emerald-700 font-extrabold">Costo de Membresía: S/. 50.00 anual</span>
-                        </div>
-                        <div class="space-y-1.5 font-mono text-[11px]">
-                            <div class="bg-white border border-slate-300 p-2 rounded-xl">
-                                <span class="text-[10px] text-slate-500 font-sans font-bold block">N° de Cuenta:</span>
-                                <span id="txtCuentaPago" class="font-black text-slate-900 select-all">191-98765432-0-88</span>
-                            </div>
-                            <div class="bg-white border border-slate-300 p-2 rounded-xl">
-                                <span class="text-[10px] text-slate-500 font-sans font-bold block">CCI Interbancario:</span>
-                                <span id="txtCciPago" class="font-black text-slate-900 select-all break-all">002-191-009876543208-88</span>
-                            </div>
-                        </div>
-                        <button onclick="copiarCci()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-black rounded-xl text-xs transition cursor-pointer shadow flex items-center justify-center gap-1.5">
-                            📋 Copiar Código CCI
-                        </button>
-                    </div>
+                <!-- Contenedor Dinámico de Medios de Pago Reactivo con Switches y Multi-QR -->
+                <div id="contenedorMetodosPagoDonaciones" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <!-- Se renderiza dinámicamente vía actualizarVistaDonacionesStandalone() -->
                 </div>
 
                 <!-- Deslinde y Protocolo Oficial de Seguridad Institucional Anti-Extorsión -->
@@ -2931,16 +2902,7 @@
             const cont = document.getElementById('seccionContenidoAdmin');
             const currentUrl = localStorage.getItem('mapache_api_url') || URL_API_GOOGLE;
             const sugerencias = JSON.parse(localStorage.getItem('mapache_sugerencias') || '[]');
-            const pagos = JSON.parse(localStorage.getItem('mapache_config_pagos') || 'null') || {
-                titular: 'Coordinación Proyecto MAPACHE Ventanilla',
-                banco: 'BCP - Banco de Crédito del Perú',
-                numeroCuenta: '191-98765432-0-88',
-                cci: '002-191-009876543208-88',
-                yapePlinTexto: 'Escanear QR Oficial Yape / Plin',
-                qrUrl: '',
-                correoContacto: 'jjmixstore@gmail.com',
-                montoMembresia: 'S/. 50.00 anual'
-            };
+            const pagos = obtenerConfigPagosStandalone();
             const masterPass = localStorage.getItem('mapache_admin_master_password') || 'mapache2026';
 
             const total = COLEGIOS.length;
@@ -3470,87 +3432,514 @@
             renderizarContenidoAdmin();
         }
 
+        // ==============================================================
+        // CONFIGURACIÓN DINÁMICA DE PAGOS, QR Y MEMBRESÍAS STANDALONE
+        // ==============================================================
+        function obtenerConfigPagosStandalone() {
+            const def = {
+                yapeActivo: true,
+                yapeTexto: 'Yape Oficial MAPACHE',
+                yapeTitular: 'Coordinación Proyecto MAPACHE Ventanilla',
+                yapeQrUrl: '',
+                plinActivo: true,
+                plinTexto: 'Plin Oficial MAPACHE',
+                plinTitular: 'Coordinación Proyecto MAPACHE Ventanilla',
+                plinQrUrl: '',
+                bancoActivo: true,
+                banco: 'BCP - Banco de Crédito del Perú',
+                bancoTitular: 'Proyecto MAPACHE Ventanilla & Mi Perú',
+                cci: '002-191-009876543208-88',
+                numeroCuenta: '191-98765432-0-88',
+                mostrarNumeroCuenta: false,
+                banco2Activo: false,
+                banco2Nombre: 'BBVA / Interbank / Banco de la Nación',
+                banco2Titular: 'Proyecto MAPACHE Ventanilla & Mi Perú',
+                banco2Cci: '',
+                banco2NumeroCuenta: '',
+                banco2MostrarCuenta: false,
+                montoMembresia: 'S/. 50.00 anual',
+                correoContacto: 'jjmixstore@gmail.com'
+            };
+            try {
+                const stored = JSON.parse(localStorage.getItem('mapache_config_pagos') || '{}');
+                if (stored.titular && !stored.bancoTitular) stored.bancoTitular = stored.titular;
+                if (stored.qrUrl && !stored.yapeQrUrl) stored.yapeQrUrl = stored.qrUrl;
+                return Object.assign({}, def, stored);
+            } catch(e) {
+                return def;
+            }
+        }
+
+        function copiarTextoDonaciones(texto, btnId) {
+            if (!texto) return;
+            navigator.clipboard.writeText(texto).then(() => {
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '✅ ¡Copiado!';
+                    btn.classList.add('bg-emerald-600');
+                    setTimeout(() => {
+                        btn.innerHTML = original;
+                        btn.classList.remove('bg-emerald-600');
+                    }, 2000);
+                }
+                mostrarToast('¡Código copiado al portapapeles! 📋');
+            }).catch(() => {
+                prompt('Copia manualmente este código:', texto);
+            });
+        }
+
+        function actualizarVistaDonacionesStandalone() {
+            const cont = document.getElementById('contenedorMetodosPagoDonaciones');
+            if (!cont) return;
+
+            const cfg = obtenerConfigPagosStandalone();
+            let htmlCards = '';
+
+            const hayAlgunMetodo = cfg.yapeActivo || cfg.plinActivo || cfg.bancoActivo || cfg.banco2Activo;
+
+            if (!hayAlgunMetodo) {
+                cont.innerHTML = `
+                    <div class="col-span-full bg-amber-50 border-2 border-amber-300 p-5 rounded-2xl text-center space-y-2">
+                        <span class="text-3xl">⚠️</span>
+                        <h4 class="font-black text-amber-950 text-sm">Canales de Pago en Actualización</h4>
+                        <p class="text-amber-800 text-xs">Los métodos de pago y aportes están siendo actualizados por el Administrador. Si deseas coordinar tu membresía digital, escríbenos directamente a <b>${cfg.correoContacto || 'jjmixstore@gmail.com'}</b>.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // TARJETA YAPE OFICIAL
+            if (cfg.yapeActivo) {
+                htmlCards += `
+                    <div class="bg-gradient-to-b from-purple-50 to-white border-2 border-purple-200 p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-sm transition hover:shadow-md">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-base">📱</span>
+                            <b class="text-purple-800 font-black text-sm">${cfg.yapeTexto || 'Yape Oficial MAPACHE'}</b>
+                        </div>
+                        <span class="text-[10px] bg-purple-100 text-purple-900 font-bold px-2 py-0.5 rounded-full border border-purple-200">
+                            🛡️ Pago Seguro sin Teléfono Visible
+                        </span>
+                        <p class="text-[10.5px] text-slate-600">
+                            Escanea directamente el <b>Código QR Oficial de Yape</b> desde tu app:
+                        </p>
+                        <div class="w-32 h-32 bg-white border-2 border-purple-200 rounded-xl flex items-center justify-center my-1 p-1 shadow-inner overflow-hidden">
+                            ${cfg.yapeQrUrl ? `
+                                <img src="${cfg.yapeQrUrl}" alt="QR Yape Oficial" class="w-full h-full object-contain rounded-lg" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-3xl\'>📲</span>';" />
+                            ` : `
+                                <div class="flex flex-col items-center justify-center text-slate-400 p-1">
+                                    <span class="text-3xl mb-1">📲</span>
+                                    <span class="text-[9px] font-bold text-purple-700">QR Oficial Yape</span>
+                                </div>
+                            `}
+                        </div>
+                        <span class="text-[10px] text-slate-700 font-bold bg-purple-50/80 px-2 py-1 rounded-lg border border-purple-100 w-full truncate">
+                            Titular: ${cfg.yapeTitular || 'Coordinación Proyecto MAPACHE Ventanilla'}
+                        </span>
+                    </div>
+                `;
+            }
+
+            // TARJETA PLIN OFICIAL
+            if (cfg.plinActivo) {
+                htmlCards += `
+                    <div class="bg-gradient-to-b from-cyan-50 to-white border-2 border-cyan-200 p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-sm transition hover:shadow-md">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-base">⚡</span>
+                            <b class="text-cyan-800 font-black text-sm">${cfg.plinTexto || 'Plin Oficial MAPACHE'}</b>
+                        </div>
+                        <span class="text-[10px] bg-cyan-100 text-cyan-900 font-bold px-2 py-0.5 rounded-full border border-cyan-200">
+                            🛡️ Transferencia Inmediata Interbancaria
+                        </span>
+                        <p class="text-[10.5px] text-slate-600">
+                            Escanea el <b>Código QR Oficial de Plin</b> desde tu app bancaria:
+                        </p>
+                        <div class="w-32 h-32 bg-white border-2 border-cyan-200 rounded-xl flex items-center justify-center my-1 p-1 shadow-inner overflow-hidden">
+                            ${cfg.plinQrUrl ? `
+                                <img src="${cfg.plinQrUrl}" alt="QR Plin Oficial" class="w-full h-full object-contain rounded-lg" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-3xl\'>⚡</span>';" />
+                            ` : `
+                                <div class="flex flex-col items-center justify-center text-slate-400 p-1">
+                                    <span class="text-3xl mb-1">⚡</span>
+                                    <span class="text-[9px] font-bold text-cyan-700">QR Oficial Plin</span>
+                                </div>
+                            `}
+                        </div>
+                        <span class="text-[10px] text-slate-700 font-bold bg-cyan-50/80 px-2 py-1 rounded-lg border border-cyan-100 w-full truncate">
+                            Titular: ${cfg.plinTitular || 'Coordinación Proyecto MAPACHE Ventanilla'}
+                        </span>
+                    </div>
+                `;
+            }
+
+            // TARJETA BANCO PRINCIPAL
+            if (cfg.bancoActivo) {
+                htmlCards += `
+                    <div class="bg-gradient-to-b from-sky-50 to-white border-2 border-sky-200 p-4 rounded-2xl flex flex-col justify-between text-left space-y-2.5 shadow-sm transition hover:shadow-md">
+                        <div class="text-center pb-1 border-b border-sky-100">
+                            <b class="text-sky-800 font-black text-sm block">🏦 ${cfg.banco || 'BCP - Banco de Crédito del Perú'}</b>
+                            <span class="text-[10.5px] text-emerald-700 font-extrabold block mt-0.5">Membresía Digital: ${cfg.montoMembresia || 'S/. 50.00 anual'}</span>
+                            <span class="text-[10px] text-slate-500 font-bold block mt-0.5 truncate">Titular: ${cfg.bancoTitular || 'Proyecto MAPACHE Ventanilla & Mi Perú'}</span>
+                        </div>
+                        <div class="space-y-1.5 font-mono text-[11px]">
+                            <div class="bg-white border-2 border-sky-300 p-2.5 rounded-xl shadow-xs">
+                                <span class="text-[10px] text-sky-800 font-sans font-black flex items-center gap-1">
+                                    <span>⭐</span> CCI Interbancario (Recomendado):
+                                </span>
+                                <span class="font-black text-slate-900 select-all break-all text-xs tracking-wider block mt-0.5">${cfg.cci || '002-191-009876543208-88'}</span>
+                            </div>
+                            ${cfg.mostrarNumeroCuenta && cfg.numeroCuenta ? `
+                                <div class="bg-white border border-slate-200 p-2 rounded-xl">
+                                    <span class="text-[10px] text-slate-500 font-sans font-bold block">N° de Cuenta Corriente / Ahorros:</span>
+                                    <span class="font-black text-slate-800 select-all text-xs block mt-0.5">${cfg.numeroCuenta}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <button id="btnCopiarCciStand1" onclick="copiarTextoDonaciones('${cfg.cci || ''}', 'btnCopiarCciStand1')" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-black rounded-xl text-xs transition cursor-pointer shadow flex items-center justify-center gap-1.5">
+                            📋 Copiar Código CCI
+                        </button>
+                    </div>
+                `;
+            }
+
+            // TARJETA BANCO DE RESPALDO (2DA ENTIDAD)
+            if (cfg.banco2Activo && (cfg.banco2Cci || cfg.banco2NumeroCuenta)) {
+                htmlCards += `
+                    <div class="bg-gradient-to-b from-blue-50 to-white border-2 border-blue-200 p-4 rounded-2xl flex flex-col justify-between text-left space-y-2.5 shadow-sm transition hover:shadow-md">
+                        <div class="text-center pb-1 border-b border-blue-100">
+                            <b class="text-blue-800 font-black text-sm block">🏛️ ${cfg.banco2Nombre || 'Segunda Entidad Financiera'}</b>
+                            <span class="text-[10px] text-blue-600 font-bold bg-blue-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Entidad Bancaria de Respaldo</span>
+                            <span class="text-[10px] text-slate-500 font-bold block mt-0.5 truncate">Titular: ${cfg.banco2Titular || cfg.bancoTitular || 'Proyecto MAPACHE'}</span>
+                        </div>
+                        <div class="space-y-1.5 font-mono text-[11px]">
+                            <div class="bg-white border-2 border-blue-300 p-2.5 rounded-xl shadow-xs">
+                                <span class="text-[10px] text-blue-800 font-sans font-black flex items-center gap-1">
+                                    <span>⭐</span> CCI Interbancario:
+                                </span>
+                                <span class="font-black text-slate-900 select-all break-all text-xs tracking-wider block mt-0.5">${cfg.banco2Cci}</span>
+                            </div>
+                            ${cfg.banco2MostrarCuenta && cfg.banco2NumeroCuenta ? `
+                                <div class="bg-white border border-slate-200 p-2 rounded-xl">
+                                    <span class="text-[10px] text-slate-500 font-sans font-bold block">N° de Cuenta Alternativa:</span>
+                                    <span class="font-black text-slate-800 select-all text-xs block mt-0.5">${cfg.banco2NumeroCuenta}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <button id="btnCopiarCciStand2" onclick="copiarTextoDonaciones('${cfg.banco2Cci || ''}', 'btnCopiarCciStand2')" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl text-xs transition cursor-pointer shadow flex items-center justify-center gap-1.5">
+                            📋 Copiar CCI Respaldo
+                        </button>
+                    </div>
+                `;
+            }
+
+            cont.innerHTML = htmlCards;
+        }
+
         function renderHtmlTabPagos(pagos) {
             return `
-                <div class="bg-slate-950 border border-amber-500/50 p-4 sm:p-5 rounded-2xl space-y-3.5 text-xs">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <h4 class="text-sm font-black text-amber-300 flex items-center gap-1.5">
-                            <span>💳</span> Configurar Medios de Pago, QR y Membresías Digitales
-                        </h4>
-                        <span class="text-[10px] text-amber-400 font-bold bg-amber-950 px-2 py-0.5 rounded-full border border-amber-500/40">Oficial MAPACHE</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="space-y-4 text-xs">
+                    <!-- ENCABEZADO -->
+                    <div class="flex items-center justify-between bg-slate-900 p-4 rounded-2xl border border-slate-800">
                         <div>
-                            <label class="block font-bold text-slate-300 mb-1">Titular de la Cuenta / Destinatario:</label>
-                            <input type="text" id="pagoTitular" value="${pagos.titular || ''}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-amber-400 font-bold" />
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-300 mb-1">Banco / Entidad Financiera:</label>
-                            <input type="text" id="pagoBanco" value="${pagos.banco || ''}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-amber-400 font-bold" />
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block font-bold text-slate-300 mb-1">Número de Cuenta Corriente / Ahorros:</label>
-                            <input type="text" id="pagoCuenta" value="${pagos.numeroCuenta || ''}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-amber-200 font-mono text-xs outline-none focus:border-amber-400 font-bold" />
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-300 mb-1">Código de Cuenta Interbancario (CCI):</label>
-                            <input type="text" id="pagoCci" value="${pagos.cci || ''}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-amber-200 font-mono text-xs outline-none focus:border-amber-400 font-bold" />
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block font-bold text-slate-300 mb-1">Texto de Billetera Digital (Yape / Plin):</label>
-                            <input type="text" id="pagoYape" value="${pagos.yapePlinTexto || ''}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-amber-400" />
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-300 mb-1">Monto de Membresía Digital Anual:</label>
-                            <input type="text" id="pagoMonto" value="${pagos.montoMembresia || 'S/. 50.00 anual'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-amber-400 font-bold" />
-                        </div>
-                    </div>
-
-                    <!-- URL del QR con Previsualización en Vivo -->
-                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
-                        <label class="block font-bold text-slate-300 text-[11px]">Enlace / URL de la Imagen del QR (Yape, Plin o Tarjeta):</label>
-                        <input
-                            type="url"
-                            id="pagoQrUrl"
-                            value="${pagos.qrUrl || ''}"
-                            oninput="actualizarPreviewQrAdmin(this.value)"
-                            placeholder="https://.../mi_codigo_qr.png"
-                            class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-sky-300 font-mono text-xs outline-none"
-                        />
-                        <div id="previewQrAdminContenedor" class="mt-2 flex items-center gap-3">
-                            <div class="w-20 h-20 bg-white rounded-xl border border-slate-700 flex items-center justify-center overflow-hidden shrink-0">
-                                <img id="imgPreviewQrAdmin" src="${pagos.qrUrl || ''}" onerror="this.classList.add('hidden')" onload="this.classList.remove('hidden')" class="${pagos.qrUrl ? '' : 'hidden'} w-full h-full object-contain" />
-                                <span id="txtSinQrAdmin" class="${pagos.qrUrl ? 'hidden' : ''} text-[10px] text-slate-500 text-center font-bold">Sin QR</span>
-                            </div>
-                            <p class="text-[11px] text-slate-400 leading-relaxed">
-                                Puedes pegar un enlace directo a tu imagen de QR (Dropbox, Imgur, Drive público o GitHub) para que los directores lo escaneen directamente en la pantalla de donaciones.
+                            <h4 class="text-sm font-black text-amber-300 flex items-center gap-2">
+                                <span>💳</span> Configurar Medios de Pago, QR y Membresías Digitales
+                            </h4>
+                            <p class="text-[11px] text-slate-400 mt-0.5">
+                                Activa, desactiva o sube capturas de imagen directamente desde tu celular o PC para cada billetera o banco en tiempo real.
                             </p>
                         </div>
+                        <span class="text-[10px] text-amber-400 font-bold bg-amber-950 px-2.5 py-1 rounded-full border border-amber-500/40 shrink-0">Oficial MAPACHE</span>
                     </div>
 
-                    <div>
-                        <label class="block font-bold text-slate-300 mb-1">Correo Electrónico Oficial de Contacto / Comprobantes:</label>
-                        <input type="email" id="pagoCorreo" value="${pagos.correoContacto || 'jjmixstore@gmail.com'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-amber-400" />
+                    <!-- 1. TARJETA YAPE OFICIAL -->
+                    <div class="bg-slate-950 border border-purple-500/50 p-4 sm:p-5 rounded-2xl space-y-3">
+                        <div class="flex items-center justify-between border-b border-purple-900/50 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">📱</span>
+                                <div>
+                                    <b class="text-purple-300 font-black text-xs block">Billetera Digital 1: YAPE</b>
+                                    <span class="text-[10px] text-purple-400 font-bold">Subida de captura QR y pagos directos</span>
+                                </div>
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-1.5 rounded-xl border border-purple-600/50">
+                                <span class="text-[11px] font-black ${pagos.yapeActivo ? 'text-emerald-400' : 'text-slate-400'}" id="lblYapeActivo">${pagos.yapeActivo ? 'ACTIVO (Visible)' : 'INACTIVO (Oculto)'}</span>
+                                <input type="checkbox" id="chkYapeActivo" ${pagos.yapeActivo ? 'checked' : ''} onchange="toggleSwitchVisual('chkYapeActivo', 'lblYapeActivo')" class="w-4 h-4 accent-purple-600 cursor-pointer" />
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Texto de la Billetera:</label>
+                                <input type="text" id="pagoYapeTexto" value="${pagos.yapeTexto || 'Yape Oficial MAPACHE'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-purple-400 font-bold" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Titular de Yape:</label>
+                                <input type="text" id="pagoYapeTitular" value="${pagos.yapeTitular || 'Coordinación Proyecto MAPACHE Ventanilla'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-purple-400 font-bold" />
+                            </div>
+                        </div>
+
+                        <!-- Carga directa de captura QR Yape -->
+                        <div class="p-3 bg-purple-950/20 border border-purple-500/30 rounded-xl space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label class="font-bold text-purple-200 text-[11px]">Imagen / Captura de Pantalla del QR Yape:</label>
+                                <div class="flex items-center gap-2">
+                                    <label class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg text-xs cursor-pointer transition shadow flex items-center gap-1.5">
+                                        <span>📷</span> Subir Captura desde Celular / PC
+                                        <input type="file" accept="image/*" class="hidden" onchange="handleSubirQrArchivoStandalone(event, 'yape')" />
+                                    </label>
+                                    <button type="button" onclick="quitarQrAdmin('yape')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-rose-200 font-bold rounded-lg text-xs cursor-pointer transition">
+                                        Quitar
+                                    </button>
+                                </div>
+                            </div>
+                            <input
+                                type="text"
+                                id="pagoYapeQrUrl"
+                                value="${pagos.yapeQrUrl || ''}"
+                                oninput="actualizarPreviewQrAdmin(this.value, 'yape')"
+                                placeholder="O pega un enlace web directo: https://.../qr_yape.png"
+                                class="w-full px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-purple-200 font-mono text-[11px] outline-none"
+                            />
+                            <div class="flex items-center gap-3 pt-1">
+                                <div class="w-20 h-20 bg-white rounded-xl border border-purple-400 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+                                    <img id="imgPreviewQrYape" src="${pagos.yapeQrUrl || ''}" onerror="this.classList.add('hidden'); document.getElementById('txtSinQrYape').classList.remove('hidden');" onload="this.classList.remove('hidden'); document.getElementById('txtSinQrYape').classList.add('hidden');" class="${pagos.yapeQrUrl ? '' : 'hidden'} w-full h-full object-contain" />
+                                    <span id="txtSinQrYape" class="${pagos.yapeQrUrl ? 'hidden' : ''} text-[10px] text-slate-400 text-center font-bold">Sin QR</span>
+                                </div>
+                                <p class="text-[10.5px] text-slate-400 leading-snug">
+                                    Sube la captura de pantalla de tu código QR de Yape. Se almacena localmente de forma segura en Base64 sin requerir servidores externos.
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
-                    <button type="button" onclick="guardarConfigPagosAdmin()" class="w-full py-3 bg-amber-600 hover:bg-amber-500 text-slate-950 font-black rounded-xl text-xs transition shadow-lg cursor-pointer flex items-center justify-center gap-2">
-                        <span>💾</span> Guardar Configuración de Pagos y Membresías
-                    </button>
+                    <!-- 2. TARJETA PLIN OFICIAL -->
+                    <div class="bg-slate-950 border border-cyan-500/50 p-4 sm:p-5 rounded-2xl space-y-3">
+                        <div class="flex items-center justify-between border-b border-cyan-900/50 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">⚡</span>
+                                <div>
+                                    <b class="text-cyan-300 font-black text-xs block">Billetera Digital 2: PLIN</b>
+                                    <span class="text-[10px] text-cyan-400 font-bold">Interoperabilidad bancaria (BBVA, Interbank, Scotiabank)</span>
+                                </div>
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-1.5 rounded-xl border border-cyan-600/50">
+                                <span class="text-[11px] font-black ${pagos.plinActivo ? 'text-emerald-400' : 'text-slate-400'}" id="lblPlinActivo">${pagos.plinActivo ? 'ACTIVO (Visible)' : 'INACTIVO (Oculto)'}</span>
+                                <input type="checkbox" id="chkPlinActivo" ${pagos.plinActivo ? 'checked' : ''} onchange="toggleSwitchVisual('chkPlinActivo', 'lblPlinActivo')" class="w-4 h-4 accent-cyan-600 cursor-pointer" />
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Texto de la Billetera:</label>
+                                <input type="text" id="pagoPlinTexto" value="${pagos.plinTexto || 'Plin Oficial MAPACHE'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-cyan-400 font-bold" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Titular de Plin:</label>
+                                <input type="text" id="pagoPlinTitular" value="${pagos.plinTitular || 'Coordinación Proyecto MAPACHE Ventanilla'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-cyan-400 font-bold" />
+                            </div>
+                        </div>
+
+                        <!-- Carga directa de captura QR Plin -->
+                        <div class="p-3 bg-cyan-950/20 border border-cyan-500/30 rounded-xl space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label class="font-bold text-cyan-200 text-[11px]">Imagen / Captura de Pantalla del QR Plin:</label>
+                                <div class="flex items-center gap-2">
+                                    <label class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg text-xs cursor-pointer transition shadow flex items-center gap-1.5">
+                                        <span>📷</span> Subir Captura desde Celular / PC
+                                        <input type="file" accept="image/*" class="hidden" onchange="handleSubirQrArchivoStandalone(event, 'plin')" />
+                                    </label>
+                                    <button type="button" onclick="quitarQrAdmin('plin')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-rose-200 font-bold rounded-lg text-xs cursor-pointer transition">
+                                        Quitar
+                                    </button>
+                                </div>
+                            </div>
+                            <input
+                                type="text"
+                                id="pagoPlinQrUrl"
+                                value="${pagos.plinQrUrl || ''}"
+                                oninput="actualizarPreviewQrAdmin(this.value, 'plin')"
+                                placeholder="O pega un enlace web directo: https://.../qr_plin.png"
+                                class="w-full px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-cyan-200 font-mono text-[11px] outline-none"
+                            />
+                            <div class="flex items-center gap-3 pt-1">
+                                <div class="w-20 h-20 bg-white rounded-xl border border-cyan-400 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+                                    <img id="imgPreviewQrPlin" src="${pagos.plinQrUrl || ''}" onerror="this.classList.add('hidden'); document.getElementById('txtSinQrPlin').classList.remove('hidden');" onload="this.classList.remove('hidden'); document.getElementById('txtSinQrPlin').classList.add('hidden');" class="${pagos.plinQrUrl ? '' : 'hidden'} w-full h-full object-contain" />
+                                    <span id="txtSinQrPlin" class="${pagos.plinQrUrl ? 'hidden' : ''} text-[10px] text-slate-400 text-center font-bold">Sin QR</span>
+                                </div>
+                                <p class="text-[10.5px] text-slate-400 leading-snug">
+                                    Sube la captura de pantalla de tu código QR de Plin. Funciona de manera independiente y puedes activarlo o pausarlo cuando gustes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. TARJETA BANCO PRINCIPAL -->
+                    <div class="bg-slate-950 border border-sky-500/50 p-4 sm:p-5 rounded-2xl space-y-3">
+                        <div class="flex items-center justify-between border-b border-sky-900/50 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">🏦</span>
+                                <div>
+                                    <b class="text-sky-300 font-black text-xs block">Entidad Bancaria Principal</b>
+                                    <span class="text-[10px] text-sky-400 font-bold">Transferencias interbancarias directas con CCI</span>
+                                </div>
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-1.5 rounded-xl border border-sky-600/50">
+                                <span class="text-[11px] font-black ${pagos.bancoActivo ? 'text-emerald-400' : 'text-slate-400'}" id="lblBancoActivo">${pagos.bancoActivo ? 'ACTIVO (Visible)' : 'INACTIVO (Oculto)'}</span>
+                                <input type="checkbox" id="chkBancoActivo" ${pagos.bancoActivo ? 'checked' : ''} onchange="toggleSwitchVisual('chkBancoActivo', 'lblBancoActivo')" class="w-4 h-4 accent-sky-600 cursor-pointer" />
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Banco / Entidad Financiera:</label>
+                                <input type="text" id="pagoBanco" value="${pagos.banco || 'BCP - Banco de Crédito del Perú'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-sky-400 font-bold" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Titular de la Cuenta:</label>
+                                <input type="text" id="pagoBancoTitular" value="${pagos.bancoTitular || 'Proyecto MAPACHE Ventanilla & Mi Perú'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-sky-400 font-bold" />
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-sky-950/20 border-2 border-sky-500/40 rounded-xl space-y-1">
+                            <label class="block font-black text-sky-300 text-xs">⭐ Código de Cuenta Interbancario (CCI Principal - Indispensable):</label>
+                            <input type="text" id="pagoCci" value="${pagos.cci || '002-191-009876543208-88'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sky-200 font-mono text-xs outline-none focus:border-sky-400 font-black tracking-wider" />
+                            <p class="text-[10px] text-slate-400">Es el código principal utilizado para transferir desde cualquier banco en el Perú.</p>
+                        </div>
+
+                        <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label class="block font-bold text-slate-300 text-xs">Número de Cuenta Corriente / Ahorros:</label>
+                                <label class="flex items-center gap-1.5 cursor-pointer text-[10.5px]">
+                                    <input type="checkbox" id="chkMostrarCuenta" ${pagos.mostrarNumeroCuenta ? 'checked' : ''} class="accent-sky-500" />
+                                    <span class="text-slate-300 font-bold">Mostrar en vista pública</span>
+                                    <span class="text-[9.5px] text-amber-400 font-mono">(Recomendado: Oculto)</span>
+                                </label>
+                            </div>
+                            <input type="text" id="pagoCuenta" value="${pagos.numeroCuenta || '191-98765432-0-88'}" placeholder="Ej. 191-98765432-0-88" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-amber-200 font-mono text-xs outline-none focus:border-sky-400 font-bold" />
+                        </div>
+                    </div>
+
+                    <!-- 4. TARJETA 2DA ENTIDAD BANCARIA DE RESPALDO -->
+                    <div class="bg-slate-950 border border-blue-500/50 p-4 sm:p-5 rounded-2xl space-y-3">
+                        <div class="flex items-center justify-between border-b border-blue-900/50 pb-2.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">🏛️</span>
+                                <div>
+                                    <b class="text-blue-300 font-black text-xs block">2da Entidad Bancaria de Respaldo</b>
+                                    <span class="text-[10px] text-blue-400 font-bold">Banco alternativo ante caídas o imprevistos (BBVA, Interbank, etc.)</span>
+                                </div>
+                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-1.5 rounded-xl border border-blue-600/50">
+                                <span class="text-[11px] font-black ${pagos.banco2Activo ? 'text-emerald-400' : 'text-slate-400'}" id="lblBanco2Activo">${pagos.banco2Activo ? 'ACTIVO (Visible)' : 'INACTIVO (Oculto)'}</span>
+                                <input type="checkbox" id="chkBanco2Activo" ${pagos.banco2Activo ? 'checked' : ''} onchange="toggleSwitchVisual('chkBanco2Activo', 'lblBanco2Activo')" class="w-4 h-4 accent-blue-600 cursor-pointer" />
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Nombre del 2do Banco:</label>
+                                <input type="text" id="pagoBanco2Nombre" value="${pagos.banco2Nombre || 'BBVA / Interbank / Banco de la Nación'}" placeholder="Ej. BBVA Continental" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-blue-400 font-bold" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Titular del 2do Banco:</label>
+                                <input type="text" id="pagoBanco2Titular" value="${pagos.banco2Titular || pagos.bancoTitular || 'Proyecto MAPACHE Ventanilla & Mi Perú'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-blue-400 font-bold" />
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-blue-950/20 border-2 border-blue-500/40 rounded-xl space-y-1">
+                            <label class="block font-black text-blue-300 text-xs">⭐ Código de Cuenta Interbancario (CCI del 2do Banco):</label>
+                            <input type="text" id="pagoBanco2Cci" value="${pagos.banco2Cci || ''}" placeholder="Ej. 011-123-000123456789-10" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-blue-200 font-mono text-xs outline-none focus:border-blue-400 font-black tracking-wider" />
+                        </div>
+
+                        <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label class="block font-bold text-slate-300 text-xs">N° de Cuenta del 2do Banco (Opcional):</label>
+                                <label class="flex items-center gap-1.5 cursor-pointer text-[10.5px]">
+                                    <input type="checkbox" id="chkBanco2MostrarCuenta" ${pagos.banco2MostrarCuenta ? 'checked' : ''} class="accent-blue-500" />
+                                    <span class="text-slate-300 font-bold">Mostrar en vista pública</span>
+                                </label>
+                            </div>
+                            <input type="text" id="pagoBanco2NumeroCuenta" value="${pagos.banco2NumeroCuenta || ''}" placeholder="Ej. 0011-0123-0200123456" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-blue-200 font-mono text-xs outline-none focus:border-blue-400 font-bold" />
+                        </div>
+                    </div>
+
+                    <!-- 5. MEMBRESÍA Y CORREO OFICIAL -->
+                    <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Monto de Membresía Digital Anual:</label>
+                                <input type="text" id="pagoMonto" value="${pagos.montoMembresia || 'S/. 50.00 anual'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-amber-400 font-bold" />
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-300 mb-1">Correo Electrónico Oficial de Contacto / Comprobantes:</label>
+                                <input type="email" id="pagoCorreo" value="${pagos.correoContacto || 'jjmixstore@gmail.com'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-amber-400" />
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="guardarConfigPagosAdmin()" class="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                            <span>💾</span> Guardar Configuración de Pagos y Membresías en Tiempo Real
+                        </button>
+                    </div>
                 </div>
             `;
         }
 
-        function actualizarPreviewQrAdmin(url) {
-            const img = document.getElementById('imgPreviewQrAdmin');
-            const txt = document.getElementById('txtSinQrAdmin');
-            if (url && url.startsWith('http')) {
+        function toggleSwitchVisual(chkId, labelId) {
+            const chk = document.getElementById(chkId);
+            const lbl = document.getElementById(labelId);
+            if (!chk || !lbl) return;
+            if (chk.checked) {
+                lbl.innerText = 'ACTIVO (Visible)';
+                lbl.className = 'text-[11px] font-black text-emerald-400';
+            } else {
+                lbl.innerText = 'INACTIVO (Oculto)';
+                lbl.className = 'text-[11px] font-black text-slate-400';
+            }
+        }
+
+        function handleSubirQrArchivoStandalone(e, tipo) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            if (file.size > 3 * 1024 * 1024) {
+                alert('La imagen seleccionada supera los 3 MB. Por favor elige una captura más ligera.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const base64 = evt.target.result;
+                if (tipo === 'yape') {
+                    const inp = document.getElementById('pagoYapeQrUrl');
+                    if (inp) inp.value = base64;
+                    actualizarPreviewQrAdmin(base64, 'yape');
+                } else if (tipo === 'plin') {
+                    const inp = document.getElementById('pagoPlinQrUrl');
+                    if (inp) inp.value = base64;
+                    actualizarPreviewQrAdmin(base64, 'plin');
+                }
+                mostrarToast('¡Captura de QR ' + tipo.toUpperCase() + ' cargada con éxito! Haz clic en "Guardar Configuración" 🦝📸');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function quitarQrAdmin(tipo) {
+            if (tipo === 'yape') {
+                const inp = document.getElementById('pagoYapeQrUrl');
+                if (inp) inp.value = '';
+                actualizarPreviewQrAdmin('', 'yape');
+            } else if (tipo === 'plin') {
+                const inp = document.getElementById('pagoPlinQrUrl');
+                if (inp) inp.value = '';
+                actualizarPreviewQrAdmin('', 'plin');
+            }
+        }
+
+        function actualizarPreviewQrAdmin(url, tipo) {
+            const imgId = tipo === 'yape' ? 'imgPreviewQrYape' : 'imgPreviewQrPlin';
+            const txtId = tipo === 'yape' ? 'txtSinQrYape' : 'txtSinQrPlin';
+            const img = document.getElementById(imgId);
+            const txt = document.getElementById(txtId);
+            if (!img || !txt) return;
+
+            if (url && (url.startsWith('http') || url.startsWith('data:image'))) {
                 img.src = url;
                 img.classList.remove('hidden');
                 txt.classList.add('hidden');
@@ -3561,21 +3950,47 @@
         }
 
         function guardarConfigPagosAdmin() {
+            const chkYape = document.getElementById('chkYapeActivo');
+            const chkPlin = document.getElementById('chkPlinActivo');
+            const chkBanco = document.getElementById('chkBancoActivo');
+            const chkBanco2 = document.getElementById('chkBanco2Activo');
+            const chkMostrarCuenta = document.getElementById('chkMostrarCuenta');
+            const chkBanco2MostrarCuenta = document.getElementById('chkBanco2MostrarCuenta');
+
             const config = {
-                titular: document.getElementById('pagoTitular').value.trim(),
-                banco: document.getElementById('pagoBanco').value.trim(),
-                numeroCuenta: document.getElementById('pagoCuenta').value.trim(),
-                cci: document.getElementById('pagoCci').value.trim(),
-                yapePlinTexto: document.getElementById('pagoYape').value.trim(),
-                qrUrl: document.getElementById('pagoQrUrl').value.trim(),
-                correoContacto: document.getElementById('pagoCorreo').value.trim(),
-                montoMembresia: document.getElementById('pagoMonto').value.trim()
+                yapeActivo: chkYape ? chkYape.checked : true,
+                yapeTexto: (document.getElementById('pagoYapeTexto')?.value || 'Yape Oficial MAPACHE').trim(),
+                yapeTitular: (document.getElementById('pagoYapeTitular')?.value || '').trim(),
+                yapeQrUrl: (document.getElementById('pagoYapeQrUrl')?.value || '').trim(),
+
+                plinActivo: chkPlin ? chkPlin.checked : true,
+                plinTexto: (document.getElementById('pagoPlinTexto')?.value || 'Plin Oficial MAPACHE').trim(),
+                plinTitular: (document.getElementById('pagoPlinTitular')?.value || '').trim(),
+                plinQrUrl: (document.getElementById('pagoPlinQrUrl')?.value || '').trim(),
+
+                bancoActivo: chkBanco ? chkBanco.checked : true,
+                banco: (document.getElementById('pagoBanco')?.value || 'BCP - Banco de Crédito del Perú').trim(),
+                bancoTitular: (document.getElementById('pagoBancoTitular')?.value || '').trim(),
+                cci: (document.getElementById('pagoCci')?.value || '').trim(),
+                numeroCuenta: (document.getElementById('pagoCuenta')?.value || '').trim(),
+                mostrarNumeroCuenta: chkMostrarCuenta ? chkMostrarCuenta.checked : false,
+
+                banco2Activo: chkBanco2 ? chkBanco2.checked : false,
+                banco2Nombre: (document.getElementById('pagoBanco2Nombre')?.value || 'BBVA / Interbank / Banco de la Nación').trim(),
+                banco2Titular: (document.getElementById('pagoBanco2Titular')?.value || '').trim(),
+                banco2Cci: (document.getElementById('pagoBanco2Cci')?.value || '').trim(),
+                banco2NumeroCuenta: (document.getElementById('pagoBanco2NumeroCuenta')?.value || '').trim(),
+                banco2MostrarCuenta: chkBanco2MostrarCuenta ? chkBanco2MostrarCuenta.checked : false,
+
+                montoMembresia: (document.getElementById('pagoMonto')?.value || 'S/. 50.00 anual').trim(),
+                correoContacto: (document.getElementById('pagoCorreo')?.value || 'jjmixstore@gmail.com').trim()
             };
 
             localStorage.setItem('mapache_config_pagos', JSON.stringify(config));
             actualizarVistaDonacionesStandalone();
-            mostrarToast('¡Datos bancarios y medios de pago guardados con éxito! 💳✨');
+            mostrarToast('¡Datos bancarios, QRs y medios de pago guardados con éxito! 💳✨');
         }
+
 
         function renderHtmlTabSeguridad(masterPass) {
             return `
