@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
-    <title>MAPACHE - Red Escolar Digital • Edición Ventanilla &amp; Mi Perú</title>
+    <title>MAPPACHE - Red Escolar Digital • Edición Ventanilla &amp; Mi Perú</title>
     <!-- Tailwind CSS CDN Oficial -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -78,7 +78,7 @@
                      onclick="handleMapachitoClick()" />
                 <div class="flex flex-col items-start text-left z-0 shrink-0">
                     <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-black tracking-wide text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)] leading-none m-0">
-                        MAPACHE
+                        MAPPACHE
                     </h1>
                     <p class="text-xs sm:text-sm md:text-base font-bold mt-1 md:mt-1.5 mb-0.5 text-slate-300">
                         Red Escolar Digital • <span class="text-sky-300 font-extrabold">Edición Ventanilla &amp; Mi Perú</span>
@@ -94,15 +94,10 @@
                 </div>
             </div>
 
-            <!-- Bloque de Controles y Botones Reducidos para no scrollear en desktop -->
-            <div class="w-full bg-slate-900/90 border-2 border-sky-500/30 p-2.5 sm:p-3 md:p-3.5 rounded-[20px] shadow-2xl space-y-1.5 md:space-y-2 backdrop-blur-md">
+            <!-- Bloque de Controles - Alternativa A: Jerarquía Inteligente y Paleta Sobria -->
+            <div class="w-full bg-slate-900/90 border border-sky-500/35 p-3 sm:p-3.5 md:p-4 rounded-[22px] shadow-2xl space-y-2.5 backdrop-blur-md">
                 
-                <!-- 1. Tour Interactivo (Índigo/Púrpura) -->
-                <button onclick="mostrarDialogoMapachito('saludando', '¡Te enseñaré paso a paso cómo buscar colegios y rastrear cupos!', iniciarTourMapachito)" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#4f46e5] hover:brightness-110 text-white font-extrabold text-xs transition shadow-sm border border-[#a5b4fc] flex items-center justify-center gap-1.5 cursor-pointer">
-                    <span>🦝</span> Tour Interactivo: ¿Cómo buscar un colegio?
-                </button>
-
-                <!-- 2. Barra de Búsqueda Inteligente -->
+                <!-- Nivel 1: Barra de Búsqueda Inteligente (Protagonista) -->
                 <div class="relative w-full">
                     <input
                         type="text"
@@ -110,58 +105,76 @@
                         oninput="onBuscarPortadaInput(this.value)"
                         onkeydown="onBuscarPortadaKeydown(event)"
                         placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, Elim, 509..."
-                        class="w-full px-3.5 py-2 rounded-xl bg-white text-[#0f172a] font-bold text-xs placeholder-slate-400 outline-none shadow-sm border-none"
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-white text-[#0f172a] font-bold text-xs placeholder-slate-400 outline-none shadow-md border border-sky-200 focus:ring-2 focus:ring-sky-400 transition"
                         autocomplete="off"
                     />
                     <div id="listaSugerenciasPortada" class="hidden absolute top-full left-0 right-0 mt-1 bg-white text-slate-900 rounded-b-xl shadow-2xl max-h-52 overflow-y-auto z-50 divide-y divide-slate-100 text-xs"></div>
                 </div>
 
-                <!-- 3. Botón Ver Todos en el Mapa (Verde Esmeralda) -->
-                <button onclick="mostrarDialogoMapachito('feliz', '¡Cargando el mapa interactivo con todas las instituciones educativas!', verTodosEnMapa)" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#059669] to-[#047857] hover:brightness-110 text-white font-extrabold text-xs transition shadow-sm border border-[#6ee7b7] cursor-pointer">
-                    Ver Todos los Colegios en el Mapa
-                </button>
-
-                <!-- Botón Colegios Más Cercanos a Mí (GPS) -->
-                <button onclick="mostrarDialogoMapachito('buscando', 'Localizando tu señal GPS para encontrar los colegios más cercanos a ti...', buscarColegiosMasCercanosGPS)" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] hover:brightness-110 text-white font-black text-xs transition shadow-md border-2 border-[#7dd3fc] flex items-center justify-center gap-2 cursor-pointer">
-                    <span>📍</span>
-                    <span>Colegios Más Cercanos a Mí (GPS)</span>
-                    <span class="text-[10px] bg-sky-950/40 text-sky-200 border border-sky-300/40 px-1.5 py-0.5 rounded-full font-bold">5 - 8 cercanos</span>
-                </button>
-
-                <!-- 4. Filtrar por Redes Educativas (Azul Cobalto) -->
-                <button onclick="mostrarDialogoMapachito('olfateando', 'Elige una de las 9 Redes Educativas de UGEL Ventanilla para explorar sus colegios.', abrirModalRedes)" class="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] hover:brightness-110 text-white font-extrabold text-xs transition shadow-sm border border-[#93c5fd] text-center cursor-pointer">
-                    <div>Filtrar por Redes Educativas (1-9)</div>
-                </button>
-
-                <!-- 5. Fila Dividida: Estatales (Petróleo) vs Particulares (Oro Cálido) -->
-                <div class="flex gap-2">
-                    <button onclick="mostrarDialogoMapachito('saludando', 'Mostrando todos los colegios estatales públicos en el mapa.', verEstatalesEnMapa)" class="flex-1 py-2 px-2 rounded-xl bg-gradient-to-r from-[#0f766e] to-[#115e59] hover:brightness-110 text-white font-extrabold text-xs transition shadow-sm border border-[#5eead4] text-center cursor-pointer">
-                        Colegios Estatales
+                <!-- Nivel 2: Dos Acciones Estrella (Paleta Unificada Azul + Esmeralda) -->
+                <div class="space-y-2">
+                    <button onclick="mostrarDialogoMapachito('buscando', 'Localizando tu señal GPS para encontrar los colegios más cercanos a ti...', buscarColegiosMasCercanosGPS)" class="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] hover:brightness-110 text-white font-black text-xs transition shadow-md border border-[#7dd3fc]/70 flex items-center justify-center gap-2 cursor-pointer">
+                        <span>📍</span>
+                        <span>Colegios Más Cercanos a Mí (GPS)</span>
+                        <span class="text-[10px] bg-sky-950/50 text-sky-100 border border-sky-300/35 px-1.5 py-0.5 rounded-full font-bold">5 - 8 cercanos</span>
                     </button>
-                    <button onclick="mostrarDialogoMapachito('guiñando', 'Explorando colegios particulares autorizados con membresía digital activa.', verParticularesEnMapa)" class="flex-1 py-2 px-2 rounded-xl bg-gradient-to-r from-[#d97706] to-[#b45309] hover:brightness-110 text-amber-50 font-black text-xs transition shadow-sm border-2 border-[#fde047] text-center cursor-pointer">
-                        Colegios Particulares ⭐
+
+                    <button onclick="mostrarDialogoMapachito('sorprendido', 'Consultando el semáforo de vacantes en tiempo real para todos los niveles.', function() { abrirPantallaVacantes(); })" class="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-[#059669] to-[#047857] hover:brightness-110 text-white font-black text-xs transition shadow-md border border-[#6ee7b7]/60 flex items-center justify-center gap-2 cursor-pointer">
+                        <span>🚦</span>
+                        <span>Buscar Vacantes Disponibles</span>
                     </button>
                 </div>
 
-                <!-- 6. Botón Buscar Vacantes (Rojo Carmesí) -->
-                <button onclick="mostrarDialogoMapachito('sorprendido', 'Consultando el semáforo de vacantes en tiempo real para todos los niveles.', function() { abrirPantallaVacantes(); })" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#dc2626] to-[#b91c1c] hover:brightness-110 text-white font-extrabold text-xs transition shadow-sm border border-[#fca5a5] cursor-pointer">
-                    🚦 Buscar Vacantes Disponibles
-                </button>
+                <!-- Nivel 3: Cuadrícula Limpia 2x2 de Exploración en Mapa -->
+                <div class="pt-0.5">
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center mb-1.5">
+                        Explorar en el Mapa
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="mostrarDialogoMapachito('feliz', '¡Cargando el mapa interactivo con todas las instituciones educativas!', verTodosEnMapa)" class="py-2 px-2.5 rounded-xl bg-slate-800/85 hover:bg-slate-700/90 text-slate-100 font-bold text-[11.5px] transition shadow-sm border border-slate-600/60 hover:border-sky-400/60 flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>🗺️</span>
+                            <span>Ver Todos Mapa</span>
+                        </button>
 
-                <!-- 7. Botón Buzón de Sugerencias y Opiniones (Cian / Turquesa) -->
-                <button onclick="mostrarDialogoMapachito('pensativo', '¡Tu opinión nos ayuda a mejorar la comunidad! Déjanos tu sugerencia o comentario.', abrirModalBuzon)" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] hover:brightness-110 text-white font-extrabold text-xs transition shadow-sm border border-[#38bdf8] flex items-center justify-center gap-1.5 cursor-pointer">
-                    <span>💬</span> Buzón de Sugerencias y Opiniones
-                </button>
+                        <button onclick="mostrarDialogoMapachito('olfateando', 'Elige una de las 9 Redes Educativas de UGEL Ventanilla para explorar sus colegios.', abrirModalRedes)" class="py-2 px-2.5 rounded-xl bg-slate-800/85 hover:bg-slate-700/90 text-slate-100 font-bold text-[11.5px] transition shadow-sm border border-slate-600/60 hover:border-sky-400/60 flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>🏫</span>
+                            <span>Redes (1 - 9)</span>
+                        </button>
 
-                <!-- 8. Botón Membresía Digital (Magenta / Rubí) -->
-                <button onclick="mostrarDialogoMapachito('feliz', 'Conoce cómo aportar al proyecto tecnológico MAPACHE y activar membresías escolares.', abrirPantallaDonaciones)" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#be185d] to-[#9d174d] hover:brightness-110 text-white font-extrabold text-xs transition shadow-sm border border-[#f472b6] cursor-pointer">
-                    💎 Colaboración y Membresía Digital
-                </button>
+                        <button onclick="mostrarDialogoMapachito('saludando', 'Mostrando todos los colegios estatales públicos en el mapa.', verEstatalesEnMapa)" class="py-2 px-2.5 rounded-xl bg-slate-800/85 hover:bg-slate-700/90 text-slate-100 font-bold text-[11.5px] transition shadow-sm border border-slate-600/60 hover:border-sky-400/60 flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>🏛️</span>
+                            <span>Estatales</span>
+                        </button>
+
+                        <button onclick="mostrarDialogoMapachito('guiñando', 'Explorando colegios particulares autorizados con membresía digital activa.', verParticularesEnMapa)" class="py-2 px-2.5 rounded-xl bg-slate-800/85 hover:bg-slate-700/90 text-amber-200 font-bold text-[11.5px] transition shadow-sm border border-amber-500/35 hover:border-amber-400/70 flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>⭐</span>
+                            <span>Particulares</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Nivel 4: Barra Sutil de Utilidades en 1 Línea -->
+                <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-slate-700/60">
+                    <button onclick="mostrarDialogoMapachito('saludando', '¡Te enseñaré paso a paso cómo buscar colegios y rastrear cupos!', iniciarTourMapachito)" class="py-2 px-1.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-[11px] transition border border-slate-700/70 flex items-center justify-center gap-1 whitespace-nowrap cursor-pointer">
+                        <span>🦝</span>
+                        <span>Tour Guía</span>
+                    </button>
+
+                    <button onclick="mostrarDialogoMapachito('pensativo', '¡Tu opinión nos ayuda a mejorar la comunidad! Déjanos tu sugerencia o comentario.', abrirModalBuzon)" class="py-2 px-1.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-[11px] transition border border-slate-700/70 flex items-center justify-center gap-1 whitespace-nowrap cursor-pointer">
+                        <span>💬</span>
+                        <span>Buzón</span>
+                    </button>
+
+                    <button onclick="mostrarDialogoMapachito('feliz', 'Conoce cómo aportar al proyecto tecnológico MAPPACHE y activar membresías escolares.', abrirPantallaDonaciones)" class="py-2 px-1.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-[11px] transition border border-slate-700/70 flex items-center justify-center gap-1 whitespace-nowrap cursor-pointer">
+                        <span>💎</span>
+                        <span>Membresía</span>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div onclick="handleFooterClick()" title="Plataforma Tecnológica MAPACHE" class="w-full py-0.5 text-center text-[10px] text-slate-500 font-medium shrink-0 cursor-default select-none">
-            Plataforma Tecnológica MAPACHE • Red Escolar Digital 🦝
+        <div onclick="handleFooterClick()" title="Plataforma Tecnológica MAPPACHE" class="w-full py-0.5 text-center text-[10px] text-slate-500 font-medium shrink-0 cursor-default select-none">
+            Plataforma Tecnológica MAPPACHE • Red Escolar Digital 🦝
         </div>
     </div>
 
@@ -262,7 +275,7 @@
             <button onclick="volverAPortada()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition cursor-pointer">
                 ⬅ Volver
             </button>
-            <h2 class="text-sm font-black text-white">💎 Membresía y Aportes MAPACHE</h2>
+            <h2 class="text-sm font-black text-white">💎 Membresía y Aportes MAPPACHE</h2>
             <div class="w-16"></div>
         </header>
 
@@ -273,7 +286,7 @@
                         <span>Sostenibilidad y Alianzas Educativas</span> <span>🦝</span>
                     </h3>
                     <p class="text-xs text-slate-600 mt-2 text-justify">
-                        El Proyecto MAPACHE es una plataforma tecnológica independiente para la comunidad de Ventanilla y Mi Perú.
+                        El Proyecto MAPPACHE es una plataforma tecnológica independiente para la comunidad de Ventanilla y Mi Perú.
                     </p>
                 </div>
 
@@ -307,16 +320,16 @@
                         <span>🛡️</span> Protocolo Oficial de Seguridad Institucional:
                     </b>
                     <p class="text-[11px] text-slate-300 text-justify leading-relaxed">
-                        Para proteger la tranquilidad de los directores y promotores ante cualquier riesgo de extorsión, la Plataforma MAPACHE <b>NUNCA realiza llamadas telefónicas de cobranza ni solicita depósitos a números celulares particulares</b>.
+                        Para proteger la tranquilidad de los directores y promotores ante cualquier riesgo de extorsión, la Plataforma MAPPACHE <b>NUNCA realiza llamadas telefónicas de cobranza ni solicita depósitos a números celulares particulares</b>.
                     </p>
                     <div class="bg-amber-950/60 border border-amber-500/50 p-3 rounded-xl text-[10.5px] text-amber-200 leading-relaxed">
-                        <b>⚠️ Aviso Oficial sobre la "Mesa de Partes Digital MAPACHE":</b> Este canal es de uso exclusivo de nuestra plataforma tecnológica independiente <b>PROYECTO MAPACHE</b>. NO guarda relación alguna con la Mesa de Partes de la UGEL Ventanilla ni con entidades estatales.
+                        <b>⚠️ Aviso Oficial sobre la "Mesa de Partes Digital MAPPACHE":</b> Este canal es de uso exclusivo de nuestra plataforma tecnológica independiente <b>PROYECTO MAPPACHE</b>. NO guarda relación alguna con la Mesa de Partes de la UGEL Ventanilla ni con entidades estatales.
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                         <button onclick="abrirModalBuzon()" class="py-2.5 px-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs transition cursor-pointer flex items-center justify-center gap-1.5">
                             <span>📩</span> Registrar Comprobante en la App
                         </button>
-                        <a href="mailto:jjmixstore@gmail.com?subject=Comprobante%20Membresia%20MAPACHE" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 text-center">
+                        <a href="mailto:jjmixstore@gmail.com?subject=Comprobante%20Membresia%20MAPPACHE" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 text-center">
                             <span>✉️</span> Enviar por Correo Seguro (jjmixstore@gmail.com)
                         </a>
                     </div>
@@ -509,7 +522,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- PANTALLA ADMIN: DASHBOARD ADMINISTRATIVO MAPACHE (FULLSCREEN)  -->
+    <!-- PANTALLA ADMIN: DASHBOARD ADMINISTRATIVO MAPPACHE (FULLSCREEN)  -->
     <!-- ============================================================== -->
     <div id="pantalla-admin" class="hidden fixed inset-0 z-50 flex flex-col bg-slate-950 text-white overflow-hidden">
         <!-- Barra superior del Dashboard -->
@@ -518,7 +531,7 @@
                 <img src="./mapache_guiñando_ojo.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_gui%C3%B1ando_ojo.png';" alt="Mapachito" class="h-10 w-10 object-contain drop-shadow" />
                 <div>
                     <h1 class="text-base sm:text-lg font-black text-sky-400 tracking-wide">
-                        DASHBOARD ADMINISTRATIVO MAPACHE
+                        DASHBOARD ADMINISTRATIVO MAPPACHE
                     </h1>
                     <p class="text-xs text-slate-400">Control total de instituciones, claves, aportes y configuración</p>
                 </div>
@@ -677,7 +690,7 @@
 
                 <div>
                     <label class="block font-bold text-slate-300 mb-1 text-[11px]">Tu Mensaje o Sugerencia:</label>
-                    <textarea id="buzonMensaje" rows="3" placeholder="Escribe aquí tu sugerencia, opinión o solicitud para la app MAPACHE..." class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-sky-400 text-xs"></textarea>
+                    <textarea id="buzonMensaje" rows="3" placeholder="Escribe aquí tu sugerencia, opinión o solicitud para la app MAPPACHE..." class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-sky-400 text-xs"></textarea>
                 </div>
 
                 <button onclick="enviarSugerenciaBuzon()" class="w-full py-3 bg-sky-500 hover:bg-sky-400 text-slate-950 font-black rounded-xl text-xs transition shadow-lg cursor-pointer flex items-center justify-center gap-2">
@@ -1059,7 +1072,7 @@
         // ACTUALIZACIÓN DINÁMICA EN TIEMPO REAL DE DATOS DE PAGO Y MEMBRESÍA
         function actualizarVistaDonacionesStandalone() {
             const config = JSON.parse(localStorage.getItem('mapache_config_pagos') || 'null') || {
-                titular: 'Coordinación Proyecto MAPACHE Ventanilla',
+                titular: 'Coordinación Proyecto MAPPACHE Ventanilla',
                 banco: 'BCP - Banco de Crédito del Perú',
                 numeroCuenta: '191-98765432-0-88',
                 cci: '002-191-009876543208-88',
@@ -1082,7 +1095,7 @@
             if (elCci) elCci.innerText = config.cci || '002-191-009876543208-88';
 
             const elTitular = document.getElementById('txtTitularPago');
-            if (elTitular) elTitular.innerText = 'Titular: ' + (config.titular || 'Coordinación Proyecto MAPACHE Ventanilla');
+            if (elTitular) elTitular.innerText = 'Titular: ' + (config.titular || 'Coordinación Proyecto MAPPACHE Ventanilla');
 
             const elQrContainer = document.getElementById('qrYapeContainer');
             if (elQrContainer) {
@@ -1135,7 +1148,7 @@
             if (mapa) return;
             mapa = L.map('mapaContenedor').setView([-11.8712, -77.1352], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap | Proyecto MAPACHE',
+                attribution: '&copy; OpenStreetMap | Proyecto MAPPACHE',
                 maxZoom: 19
             }).addTo(mapa);
 
@@ -2457,7 +2470,7 @@
             }
 
             if (col.estado_vigencia === 'Bloqueado' || col.estado_vigencia === 'bloqueado' || col.estado_vigencia === 'suspendido') {
-                err.innerText = '⛔ Acceso temporalmente restringido por regularización institucional. Comunícate con Mesa de Partes Digital MAPACHE.';
+                err.innerText = '⛔ Acceso temporalmente restringido por regularización institucional. Comunícate con Mesa de Partes Digital MAPPACHE.';
                 err.classList.remove('hidden');
                 return;
             }
@@ -2779,7 +2792,7 @@
             if (mapacheClickTimer) clearTimeout(mapacheClickTimer);
             mapacheClickTimer = setTimeout(function() {
                 if (mapacheClickCount === 1) {
-                    mostrarDialogoMapachito('saludando', '¡Hola! Soy Mapache, tu asistente escolar en Ventanilla & Mi Perú 🦝✨ Rastrea, encuentra y matricula.');
+                    mostrarDialogoMapachito('saludando', '¡Hola! Soy Mappache, tu asistente escolar en Ventanilla & Mi Perú 🦝✨ Rastrea, encuentra y matricula.');
                 }
                 mapacheClickCount = 0;
             }, 380);
@@ -3194,10 +3207,10 @@
                         <!-- ACLARACIÓN MESA DE PARTES Y UGEL -->
                         <div class="bg-amber-950/40 border border-amber-400/40 p-4 rounded-2xl space-y-1.5">
                             <h3 class="text-sm font-bold text-amber-300 flex items-center gap-1.5">
-                                <span>🏛️</span> ¿Qué es la "Mesa de Partes Digital MAPACHE" y cómo evitar confusiones con la UGEL?
+                                <span>🏛️</span> ¿Qué es la "Mesa de Partes Digital MAPPACHE" y cómo evitar confusiones con la UGEL?
                             </h3>
                             <p class="text-slate-300">
-                                La <b>Mesa de Partes Digital MAPACHE</b> es el canal privado e independiente de nuestra plataforma tecnológica.
+                                La <b>Mesa de Partes Digital MAPPACHE</b> es el canal privado e independiente de nuestra plataforma tecnológica.
                                 <b> NO tiene vinculación institucional con la Mesa de Partes de la UGEL Ventanilla ni el MINEDU</b>.
                                 Sirve exclusivamente para que los directores y promotores de colegios particulares coordinen la habilitación de sus accesos, envíen comprobantes o soliciten su membresía digital con el administrador.
                             </p>
@@ -3443,22 +3456,22 @@
         function obtenerConfigPagosStandalone() {
             const def = {
                 yapeActivo: true,
-                yapeTexto: 'Yape Oficial MAPACHE',
-                yapeTitular: 'Coordinación Proyecto MAPACHE Ventanilla',
+                yapeTexto: 'Yape Oficial MAPPACHE',
+                yapeTitular: 'Coordinación Proyecto MAPPACHE Ventanilla',
                 yapeQrUrl: '',
                 plinActivo: true,
-                plinTexto: 'Plin Oficial MAPACHE',
-                plinTitular: 'Coordinación Proyecto MAPACHE Ventanilla',
+                plinTexto: 'Plin Oficial MAPPACHE',
+                plinTitular: 'Coordinación Proyecto MAPPACHE Ventanilla',
                 plinQrUrl: '',
                 bancoActivo: true,
                 banco: 'BCP - Banco de Crédito del Perú',
-                bancoTitular: 'Proyecto MAPACHE Ventanilla & Mi Perú',
+                bancoTitular: 'Proyecto MAPPACHE Ventanilla & Mi Perú',
                 cci: '002-191-009876543208-88',
                 numeroCuenta: '191-98765432-0-88',
                 mostrarNumeroCuenta: false,
                 banco2Activo: false,
                 banco2Nombre: 'BBVA / Interbank / Banco de la Nación',
-                banco2Titular: 'Proyecto MAPACHE Ventanilla & Mi Perú',
+                banco2Titular: 'Proyecto MAPPACHE Ventanilla & Mi Perú',
                 banco2Cci: '',
                 banco2NumeroCuenta: '',
                 banco2MostrarCuenta: false,
@@ -3520,7 +3533,7 @@
                     <div class="bg-gradient-to-b from-purple-50 to-white border-2 border-purple-200 p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-sm transition hover:shadow-md">
                         <div class="flex items-center gap-1.5">
                             <span class="text-base">📱</span>
-                            <b class="text-purple-800 font-black text-sm">${cfg.yapeTexto || 'Yape Oficial MAPACHE'}</b>
+                            <b class="text-purple-800 font-black text-sm">${cfg.yapeTexto || 'Yape Oficial MAPPACHE'}</b>
                         </div>
                         <span class="text-[10px] bg-purple-100 text-purple-900 font-bold px-2 py-0.5 rounded-full border border-purple-200">
                             🛡️ Pago Seguro sin Teléfono Visible
@@ -3539,7 +3552,7 @@
                             `}
                         </div>
                         <span class="text-[10px] text-slate-700 font-bold bg-purple-50/80 px-2 py-1 rounded-lg border border-purple-100 w-full truncate">
-                            Titular: ${cfg.yapeTitular || 'Coordinación Proyecto MAPACHE Ventanilla'}
+                            Titular: ${cfg.yapeTitular || 'Coordinación Proyecto MAPPACHE Ventanilla'}
                         </span>
                     </div>
                 `;
@@ -3551,7 +3564,7 @@
                     <div class="bg-gradient-to-b from-cyan-50 to-white border-2 border-cyan-200 p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-sm transition hover:shadow-md">
                         <div class="flex items-center gap-1.5">
                             <span class="text-base">⚡</span>
-                            <b class="text-cyan-800 font-black text-sm">${cfg.plinTexto || 'Plin Oficial MAPACHE'}</b>
+                            <b class="text-cyan-800 font-black text-sm">${cfg.plinTexto || 'Plin Oficial MAPPACHE'}</b>
                         </div>
                         <span class="text-[10px] bg-cyan-100 text-cyan-900 font-bold px-2 py-0.5 rounded-full border border-cyan-200">
                             🛡️ Transferencia Inmediata Interbancaria
@@ -3570,7 +3583,7 @@
                             `}
                         </div>
                         <span class="text-[10px] text-slate-700 font-bold bg-cyan-50/80 px-2 py-1 rounded-lg border border-cyan-100 w-full truncate">
-                            Titular: ${cfg.plinTitular || 'Coordinación Proyecto MAPACHE Ventanilla'}
+                            Titular: ${cfg.plinTitular || 'Coordinación Proyecto MAPPACHE Ventanilla'}
                         </span>
                     </div>
                 `;
@@ -3583,7 +3596,7 @@
                         <div class="text-center pb-1 border-b border-sky-100">
                             <b class="text-sky-800 font-black text-sm block">🏦 ${cfg.banco || 'BCP - Banco de Crédito del Perú'}</b>
                             <span class="text-[10.5px] text-emerald-700 font-extrabold block mt-0.5">Membresía Digital: ${cfg.montoMembresia || 'S/. 50.00 anual'}</span>
-                            <span class="text-[10px] text-slate-500 font-bold block mt-0.5 truncate">Titular: ${cfg.bancoTitular || 'Proyecto MAPACHE Ventanilla & Mi Perú'}</span>
+                            <span class="text-[10px] text-slate-500 font-bold block mt-0.5 truncate">Titular: ${cfg.bancoTitular || 'Proyecto MAPPACHE Ventanilla & Mi Perú'}</span>
                         </div>
                         <div class="space-y-1.5 font-mono text-[11px]">
                             <div class="bg-white border-2 border-sky-300 p-2.5 rounded-xl shadow-xs">
@@ -3613,7 +3626,7 @@
                         <div class="text-center pb-1 border-b border-blue-100">
                             <b class="text-blue-800 font-black text-sm block">🏛️ ${cfg.banco2Nombre || 'Segunda Entidad Financiera'}</b>
                             <span class="text-[10px] text-blue-600 font-bold bg-blue-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Entidad Bancaria de Respaldo</span>
-                            <span class="text-[10px] text-slate-500 font-bold block mt-0.5 truncate">Titular: ${cfg.banco2Titular || cfg.bancoTitular || 'Proyecto MAPACHE'}</span>
+                            <span class="text-[10px] text-slate-500 font-bold block mt-0.5 truncate">Titular: ${cfg.banco2Titular || cfg.bancoTitular || 'Proyecto MAPPACHE'}</span>
                         </div>
                         <div class="space-y-1.5 font-mono text-[11px]">
                             <div class="bg-white border-2 border-blue-300 p-2.5 rounded-xl shadow-xs">
@@ -3652,7 +3665,7 @@
                                 Activa, desactiva o sube capturas de imagen directamente desde tu celular o PC para cada billetera o banco en tiempo real.
                             </p>
                         </div>
-                        <span class="text-[10px] text-amber-400 font-bold bg-amber-950 px-2.5 py-1 rounded-full border border-amber-500/40 shrink-0">Oficial MAPACHE</span>
+                        <span class="text-[10px] text-amber-400 font-bold bg-amber-950 px-2.5 py-1 rounded-full border border-amber-500/40 shrink-0">Oficial MAPPACHE</span>
                     </div>
 
                     <!-- 1. TARJETA YAPE OFICIAL -->
@@ -3674,11 +3687,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-300 mb-1">Texto de la Billetera:</label>
-                                <input type="text" id="pagoYapeTexto" value="${pagos.yapeTexto || 'Yape Oficial MAPACHE'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-purple-400 font-bold" />
+                                <input type="text" id="pagoYapeTexto" value="${pagos.yapeTexto || 'Yape Oficial MAPPACHE'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-purple-400 font-bold" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-300 mb-1">Titular de Yape:</label>
-                                <input type="text" id="pagoYapeTitular" value="${pagos.yapeTitular || 'Coordinación Proyecto MAPACHE Ventanilla'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-purple-400 font-bold" />
+                                <input type="text" id="pagoYapeTitular" value="${pagos.yapeTitular || 'Coordinación Proyecto MAPPACHE Ventanilla'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-purple-400 font-bold" />
                             </div>
                         </div>
 
@@ -3735,11 +3748,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-300 mb-1">Texto de la Billetera:</label>
-                                <input type="text" id="pagoPlinTexto" value="${pagos.plinTexto || 'Plin Oficial MAPACHE'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-cyan-400 font-bold" />
+                                <input type="text" id="pagoPlinTexto" value="${pagos.plinTexto || 'Plin Oficial MAPPACHE'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-cyan-400 font-bold" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-300 mb-1">Titular de Plin:</label>
-                                <input type="text" id="pagoPlinTitular" value="${pagos.plinTitular || 'Coordinación Proyecto MAPACHE Ventanilla'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-cyan-400 font-bold" />
+                                <input type="text" id="pagoPlinTitular" value="${pagos.plinTitular || 'Coordinación Proyecto MAPPACHE Ventanilla'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-cyan-400 font-bold" />
                             </div>
                         </div>
 
@@ -3800,7 +3813,7 @@
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-300 mb-1">Titular de la Cuenta:</label>
-                                <input type="text" id="pagoBancoTitular" value="${pagos.bancoTitular || 'Proyecto MAPACHE Ventanilla & Mi Perú'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-sky-400 font-bold" />
+                                <input type="text" id="pagoBancoTitular" value="${pagos.bancoTitular || 'Proyecto MAPPACHE Ventanilla & Mi Perú'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-sky-400 font-bold" />
                             </div>
                         </div>
 
@@ -3846,7 +3859,7 @@
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-300 mb-1">Titular del 2do Banco:</label>
-                                <input type="text" id="pagoBanco2Titular" value="${pagos.banco2Titular || pagos.bancoTitular || 'Proyecto MAPACHE Ventanilla & Mi Perú'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-blue-400 font-bold" />
+                                <input type="text" id="pagoBanco2Titular" value="${pagos.banco2Titular || pagos.bancoTitular || 'Proyecto MAPPACHE Ventanilla & Mi Perú'}" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white outline-none focus:border-blue-400 font-bold" />
                             </div>
                         </div>
 
@@ -3964,12 +3977,12 @@
 
             const config = {
                 yapeActivo: chkYape ? chkYape.checked : true,
-                yapeTexto: (document.getElementById('pagoYapeTexto')?.value || 'Yape Oficial MAPACHE').trim(),
+                yapeTexto: (document.getElementById('pagoYapeTexto')?.value || 'Yape Oficial MAPPACHE').trim(),
                 yapeTitular: (document.getElementById('pagoYapeTitular')?.value || '').trim(),
                 yapeQrUrl: (document.getElementById('pagoYapeQrUrl')?.value || '').trim(),
 
                 plinActivo: chkPlin ? chkPlin.checked : true,
-                plinTexto: (document.getElementById('pagoPlinTexto')?.value || 'Plin Oficial MAPACHE').trim(),
+                plinTexto: (document.getElementById('pagoPlinTexto')?.value || 'Plin Oficial MAPPACHE').trim(),
                 plinTitular: (document.getElementById('pagoPlinTitular')?.value || '').trim(),
                 plinQrUrl: (document.getElementById('pagoPlinQrUrl')?.value || '').trim(),
 
