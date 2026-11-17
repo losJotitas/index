@@ -3208,6 +3208,9 @@
                     <button onclick="cambiarTabAdmin('buzon')" class="py-2.5 px-4 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${tabAdminActual === 'buzon' ? 'bg-slate-950 text-pink-400 border-t-2 border-x-2 border-pink-400' : 'text-slate-400 hover:text-white'}">
                         <span>📬</span> Buzón (${sugerencias.length})
                     </button>
+                    <button onclick="cambiarTabAdmin('valoracion')" class="py-2.5 px-4 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${tabAdminActual === 'valoracion' ? 'bg-slate-950 text-emerald-400 border-t-2 border-x-2 border-emerald-400' : 'text-slate-400 hover:text-white'}">
+                        <span>👍</span> Valoración App (👍 ${obtenerContadoresRatingStandalone().likes} · 👎 ${obtenerContadoresRatingStandalone().dislikes})
+                    </button>
                 `;
             }
 
@@ -3240,6 +3243,7 @@
                     ${tabAdminActual === 'seguridad' ? renderHtmlTabSeguridad(masterPass) : ''}
                     ${tabAdminActual === 'sheets' ? renderHtmlTabSheets(currentUrl) : ''}
                     ${tabAdminActual === 'buzon' ? renderHtmlTabBuzon(sugerencias) : ''}
+                    ${tabAdminActual === 'valoracion' ? renderHtmlTabValoracion() : ''}
                 </div>
             `;
         }
@@ -4457,6 +4461,89 @@
                     `}
                 </div>
             `;
+        }
+
+        function renderHtmlTabValoracion() {
+            const ratingData = obtenerContadoresRatingStandalone();
+            const totalVotos = ratingData.likes + ratingData.dislikes;
+            const porcentajeLikes = totalVotos > 0 ? Math.round((ratingData.likes / totalVotos) * 100) : 0;
+            const porcentajeDislikes = totalVotos > 0 ? 100 - porcentajeLikes : 0;
+
+            return `
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 max-w-4xl mx-auto shadow-2xl space-y-5 text-xs">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                        <div class="flex items-center gap-3">
+                            <img src="./mapache_saludando_en_un_pie.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png';" alt="Mapachito" class="h-11 w-11 object-contain drop-shadow" />
+                            <div>
+                                <h3 class="text-base sm:text-lg font-black text-emerald-400">Valoración de la App (Likes y Anti-likes)</h3>
+                                <p class="text-slate-400 text-xs">Conteo permanente de calificaciones recibidas en la app MAPPACHE</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" onclick="actualizarContadoresRatingDashboardStandalone()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-bold text-xs cursor-pointer transition shadow-sm flex items-center gap-1.5">
+                                <span>🔄</span> Actualizar Conteo
+                            </button>
+                            <button type="button" onclick="reiniciarContadoresRatingStandalone()" class="px-3.5 py-2 bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-500/40 rounded-xl font-bold text-xs cursor-pointer transition flex items-center gap-1.5">
+                                <span>🗑️</span> Reiniciar a 0
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="bg-emerald-950/35 border border-emerald-500/40 rounded-2xl p-4 text-center space-y-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300 block">👍 Likes App</span>
+                            <span class="text-3xl font-black text-emerald-400 block">${ratingData.likes}</span>
+                            <span class="text-[10px] text-emerald-200/70 block font-semibold">Me gusta</span>
+                        </div>
+                        <div class="bg-rose-950/35 border border-rose-500/40 rounded-2xl p-4 text-center space-y-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-300 block">👎 Anti-likes</span>
+                            <span class="text-3xl font-black text-rose-400 block">${ratingData.dislikes}</span>
+                            <span class="text-[10px] text-rose-200/70 block font-semibold">No me gusta</span>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-700 rounded-2xl p-4 text-center space-y-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300 block">🗳️ Total Votos</span>
+                            <span class="text-3xl font-black text-white block">${totalVotos}</span>
+                            <span class="text-[10px] text-slate-400 block font-semibold">Acumulados</span>
+                        </div>
+                        <div class="bg-sky-950/35 border border-sky-500/40 rounded-2xl p-4 text-center space-y-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-sky-300 block">📊 Aprobación</span>
+                            <span class="text-3xl font-black text-sky-300 block">${totalVotos > 0 ? porcentajeLikes + '%' : '—'}</span>
+                            <span class="text-[10px] text-sky-200/70 block font-semibold">Satisfacción</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+                        <div class="flex items-center justify-between text-xs font-bold">
+                            <span class="text-emerald-400">👍 Positivos: ${totalVotos > 0 ? porcentajeLikes + '%' : '0%'}</span>
+                            <span class="text-rose-400">👎 Negativos: ${totalVotos > 0 ? porcentajeDislikes + '%' : '0%'}</span>
+                        </div>
+                        <div class="w-full h-3.5 rounded-full bg-slate-800 overflow-hidden flex border border-slate-700">
+                            ${totalVotos > 0
+                                ? `<div class="h-full bg-emerald-500 transition-all duration-300" style="width: ${porcentajeLikes}%"></div><div class="h-full bg-rose-500 transition-all duration-300" style="width: ${porcentajeDislikes}%"></div>`
+                                : '<div class="h-full w-full bg-slate-800"></div>'}
+                        </div>
+                        <p class="text-[11px] text-slate-400 leading-relaxed pt-1">
+                            💾 Almacenamiento permanente ligero (~40 bytes en memoria del navegador). Cada voto emitido por un usuario también se envía automáticamente a tu Google Apps Script (<code class="text-sky-300 font-mono">accion: "calificar_app"</code>).
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function actualizarContadoresRatingDashboardStandalone() {
+            renderizarContenidoAdmin();
+            mostrarToast('✅ Contadores de Likes y Anti-likes actualizados.');
+        }
+
+        function reiniciarContadoresRatingStandalone() {
+            if (confirm('¿Deseas reiniciar a 0 el contador permanente de Likes y Anti-likes guardado en este dispositivo?')) {
+                try {
+                    localStorage.setItem('mappache_app_rating_contadores', JSON.stringify({ likes: 0, dislikes: 0 }));
+                    localStorage.removeItem('mappache_app_rating_voto');
+                } catch(e) {}
+                renderizarContenidoAdmin();
+                mostrarToast('🗑️ Contadores de valoración reiniciados a cero.');
+            }
         }
 
         // MODAL EDICIÓN DE COLEGIO EN ADMIN
