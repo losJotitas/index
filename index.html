@@ -214,28 +214,28 @@
     <!-- ============================================================== -->
     <!-- PANTALLA 2: MAPA LEAFLET EN VIVO                               -->
     <!-- ============================================================== -->
-    <div id="pantalla-mapa" class="hidden fixed inset-0 z-40 flex flex-col bg-slate-900">
+    <div id="pantalla-mapa" class="hidden fixed inset-0 z-40 flex flex-col bg-slate-950">
         <!-- Top Bar del Mapa -->
-        <header class="bg-slate-950 border-b border-slate-800 px-3 py-2.5 flex items-center gap-2 shrink-0 z-10 shadow-md">
-            <button onclick="volverAPortada()" class="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition cursor-pointer">
+        <header id="headerMapaStandalone" class="bg-slate-950/90 backdrop-blur-xl border-b border-white/10 px-3 sm:px-4 py-2.5 flex items-center gap-2 sm:gap-2.5 shrink-0 z-10 shadow-lg transition-colors">
+            <button onclick="volverAPortada()" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl border border-white/15 transition cursor-pointer shrink-0 whitespace-nowrap">
                 ⬅ Volver
             </button>
-            <div class="relative flex-1">
+            <div class="relative flex-1 max-w-xl">
                 <input
                     type="text"
                     id="inputBusquedaMapa"
                     oninput="onBuscarMapaInput(this.value)"
                     onkeydown="onBuscarMapaKeydown(event)"
-                    placeholder="Filtrar en mapa (Elim, 121, 5090)..."
-                    class="w-full px-3 py-2 bg-white text-slate-900 rounded-lg text-xs font-bold outline-none"
+                    placeholder="🔍 Filtrar en mapa (Elim, 121, 5090)..."
+                    class="w-full px-3.5 py-2 bg-white/95 focus:bg-white text-slate-900 placeholder-slate-400 rounded-xl text-xs font-bold outline-none border border-white/20 focus:ring-2 focus:ring-sky-400 shadow-sm transition"
                     autocomplete="off"
                 />
-                <div id="listaSugerenciasMapa" class="hidden absolute top-full left-0 right-0 mt-1 bg-white text-slate-900 rounded-lg shadow-2xl border border-slate-300 max-h-48 overflow-y-auto z-50 text-xs divide-y divide-slate-100"></div>
+                <div id="listaSugerenciasMapa" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white text-slate-900 rounded-2xl shadow-2xl border border-slate-200 max-h-56 overflow-y-auto z-50 text-xs divide-y divide-slate-100"></div>
             </div>
-            <button onclick="buscarColegiosMasCercanosGPS()" class="px-2.5 py-2 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black text-xs rounded-lg transition flex items-center gap-1 cursor-pointer shrink-0" title="Ver los 8 colegios más cercanos a mi ubicación">
+            <button onclick="buscarColegiosMasCercanosGPS()" class="px-3 py-2 bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-400/30 font-extrabold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap" title="Ver los 8 colegios más cercanos a mi ubicación">
                 <span>📍</span> Cercanos (GPS)
             </button>
-            <button onclick="sincronizarConGoogleSheets()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition flex items-center gap-1 cursor-pointer shrink-0">
+            <button onclick="sincronizarConGoogleSheets()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/30 font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap shadow-sm">
                 🔄 Sincronizar
             </button>
         </header>
@@ -244,16 +244,16 @@
         <div id="mapaContenedor" class="flex-1 w-full h-full relative z-0"></div>
 
         <!-- Panel Flotante Desplegable: 5 a 8 Colegios Más Cercanos -->
-        <div id="drawerCercanosMapa" class="hidden absolute bottom-3 left-2 right-2 sm:left-4 sm:right-auto sm:w-[450px] bg-slate-900/95 backdrop-blur-md border-2 border-cyan-400 text-white rounded-2xl shadow-2xl p-3.5 z-[1000] max-h-[50vh] flex flex-col space-y-2">
-            <div class="flex items-center justify-between pb-2 border-b border-slate-800 shrink-0">
+        <div id="drawerCercanosMapa" class="hidden absolute bottom-3 left-2 right-2 sm:left-4 sm:right-auto sm:w-[450px] bg-slate-900/95 backdrop-blur-xl border border-cyan-400/40 text-white rounded-3xl shadow-2xl p-3.5 z-[1000] max-h-[50vh] flex flex-col space-y-2.5 transition-colors">
+            <div id="drawerCercanosHeader" class="flex items-center justify-between pb-2 border-b border-white/10 shrink-0">
                 <div class="flex items-center gap-2">
                     <span class="text-base">📍</span>
                     <div>
                         <h4 id="drawerCercanosTitulo" class="text-xs font-black text-cyan-300 leading-tight">8 Colegios Más Cercanos a Ti (GPS)</h4>
-                        <p class="text-[10px] text-slate-400 font-semibold">Estatales y Particulares ordenados por proximidad</p>
+                        <p id="drawerCercanosSub" class="text-[10.5px] text-slate-400 font-semibold">Estatales y Particulares ordenados por proximidad</p>
                     </div>
                 </div>
-                <button onclick="cerrarDrawerCercanos()" class="w-6 h-6 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-xs flex items-center justify-center cursor-pointer">✕</button>
+                <button id="btnCerrarDrawerCercanos" onclick="cerrarDrawerCercanos()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 font-black text-xs flex items-center justify-center cursor-pointer transition">✕</button>
             </div>
             <div id="drawerCercanosLista" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
         </div>
@@ -262,28 +262,33 @@
     <!-- ============================================================== -->
     <!-- PANTALLA 3: BUSCADOR DE VACANTES CON SEMÁFORO EN TIEMPO REAL   -->
     <!-- ============================================================== -->
-    <div id="pantalla-vacantes" class="hidden fixed inset-0 z-40 flex flex-col bg-slate-100 text-slate-800 overflow-y-auto">
-        <header class="bg-slate-900 text-white px-4 py-3 flex items-center justify-between shrink-0 sticky top-0 z-10 shadow-md">
-            <button onclick="volverAPortada()" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition cursor-pointer">
-                ⬅ Volver
-            </button>
-            <h2 class="text-sm font-black text-white flex items-center gap-1.5">
-                <span>🚦</span> Disponibilidad de Vacantes en Tiempo Real
-            </h2>
-            <button onclick="mostrarDialogoMapachito('buscando', 'Sincronizando disponibilidad de vacantes directamente con la nube de Google Sheets...', sincronizarConGoogleSheetsManual)" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition cursor-pointer">
+    <div id="pantalla-vacantes" class="hidden fixed inset-0 z-40 flex flex-col bg-[radial-gradient(circle_at_top,#1b2a4a_0%,#070d1a_100%)] text-slate-100 overflow-y-auto transition-colors duration-300">
+        <header id="headerVacantesStandalone" class="bg-slate-950/90 backdrop-blur-xl border-b border-white/10 text-white px-3 sm:px-5 py-3 flex items-center justify-between gap-3 shrink-0 sticky top-0 z-20 shadow-lg transition-colors">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <button onclick="volverAPortada()" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl border border-white/15 transition cursor-pointer shrink-0 whitespace-nowrap">
+                    ⬅ Volver
+                </button>
+                <h2 class="text-sm sm:text-base font-black text-white flex items-center gap-1.5 truncate">
+                    <span>🚦</span>
+                    <span class="truncate">Disponibilidad de Vacantes en Tiempo Real</span>
+                </h2>
+            </div>
+            <button onclick="mostrarDialogoMapachito('buscando', 'Sincronizando disponibilidad de vacantes directamente con la nube de Google Sheets...', sincronizarConGoogleSheetsManual)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/30 font-bold text-xs rounded-xl transition cursor-pointer shrink-0 whitespace-nowrap shadow-sm">
                 🔄 Sincronizar
             </button>
         </header>
 
-        <main class="flex-1 p-4 max-w-3xl w-full mx-auto space-y-4">
-            <div class="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-sm space-y-3">
-                <h3 class="text-base font-black text-slate-900">Vacantes Escolares (Ventanilla &amp; Mi Perú)</h3>
+        <main class="flex-1 px-3 sm:px-5 py-5 max-w-3xl w-full mx-auto space-y-4">
+            <div id="cardFiltrosVacantes" class="bg-slate-900/75 border border-sky-400/25 backdrop-blur-xl p-4 sm:p-6 rounded-3xl shadow-2xl space-y-3.5 transition-colors">
+                <div>
+                    <h3 id="tituloFiltrosVacantes" class="text-base sm:text-lg font-black text-white tracking-tight">Vacantes Escolares (Ventanilla &amp; Mi Perú)</h3>
+                </div>
                 <div class="flex flex-wrap gap-1.5">
-                    <button onclick="filtrarNivelVacantes('todos')" id="btnVacTodos" class="px-3 py-1.5 bg-slate-900 text-white font-bold text-xs rounded-lg cursor-pointer">Todos</button>
-                    <button onclick="filtrarNivelVacantes('inicial')" id="btnVacIni" class="px-3 py-1.5 bg-amber-100 text-amber-900 font-bold text-xs rounded-lg cursor-pointer">🎨 Inicial (3, 4, 5 años)</button>
-                    <button onclick="filtrarNivelVacantes('primaria')" id="btnVacPri" class="px-3 py-1.5 bg-blue-100 text-blue-900 font-bold text-xs rounded-lg cursor-pointer">📚 Primaria</button>
-                    <button onclick="filtrarNivelVacantes('secundaria')" id="btnVacSec" class="px-3 py-1.5 bg-purple-100 text-purple-900 font-bold text-xs rounded-lg cursor-pointer">🎓 Secundaria</button>
-                    <button onclick="filtrarNivelVacantes('particular')" id="btnVacPart" class="px-3 py-1.5 bg-amber-500 text-slate-950 font-black text-xs rounded-lg cursor-pointer">⭐ Particulares</button>
+                    <button onclick="filtrarNivelVacantes('todos')" id="btnVacTodos" class="px-3.5 py-2 bg-sky-500 text-slate-950 border border-sky-400 font-extrabold text-xs rounded-xl cursor-pointer transition whitespace-nowrap shadow-sm">Todos</button>
+                    <button onclick="filtrarNivelVacantes('inicial')" id="btnVacIni" class="px-3.5 py-2 bg-amber-500/15 text-amber-200 border border-amber-400/25 hover:bg-amber-500/25 font-bold text-xs rounded-xl cursor-pointer transition whitespace-nowrap">🎨 Inicial (3, 4, 5 años)</button>
+                    <button onclick="filtrarNivelVacantes('primaria')" id="btnVacPri" class="px-3.5 py-2 bg-blue-500/15 text-blue-200 border border-blue-400/25 hover:bg-blue-500/25 font-bold text-xs rounded-xl cursor-pointer transition whitespace-nowrap">📚 Primaria</button>
+                    <button onclick="filtrarNivelVacantes('secundaria')" id="btnVacSec" class="px-3.5 py-2 bg-purple-500/15 text-purple-200 border border-purple-400/25 hover:bg-purple-500/25 font-bold text-xs rounded-xl cursor-pointer transition whitespace-nowrap">🎓 Secundaria</button>
+                    <button onclick="filtrarNivelVacantes('particular')" id="btnVacPart" class="px-3.5 py-2 bg-amber-500/10 text-amber-300 border border-amber-400/30 hover:bg-amber-500/20 font-bold text-xs rounded-xl cursor-pointer transition whitespace-nowrap">⭐ Particulares</button>
                 </div>
                 <input
                     type="text"
@@ -291,7 +296,7 @@
                     oninput="renderizarListaVacantes()"
                     onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}"
                     placeholder="🔍 Filtra por nombre o número (Elim, 121, 5090, Coprodeli)..."
-                    class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl font-bold text-xs outline-none focus:border-sky-500"
+                    class="w-full px-4 py-3 bg-slate-800/80 border border-white/15 focus:border-sky-400 text-white placeholder-slate-400 rounded-2xl font-bold text-xs sm:text-sm outline-none transition"
                 />
             </div>
 
@@ -433,9 +438,9 @@
     <!-- ============================================================== -->
     <!-- MODAL 1: INFORMACIÓN GENERAL DEL COLEGIO + VACANTES EN VIVO    -->
     <!-- ============================================================== -->
-    <div id="modalDetalleColegio" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-        <div class="relative bg-white text-slate-900 rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
-            <button onclick="cerrarModalDetalle()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-black cursor-pointer">✕</button>
+    <div id="modalDetalleColegio" onclick="if(event.target===this)cerrarModalDetalle()" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-3 sm:p-4 overflow-y-auto">
+        <div id="cardModalDetalle" onclick="event.stopPropagation()" class="relative bg-slate-900/95 border border-white/15 text-slate-100 rounded-3xl p-5 sm:p-6 max-w-lg w-full shadow-2xl backdrop-blur-xl space-y-4 max-h-[92vh] overflow-y-auto transition-colors">
+            <button id="btnCerrarModalDetalle" onclick="cerrarModalDetalle()" aria-label="Cerrar ventana" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-rose-500/90 text-slate-200 hover:text-white border border-white/15 font-black text-lg cursor-pointer transition">✕</button>
             <div id="contenidoModalDetalle" class="space-y-4"></div>
         </div>
     </div>
@@ -1428,12 +1433,13 @@
                 const listEl = document.getElementById('drawerCercanosLista');
                 if (drawer && listEl) {
                     drawer.classList.remove('hidden');
+                    var esClaroCercanos = getTemaActualStandalone() !== 'oscuro';
                     listEl.innerHTML = top8.map(function(it, idx) {
                         var col = it.colegio;
                         var esPart = normalizarTexto(col.gestion).includes('particular') || normalizarTexto(col.gestion).includes('privad');
-                        var badgeGestion = esPart 
-                            ? '<span class="text-amber-300 font-black">⭐ Particular</span>' 
-                            : '<span class="text-sky-300 font-semibold">' + (col.red_educativa || 'Estatal') + '</span>';
+                        var badgeGestion = esPart
+                            ? '<span class="' + (esClaroCercanos ? 'text-amber-700' : 'text-amber-300') + ' font-black">⭐ Particular</span>'
+                            : '<span class="' + (esClaroCercanos ? 'text-sky-700' : 'text-sky-300') + ' font-semibold">' + (col.red_educativa || 'Estatal') + '</span>';
                         var nomCol = String(col.nombre_colegio || 'Colegio');
                         var nomColEsc = nomCol.replace(/'/g, "\'");
                         var idCol = String(col.id_colegio || col.codigo || '');
@@ -1442,26 +1448,26 @@
                         var latCol = col.latitud || '';
                         var lngCol = col.longitud || '';
 
-                        return '<div class="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 hover:border-cyan-400 transition text-xs space-y-2">' +
+                        return '<div class="p-3 rounded-2xl border transition text-xs space-y-2 ' + (esClaroCercanos ? 'bg-slate-50/90 border-slate-200 hover:border-sky-400' : 'bg-slate-800/80 border-white/10 hover:border-cyan-400/50') + '">' +
                             '<div class="flex items-start justify-between gap-2">' +
                                 '<div class="min-w-0 flex-1">' +
-                                    '<div class="font-black text-slate-100 flex items-center gap-1.5">' +
+                                    '<div class="font-black flex items-center gap-1.5 ' + (esClaroCercanos ? 'text-slate-900' : 'text-white') + '">' +
                                         '<span class="w-5 h-5 rounded-full bg-cyan-600 text-white text-[10px] flex items-center justify-center font-black shrink-0">' + (idx + 1) + '</span>' +
-                                        '<span class="truncate font-extrabold text-white text-xs" title="' + nomCol + '">' + nomCol + '</span>' +
+                                        '<span class="truncate font-extrabold text-xs" title="' + nomCol + '">' + nomCol + '</span>' +
                                     '</div>' +
-                                    '<div class="text-[10px] text-slate-400 mt-0.5 truncate">' +
-                                        distCol + ' • ' + badgeGestion +
+                                    '<div class="text-[10.5px] mt-0.5 truncate ' + (esClaroCercanos ? 'text-slate-500' : 'text-slate-400') + '">' +
+                                        distCol + ' · ' + badgeGestion +
                                     '</div>' +
                                 '</div>' +
-                                '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-cyan-950 text-cyan-300 border border-cyan-400 shrink-0 whitespace-nowrap">' +
+                                '<span class="text-[11px] font-black shrink-0 whitespace-nowrap ' + (esClaroCercanos ? 'text-sky-700' : 'text-cyan-300') + '">' +
                                     '📍 A ' + distTxt +
                                 '</span>' +
                             '</div>' +
                             '<div class="grid grid-cols-4 gap-1.5 pt-1">' +
-                                '<button data-id="' + idCol + '" onclick="enfocarEnMapa(this.dataset.id)" class="py-1 px-1 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black rounded-lg text-[10px] transition text-center cursor-pointer">🗺️ Ver</button>' +
-                                '<button data-id="' + idCol + '" onclick="abrirModalFachada(this.dataset.id)" class="py-1 px-1 bg-sky-600 hover:bg-sky-500 text-white font-extrabold rounded-lg text-[10px] transition text-center cursor-pointer">🏫 Fachada</button>' +
-                                '<a href="https://www.google.com/maps/dir/?api=1&destination=' + latCol + ',' + lngCol + '" target="_blank" class="py-1 px-1 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-lg text-[10px] transition text-center flex items-center justify-center">🧭 Viaje</a>' +
-                                '<button data-nom="' + nomColEsc + '" onclick="abrirPantallaVacantes(this.dataset.nom)" class="py-1 px-1 bg-orange-600 hover:bg-orange-500 text-white font-black rounded-lg text-[10px] transition text-center cursor-pointer">🚦 Cupos</button>' +
+                                '<button data-id="' + idCol + '" onclick="enfocarEnMapa(this.dataset.id)" class="py-1.5 px-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black rounded-xl text-[10px] transition text-center cursor-pointer whitespace-nowrap">🗺️ Ver</button>' +
+                                '<button data-id="' + idCol + '" onclick="abrirModalFachada(this.dataset.id)" class="py-1.5 px-1 bg-sky-600 hover:bg-sky-500 text-white font-extrabold rounded-xl text-[10px] transition text-center cursor-pointer whitespace-nowrap">🏫 Fachada</button>' +
+                                '<a href="https://www.google.com/maps/dir/?api=1&destination=' + latCol + ',' + lngCol + '" target="_blank" class="py-1.5 px-1 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-[10px] transition text-center flex items-center justify-center whitespace-nowrap">🧭 Viaje</a>' +
+                                '<button data-nom="' + nomColEsc + '" onclick="abrirPantallaVacantes(this.dataset.nom)" class="py-1.5 px-1 bg-orange-600 hover:bg-orange-500 text-white font-black rounded-xl text-[10px] transition text-center cursor-pointer whitespace-nowrap">🚦 Cupos</button>' +
                             '</div>' +
                         '</div>';
                     }).join('');
@@ -2017,35 +2023,60 @@
             }
         }
 
-        // Helper para pintar badges de vacantes (con soporte numérico exacto para colegios particulares)
+        function getTemaActualStandalone() {
+            try {
+                var t = localStorage.getItem('mappache_tema_portada');
+                if (t === 'claro' || t === 'mixto' || t === 'oscuro') return t;
+            } catch (e) {}
+            return 'oscuro';
+        }
+
+        // Helper para pintar estados de vacantes (con soporte numérico exacto para colegios particulares)
         function obtenerBadgeSemaforo(valor, esPart, defecto) {
             const v = String(valor !== undefined && valor !== null && String(valor).trim() !== '' ? valor : (defecto || 'verde')).trim();
             const esNum = !isNaN(Number(v)) && v !== '';
+            const esOscuro = getTemaActualStandalone() === 'oscuro';
+            const clsVerde = esOscuro ? 'text-emerald-300' : 'text-emerald-700';
+            const clsAmarillo = esOscuro ? 'text-amber-300' : 'text-amber-700';
+            const clsRojo = esOscuro ? 'text-rose-300' : 'text-rose-700';
+
             if (esPart || esNum) {
                 const num = esNum ? Number(v) : (v.toLowerCase().includes('rojo') ? 0 : v.toLowerCase().includes('amarillo') ? 5 : 15);
                 if (num === 0) {
-                    return '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300">🔴 0 vacantes (Agotado)</span>';
+                    return '<span class="block mt-0.5 text-[10.5px] font-black ' + clsRojo + '">🔴 0 vacantes (Agotado)</span>';
                 } else if (num <= 10) {
-                    return '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">🟡 Pocas (' + num + ' vacantes)</span>';
+                    return '<span class="block mt-0.5 text-[10.5px] font-black ' + clsAmarillo + '">🟡 Pocas (' + num + ' vacantes)</span>';
                 } else {
-                    return '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">🟢 Disponible (' + num + ' vacantes)</span>';
+                    return '<span class="block mt-0.5 text-[10.5px] font-black ' + clsVerde + '">🟢 Disponible (' + num + ' vacantes)</span>';
                 }
             }
             const vLower = v.toLowerCase();
             if (vLower.includes('rojo') || vLower.includes('sin vacante')) {
-                return '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300">🔴 Sin Vacantes</span>';
+                return '<span class="block mt-0.5 text-[10.5px] font-black ' + clsRojo + '">🔴 Sin Vacantes</span>';
             }
             if (vLower.includes('amarillo') || vLower.includes('pocas')) {
-                return '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">🟡 Pocas Vacantes</span>';
+                return '<span class="block mt-0.5 text-[10.5px] font-black ' + clsAmarillo + '">🟡 Pocas Vacantes</span>';
             }
-            return '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">🟢 Hay Vacantes</span>';
+            return '<span class="block mt-0.5 text-[10.5px] font-black ' + clsVerde + '">🟢 Hay Vacantes</span>';
         }
 
-        // Modal Detalle: Ficha Informativa General Limpia y Organizada
+        // Modal Detalle: Ficha Informativa General Limpia y Organizada (Opción 1 Adaptativa)
         function abrirModalDetalle(col) {
             colegioSeleccionado = col;
             const modal = document.getElementById('modalDetalleColegio');
             const cont = document.getElementById('contenidoModalDetalle');
+            const cardModal = document.getElementById('cardModalDetalle');
+            const btnCerrar = document.getElementById('btnCerrarModalDetalle');
+            const esOscuro = getTemaActualStandalone() === 'oscuro';
+
+            if (cardModal) {
+                cardModal.className = 'relative rounded-3xl p-5 sm:p-6 max-w-lg w-full shadow-2xl border backdrop-blur-xl space-y-4 max-h-[92vh] overflow-y-auto transition-colors ' +
+                    (esOscuro ? 'bg-slate-900/95 border-white/15 text-slate-100' : 'bg-white/95 border-slate-200 text-slate-900');
+            }
+            if (btnCerrar) {
+                btnCerrar.className = 'absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full font-black text-lg cursor-pointer transition border ' +
+                    (esOscuro ? 'bg-white/10 hover:bg-rose-500/90 text-slate-200 hover:text-white border-white/15' : 'bg-slate-100 hover:bg-rose-500 text-slate-600 hover:text-white border-slate-200');
+            }
 
             const esPart = normalizarTexto(col.gestion).includes('particular') || normalizarTexto(col.gestion).includes('privad');
             const niv = normalizarTexto(col.niveles || '');
@@ -2056,71 +2087,76 @@
             const tienePri = niv.includes('primaria') || nom.includes('primaria');
             const tieneSec = niv.includes('secundaria') || nom.includes('secundaria');
 
+            const boxCls = esOscuro ? 'bg-slate-800/70 border-white/10' : 'bg-slate-50/90 border-slate-200/80';
+            const lblCls = esOscuro ? 'text-slate-400' : 'text-slate-500';
+            const valCls = esOscuro ? 'text-white' : 'text-slate-900';
+
             cont.innerHTML = `
-                <div class="pr-8">
-                    <h2 class="text-xl font-black text-slate-900 leading-tight">${col.nombre_colegio}</h2>
-                    <div class="flex flex-wrap items-center gap-2 mt-1.5 text-xs">
-                        <span class="px-2.5 py-0.5 rounded-lg font-black ${esPart ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-blue-100 text-blue-900'}">
+                <div class="pr-11">
+                    <div class="flex flex-wrap items-center gap-2 text-xs mb-1.5">
+                        <span class="font-extrabold ${esPart ? (esOscuro ? 'text-amber-300' : 'text-amber-700') : (esOscuro ? 'text-sky-300' : 'text-sky-700')}">
                             ${esPart ? '⭐ Colegio Particular' : '🏛️ ' + col.gestion}
                         </span>
-                        <span class="text-slate-600 font-bold">Distrito: ${col.distrito || 'Ventanilla'}</span>
-                        <span class="text-slate-500 font-mono text-[11px]">${col.red_educativa || 'Red Oficial'}</span>
+                        <span class="${esOscuro ? 'text-slate-600' : 'text-slate-300'}" aria-hidden="true">·</span>
+                        <span class="font-semibold ${esOscuro ? 'text-slate-300' : 'text-slate-600'}">Distrito: <strong class="${valCls}">${col.distrito || 'Ventanilla'}</strong></span>
+                    </div>
+                    <h2 class="text-lg sm:text-xl font-black leading-snug tracking-tight ${valCls}">${col.nombre_colegio}</h2>
+                    <p class="text-[11px] font-semibold mt-1 ${lblCls}">${col.red_educativa || 'Red Oficial'}</p>
+                </div>
+
+                <!-- Ficha Informativa Unificada y Organizada Compacta -->
+                <div class="mt-4 space-y-2.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                        <div class="${boxCls} p-3 rounded-2xl border">
+                            <span class="text-[11px] font-bold ${lblCls} block mb-0.5">📍 Zona / Sector</span>
+                            <span class="font-extrabold ${valCls} text-xs block">${col.zona || col.distrito || 'Ventanilla'}</span>
+                        </div>
+                        <div class="${boxCls} p-3 rounded-2xl border">
+                            <span class="text-[11px] font-bold ${lblCls} block mb-0.5">🌐 Red Educativa</span>
+                            <span class="font-extrabold ${esOscuro ? 'text-sky-300' : 'text-sky-800'} text-xs block">${col.red_educativa || 'Particular / Independiente'}</span>
+                        </div>
+                        <div class="${boxCls} p-3 rounded-2xl border">
+                            <span class="text-[11px] font-bold ${lblCls} block mb-0.5">⏰ Turnos de Atención</span>
+                            <span class="font-bold ${esOscuro ? 'text-slate-100' : 'text-slate-800'} text-xs block">${col.TURNOS || 'Mañana, Tarde'}</span>
+                        </div>
+                        <div class="${boxCls} p-3 rounded-2xl border">
+                            <span class="text-[11px] font-bold ${lblCls} block mb-0.5">🏢 Dirección</span>
+                            <span class="font-bold ${esOscuro ? 'text-slate-100' : 'text-slate-800'} text-xs block">${col.direccion || 'Ventanilla / Mi Perú'}</span>
+                        </div>
+                    </div>
+                    <div class="${boxCls} p-3 rounded-2xl border text-xs">
+                        <span class="text-[11px] font-bold ${lblCls} block mb-1">📝 Requisitos de Matrícula</span>
+                        <p class="${esOscuro ? 'text-slate-200' : 'text-slate-700'} text-[11.5px] leading-relaxed font-medium">${col.requisitos_de_matricula || 'DNI del estudiante y apoderado, FUM SIAGIE'}</p>
                     </div>
                 </div>
 
-                <!-- Ficha Informativa Unificada y Organizada Compacta (Encabezado arriba, valor debajo) -->
-                <div class="mt-3.5 space-y-2">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">📍 Zona / Sector:</span>
-                            <span class="font-black text-slate-900 text-xs block">${col.zona || col.distrito || 'Ventanilla'}</span>
-                        </div>
-                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">🌐 Red Educativa:</span>
-                            <span class="font-black text-sky-800 text-xs block">${col.red_educativa || 'Particular / Independiente'}</span>
-                        </div>
-                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">⏰ Turnos de Atención:</span>
-                            <span class="font-bold text-slate-800 text-xs block">${col.TURNOS || 'Mañana, Tarde'}</span>
-                        </div>
-                        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">🏢 Dirección:</span>
-                            <span class="font-bold text-slate-800 text-xs block">${col.direccion || 'Ventanilla / Mi Perú'}</span>
-                        </div>
-                    </div>
-                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs">
-                        <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500 block mb-0.5">📝 Requisitos de Matrícula:</span>
-                        <p class="text-slate-700 text-[11px] leading-snug font-medium">${col.requisitos_de_matricula || 'DNI del estudiante y apoderado, FUM SIAGIE'}</p>
-                    </div>
-                </div>
-
-                <!-- Insignias de Niveles con Colores Sólidos -->
+                <!-- Niveles Educativos Impartidos -->
                 <div>
-                    <h4 class="text-xs font-black text-slate-800 mb-2">🏷️ Niveles Educativos Impartidos:</h4>
+                    <h4 class="text-xs font-extrabold ${esOscuro ? 'text-slate-200' : 'text-slate-800'} mb-2 flex items-center gap-1.5"><span>🏷️</span> Niveles Educativos Impartidos</h4>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                        ${tieneCuna ? '<div class="bg-pink-600 text-white p-2.5 rounded-xl text-center font-black text-xs shadow">👶 Cuna</div>' : ''}
-                        ${tieneIni ? '<div class="bg-amber-600 text-white p-2.5 rounded-xl text-center font-black text-xs shadow">🎨 Inicial</div>' : ''}
-                        ${tienePri ? '<div class="bg-blue-700 text-white p-2.5 rounded-xl text-center font-black text-xs shadow">📚 Primaria</div>' : ''}
-                        ${tieneSec ? '<div class="bg-purple-700 text-white p-2.5 rounded-xl text-center font-black text-xs shadow">🎓 Secundaria</div>' : ''}
+                        ${tieneCuna ? '<div class="py-2.5 px-3 rounded-xl border font-extrabold text-xs text-center flex items-center justify-center gap-1.5 ' + (esOscuro ? 'bg-pink-500/15 text-pink-200 border-pink-400/35' : 'bg-pink-50 text-pink-800 border-pink-200') + '"><span>👶</span><span>Cuna</span></div>' : ''}
+                        ${tieneIni ? '<div class="py-2.5 px-3 rounded-xl border font-extrabold text-xs text-center flex items-center justify-center gap-1.5 ' + (esOscuro ? 'bg-amber-500/15 text-amber-200 border-amber-400/35' : 'bg-amber-50 text-amber-900 border-amber-200') + '"><span>🎨</span><span>Inicial</span></div>' : ''}
+                        ${tienePri ? '<div class="py-2.5 px-3 rounded-xl border font-extrabold text-xs text-center flex items-center justify-center gap-1.5 ' + (esOscuro ? 'bg-blue-500/15 text-blue-200 border-blue-400/35' : 'bg-blue-50 text-blue-800 border-blue-200') + '"><span>📚</span><span>Primaria</span></div>' : ''}
+                        ${tieneSec ? '<div class="py-2.5 px-3 rounded-xl border font-extrabold text-xs text-center flex items-center justify-center gap-1.5 ' + (esOscuro ? 'bg-purple-500/15 text-purple-200 border-purple-400/35' : 'bg-purple-50 text-purple-800 border-purple-200') + '"><span>🎓</span><span>Secundaria</span></div>' : ''}
                     </div>
                 </div>
 
                 ${(col.enlace_web_o_whatsapp || col.enlace_facebook || col.enlace_tiktok) ? `
-                    <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl space-y-2">
-                        <span class="text-[11px] font-black text-slate-800 block">🌐 Canales Oficiales y Redes Sociales:</span>
+                    <div class="p-3 rounded-2xl border space-y-2 ${esOscuro ? 'bg-sky-950/35 border-sky-400/20' : 'bg-sky-50/70 border-sky-200/80'}">
+                        <span class="text-xs font-extrabold ${esOscuro ? 'text-sky-200' : 'text-slate-800'} block">🌐 Canales Oficiales y Redes Sociales</span>
                         <div class="flex flex-wrap gap-2">
                             ${col.enlace_web_o_whatsapp ? `
-                                <a href="${col.enlace_web_o_whatsapp.startsWith('http') ? col.enlace_web_o_whatsapp : 'https://' + col.enlace_web_o_whatsapp}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-xs shadow-sm">
+                                <a href="${col.enlace_web_o_whatsapp.startsWith('http') ? col.enlace_web_o_whatsapp : 'https://' + col.enlace_web_o_whatsapp}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs shadow-xs transition whitespace-nowrap">
                                     💬 Web / WhatsApp
                                 </a>
                             ` : ''}
                             ${col.enlace_facebook ? `
-                                <a href="${col.enlace_facebook.startsWith('http') ? col.enlace_facebook : 'https://' + col.enlace_facebook}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold text-xs shadow-sm">
+                                <a href="${col.enlace_facebook.startsWith('http') ? col.enlace_facebook : 'https://' + col.enlace_facebook}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#1877F2] hover:bg-[#166fe5] text-white rounded-xl font-bold text-xs shadow-xs transition whitespace-nowrap">
                                     📘 Facebook
                                 </a>
                             ` : ''}
                             ${col.enlace_tiktok ? `
-                                <a href="${col.enlace_tiktok.startsWith('http') ? col.enlace_tiktok : 'https://' + col.enlace_tiktok}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-black text-white rounded-lg font-bold text-xs shadow-sm">
+                                <a href="${col.enlace_tiktok.startsWith('http') ? col.enlace_tiktok : 'https://' + col.enlace_tiktok}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-black text-white border border-white/15 rounded-xl font-bold text-xs shadow-xs transition whitespace-nowrap">
                                     🎵 TikTok
                                 </a>
                             ` : ''}
@@ -2128,17 +2164,19 @@
                     </div>
                 ` : ''}
 
-                <div class="flex gap-2 pt-2">
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${col.latitud},${col.longitud}" target="_blank" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl text-center shadow flex items-center justify-center gap-1.5">
-                        <span>🗺️</span> Iniciar Viaje en Maps
-                    </a>
-                    <button onclick="abrirModalFachada('${col.id_colegio}');" class="flex-1 py-3 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs rounded-xl text-center shadow cursor-pointer flex items-center justify-center gap-1.5">
-                        <span>🏫</span> Fachada del Colegio
+                <div class="space-y-2.5 pt-1">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=${col.latitud},${col.longitud}" target="_blank" class="py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl text-center shadow-sm transition flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <span>🗺️</span> Iniciar Viaje en Maps
+                        </a>
+                        <button onclick="abrirModalFachada('${col.id_colegio}');" class="py-3 px-4 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs rounded-xl text-center shadow-sm transition cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <span>🏫</span> Fachada del Colegio
+                        </button>
+                    </div>
+                    <button onclick="cerrarModalDetalle(); abrirPantallaVacantes('${col.nombre_colegio}');" class="w-full py-3.5 px-4 bg-gradient-to-r from-[#ea580c] to-[#c2410c] hover:brightness-110 text-white font-black text-xs rounded-xl text-center shadow-md transition cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap">
+                        <span>🚦</span> Consultar Vacantes en Tiempo Real ➔
                     </button>
                 </div>
-                <button onclick="cerrarModalDetalle(); abrirPantallaVacantes('${col.nombre_colegio}');" class="w-full py-3.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:brightness-110 text-white font-black text-xs rounded-xl text-center shadow cursor-pointer flex items-center justify-center gap-2">
-                    <span>🚦</span> Consultar Vacantes en Tiempo Real ➔
-                </button>
             `;
 
             modal.classList.remove('hidden');
@@ -2149,19 +2187,44 @@
             document.getElementById('modalDetalleColegio').classList.add('hidden');
         }
 
+        function actualizarEstilosBotonesVacantesStandalone() {
+            var esOscuro = getTemaActualStandalone() === 'oscuro';
+            var bTodos = document.getElementById('btnVacTodos');
+            var bIni = document.getElementById('btnVacIni');
+            var bPri = document.getElementById('btnVacPri');
+            var bSec = document.getElementById('btnVacSec');
+            var bPart = document.getElementById('btnVacPart');
+            var base = 'px-3.5 py-2 text-xs rounded-xl cursor-pointer transition whitespace-nowrap border ';
+
+            if (bTodos) bTodos.className = base + (filtroNivelActual === 'todos'
+                ? (esOscuro ? 'bg-sky-500 text-slate-950 border-sky-400 font-extrabold shadow-sm' : 'bg-slate-900 text-white border-slate-900 font-extrabold shadow-sm')
+                : (esOscuro ? 'bg-slate-800/80 text-slate-200 border-white/10 hover:bg-slate-800 font-bold' : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200/80 font-bold'));
+            if (bIni) bIni.className = base + (filtroNivelActual === 'inicial'
+                ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold shadow-sm'
+                : (esOscuro ? 'bg-amber-500/15 text-amber-200 border-amber-400/25 hover:bg-amber-500/25 font-bold' : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100 font-bold'));
+            if (bPri) bPri.className = base + (filtroNivelActual === 'primaria'
+                ? 'bg-blue-600 text-white border-blue-500 font-extrabold shadow-sm'
+                : (esOscuro ? 'bg-blue-500/15 text-blue-200 border-blue-400/25 hover:bg-blue-500/25 font-bold' : 'bg-blue-50 text-blue-900 border-blue-200 hover:bg-blue-100 font-bold'));
+            if (bSec) bSec.className = base + (filtroNivelActual === 'secundaria'
+                ? 'bg-purple-600 text-white border-purple-500 font-extrabold shadow-sm'
+                : (esOscuro ? 'bg-purple-500/15 text-purple-200 border-purple-400/25 hover:bg-purple-500/25 font-bold' : 'bg-purple-50 text-purple-900 border-purple-200 hover:bg-purple-100 font-bold'));
+            if (bPart) bPart.className = base + (filtroNivelActual === 'particular'
+                ? 'bg-amber-400 text-slate-950 border-amber-300 font-black shadow-sm'
+                : (esOscuro ? 'bg-amber-500/10 text-amber-300 border-amber-400/30 hover:bg-amber-500/20 font-bold' : 'bg-amber-50/70 text-amber-800 border-amber-300 hover:bg-amber-100 font-bold'));
+        }
+
         // Vacantes con Bloques Separados de Inicial, Primaria y Secundaria
         function filtrarNivelVacantes(nivel) {
             filtroNivelActual = nivel;
-            ['btnVacTodos', 'btnVacIni', 'btnVacPri', 'btnVacSec', 'btnVacPart'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.remove('ring-2', 'ring-sky-500', 'scale-105');
-            });
+            actualizarEstilosBotonesVacantesStandalone();
             renderizarListaVacantes();
         }
 
         function renderizarListaVacantes() {
             const cont = document.getElementById('contenedorListaVacantes');
             const filtroTexto = normalizarTexto(document.getElementById('inputFiltroVacantes').value);
+            const esOscuro = getTemaActualStandalone() === 'oscuro';
+            actualizarEstilosBotonesVacantesStandalone();
 
             const filtrados = COLEGIOS.filter(c => {
                 if (filtroTexto && !normalizarTexto(c.nombre_colegio).includes(filtroTexto)) return false;
@@ -2177,7 +2240,9 @@
             });
 
             if (filtrados.length === 0) {
-                cont.innerHTML = '<div class="p-8 text-center bg-white rounded-2xl border text-slate-500 font-bold text-xs">No se encontraron colegios con ese criterio de búsqueda.</div>';
+                cont.innerHTML = '<div class="p-8 text-center rounded-3xl border font-bold text-xs ' +
+                    (esOscuro ? 'bg-slate-900/75 border-white/10 text-slate-300' : 'bg-white border-slate-200 text-slate-500') +
+                    '">No se encontraron colegios con ese criterio de búsqueda.</div>';
                 return;
             }
 
@@ -2192,34 +2257,46 @@
                 const tienePri = niv.includes('primaria') || nom.includes('primaria');
                 const tieneSec = niv.includes('secundaria') || nom.includes('secundaria');
 
+                const cardCls = esOscuro
+                    ? 'bg-slate-900/75 border-white/10 shadow-xl backdrop-blur-md text-slate-100'
+                    : 'bg-white border-slate-200/90 shadow-sm hover:shadow-md text-slate-900';
+                const hdrBorderCls = esOscuro ? 'border-white/10' : 'border-slate-100';
+                const tileCls = esOscuro
+                    ? 'bg-slate-800/80 border-white/10 text-slate-200'
+                    : 'bg-white border-slate-200/80 text-slate-800';
+                const tileLblCls = esOscuro ? 'text-slate-400' : 'text-slate-500';
+                const fichaBtnCls = esOscuro
+                    ? 'bg-white/10 hover:bg-white/20 text-sky-300 border-white/15'
+                    : 'bg-slate-100 hover:bg-slate-200 text-sky-800 border-slate-200';
+                const fechaActualizacion = (c.vacantes && c.vacantes.actualizacion)
+                    ? c.vacantes.actualizacion
+                    : ((c.ultima_modificacion && c.ultima_modificacion.trim()) ? c.ultima_modificacion : (new Date().toLocaleDateString('es-PE') + ' 08:30 a. m.'));
+
                 return `
-                    <div class="bg-white border-2 border-slate-200 p-4 sm:p-5 rounded-3xl shadow-sm space-y-3.5">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 pb-2.5 border-b border-slate-100">
-                            <div>
-                                <h4 class="font-black text-sm sm:text-base text-slate-900 leading-tight flex items-center gap-1.5">
-                                    <span>${c.nombre_colegio}</span>
-                                    ${esPart ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">⭐ PARTICULAR</span>' : ''}
-                                </h4>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${esPart ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-blue-100 text-blue-900'}">${c.gestion}</span>
-                                    <span class="text-[11px] text-slate-500 font-bold">${c.distrito} - ${c.red_educativa || 'Red Oficial'}</span>
+                    <div class="${cardCls} border p-4 sm:p-5 rounded-3xl space-y-3.5 transition-colors">
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 pb-3 border-b ${hdrBorderCls}">
+                            <div class="min-w-0 space-y-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h4 class="font-black text-base leading-snug ${esOscuro ? 'text-white' : 'text-slate-900'}">${c.nombre_colegio}</h4>
+                                    ${esPart ? '<span class="text-[10.5px] font-black ' + (esOscuro ? 'text-amber-300' : 'text-amber-700') + '">⭐ Particular</span>' : ''}
                                 </div>
-                                <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-1 rounded-lg shadow-xs mt-1.5">
+                                <p class="text-xs font-medium ${esOscuro ? 'text-slate-400' : 'text-slate-500'}">
+                                    ${c.gestion} · ${c.distrito} · ${c.red_educativa || 'Red Oficial'}
+                                </p>
+                                <div class="inline-flex items-center gap-1.5 text-[11px] font-bold whitespace-nowrap ${esOscuro ? 'text-emerald-300' : 'text-emerald-700'}">
                                     <span>🕒</span>
-                                    <span>Última actualización de vacantes:</span>
-                                    <span class="text-emerald-950 font-black">
-                                        ${c.vacantes?.actualizacion || (c.ultima_modificacion && c.ultima_modificacion.trim() ? c.ultima_modificacion : (new Date().toLocaleDateString('es-PE') + ' 08:30 a. m.'))}
-                                    </span>
+                                    <span>Última actualización:</span>
+                                    <span class="font-black tabular-nums">${fechaActualizacion}</span>
                                 </div>
                             </div>
-                            <div class="flex flex-wrap items-center gap-2 shrink-0">
-                                <button onclick="enfocarEnMapa('${c.id_colegio}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black rounded-xl transition cursor-pointer flex items-center gap-1 shadow-sm">
+                            <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+                                <button onclick="enfocarEnMapa('${c.id_colegio}')" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition cursor-pointer flex items-center gap-1.5 shadow-xs whitespace-nowrap">
                                     <span>🗺️</span> Ir al mapa
                                 </button>
-                                <button onclick="abrirModalFachada('${c.id_colegio}')" class="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 text-white text-xs font-black rounded-xl transition cursor-pointer flex items-center gap-1 shadow-sm" title="Ver fachada del colegio">
+                                <button onclick="abrirModalFachada('${c.id_colegio}')" class="px-3 py-2 bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold rounded-xl transition cursor-pointer flex items-center gap-1.5 shadow-xs whitespace-nowrap" title="Ver fachada del colegio">
                                     <span>🏫</span> Fachada
                                 </button>
-                                <button onclick="abrirModalDetalle(COLEGIOS.find(x => x.id_colegio === '${c.id_colegio}'))" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-sky-700 text-xs font-black rounded-xl transition cursor-pointer shrink-0">
+                                <button onclick="abrirModalDetalle(COLEGIOS.find(x => x.id_colegio === '${c.id_colegio}'))" class="px-3 py-2 ${fichaBtnCls} text-xs font-extrabold rounded-xl border transition cursor-pointer shrink-0 whitespace-nowrap">
                                     ℹ️ Ficha ➔
                                 </button>
                             </div>
@@ -2227,21 +2304,21 @@
 
                         <!-- BLOQUE INICIAL -->
                         ${tieneIni ? `
-                            <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-2xl space-y-2">
-                                <b class="text-amber-900 text-xs flex items-center gap-1.5">
-                                    <span>🎨</span> NIVEL INICIAL (3, 4 y 5 Años):
+                            <div class="p-3 rounded-2xl border space-y-2 ${esOscuro ? 'bg-amber-950/20 border-amber-400/25' : 'bg-amber-50/40 border-amber-200/80'}">
+                                <b class="${esOscuro ? 'text-amber-300' : 'text-amber-900'} text-[11px] font-black flex items-center gap-1.5">
+                                    <span>🎨</span> NIVEL INICIAL (3, 4 y 5 Años)
                                 </b>
                                 <div class="grid grid-cols-3 gap-2 text-center text-xs">
-                                    <div class="bg-white border border-amber-200 p-2 rounded-xl">
-                                        <span class="block text-[10px] text-slate-500 font-bold">3 Años</span>
+                                    <div class="${tileCls} border p-2.5 rounded-xl">
+                                        <span class="block text-[10.5px] ${tileLblCls} font-bold">3 Años</span>
                                         ${obtenerBadgeSemaforo(vac['ini_3a'], esPart, 'verde')}
                                     </div>
-                                    <div class="bg-white border border-amber-200 p-2 rounded-xl">
-                                        <span class="block text-[10px] text-slate-500 font-bold">4 Años</span>
+                                    <div class="${tileCls} border p-2.5 rounded-xl">
+                                        <span class="block text-[10.5px] ${tileLblCls} font-bold">4 Años</span>
                                         ${obtenerBadgeSemaforo(vac['ini_4a'], esPart, 'amarillo')}
                                     </div>
-                                    <div class="bg-white border border-amber-200 p-2 rounded-xl">
-                                        <span class="block text-[10px] text-slate-500 font-bold">5 Años</span>
+                                    <div class="${tileCls} border p-2.5 rounded-xl">
+                                        <span class="block text-[10.5px] ${tileLblCls} font-bold">5 Años</span>
                                         ${obtenerBadgeSemaforo(vac['ini_5a'], esPart, 'verde')}
                                     </div>
                                 </div>
@@ -2250,14 +2327,14 @@
 
                         <!-- BLOQUE PRIMARIA -->
                         ${tienePri ? `
-                            <div class="p-3 bg-blue-50/70 border border-blue-200 rounded-2xl space-y-2">
-                                <b class="text-blue-900 text-xs flex items-center gap-1.5">
-                                    <span>📚</span> NIVEL PRIMARIA (1° a 6° Grado):
+                            <div class="p-3 rounded-2xl border space-y-2 ${esOscuro ? 'bg-blue-950/20 border-blue-400/25' : 'bg-blue-50/40 border-blue-200/80'}">
+                                <b class="${esOscuro ? 'text-blue-300' : 'text-blue-900'} text-[11px] font-black flex items-center gap-1.5">
+                                    <span>📚</span> NIVEL PRIMARIA (1° a 6° Grado)
                                 </b>
-                                <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 text-center text-xs">
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center text-xs">
                                     ${[1,2,3,4,5,6].map(g => `
-                                        <div class="bg-white border border-blue-200 p-1.5 rounded-xl">
-                                            <span class="block text-[10px] text-slate-500 font-bold">${g}° Grado</span>
+                                        <div class="${tileCls} border p-2 rounded-xl">
+                                            <span class="block text-[10.5px] ${tileLblCls} font-bold">${g}° Grado</span>
                                             ${obtenerBadgeSemaforo(vac['pri_' + g], esPart, g % 2 === 0 ? 'verde' : 'amarillo')}
                                         </div>
                                     `).join('')}
@@ -2267,14 +2344,14 @@
 
                         <!-- BLOQUE SECUNDARIA -->
                         ${tieneSec ? `
-                            <div class="p-3 bg-purple-50/70 border border-purple-200 rounded-2xl space-y-2">
-                                <b class="text-purple-900 text-xs flex items-center gap-1.5">
-                                    <span>🎓</span> NIVEL SECUNDARIA (1° a 5° Año):
+                            <div class="p-3 rounded-2xl border space-y-2 ${esOscuro ? 'bg-purple-950/20 border-purple-400/25' : 'bg-purple-50/40 border-purple-200/80'}">
+                                <b class="${esOscuro ? 'text-purple-300' : 'text-purple-900'} text-[11px] font-black flex items-center gap-1.5">
+                                    <span>🎓</span> NIVEL SECUNDARIA (1° a 5° Año)
                                 </b>
-                                <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-center text-xs">
+                                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
                                     ${[1,2,3,4,5].map(s => `
-                                        <div class="bg-white border border-purple-200 p-1.5 rounded-xl">
-                                            <span class="block text-[10px] text-slate-500 font-bold">${s}° Año</span>
+                                        <div class="${tileCls} border p-2 rounded-xl">
+                                            <span class="block text-[10.5px] ${tileLblCls} font-bold">${s}° Año</span>
                                             ${obtenerBadgeSemaforo(vac['sec_' + s], esPart, s === 1 ? 'rojo' : 'verde')}
                                         </div>
                                     `).join('')}
@@ -4759,6 +4836,67 @@
             if (bRedes) bRedes.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 ' + (esCuerpoClaro ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' : 'bg-indigo-500/20 text-indigo-300 border border-indigo-400/30');
             if (bEst) bEst.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 ' + (esCuerpoClaro ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30');
             if (bPart) bPart.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 ' + (esCuerpoClaro ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-amber-500/20 text-amber-300 border border-amber-400/30');
+
+            aplicarTemaVistasSecundariasStandalone(tema);
+        }
+
+        function aplicarTemaVistasSecundariasStandalone(tema) {
+            var esClaro = tema === 'claro';
+            var esMixto = tema === 'mixto';
+            var esOscuro = !esClaro && !esMixto;
+
+            var hdrMapa = document.getElementById('headerMapaStandalone');
+            if (hdrMapa) {
+                hdrMapa.className = 'px-3 sm:px-4 py-2.5 flex items-center gap-2 sm:gap-2.5 shrink-0 z-10 shadow-lg transition-colors ' +
+                    (esClaro ? 'bg-[#0f172a] text-white border-b border-slate-800' : 'bg-slate-950/90 backdrop-blur-xl text-white border-b border-white/10');
+            }
+
+            var drw = document.getElementById('drawerCercanosMapa');
+            var drwHdr = document.getElementById('drawerCercanosHeader');
+            var drwTit = document.getElementById('drawerCercanosTitulo');
+            var drwSub = document.getElementById('drawerCercanosSub');
+            var drwBtn = document.getElementById('btnCerrarDrawerCercanos');
+            if (drw) {
+                drw.className = (drw.classList.contains('hidden') ? 'hidden ' : '') +
+                    'absolute bottom-3 left-2 right-2 sm:left-4 sm:right-auto sm:w-[450px] backdrop-blur-xl border rounded-3xl shadow-2xl p-3.5 z-[1000] max-h-[50vh] flex flex-col space-y-2.5 transition-colors ' +
+                    (esOscuro ? 'bg-slate-900/95 border-cyan-400/40 text-white' : 'bg-white/95 border-slate-200 text-slate-900');
+            }
+            if (drwHdr) drwHdr.className = 'flex items-center justify-between pb-2 border-b shrink-0 ' + (esOscuro ? 'border-white/10' : 'border-slate-200');
+            if (drwTit) drwTit.className = 'text-xs font-black leading-tight ' + (esOscuro ? 'text-cyan-300' : 'text-sky-800');
+            if (drwSub) drwSub.className = 'text-[10.5px] font-semibold ' + (esOscuro ? 'text-slate-400' : 'text-slate-500');
+            if (drwBtn) drwBtn.className = 'w-7 h-7 rounded-full font-black text-xs flex items-center justify-center cursor-pointer transition ' + (esOscuro ? 'bg-white/10 hover:bg-white/20 text-slate-200' : 'bg-slate-100 hover:bg-slate-200 text-slate-600');
+
+            var pVac = document.getElementById('pantalla-vacantes');
+            var hdrVac = document.getElementById('headerVacantesStandalone');
+            var cardFilt = document.getElementById('cardFiltrosVacantes');
+            var titFilt = document.getElementById('tituloFiltrosVacantes');
+            var inpFilt = document.getElementById('inputFiltroVacantes');
+
+            if (pVac) {
+                pVac.className = (pVac.classList.contains('hidden') ? 'hidden ' : '') +
+                    'fixed inset-0 z-40 flex flex-col overflow-y-auto transition-colors duration-300 ' +
+                    (esOscuro ? 'bg-[radial-gradient(circle_at_top,#1b2a4a_0%,#070d1a_100%)] text-slate-100' : esClaro ? 'bg-slate-50 text-slate-900' : 'bg-slate-100 text-slate-900');
+            }
+            if (hdrVac) {
+                hdrVac.className = 'px-3 sm:px-5 py-3 flex items-center justify-between gap-3 shrink-0 sticky top-0 z-20 shadow-lg transition-colors ' +
+                    (esClaro ? 'bg-[#0f172a] text-white border-b border-slate-800' : 'bg-slate-950/90 backdrop-blur-xl text-white border-b border-white/10');
+            }
+            if (cardFilt) {
+                cardFilt.className = 'p-4 sm:p-6 rounded-3xl border space-y-3.5 transition-colors ' +
+                    (esOscuro ? 'bg-slate-900/75 border-sky-400/25 shadow-2xl backdrop-blur-xl' : 'bg-white border-slate-200/90 shadow-sm');
+            }
+            if (titFilt) titFilt.className = 'text-base sm:text-lg font-black tracking-tight ' + (esOscuro ? 'text-white' : 'text-slate-900');
+            if (inpFilt) {
+                inpFilt.className = 'w-full px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm outline-none transition border ' +
+                    (esOscuro ? 'bg-slate-800/80 border-white/15 focus:border-sky-400 text-white placeholder-slate-400' : 'bg-slate-50 border-slate-200 focus:border-sky-500 focus:bg-white text-slate-900 placeholder-slate-400');
+            }
+
+            if (typeof actualizarEstilosBotonesVacantesStandalone === 'function') {
+                actualizarEstilosBotonesVacantesStandalone();
+            }
+            if (pVac && !pVac.classList.contains('hidden') && typeof renderizarListaVacantes === 'function') {
+                renderizarListaVacantes();
+            }
         }
 
         // Inicializar vista de donaciones, tema visual y contadores en vivo
