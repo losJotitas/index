@@ -174,7 +174,7 @@
                         <div class="flex items-center gap-3 min-w-0">
                             <span class="text-2xl shrink-0 group-hover:scale-110 transition">🏫</span>
                             <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-white">Colegios por redes (1-9)</div>
+                                <div class="cat-title font-extrabold text-xs sm:text-sm text-white">Colegios por redes</div>
                                 <div class="cat-sub text-[11px] font-medium text-slate-400">Explora por Red Educativa</div>
                             </div>
                         </div>
@@ -263,17 +263,15 @@
     <!-- PANTALLA 3: BUSCADOR DE VACANTES CON SEMÁFORO EN TIEMPO REAL   -->
     <!-- ============================================================== -->
     <div id="pantalla-vacantes" class="hidden fixed inset-0 z-40 flex flex-col bg-[radial-gradient(circle_at_top,#1b2a4a_0%,#070d1a_100%)] text-slate-100 overflow-y-auto transition-colors duration-300">
-        <header id="headerVacantesStandalone" class="bg-slate-950/90 backdrop-blur-xl border-b border-white/10 text-white px-3 sm:px-5 py-3 flex items-center justify-between gap-3 shrink-0 sticky top-0 z-20 shadow-lg transition-colors">
-            <div class="flex items-center gap-2.5 min-w-0">
-                <button onclick="volverAPortada()" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl border border-white/15 transition cursor-pointer shrink-0 whitespace-nowrap">
-                    ⬅ Volver
-                </button>
-                <h2 class="text-sm sm:text-base font-black text-white flex items-center gap-1.5 truncate">
-                    <span>🚦</span>
-                    <span class="truncate">Disponibilidad de Vacantes en Tiempo Real</span>
-                </h2>
-            </div>
-            <button onclick="mostrarDialogoMapachito('buscando', 'Sincronizando disponibilidad de vacantes directamente con la nube de Google Sheets...', sincronizarConGoogleSheetsManual)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/30 font-bold text-xs rounded-xl transition cursor-pointer shrink-0 whitespace-nowrap shadow-sm">
+        <header id="headerVacantesStandalone" class="bg-slate-950/90 backdrop-blur-xl border-b border-white/10 text-white px-3 sm:px-5 py-3 grid grid-cols-[auto_1fr_auto] sm:grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4 shrink-0 sticky top-0 z-20 shadow-lg transition-colors">
+            <button onclick="volverAPortada()" class="justify-self-start px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl border border-white/15 transition cursor-pointer shrink-0 whitespace-nowrap">
+                ⬅ Volver
+            </button>
+            <h2 class="justify-self-center text-center text-sm sm:text-base font-black text-white flex items-center justify-center gap-1.5 truncate max-w-full">
+                <span>🚦</span>
+                <span class="truncate">Disponibilidad de Vacantes en Tiempo Real</span>
+            </h2>
+            <button onclick="mostrarDialogoMapachito('buscando', 'Sincronizando disponibilidad de vacantes directamente con la nube de Google Sheets...', sincronizarConGoogleSheetsManual)" class="justify-self-end px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/30 font-bold text-xs rounded-xl transition cursor-pointer shrink-0 whitespace-nowrap shadow-sm">
                 🔄 Sincronizar
             </button>
         </header>
@@ -856,6 +854,39 @@
         </div>
     </div>
 
+    <!-- PROMPT FLOTANTE PARA CALIFICAR LA APP (LIKES / ANTI-LIKES PERMANENTES) -->
+    <div id="promptCalificarApp" class="hidden fixed bottom-4 right-4 z-40 max-w-xs w-[calc(100%-2rem)] rounded-2xl p-4 shadow-2xl border backdrop-blur-xl bg-slate-900/95 border-sky-400/35 text-slate-100 transition-all">
+        <button id="btnCerrarPromptRating" type="button" onclick="cerrarPromptCalificarStandalone()" aria-label="Cerrar mensaje de calificación" class="absolute top-2.5 right-2.5 w-6 h-6 rounded-full text-xs font-black flex items-center justify-center cursor-pointer transition bg-white/10 hover:bg-white/20 text-slate-300">✕</button>
+        <div id="promptRatingPregunta" class="space-y-3">
+            <div class="pr-6">
+                <p class="text-xs font-black flex items-center gap-1.5">
+                    <span>🦝</span>
+                    <span>¿Te gustó la app MAPPACHE?</span>
+                </p>
+                <p id="promptRatingSub" class="text-[11px] font-medium mt-0.5 leading-snug text-slate-300">
+                    Califica tu experiencia con un toque para seguir mejorando.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="calificarAppStandalone('like')" class="py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shadow-sm">
+                    <span>👍</span>
+                    <span>Me gusta</span>
+                </button>
+                <button id="btnDislikeRating" type="button" onclick="calificarAppStandalone('dislike')" class="py-2 px-3 rounded-xl font-extrabold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 border bg-rose-500/15 hover:bg-rose-500/25 text-rose-200 border-rose-400/30">
+                    <span>👎</span>
+                    <span>No me gusta</span>
+                </button>
+            </div>
+        </div>
+        <div id="promptRatingGracias" class="hidden pr-5 space-y-1">
+            <p class="text-xs font-black flex items-center gap-1.5">
+                <span>🦝</span>
+                <span>¡Gracias por calificar MAPPACHE!</span>
+            </p>
+            <p id="promptRatingResumen" class="text-[11px] font-semibold text-slate-300"></p>
+        </div>
+    </div>
+
     <!-- ============================================================== -->
     <!-- JAVASCRIPT PRINCIPAL                                            -->
     <!-- ============================================================== -->
@@ -1153,13 +1184,22 @@
             document.getElementById('pantalla-donaciones').classList.add('hidden');
         }
 
+        let visitoVistaSecundariaStandalone = false;
+
         function volverAPortada() {
+            const pMapa = document.getElementById('pantalla-mapa');
+            const pVac = document.getElementById('pantalla-vacantes');
+            const veniaDeVistaPrincipal = (pMapa && !pMapa.classList.contains('hidden')) || (pVac && !pVac.classList.contains('hidden')) || visitoVistaSecundariaStandalone;
             mostrarDialogoMapachito('saludando', 'Regresando a la portada principal.');
             ocultarPantallas();
             document.getElementById('pantalla-portada').classList.remove('hidden');
+            if (veniaDeVistaPrincipal) {
+                programarPromptCalificarStandalone(700);
+            }
         }
 
         function abrirPantallaVacantes(nombreFiltro) {
+            visitoVistaSecundariaStandalone = true;
             ocultarPantallas();
             document.getElementById('pantalla-vacantes').classList.remove('hidden');
             if (nombreFiltro) {
@@ -2060,22 +2100,33 @@
             return '<span class="block mt-0.5 text-[10.5px] font-black ' + clsVerde + '">🟢 Hay Vacantes</span>';
         }
 
-        // Modal Detalle: Ficha Informativa General Limpia y Organizada (Opción 1 Adaptativa)
+        // Modal Detalle: Ficha Informativa General (Oscuro / Claro Adaptativo + Mixto Súper-App)
         function abrirModalDetalle(col) {
             colegioSeleccionado = col;
             const modal = document.getElementById('modalDetalleColegio');
             const cont = document.getElementById('contenidoModalDetalle');
             const cardModal = document.getElementById('cardModalDetalle');
             const btnCerrar = document.getElementById('btnCerrarModalDetalle');
-            const esOscuro = getTemaActualStandalone() === 'oscuro';
+            const temaModal = getTemaActualStandalone();
+            const esOscuro = temaModal === 'oscuro';
+            const esMixto = temaModal === 'mixto';
 
             if (cardModal) {
-                cardModal.className = 'relative rounded-3xl p-5 sm:p-6 max-w-lg w-full shadow-2xl border backdrop-blur-xl space-y-4 max-h-[92vh] overflow-y-auto transition-colors ' +
-                    (esOscuro ? 'bg-slate-900/95 border-white/15 text-slate-100' : 'bg-white/95 border-slate-200 text-slate-900');
+                cardModal.className = esMixto
+                    ? 'relative rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200 bg-white text-slate-900 transition-colors'
+                    : ('relative rounded-3xl p-5 sm:p-6 max-w-lg w-full shadow-2xl border backdrop-blur-xl space-y-4 max-h-[92vh] overflow-y-auto transition-colors ' +
+                        (esOscuro ? 'bg-slate-900/95 border-white/15 text-slate-100' : 'bg-white/95 border-slate-200 text-slate-900'));
+            }
+            if (cont) {
+                cont.className = esMixto ? '' : 'space-y-4';
             }
             if (btnCerrar) {
-                btnCerrar.className = 'absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full font-black text-lg cursor-pointer transition border ' +
-                    (esOscuro ? 'bg-white/10 hover:bg-rose-500/90 text-slate-200 hover:text-white border-white/15' : 'bg-slate-100 hover:bg-rose-500 text-slate-600 hover:text-white border-slate-200');
+                btnCerrar.className = 'absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center rounded-full font-black text-lg cursor-pointer transition border ' +
+                    (esMixto
+                        ? 'bg-white/15 hover:bg-white/25 text-white border-white/25'
+                        : esOscuro
+                            ? 'bg-white/10 hover:bg-rose-500/90 text-slate-200 hover:text-white border-white/15'
+                            : 'bg-slate-100 hover:bg-rose-500 text-slate-600 hover:text-white border-slate-200');
             }
 
             const esPart = normalizarTexto(col.gestion).includes('particular') || normalizarTexto(col.gestion).includes('privad');
@@ -2086,6 +2137,105 @@
             const tieneIni = niv.includes('inicial') || niv.includes('jardin') || nom.includes('i.e.i') || (!niv.includes('primaria') && !niv.includes('secundaria'));
             const tienePri = niv.includes('primaria') || nom.includes('primaria');
             const tieneSec = niv.includes('secundaria') || nom.includes('secundaria');
+
+            if (esMixto) {
+                cont.innerHTML = `
+                    <!-- Cabecera Súper-App Azul Degradada -->
+                    <div class="bg-gradient-to-r from-[#0284c7] via-[#1d4ed8] to-[#0f3d91] text-white px-5 sm:px-6 pt-5 pb-5 relative">
+                        <div class="pr-11">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-[11px] font-black uppercase tracking-wide text-white">
+                                <span>${esPart ? '⭐' : '🏛️'}</span>
+                                <span>${esPart ? 'Particular' : col.gestion} · ${col.distrito || 'Ventanilla'}</span>
+                            </span>
+                            <h2 class="text-lg sm:text-xl font-black text-white leading-snug tracking-tight mt-3">${col.nombre_colegio}</h2>
+                            ${col.red_educativa ? `<p class="text-[11px] font-semibold text-sky-100/90 mt-1">${col.red_educativa}</p>` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Cuerpo Blanco Súper-App -->
+                    <div class="p-5 sm:p-6 space-y-3 bg-white">
+                        <!-- Tarjeta Zona/Sector + Turno -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-3.5 flex items-start justify-between gap-3 shadow-2xs">
+                            <div class="min-w-0">
+                                <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 block">Zona / Sector</span>
+                                <span class="font-black text-slate-900 text-xs block mt-0.5">${col.zona || col.distrito || 'Ventanilla'}</span>
+                            </div>
+                            <div class="text-right shrink-0">
+                                <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 block">Turno</span>
+                                <span class="inline-block mt-0.5 px-2.5 py-0.5 rounded-lg bg-sky-50 border border-sky-200 text-sky-800 font-extrabold text-xs">${col.TURNOS || 'Mañana, Tarde'}</span>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Dirección + Red Educativa -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-3.5 space-y-2.5 shadow-2xs">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 block">Dirección</span>
+                                <span class="font-extrabold text-slate-900 text-xs block mt-0.5">${col.direccion || 'Ventanilla / Mi Perú'}</span>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100">
+                                <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 block">Red Educativa</span>
+                                <span class="font-extrabold text-sky-800 text-xs block mt-0.5">${col.red_educativa || 'Particular / Independiente'}</span>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Requisitos -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-3.5 shadow-2xs">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 block mb-1">Requisitos de Matrícula</span>
+                            <p class="text-slate-700 text-[11.5px] leading-relaxed font-medium">${col.requisitos_de_matricula || 'DNI del estudiante y apoderado, FUM SIAGIE'}</p>
+                        </div>
+
+                        <!-- Niveles Educativos Impartidos -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-3.5 shadow-2xs">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400 block mb-2">Niveles Educativos Impartidos</span>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                ${tieneCuna ? '<div class="py-2 px-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-800 font-extrabold text-xs text-center flex items-center justify-center gap-1"><span>👶</span><span>Cuna</span></div>' : ''}
+                                ${tieneIni ? '<div class="py-2 px-2.5 rounded-xl border border-amber-200 bg-amber-50 text-amber-900 font-extrabold text-xs text-center flex items-center justify-center gap-1"><span>🎨</span><span>Inicial</span></div>' : ''}
+                                ${tienePri ? '<div class="py-2 px-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 font-extrabold text-xs text-center flex items-center justify-center gap-1"><span>📚</span><span>Primaria</span></div>' : ''}
+                                ${tieneSec ? '<div class="py-2 px-2.5 rounded-xl border border-purple-200 bg-purple-50 text-purple-800 font-extrabold text-xs text-center flex items-center justify-center gap-1"><span>🎓</span><span>Secundaria</span></div>' : ''}
+                            </div>
+                        </div>
+
+                        ${(col.enlace_web_o_whatsapp || col.enlace_facebook || col.enlace_tiktok) ? `
+                            <div class="bg-sky-50/70 border border-sky-200/80 rounded-2xl p-3.5 space-y-2">
+                                <span class="text-[10px] uppercase tracking-wider font-extrabold text-sky-900 block">🌐 Canales Oficiales y Redes Sociales</span>
+                                <div class="flex flex-wrap gap-2">
+                                    ${col.enlace_web_o_whatsapp ? `
+                                        <a href="${col.enlace_web_o_whatsapp.startsWith('http') ? col.enlace_web_o_whatsapp : 'https://' + col.enlace_web_o_whatsapp}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs shadow-xs transition whitespace-nowrap">
+                                            💬 Web / WhatsApp
+                                        </a>
+                                    ` : ''}
+                                    ${col.enlace_facebook ? `
+                                        <a href="${col.enlace_facebook.startsWith('http') ? col.enlace_facebook : 'https://' + col.enlace_facebook}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#1877F2] hover:bg-[#166fe5] text-white rounded-xl font-bold text-xs shadow-xs transition whitespace-nowrap">
+                                            📘 Facebook
+                                        </a>
+                                    ` : ''}
+                                    ${col.enlace_tiktok ? `
+                                        <a href="${col.enlace_tiktok.startsWith('http') ? col.enlace_tiktok : 'https://' + col.enlace_tiktok}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-black text-white rounded-xl font-bold text-xs shadow-xs transition whitespace-nowrap">
+                                            🎵 TikTok
+                                        </a>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="space-y-2.5 pt-1">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=${col.latitud},${col.longitud}" target="_blank" class="py-3 px-4 bg-emerald-50/80 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold text-xs rounded-xl text-center transition flex items-center justify-center gap-1.5 whitespace-nowrap">
+                                    <span>🗺️</span> Google Maps
+                                </a>
+                                <button onclick="abrirModalFachada('${col.id_colegio}');" class="py-3 px-4 bg-sky-50/80 hover:bg-sky-100 text-sky-800 border border-sky-300 font-extrabold text-xs rounded-xl text-center transition cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap">
+                                    <span>🏫</span> Ver Fachada
+                                </button>
+                            </div>
+                            <button onclick="cerrarModalDetalle(); abrirPantallaVacantes('${col.nombre_colegio}');" class="w-full py-3.5 px-4 bg-gradient-to-r from-[#0284c7] to-[#059669] hover:brightness-110 text-white font-black text-xs rounded-xl text-center shadow-md transition cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap">
+                                <span>🚦</span> Ver Vacantes en Tiempo Real ➔
+                            </button>
+                        </div>
+                    </div>
+                `;
+                modal.classList.remove('hidden');
+                return;
+            }
 
             const boxCls = esOscuro ? 'bg-slate-800/70 border-white/10' : 'bg-slate-50/90 border-slate-200/80';
             const lblCls = esOscuro ? 'text-slate-400' : 'text-slate-500';
@@ -4260,8 +4410,25 @@
         }
 
         function renderHtmlTabBuzon(sugerencias) {
+            const ratingData = obtenerContadoresRatingStandalone();
+            const totalVotos = ratingData.likes + ratingData.dislikes;
+            const aprobacion = totalVotos > 0 ? Math.round((ratingData.likes / totalVotos) * 100) + '%' : '—';
             return `
                 <div class="space-y-3 text-xs">
+                    <div class="grid grid-cols-3 gap-2.5 bg-slate-950/90 border border-slate-800 rounded-2xl p-3">
+                        <div class="bg-emerald-950/35 border border-emerald-500/30 rounded-xl p-2.5 text-center">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-300 block">👍 Likes App</span>
+                            <span class="text-lg font-black text-emerald-400">${ratingData.likes}</span>
+                        </div>
+                        <div class="bg-rose-950/35 border border-rose-500/30 rounded-xl p-2.5 text-center">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-rose-300 block">👎 Anti-likes</span>
+                            <span class="text-lg font-black text-rose-400">${ratingData.dislikes}</span>
+                        </div>
+                        <div class="bg-sky-950/35 border border-sky-500/30 rounded-xl p-2.5 text-center">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-sky-300 block">📊 Aprobación</span>
+                            <span class="text-lg font-black text-sky-300">${aprobacion}</span>
+                        </div>
+                    </div>
                     <div class="flex items-center justify-between">
                         <span class="font-bold text-amber-300">Mensajes y Sugerencias de la Comunidad:</span>
                         ${sugerencias.length > 0 ? `
@@ -4726,7 +4893,8 @@
                 var esPart = g.indexOf('particular') !== -1 || g.indexOf('privad') !== -1;
                 if (esPart) particulares++; else estatales++;
                 var r = String(COLEGIOS[i].red_educativa || '').trim();
-                if (r && r.toLowerCase() !== 'red n/a') redesSet[r] = true;
+                var rl = r.toLowerCase();
+                if (r && rl !== 'red n/a' && rl.indexOf('independiente') === -1 && rl.indexOf('particular') === -1 && rl.indexOf('privad') === -1) redesSet[r] = true;
             }
             var totalRedes = Object.keys(redesSet).length || 9;
 
@@ -4838,6 +5006,9 @@
             if (bPart) bPart.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 ' + (esCuerpoClaro ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-amber-500/20 text-amber-300 border border-amber-400/30');
 
             aplicarTemaVistasSecundariasStandalone(tema);
+            if (typeof aplicarTemaPromptRatingStandalone === 'function') {
+                aplicarTemaPromptRatingStandalone();
+            }
         }
 
         function aplicarTemaVistasSecundariasStandalone(tema) {
@@ -4878,7 +5049,7 @@
                     (esOscuro ? 'bg-[radial-gradient(circle_at_top,#1b2a4a_0%,#070d1a_100%)] text-slate-100' : esClaro ? 'bg-slate-50 text-slate-900' : 'bg-slate-100 text-slate-900');
             }
             if (hdrVac) {
-                hdrVac.className = 'px-3 sm:px-5 py-3 flex items-center justify-between gap-3 shrink-0 sticky top-0 z-20 shadow-lg transition-colors ' +
+                hdrVac.className = 'px-3 sm:px-5 py-3 grid grid-cols-[auto_1fr_auto] sm:grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4 shrink-0 sticky top-0 z-20 shadow-lg transition-colors ' +
                     (esClaro ? 'bg-[#0f172a] text-white border-b border-slate-800' : 'bg-slate-950/90 backdrop-blur-xl text-white border-b border-white/10');
             }
             if (cardFilt) {
@@ -4899,9 +5070,118 @@
             }
         }
 
+        // Sistema de Calificación Permanente (👍 Likes / 👎 Anti-likes)
+        let ratingCerradoSesionStandalone = false;
+        function obtenerContadoresRatingStandalone() {
+            try {
+                const raw = localStorage.getItem('mappache_app_rating_contadores');
+                if (raw) {
+                    const p = JSON.parse(raw);
+                    return {
+                        likes: Math.max(0, Number(p && p.likes) || 0),
+                        dislikes: Math.max(0, Number(p && p.dislikes) || 0)
+                    };
+                }
+            } catch(e) {}
+            return { likes: 0, dislikes: 0 };
+        }
+
+        function obtenerMiVotoRatingStandalone() {
+            try {
+                const v = localStorage.getItem('mappache_app_rating_voto');
+                if (v === 'like' || v === 'dislike') return v;
+            } catch(e) {}
+            return null;
+        }
+
+        function aplicarTemaPromptRatingStandalone() {
+            const box = document.getElementById('promptCalificarApp');
+            const btnClose = document.getElementById('btnCerrarPromptRating');
+            const sub = document.getElementById('promptRatingSub');
+            const btnDislike = document.getElementById('btnDislikeRating');
+            const res = document.getElementById('promptRatingResumen');
+            const esCuerpoClaro = getTemaActualStandalone() !== 'oscuro';
+            if (box) {
+                box.className = (box.classList.contains('hidden') ? 'hidden ' : '') +
+                    'fixed bottom-4 right-4 z-40 max-w-xs w-[calc(100%-2rem)] rounded-2xl p-4 shadow-2xl border backdrop-blur-xl transition-all ' +
+                    (esCuerpoClaro ? 'bg-white/95 border-slate-200 text-slate-900' : 'bg-slate-900/95 border-sky-400/35 text-slate-100');
+            }
+            if (btnClose) {
+                btnClose.className = 'absolute top-2.5 right-2.5 w-6 h-6 rounded-full text-xs font-black flex items-center justify-center cursor-pointer transition ' +
+                    (esCuerpoClaro ? 'bg-slate-100 hover:bg-slate-200 text-slate-500' : 'bg-white/10 hover:bg-white/20 text-slate-300');
+            }
+            if (sub) sub.className = 'text-[11px] font-medium mt-0.5 leading-snug ' + (esCuerpoClaro ? 'text-slate-600' : 'text-slate-300');
+            if (res) res.className = 'text-[11px] font-semibold ' + (esCuerpoClaro ? 'text-slate-600' : 'text-slate-300');
+            if (btnDislike) {
+                btnDislike.className = 'py-2 px-3 rounded-xl font-extrabold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 border ' +
+                    (esCuerpoClaro ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border-rose-200' : 'bg-rose-500/15 hover:bg-rose-500/25 text-rose-200 border-rose-400/30');
+            }
+        }
+
+        function mostrarPromptCalificarStandalone() {
+            if (obtenerMiVotoRatingStandalone() || ratingCerradoSesionStandalone) return;
+            const modalAdmin = document.getElementById('pantalla-admin');
+            const modalDet = document.getElementById('modalDetalleColegio');
+            if ((modalAdmin && !modalAdmin.classList.contains('hidden')) || (modalDet && !modalDet.classList.contains('hidden'))) return;
+            const box = document.getElementById('promptCalificarApp');
+            if (!box) return;
+            box.classList.remove('hidden');
+            aplicarTemaPromptRatingStandalone();
+        }
+
+        function cerrarPromptCalificarStandalone() {
+            ratingCerradoSesionStandalone = true;
+            const box = document.getElementById('promptCalificarApp');
+            if (box) box.classList.add('hidden');
+        }
+
+        function programarPromptCalificarStandalone(ms) {
+            if (obtenerMiVotoRatingStandalone() || ratingCerradoSesionStandalone) return;
+            setTimeout(mostrarPromptCalificarStandalone, ms || 18000);
+        }
+
+        function calificarAppStandalone(voto) {
+            const previo = obtenerMiVotoRatingStandalone();
+            if (previo === voto) return;
+            const stats = obtenerContadoresRatingStandalone();
+            const nuevos = {
+                likes: Math.max(0, stats.likes + (voto === 'like' ? 1 : 0) - (previo === 'like' ? 1 : 0)),
+                dislikes: Math.max(0, stats.dislikes + (voto === 'dislike' ? 1 : 0) - (previo === 'dislike' ? 1 : 0))
+            };
+            try {
+                localStorage.setItem('mappache_app_rating_contadores', JSON.stringify(nuevos));
+                localStorage.setItem('mappache_app_rating_voto', voto);
+            } catch(e) {}
+
+            fetch(URL_API_GOOGLE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    accion: 'calificar_app',
+                    voto: voto,
+                    likes_total: nuevos.likes,
+                    dislikes_total: nuevos.dislikes,
+                    fecha: new Date().toLocaleString('es-PE')
+                })
+            }).catch(function() {});
+
+            const preg = document.getElementById('promptRatingPregunta');
+            const grc = document.getElementById('promptRatingGracias');
+            const res = document.getElementById('promptRatingResumen');
+            if (preg) preg.classList.add('hidden');
+            if (grc) grc.classList.remove('hidden');
+            if (res) res.innerText = 'Contador acumulado: 👍 ' + nuevos.likes + ' · 👎 ' + nuevos.dislikes;
+
+            setTimeout(function() {
+                const box = document.getElementById('promptCalificarApp');
+                if (box) box.classList.add('hidden');
+            }, 2400);
+        }
+
         // Inicializar vista de donaciones, tema visual y contadores en vivo
         actualizarVistaDonacionesStandalone();
         actualizarContadoresPortadaStandalone();
+        programarPromptCalificarStandalone(18000);
         try {
             cambiarTemaPortadaStandalone(localStorage.getItem('mappache_tema_portada') || 'oscuro');
         } catch(e) {
