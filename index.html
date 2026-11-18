@@ -137,7 +137,7 @@
                         oninput="onBuscarPortadaInput(this.value)"
                         onkeydown="onBuscarPortadaKeydown(event)"
                         placeholder="🔍 Nombre, número o apellido (Ej: Cáceres, Elim, 5090, 133)..."
-                        class="w-full px-4 py-3 sm:py-3.5 rounded-2xl bg-white text-[#0f172a] font-bold text-xs sm:text-sm placeholder-slate-400 outline-none shadow-lg border border-sky-200 focus:ring-2 focus:ring-sky-400 transition"
+                        class="w-full px-4 py-3 sm:py-3.5 rounded-2xl bg-white border-2 border-sky-400 focus:border-sky-600 ring-2 ring-sky-500/15 focus:ring-sky-500/30 text-slate-900 placeholder-slate-400 font-bold text-xs sm:text-sm outline-none shadow-lg transition"
                         autocomplete="off"
                     />
                     <div id="listaSugerenciasPortada" class="hidden absolute top-full left-0 right-0 mt-1 bg-white text-slate-900 rounded-b-2xl shadow-2xl max-h-60 overflow-y-auto z-50 divide-y divide-slate-100 text-xs border border-slate-200"></div>
@@ -157,50 +157,50 @@
                     </button>
                 </div>
 
-                <!-- 4 Tarjetas Horizontales con Texto Completo y Contadores en Vivo -->
+                <!-- 4 Tarjetas Horizontales Pastel con Cuadrado Sólido, Borde Definido y Sombra en los 3 Modos -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    <button id="cardCatTodos" onclick="mostrarDialogoMapachito('feliz', '¡Cargando el mapa interactivo con todas las instituciones educativas!', verTodosEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-white/10 hover:border-sky-400/60 text-left flex items-center justify-between gap-3 transition cursor-pointer group">
+                    <button id="cardCatTodos" onclick="mostrarDialogoMapachito('feliz', '¡Cargando el mapa interactivo con todas las instituciones educativas!', verTodosEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-sky-50 hover:bg-sky-100/90 border-2 border-sky-300 hover:border-sky-500 shadow-md hover:shadow-lg text-left flex items-center justify-between gap-3 transition cursor-pointer group">
                         <div class="flex items-center gap-3 min-w-0">
-                            <span class="text-2xl shrink-0 group-hover:scale-110 transition">🗺️</span>
+                            <span class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0 group-hover:scale-110 transition">🗺️</span>
                             <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-white">Ver todos los colegios</div>
-                                <div class="cat-sub text-[11px] font-medium text-slate-400">Mapa interactivo completo</div>
+                                <div class="cat-title font-extrabold text-xs sm:text-sm text-slate-900">Ver todos los colegios</div>
+                                <div class="cat-sub text-[11px] font-medium text-slate-600">Mapa interactivo completo</div>
                             </div>
                         </div>
-                        <span id="cntTodosPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-sky-500/20 text-sky-300 border border-sky-400/30">147 en mapa</span>
+                        <span id="cntTodosPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-sky-100 text-sky-900 border border-sky-300">147 en mapa</span>
                     </button>
 
-                    <button id="cardCatRedes" onclick="mostrarDialogoMapachito('olfateando', 'Elige una de las 9 Redes Educativas de UGEL Ventanilla para explorar sus colegios.', abrirModalRedes)" class="p-3.5 sm:p-4 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-white/10 hover:border-sky-400/60 text-left flex items-center justify-between gap-3 transition cursor-pointer group">
+                    <button id="cardCatRedes" onclick="mostrarDialogoMapachito('olfateando', 'Elige una de las 9 Redes Educativas de UGEL Ventanilla para explorar sus colegios.', abrirModalRedes)" class="p-3.5 sm:p-4 rounded-2xl bg-indigo-50 hover:bg-indigo-100/90 border-2 border-indigo-300 hover:border-indigo-500 shadow-md hover:shadow-lg text-left flex items-center justify-between gap-3 transition cursor-pointer group">
                         <div class="flex items-center gap-3 min-w-0">
-                            <span class="text-2xl shrink-0 group-hover:scale-110 transition">🏫</span>
+                            <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0 group-hover:scale-110 transition">🏫</span>
                             <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-white">Colegios por redes</div>
-                                <div class="cat-sub text-[11px] font-medium text-slate-400">Explora por Red Educativa</div>
+                                <div class="cat-title font-extrabold text-xs sm:text-sm text-slate-900">Colegios por redes</div>
+                                <div class="cat-sub text-[11px] font-medium text-slate-600">Explora por Red Educativa</div>
                             </div>
                         </div>
-                        <span id="cntRedesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">9 redes</span>
+                        <span id="cntRedesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-indigo-100 text-indigo-900 border border-indigo-300">9 redes</span>
                     </button>
 
-                    <button id="cardCatEstatales" onclick="mostrarDialogoMapachito('saludando', 'Mostrando todos los colegios estatales públicos en el mapa.', verEstatalesEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-white/10 hover:border-emerald-400/60 text-left flex items-center justify-between gap-3 transition cursor-pointer group">
+                    <button id="cardCatEstatales" onclick="mostrarDialogoMapachito('saludando', 'Mostrando todos los colegios estatales públicos en el mapa.', verEstatalesEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-emerald-50 hover:bg-emerald-100/90 border-2 border-emerald-300 hover:border-emerald-500 shadow-md hover:shadow-lg text-left flex items-center justify-between gap-3 transition cursor-pointer group">
                         <div class="flex items-center gap-3 min-w-0">
-                            <span class="text-2xl shrink-0 group-hover:scale-110 transition">🏛️</span>
+                            <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0 group-hover:scale-110 transition">🏛️</span>
                             <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-white">Colegios estatales</div>
-                                <div class="cat-sub text-[11px] font-medium text-slate-400">Instituciones públicas</div>
+                                <div class="cat-title font-extrabold text-xs sm:text-sm text-slate-900">Colegios estatales</div>
+                                <div class="cat-sub text-[11px] font-medium text-slate-600">Instituciones públicas</div>
                             </div>
                         </div>
-                        <span id="cntEstatalesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Públicos</span>
+                        <span id="cntEstatalesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-emerald-100 text-emerald-900 border border-emerald-300">Públicos</span>
                     </button>
 
-                    <button id="cardCatParticulares" onclick="mostrarDialogoMapachito('guiñando', 'Explorando colegios particulares autorizados con membresía digital activa.', verParticularesEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-amber-400/30 hover:border-amber-400 text-left flex items-center justify-between gap-3 transition cursor-pointer group">
+                    <button id="cardCatParticulares" onclick="mostrarDialogoMapachito('guiñando', 'Explorando colegios particulares autorizados con membresía digital activa.', verParticularesEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-amber-50 hover:bg-amber-100/90 border-2 border-amber-300 hover:border-amber-500 shadow-md hover:shadow-lg text-left flex items-center justify-between gap-3 transition cursor-pointer group">
                         <div class="flex items-center gap-3 min-w-0">
-                            <span class="text-2xl shrink-0 group-hover:scale-110 transition">⭐</span>
+                            <span class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-sm shrink-0 group-hover:scale-110 transition">⭐</span>
                             <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-amber-200">Colegios particulares</div>
-                                <div class="cat-sub text-[11px] font-medium text-amber-200/70">Privados y convenios</div>
+                                <div class="cat-title font-extrabold text-xs sm:text-sm text-slate-900">Colegios particulares</div>
+                                <div class="cat-sub text-[11px] font-medium text-slate-600">Privados y convenios</div>
                             </div>
                         </div>
-                        <span id="cntParticularesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-amber-500/20 text-amber-300 border border-amber-400/30">Privados</span>
+                        <span id="cntParticularesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-amber-100 text-amber-900 border border-amber-300">Privados</span>
                     </button>
                 </div>
             </div>
@@ -854,36 +854,49 @@
         </div>
     </div>
 
-    <!-- PROMPT FLOTANTE PARA CALIFICAR LA APP (LIKES / ANTI-LIKES PERMANENTES) -->
-    <div id="promptCalificarApp" class="hidden fixed bottom-4 right-4 z-40 max-w-xs w-[calc(100%-2rem)] rounded-2xl p-4 shadow-2xl border backdrop-blur-xl bg-slate-900/95 border-sky-400/35 text-slate-100 transition-all">
-        <button id="btnCerrarPromptRating" type="button" onclick="cerrarPromptCalificarStandalone()" aria-label="Cerrar mensaje de calificación" class="absolute top-2.5 right-2.5 w-6 h-6 rounded-full text-xs font-black flex items-center justify-center cursor-pointer transition bg-white/10 hover:bg-white/20 text-slate-300">✕</button>
-        <div id="promptRatingPregunta" class="space-y-3">
-            <div class="pr-6">
-                <p class="text-xs font-black flex items-center gap-1.5">
-                    <span>🦝</span>
-                    <span>¿Te gustó la app MAPPACHE?</span>
-                </p>
-                <p id="promptRatingSub" class="text-[11px] font-medium mt-0.5 leading-snug text-slate-300">
-                    Califica tu experiencia con un toque para seguir mejorando.
-                </p>
+    <!-- MODAL CENTRADO DE CALIFICACIÓN 1 A 5 ESTRELLAS (UNA VEZ TRAS 3-5 MIN DE USO) -->
+    <div id="promptCalificarApp" onclick="if(event.target===this && document.getElementById('promptRatingGracias').classList.contains('hidden')) cerrarPromptCalificarStandalone()" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
+        <div id="cardPromptCalificarApp" onclick="event.stopPropagation()" class="relative max-w-sm w-full rounded-3xl p-6 shadow-2xl border transition-all text-center bg-slate-900 border-sky-400/40 text-slate-100">
+            <button id="btnCerrarPromptRating" type="button" onclick="cerrarPromptCalificarStandalone()" aria-label="Cerrar ventana de calificación" class="absolute top-3.5 right-3.5 w-8 h-8 rounded-full text-sm font-black flex items-center justify-center cursor-pointer transition bg-white/10 hover:bg-white/20 text-slate-300">✕</button>
+            <div id="promptRatingPregunta" class="space-y-4">
+                <div class="space-y-1.5 pt-1">
+                    <div class="text-4xl">🦝</div>
+                    <h3 class="text-base sm:text-lg font-black leading-tight">¿Qué te parece la app MAPPACHE?</h3>
+                    <p id="promptRatingSub" class="text-xs font-medium leading-snug text-slate-300">
+                        Llevas varios minutos explorando colegios. Califica tu experiencia del 1 al 5:
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <div id="estrellasRowStandalone" class="flex items-center justify-center gap-2">
+                        <button type="button" data-star="1" onmouseenter="hoverEstrellaStandalone(1)" onmouseleave="hoverEstrellaStandalone(0)" onclick="seleccionarEstrellaStandalone(1)" class="star-btn w-11 h-11 rounded-2xl text-2xl flex items-center justify-center transition transform cursor-pointer border bg-slate-800 border-slate-700 text-slate-600">★</button>
+                        <button type="button" data-star="2" onmouseenter="hoverEstrellaStandalone(2)" onmouseleave="hoverEstrellaStandalone(0)" onclick="seleccionarEstrellaStandalone(2)" class="star-btn w-11 h-11 rounded-2xl text-2xl flex items-center justify-center transition transform cursor-pointer border bg-slate-800 border-slate-700 text-slate-600">★</button>
+                        <button type="button" data-star="3" onmouseenter="hoverEstrellaStandalone(3)" onmouseleave="hoverEstrellaStandalone(0)" onclick="seleccionarEstrellaStandalone(3)" class="star-btn w-11 h-11 rounded-2xl text-2xl flex items-center justify-center transition transform cursor-pointer border bg-slate-800 border-slate-700 text-slate-600">★</button>
+                        <button type="button" data-star="4" onmouseenter="hoverEstrellaStandalone(4)" onmouseleave="hoverEstrellaStandalone(0)" onclick="seleccionarEstrellaStandalone(4)" class="star-btn w-11 h-11 rounded-2xl text-2xl flex items-center justify-center transition transform cursor-pointer border bg-slate-800 border-slate-700 text-slate-600">★</button>
+                        <button type="button" data-star="5" onmouseenter="hoverEstrellaStandalone(5)" onmouseleave="hoverEstrellaStandalone(0)" onclick="seleccionarEstrellaStandalone(5)" class="star-btn w-11 h-11 rounded-2xl text-2xl flex items-center justify-center transition transform cursor-pointer border bg-slate-800 border-slate-700 text-slate-600">★</button>
+                    </div>
+                    <div class="flex items-center justify-between text-[10.5px] font-bold px-2 text-slate-400">
+                        <span>1 = Nada bueno</span>
+                        <span>5 = Muy bueno</span>
+                    </div>
+                    <div id="badgeEtiquetaEstrella" class="hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold border"></div>
+                </div>
+
+                <div class="space-y-2 pt-1">
+                    <button id="btnEnviarEstrellasStandalone" type="button" disabled onclick="calificarAppEstrellasStandalone()" class="w-full py-3 rounded-xl font-black text-xs transition flex items-center justify-center gap-1.5 shadow-md bg-slate-800 text-slate-500 cursor-not-allowed">
+                        <span>⭐</span>
+                        <span id="txtBtnEnviarEstrellas">Elige de 1 a 5 estrellas</span>
+                    </button>
+                    <button id="btnMasTardeRating" type="button" onclick="cerrarPromptCalificarStandalone()" class="w-full py-1.5 text-[11px] font-bold cursor-pointer transition text-slate-400 hover:text-slate-200">
+                        Más tarde
+                    </button>
+                </div>
             </div>
-            <div class="grid grid-cols-2 gap-2">
-                <button type="button" onclick="calificarAppStandalone('like')" class="py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shadow-sm">
-                    <span>👍</span>
-                    <span>Me gusta</span>
-                </button>
-                <button id="btnDislikeRating" type="button" onclick="calificarAppStandalone('dislike')" class="py-2 px-3 rounded-xl font-extrabold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 border bg-rose-500/15 hover:bg-rose-500/25 text-rose-200 border-rose-400/30">
-                    <span>👎</span>
-                    <span>No me gusta</span>
-                </button>
+            <div id="promptRatingGracias" class="hidden py-3 space-y-2.5">
+                <div class="text-4xl">🎉</div>
+                <h3 class="text-base font-black">¡Gracias por calificar MAPPACHE!</h3>
+                <p id="promptRatingResumen" class="text-xs font-semibold text-slate-300"></p>
             </div>
-        </div>
-        <div id="promptRatingGracias" class="hidden pr-5 space-y-1">
-            <p class="text-xs font-black flex items-center gap-1.5">
-                <span>🦝</span>
-                <span>¡Gracias por calificar MAPPACHE!</span>
-            </p>
-            <p id="promptRatingResumen" class="text-[11px] font-semibold text-slate-300"></p>
         </div>
     </div>
 
@@ -1184,18 +1197,10 @@
             document.getElementById('pantalla-donaciones').classList.add('hidden');
         }
 
-        let visitoVistaSecundariaStandalone = false;
-
         function volverAPortada() {
-            const pMapa = document.getElementById('pantalla-mapa');
-            const pVac = document.getElementById('pantalla-vacantes');
-            const veniaDeVistaPrincipal = (pMapa && !pMapa.classList.contains('hidden')) || (pVac && !pVac.classList.contains('hidden')) || visitoVistaSecundariaStandalone;
             mostrarDialogoMapachito('saludando', 'Regresando a la portada principal.');
             ocultarPantallas();
             document.getElementById('pantalla-portada').classList.remove('hidden');
-            if (veniaDeVistaPrincipal) {
-                programarPromptCalificarStandalone(700);
-            }
         }
 
         function abrirPantallaVacantes(nombreFiltro) {
@@ -4465,9 +4470,35 @@
 
         function renderHtmlTabValoracion() {
             const ratingData = obtenerContadoresRatingStandalone();
-            const totalVotos = ratingData.likes + ratingData.dislikes;
-            const porcentajeLikes = totalVotos > 0 ? Math.round((ratingData.likes / totalVotos) * 100) : 0;
-            const porcentajeDislikes = totalVotos > 0 ? 100 - porcentajeLikes : 0;
+            const est = ratingData.estrellas || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+            const totalEstrellas = (est[1] || 0) + (est[2] || 0) + (est[3] || 0) + (est[4] || 0) + (est[5] || 0);
+            const sumaEstrellas = (est[1] || 0) * 1 + (est[2] || 0) * 2 + (est[3] || 0) * 3 + (est[4] || 0) * 4 + (est[5] || 0) * 5;
+            const promedioStr = totalEstrellas > 0 ? (sumaEstrellas / totalEstrellas).toFixed(1) : '—';
+            const totalBinario = ratingData.likes + ratingData.dislikes;
+            const totalVotos = Math.max(totalEstrellas, totalBinario);
+            const porcentajeLikes = totalBinario > 0 ? Math.round((ratingData.likes / totalBinario) * 100) : 0;
+            const etiquetasEst = {
+                5: '5 ★ Muy bueno',
+                4: '4 ★ Bastante bueno',
+                3: '3 ★ Bueno',
+                2: '2 ★ Poco bueno',
+                1: '1 ★ Nada bueno'
+            };
+
+            const filasEstrellasHtml = [5, 4, 3, 2, 1].map(function(n) {
+                const cnt = est[n] || 0;
+                const pct = totalEstrellas > 0 ? Math.round((cnt / totalEstrellas) * 100) : 0;
+                const colorBar = n >= 4 ? 'bg-emerald-500' : n === 3 ? 'bg-amber-400' : 'bg-rose-500';
+                return `
+                    <div class="flex items-center gap-3">
+                        <span class="w-36 shrink-0 font-bold text-slate-300 text-[11px]">${etiquetasEst[n]}</span>
+                        <div class="flex-1 h-2.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/70">
+                            <div class="h-full ${colorBar} transition-all duration-300" style="width: ${pct}%"></div>
+                        </div>
+                        <span class="w-16 text-right font-mono text-[11px] font-bold text-slate-300">${cnt} (${pct}%)</span>
+                    </div>
+                `;
+            }).join('');
 
             return `
                 <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 max-w-4xl mx-auto shadow-2xl space-y-5 text-xs">
@@ -4475,8 +4506,8 @@
                         <div class="flex items-center gap-3">
                             <img src="./mapache_saludando_en_un_pie.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png';" alt="Mapachito" class="h-11 w-11 object-contain drop-shadow" />
                             <div>
-                                <h3 class="text-base sm:text-lg font-black text-emerald-400">Valoración de la App (Likes y Anti-likes)</h3>
-                                <p class="text-slate-400 text-xs">Conteo permanente de calificaciones recibidas en la app MAPPACHE</p>
+                                <h3 class="text-base sm:text-lg font-black text-emerald-400">Valoración de la App (1 a 5 Estrellas y Likes)</h3>
+                                <p class="text-slate-400 text-xs">Conteo permanente de calificaciones recibidas tras 3–5 minutos de uso continuo</p>
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-2">
@@ -4490,40 +4521,33 @@
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div class="bg-amber-950/35 border border-amber-500/40 rounded-2xl p-4 text-center space-y-1">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-300 block">⭐ Promedio</span>
+                            <span class="text-3xl font-black text-amber-400 block">${promedioStr}</span>
+                            <span class="text-[10px] text-amber-200/70 block font-semibold">de 5.0 estrellas</span>
+                        </div>
                         <div class="bg-emerald-950/35 border border-emerald-500/40 rounded-2xl p-4 text-center space-y-1">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300 block">👍 Likes App</span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300 block">👍 Likes (4–5★)</span>
                             <span class="text-3xl font-black text-emerald-400 block">${ratingData.likes}</span>
-                            <span class="text-[10px] text-emerald-200/70 block font-semibold">Me gusta</span>
+                            <span class="text-[10px] text-emerald-200/70 block font-semibold">Positivos (${totalBinario > 0 ? porcentajeLikes + '%' : '—'})</span>
                         </div>
                         <div class="bg-rose-950/35 border border-rose-500/40 rounded-2xl p-4 text-center space-y-1">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-300 block">👎 Anti-likes</span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-300 block">👎 Anti-likes (1–2★)</span>
                             <span class="text-3xl font-black text-rose-400 block">${ratingData.dislikes}</span>
-                            <span class="text-[10px] text-rose-200/70 block font-semibold">No me gusta</span>
+                            <span class="text-[10px] text-rose-200/70 block font-semibold">Negativos</span>
                         </div>
                         <div class="bg-slate-950 border border-slate-700 rounded-2xl p-4 text-center space-y-1">
                             <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300 block">🗳️ Total Votos</span>
                             <span class="text-3xl font-black text-white block">${totalVotos}</span>
                             <span class="text-[10px] text-slate-400 block font-semibold">Acumulados</span>
                         </div>
-                        <div class="bg-sky-950/35 border border-sky-500/40 rounded-2xl p-4 text-center space-y-1">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-sky-300 block">📊 Aprobación</span>
-                            <span class="text-3xl font-black text-sky-300 block">${totalVotos > 0 ? porcentajeLikes + '%' : '—'}</span>
-                            <span class="text-[10px] text-sky-200/70 block font-semibold">Satisfacción</span>
-                        </div>
                     </div>
 
                     <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-2.5">
-                        <div class="flex items-center justify-between text-xs font-bold">
-                            <span class="text-emerald-400">👍 Positivos: ${totalVotos > 0 ? porcentajeLikes + '%' : '0%'}</span>
-                            <span class="text-rose-400">👎 Negativos: ${totalVotos > 0 ? porcentajeDislikes + '%' : '0%'}</span>
-                        </div>
-                        <div class="w-full h-3.5 rounded-full bg-slate-800 overflow-hidden flex border border-slate-700">
-                            ${totalVotos > 0
-                                ? `<div class="h-full bg-emerald-500 transition-all duration-300" style="width: ${porcentajeLikes}%"></div><div class="h-full bg-rose-500 transition-all duration-300" style="width: ${porcentajeDislikes}%"></div>`
-                                : '<div class="h-full w-full bg-slate-800"></div>'}
-                        </div>
-                        <p class="text-[11px] text-slate-400 leading-relaxed pt-1">
-                            💾 Almacenamiento permanente ligero (~40 bytes en memoria del navegador). Cada voto emitido por un usuario también se envía automáticamente a tu Google Apps Script (<code class="text-sky-300 font-mono">accion: "calificar_app"</code>).
+                        <h4 class="font-black text-slate-200 text-xs mb-2">📊 Desglose por Estrellas (5 = Muy bueno · 1 = Nada bueno)</h4>
+                        ${filasEstrellasHtml}
+                        <p class="text-[11px] text-slate-400 leading-relaxed pt-2 border-t border-slate-800/80">
+                            💾 Almacenamiento permanente ligero (~80 bytes). Cada calificación de 1 a 5 estrellas también se reporta automáticamente a tu Google Apps Script (<code class="text-sky-300 font-mono">accion: "calificar_app"</code>).
                         </p>
                     </div>
                 </div>
@@ -4532,14 +4556,15 @@
 
         function actualizarContadoresRatingDashboardStandalone() {
             renderizarContenidoAdmin();
-            mostrarToast('✅ Contadores de Likes y Anti-likes actualizados.');
+            mostrarToast('✅ Contadores de valoración (1 a 5★ y Likes) actualizados.');
         }
 
         function reiniciarContadoresRatingStandalone() {
-            if (confirm('¿Deseas reiniciar a 0 el contador permanente de Likes y Anti-likes guardado en este dispositivo?')) {
+            if (confirm('¿Deseas reiniciar a 0 el contador permanente de valoración guardado en este dispositivo?')) {
                 try {
-                    localStorage.setItem('mappache_app_rating_contadores', JSON.stringify({ likes: 0, dislikes: 0 }));
+                    localStorage.setItem('mappache_app_rating_contadores', JSON.stringify({ likes: 0, dislikes: 0, estrellas: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } }));
                     localStorage.removeItem('mappache_app_rating_voto');
+                    localStorage.removeItem('mappache_tiempo_uso_seg');
                 } catch(e) {}
                 renderizarContenidoAdmin();
                 mostrarToast('🗑️ Contadores de valoración reiniciados a cero.');
@@ -5050,11 +5075,10 @@
             }
             if (card) {
                 card.className = 'w-full rounded-3xl p-4 sm:p-6 space-y-4 transition-colors duration-300 ' +
-                    (esCuerpoClaro ? 'bg-white border border-slate-200 shadow-xl' : 'bg-slate-900/75 border border-sky-400/30 shadow-2xl backdrop-blur-xl');
+                    (esCuerpoClaro ? 'bg-white border-2 border-slate-200/90 shadow-xl' : 'bg-slate-900/75 border border-sky-400/30 shadow-2xl backdrop-blur-xl');
             }
             if (input) {
-                input.className = 'w-full px-4 py-3 sm:py-3.5 rounded-2xl font-bold text-xs sm:text-sm outline-none transition ' +
-                    (esCuerpoClaro ? 'bg-slate-50 border-2 border-slate-200 focus:border-sky-500 focus:bg-white text-slate-900 placeholder-slate-400 shadow-xs' : 'bg-white text-[#0f172a] placeholder-slate-400 shadow-lg border border-sky-200 focus:ring-2 focus:ring-sky-400');
+                input.className = 'w-full px-4 py-3 sm:py-3.5 rounded-2xl bg-white border-2 border-sky-400 focus:border-sky-600 ring-2 ring-sky-500/15 focus:ring-sky-500/30 text-slate-900 placeholder-slate-400 font-bold text-xs sm:text-sm outline-none shadow-lg transition';
             }
             if (footer) {
                 footer.className = 'w-full py-2.5 text-center text-[10.5px] font-semibold shrink-0 cursor-pointer select-none transition ' +
@@ -5068,29 +5092,31 @@
             if (bCla) bCla.className = 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition flex items-center gap-1 cursor-pointer ' + (tema === 'claro' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-300 hover:text-white hover:bg-white/10');
             if (bMix) bMix.className = 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition flex items-center gap-1 cursor-pointer ' + (tema === 'mixto' ? 'bg-amber-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-white hover:bg-white/10');
 
+            var estilosCat = {
+                cardCatTodos: 'bg-sky-50 hover:bg-sky-100/90 border-2 border-sky-300 hover:border-sky-500 shadow-md hover:shadow-lg',
+                cardCatRedes: 'bg-indigo-50 hover:bg-indigo-100/90 border-2 border-indigo-300 hover:border-indigo-500 shadow-md hover:shadow-lg',
+                cardCatEstatales: 'bg-emerald-50 hover:bg-emerald-100/90 border-2 border-emerald-300 hover:border-emerald-500 shadow-md hover:shadow-lg',
+                cardCatParticulares: 'bg-amber-50 hover:bg-amber-100/90 border-2 border-amber-300 hover:border-amber-500 shadow-md hover:shadow-lg'
+            };
             var catIds = ['cardCatTodos', 'cardCatRedes', 'cardCatEstatales', 'cardCatParticulares'];
             for (var j = 0; j < catIds.length; j++) {
                 var cEl = document.getElementById(catIds[j]);
                 if (!cEl) continue;
-                var esPartCard = catIds[j] === 'cardCatParticulares';
-                cEl.className = 'p-3.5 sm:p-4 rounded-2xl text-left flex items-center justify-between gap-3 transition cursor-pointer group ' +
-                    (esCuerpoClaro
-                        ? (esPartCard ? 'bg-amber-50/40 hover:bg-white border border-amber-300/80 hover:border-amber-400 shadow-xs hover:shadow-md' : 'bg-slate-50 hover:bg-white border border-slate-200 hover:border-sky-400 shadow-xs hover:shadow-md')
-                        : (esPartCard ? 'bg-slate-800/80 hover:bg-slate-800 border border-amber-400/30 hover:border-amber-400' : 'bg-slate-800/80 hover:bg-slate-800 border border-white/10 hover:border-sky-400/60'));
+                cEl.className = 'p-3.5 sm:p-4 rounded-2xl text-left flex items-center justify-between gap-3 transition cursor-pointer group ' + estilosCat[catIds[j]];
                 var tEl = cEl.querySelector('.cat-title');
                 var sEl = cEl.querySelector('.cat-sub');
-                if (tEl) tEl.className = 'cat-title font-extrabold text-xs sm:text-sm ' + (esCuerpoClaro ? 'text-slate-900' : (esPartCard ? 'text-amber-200' : 'text-white'));
-                if (sEl) sEl.className = 'cat-sub text-[11px] font-medium ' + (esCuerpoClaro ? 'text-slate-500' : (esPartCard ? 'text-amber-200/70' : 'text-slate-400'));
+                if (tEl) tEl.className = 'cat-title font-extrabold text-xs sm:text-sm text-slate-900';
+                if (sEl) sEl.className = 'cat-sub text-[11px] font-medium text-slate-600';
             }
 
             var bTodos = document.getElementById('cntTodosPortada');
             var bRedes = document.getElementById('cntRedesPortada');
             var bEst = document.getElementById('cntEstatalesPortada');
             var bPart = document.getElementById('cntParticularesPortada');
-            if (bTodos) bTodos.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 ' + (esCuerpoClaro ? 'bg-sky-100 text-sky-800 border border-sky-200' : 'bg-sky-500/20 text-sky-300 border border-sky-400/30');
-            if (bRedes) bRedes.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 ' + (esCuerpoClaro ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' : 'bg-indigo-500/20 text-indigo-300 border border-indigo-400/30');
-            if (bEst) bEst.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 ' + (esCuerpoClaro ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30');
-            if (bPart) bPart.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 ' + (esCuerpoClaro ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-amber-500/20 text-amber-300 border border-amber-400/30');
+            if (bTodos) bTodos.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-sky-100 text-sky-900 border border-sky-300';
+            if (bRedes) bRedes.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-indigo-100 text-indigo-900 border border-indigo-300';
+            if (bEst) bEst.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-emerald-100 text-emerald-900 border border-emerald-300';
+            if (bPart) bPart.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-amber-100 text-amber-900 border border-amber-300';
 
             aplicarTemaVistasSecundariasStandalone(tema);
             if (typeof aplicarTemaPromptRatingStandalone === 'function') {
@@ -5157,8 +5183,18 @@
             }
         }
 
-        // Sistema de Calificación Permanente (👍 Likes / 👎 Anti-likes)
+        // Sistema de Calificación Permanente 1 a 5 Estrellas (una vez tras 3.5 minutos de uso continuo)
         let ratingCerradoSesionStandalone = false;
+        let estrellaSeleccionadaStandalone = 0;
+        let estrellaHoverStandalone = 0;
+        const ETIQUETAS_ESTRELLAS_STANDALONE = {
+            1: { texto: 'Nada bueno', emoji: '😠' },
+            2: { texto: 'Poco bueno', emoji: '😕' },
+            3: { texto: 'Bueno', emoji: '😐' },
+            4: { texto: 'Bastante bueno', emoji: '😊' },
+            5: { texto: 'Muy bueno', emoji: '🤩' }
+        };
+
         function obtenerContadoresRatingStandalone() {
             try {
                 const raw = localStorage.getItem('mappache_app_rating_contadores');
@@ -5166,54 +5202,113 @@
                     const p = JSON.parse(raw);
                     return {
                         likes: Math.max(0, Number(p && p.likes) || 0),
-                        dislikes: Math.max(0, Number(p && p.dislikes) || 0)
+                        dislikes: Math.max(0, Number(p && p.dislikes) || 0),
+                        estrellas: {
+                            1: Math.max(0, Number(p && p.estrellas && p.estrellas[1]) || 0),
+                            2: Math.max(0, Number(p && p.estrellas && p.estrellas[2]) || 0),
+                            3: Math.max(0, Number(p && p.estrellas && p.estrellas[3]) || 0),
+                            4: Math.max(0, Number(p && p.estrellas && p.estrellas[4]) || 0),
+                            5: Math.max(0, Number(p && p.estrellas && p.estrellas[5]) || 0)
+                        }
                     };
                 }
             } catch(e) {}
-            return { likes: 0, dislikes: 0 };
+            return { likes: 0, dislikes: 0, estrellas: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } };
         }
 
         function obtenerMiVotoRatingStandalone() {
             try {
                 const v = localStorage.getItem('mappache_app_rating_voto');
-                if (v === 'like' || v === 'dislike') return v;
+                if (v) return v;
             } catch(e) {}
             return null;
         }
 
+        function actualizarVisualEstrellasStandalone() {
+            const esCuerpoClaro = getTemaActualStandalone() !== 'oscuro';
+            const nivelActivo = estrellaHoverStandalone || estrellaSeleccionadaStandalone;
+            const btns = document.querySelectorAll('#estrellasRowStandalone .star-btn');
+            for (var i = 0; i < btns.length; i++) {
+                var num = Number(btns[i].getAttribute('data-star'));
+                var act = nivelActivo >= num;
+                btns[i].className = 'star-btn w-11 h-11 rounded-2xl text-2xl flex items-center justify-center transition transform cursor-pointer border ' +
+                    (act
+                        ? 'bg-amber-400/20 border-amber-400 text-amber-400 scale-110 shadow-md'
+                        : (esCuerpoClaro ? 'bg-slate-50 border-slate-200 text-slate-300 hover:border-amber-300' : 'bg-slate-800 border-slate-700 text-slate-600 hover:border-amber-400/50'));
+            }
+            const badge = document.getElementById('badgeEtiquetaEstrella');
+            if (badge) {
+                if (nivelActivo > 0 && ETIQUETAS_ESTRELLAS_STANDALONE[nivelActivo]) {
+                    var info = ETIQUETAS_ESTRELLAS_STANDALONE[nivelActivo];
+                    badge.innerText = info.emoji + ' ' + nivelActivo + '/5 · ' + info.texto;
+                    badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold border ' +
+                        (nivelActivo >= 4
+                            ? (esCuerpoClaro ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-emerald-500/15 text-emerald-300 border-emerald-400/30')
+                            : nivelActivo === 3
+                                ? (esCuerpoClaro ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-amber-500/15 text-amber-300 border-amber-400/30')
+                                : (esCuerpoClaro ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-rose-500/15 text-rose-300 border-rose-400/30'));
+                } else {
+                    badge.className = 'hidden';
+                }
+            }
+            const btnEnv = document.getElementById('btnEnviarEstrellasStandalone');
+            const txtEnv = document.getElementById('txtBtnEnviarEstrellas');
+            if (btnEnv && txtEnv) {
+                if (estrellaSeleccionadaStandalone > 0) {
+                    btnEnv.disabled = false;
+                    btnEnv.className = 'w-full py-3 rounded-xl font-black text-xs transition flex items-center justify-center gap-1.5 shadow-md bg-gradient-to-r from-[#0284c7] to-[#059669] hover:brightness-110 text-white cursor-pointer';
+                    txtEnv.innerText = 'Enviar Calificación (' + estrellaSeleccionadaStandalone + '/5)';
+                } else {
+                    btnEnv.disabled = true;
+                    btnEnv.className = 'w-full py-3 rounded-xl font-black text-xs transition flex items-center justify-center gap-1.5 shadow-md cursor-not-allowed ' +
+                        (esCuerpoClaro ? 'bg-slate-100 text-slate-400' : 'bg-slate-800 text-slate-500');
+                    txtEnv.innerText = 'Elige de 1 a 5 estrellas';
+                }
+            }
+        }
+
+        function hoverEstrellaStandalone(n) {
+            estrellaHoverStandalone = n;
+            actualizarVisualEstrellasStandalone();
+        }
+
+        function seleccionarEstrellaStandalone(n) {
+            estrellaSeleccionadaStandalone = n;
+            actualizarVisualEstrellasStandalone();
+        }
+
         function aplicarTemaPromptRatingStandalone() {
-            const box = document.getElementById('promptCalificarApp');
+            const card = document.getElementById('cardPromptCalificarApp');
             const btnClose = document.getElementById('btnCerrarPromptRating');
             const sub = document.getElementById('promptRatingSub');
-            const btnDislike = document.getElementById('btnDislikeRating');
+            const btnTarde = document.getElementById('btnMasTardeRating');
             const res = document.getElementById('promptRatingResumen');
             const esCuerpoClaro = getTemaActualStandalone() !== 'oscuro';
-            if (box) {
-                box.className = (box.classList.contains('hidden') ? 'hidden ' : '') +
-                    'fixed bottom-4 right-4 z-40 max-w-xs w-[calc(100%-2rem)] rounded-2xl p-4 shadow-2xl border backdrop-blur-xl transition-all ' +
-                    (esCuerpoClaro ? 'bg-white/95 border-slate-200 text-slate-900' : 'bg-slate-900/95 border-sky-400/35 text-slate-100');
+            if (card) {
+                card.className = 'relative max-w-sm w-full rounded-3xl p-6 shadow-2xl border transition-all text-center ' +
+                    (esCuerpoClaro ? 'bg-white border-slate-200 text-slate-900' : 'bg-slate-900 border-sky-400/40 text-slate-100');
             }
             if (btnClose) {
-                btnClose.className = 'absolute top-2.5 right-2.5 w-6 h-6 rounded-full text-xs font-black flex items-center justify-center cursor-pointer transition ' +
+                btnClose.className = 'absolute top-3.5 right-3.5 w-8 h-8 rounded-full text-sm font-black flex items-center justify-center cursor-pointer transition ' +
                     (esCuerpoClaro ? 'bg-slate-100 hover:bg-slate-200 text-slate-500' : 'bg-white/10 hover:bg-white/20 text-slate-300');
             }
-            if (sub) sub.className = 'text-[11px] font-medium mt-0.5 leading-snug ' + (esCuerpoClaro ? 'text-slate-600' : 'text-slate-300');
-            if (res) res.className = 'text-[11px] font-semibold ' + (esCuerpoClaro ? 'text-slate-600' : 'text-slate-300');
-            if (btnDislike) {
-                btnDislike.className = 'py-2 px-3 rounded-xl font-extrabold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 border ' +
-                    (esCuerpoClaro ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border-rose-200' : 'bg-rose-500/15 hover:bg-rose-500/25 text-rose-200 border-rose-400/30');
-            }
+            if (sub) sub.className = 'text-xs font-medium leading-snug ' + (esCuerpoClaro ? 'text-slate-600' : 'text-slate-300');
+            if (res) res.className = 'text-xs font-semibold ' + (esCuerpoClaro ? 'text-slate-600' : 'text-slate-300');
+            if (btnTarde) btnTarde.className = 'w-full py-1.5 text-[11px] font-bold cursor-pointer transition ' + (esCuerpoClaro ? 'text-slate-400 hover:text-slate-600' : 'text-slate-400 hover:text-slate-200');
+            actualizarVisualEstrellasStandalone();
         }
 
         function mostrarPromptCalificarStandalone() {
             if (obtenerMiVotoRatingStandalone() || ratingCerradoSesionStandalone) return;
             const modalAdmin = document.getElementById('pantalla-admin');
             const modalDet = document.getElementById('modalDetalleColegio');
-            if ((modalAdmin && !modalAdmin.classList.contains('hidden')) || (modalDet && !modalDet.classList.contains('hidden'))) return;
+            const modalDir = document.getElementById('modalAccesoDirector');
+            if ((modalAdmin && !modalAdmin.classList.contains('hidden')) || (modalDet && !modalDet.classList.contains('hidden')) || (modalDir && !modalDir.classList.contains('hidden'))) return false;
             const box = document.getElementById('promptCalificarApp');
-            if (!box) return;
+            if (!box) return false;
             box.classList.remove('hidden');
             aplicarTemaPromptRatingStandalone();
+            return true;
         }
 
         function cerrarPromptCalificarStandalone() {
@@ -5222,22 +5317,50 @@
             if (box) box.classList.add('hidden');
         }
 
-        function programarPromptCalificarStandalone(ms) {
+        function iniciarContadorUsoCalificarStandalone() {
             if (obtenerMiVotoRatingStandalone() || ratingCerradoSesionStandalone) return;
-            setTimeout(mostrarPromptCalificarStandalone, ms || 18000);
+            var acumulados = 0;
+            try { acumulados = Math.max(0, Number(localStorage.getItem('mappache_tiempo_uso_seg') || '0') || 0); } catch(e) {}
+            var timerUso = setInterval(function() {
+                if (obtenerMiVotoRatingStandalone() || ratingCerradoSesionStandalone) {
+                    clearInterval(timerUso);
+                    return;
+                }
+                if (document.visibilityState !== 'visible') return;
+                if (acumulados < 210) {
+                    acumulados += 1;
+                    if (acumulados % 5 === 0 || acumulados >= 210) {
+                        try { localStorage.setItem('mappache_tiempo_uso_seg', String(acumulados)); } catch(e) {}
+                    }
+                }
+                if (acumulados >= 210) {
+                    if (mostrarPromptCalificarStandalone()) {
+                        clearInterval(timerUso);
+                    }
+                }
+            }, 1000);
         }
 
-        function calificarAppStandalone(voto) {
-            const previo = obtenerMiVotoRatingStandalone();
-            if (previo === voto) return;
+        function calificarAppEstrellasStandalone() {
+            const puntaje = estrellaSeleccionadaStandalone;
+            if (puntaje < 1 || puntaje > 5 || obtenerMiVotoRatingStandalone()) return;
             const stats = obtenerContadoresRatingStandalone();
+            const esPositivo = puntaje >= 4;
+            const esNegativo = puntaje <= 2;
+            const est = Object.assign({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, stats.estrellas || {});
+            est[puntaje] = (est[puntaje] || 0) + 1;
             const nuevos = {
-                likes: Math.max(0, stats.likes + (voto === 'like' ? 1 : 0) - (previo === 'like' ? 1 : 0)),
-                dislikes: Math.max(0, stats.dislikes + (voto === 'dislike' ? 1 : 0) - (previo === 'dislike' ? 1 : 0))
+                likes: Math.max(0, stats.likes + (esPositivo ? 1 : 0)),
+                dislikes: Math.max(0, stats.dislikes + (esNegativo ? 1 : 0)),
+                estrellas: est
             };
+            const sumE = est[1] * 1 + est[2] * 2 + est[3] * 3 + est[4] * 4 + est[5] * 5;
+            const totE = est[1] + est[2] + est[3] + est[4] + est[5];
+            const prom = totE > 0 ? (sumE / totE).toFixed(1) : puntaje + '.0';
+
             try {
                 localStorage.setItem('mappache_app_rating_contadores', JSON.stringify(nuevos));
-                localStorage.setItem('mappache_app_rating_voto', voto);
+                localStorage.setItem('mappache_app_rating_voto', String(puntaje));
             } catch(e) {}
 
             fetch(URL_API_GOOGLE, {
@@ -5245,9 +5368,13 @@
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({
                     accion: 'calificar_app',
-                    voto: voto,
+                    estrellas: puntaje,
+                    etiqueta: (ETIQUETAS_ESTRELLAS_STANDALONE[puntaje] || {}).texto || '',
+                    voto: esPositivo ? 'like' : (esNegativo ? 'dislike' : 'neutral'),
+                    promedio: prom,
                     likes_total: nuevos.likes,
                     dislikes_total: nuevos.dislikes,
+                    conteo_estrellas: nuevos.estrellas,
                     fecha: new Date().toLocaleString('es-PE')
                 })
             }).catch(function() {});
@@ -5257,7 +5384,7 @@
             const res = document.getElementById('promptRatingResumen');
             if (preg) preg.classList.add('hidden');
             if (grc) grc.classList.remove('hidden');
-            if (res) res.innerText = 'Contador acumulado: 👍 ' + nuevos.likes + ' · 👎 ' + nuevos.dislikes;
+            if (res) res.innerHTML = 'Tu puntuación de <b class="text-amber-500">' + puntaje + ' / 5 ⭐</b> quedó registrada.';
 
             setTimeout(function() {
                 const box = document.getElementById('promptCalificarApp');
@@ -5268,7 +5395,7 @@
         // Inicializar vista de donaciones, tema visual y contadores en vivo
         actualizarVistaDonacionesStandalone();
         actualizarContadoresPortadaStandalone();
-        programarPromptCalificarStandalone(18000);
+        iniciarContadorUsoCalificarStandalone();
         try {
             cambiarTemaPortadaStandalone(localStorage.getItem('mappache_tema_portada') || 'oscuro');
         } catch(e) {
