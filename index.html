@@ -102,7 +102,7 @@
                          src="./mapache_apoyado_en_la_pared.png" 
                          onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';" 
                          alt="Mapachito apoyado en el título" 
-                         class="w-auto h-20 sm:h-28 md:h-36 object-contain mr-[-10px] sm:mr-[-14px] md:mr-[-16px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0"
+                         class="w-auto h-28 sm:h-36 md:h-44 object-contain mr-[-2px] sm:mr-[-3px] md:mr-[-4px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0"
                          title="¡Toca a Mapachito!"
                          onclick="handleMapachitoClick()" />
                     <div class="flex flex-col items-start text-left z-0 min-w-0 flex-1 sm:flex-initial">
@@ -1008,7 +1008,7 @@
             'pensativo': './mapache_pensativo.png',
             'sorprendido': './mapache_sorprendido.png',
             'durmiendo': './mapache_durmiendo.png',
-            'olfateando': './mapache_buscando.png',
+            'olfateando': './mapache_olfateando.png',
             'feliz': './mapache_saludando_en_un_pie.png',
             'guiñando': './mapache_guiñando_ojo.png'
         };
@@ -1019,7 +1019,7 @@
             'pensativo': 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_pensativo.png',
             'sorprendido': 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_sorprendido.png',
             'durmiendo': 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_durmiendo.png',
-            'olfateando': 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_buscando.png',
+            'olfateando': 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_olfateando.png',
             'feliz': 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png',
             'guiñando': 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_gui%C3%B1ando_ojo.png'
         };
@@ -4897,11 +4897,11 @@
 
         // TOUR INTERACTIVO CON FOTOS PRE-CARGADAS PARA 0 SEGUNDOS DE DEMORA
         const PASOS_TOUR = [
-            { titulo: '¡Hola! Soy Mapachito', texto: 'Te enseñaré a rastrear vacantes y encontrar colegios en Ventanilla y Mi Perú.', img: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png' },
-            { titulo: '1. Busca tu colegio', texto: 'Escribe el nombre o número de colegio en la barra de búsqueda rápida.', img: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_buscando.png' },
-            { titulo: '2. Filtra por Redes y Gestión', texto: 'Descubre colegios estatales y privados ordenados por zonas educativas.', img: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png' },
-            { titulo: '3. Semáforo de Vacantes', texto: 'Verde significa cupos confirmados, amarillo pocas vacantes y rojo sin vacantes.', img: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_sorprendido.png' },
-            { titulo: '¡Listo para Matricular!', texto: 'Inicia el viaje con Google Maps o consulta sus redes oficiales con un solo clic.', img: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_guiñando_ojo.png' }
+            { titulo: '¡Hola! Soy Mapachito, orgulloso peruano', texto: '¡Bienvenido a MAPPACHE! Soy un mapache cangrejero peruano (Procyon cancrivorus), especie nativa poco conocida que vive en ríos, manglares y humedales del Perú.\n\nDato curioso: tengo patas más largas y pelaje corto, y uso mis manos ultrasensibles para "lavar" y rastrear alimento bajo el agua casi sin mirar. Con ese mismo instinto busco vacantes reales y te acerco al colegio ideal en Ventanilla y Mi Perú.', img: './mapache_saludando.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png' },
+            { titulo: '1. Busca tu colegio', texto: 'Escribe el nombre o número de colegio en la barra de búsqueda rápida.', img: './mapache_buscando.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_buscando.png' },
+            { titulo: '2. Filtra por Redes y Gestión', texto: 'Descubre colegios estatales y privados ordenados por zonas educativas.', img: './mapache_saludando_en_un_pie.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png' },
+            { titulo: '3. Semáforo de Vacantes', texto: 'Verde significa cupos confirmados, amarillo pocas vacantes y rojo sin vacantes.', img: './mapache_sorprendido.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_sorprendido.png' },
+            { titulo: '¡Listo para Matricular!', texto: 'Inicia el viaje con Google Maps o consulta sus redes oficiales con un solo clic.', img: './mapache_guiñando_ojo.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_gui%C3%B1ando_ojo.png' }
         ];
 
         // Pre-carga inmediata de imágenes en memoria para cambio instantáneo
@@ -4921,7 +4921,14 @@
         function actualizarPasoTour() {
             const p = PASOS_TOUR[pasoActual];
             document.getElementById('tourPasoIndicador').innerText = 'PASO ' + (pasoActual + 1) + ' DE ' + PASOS_TOUR.length;
-            document.getElementById('tourImagen').src = p.img;
+            const tourImg = document.getElementById('tourImagen');
+            if (tourImg) {
+                tourImg.onerror = function() {
+                    this.onerror = null;
+                    this.src = p.fallback || 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png';
+                };
+                tourImg.src = p.img;
+            }
             document.getElementById('tourTitulo').innerText = p.titulo;
             document.getElementById('tourTexto').innerText = p.texto;
             document.getElementById('btnTourSiguiente').innerText = (pasoActual === PASOS_TOUR.length - 1) ? 'Finalizar 🎉' : 'Siguiente ➔';
