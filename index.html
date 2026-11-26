@@ -96,21 +96,21 @@
             </nav>
 
             <!-- Hero Mapachito -->
-            <header class="max-w-4xl mx-auto px-4 pt-5 sm:pt-7 pb-3 sm:pb-4 flex flex-col items-center justify-center text-center">
-                <div class="flex flex-row items-center justify-center -translate-x-2 flex-nowrap shrink-0">
+            <header class="max-w-4xl w-full mx-auto px-3 sm:px-4 pt-5 sm:pt-7 pb-3 sm:pb-4 flex flex-col items-center justify-center text-center overflow-hidden">
+                <div class="flex flex-row items-center justify-center w-full max-w-full sm:-translate-x-2 flex-nowrap">
                     <img id="imgMapachitoHero" 
                          src="./mapache_apoyado_en_la_pared.png" 
                          onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';" 
                          alt="Mapachito apoyado en el título" 
-                         class="w-auto h-24 sm:h-28 md:h-36 object-contain mr-[-14px] md:mr-[-16px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0"
+                         class="w-auto h-20 sm:h-28 md:h-36 object-contain mr-[-10px] sm:mr-[-14px] md:mr-[-16px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0"
                          title="¡Toca a Mapachito!"
                          onclick="handleMapachitoClick()" />
-                    <div class="flex flex-col items-start text-left z-0 shrink-0">
+                    <div class="flex flex-col items-start text-left z-0 min-w-0 flex-1 sm:flex-initial">
                         <h1 id="tituloPrincipalPortada" class="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black tracking-wide text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)] leading-none m-0">
                             MAPPACHE
                         </h1>
-                        <p id="subtituloPrincipalPortada" class="text-xs sm:text-sm md:text-base font-bold mt-1.5 mb-0.5 text-slate-300">
-                            Red Escolar Digital • <span id="subtituloDistritoPortada" class="text-sky-300 font-extrabold">Edición Ventanilla &amp; Mi Perú</span>
+                        <p id="subtituloPrincipalPortada" class="text-[11px] sm:text-sm md:text-base font-bold mt-1.5 mb-0.5 leading-snug break-words text-slate-300">
+                            Red Escolar Digital<span class="hidden sm:inline"> • </span><br class="sm:hidden" /><span id="subtituloDistritoPortada" class="text-sky-300 font-extrabold">Edición Ventanilla &amp; Mi Perú</span>
                         </p>
                         <p class="text-xs sm:text-sm md:text-base font-extrabold tracking-[0.4px]">
                             <span id="lemaRastrea" class="text-rose-400 drop-shadow-[0_1px_6px_rgba(251,113,133,0.4)]">Rastrea</span>
@@ -143,64 +143,64 @@
                     <div id="listaSugerenciasPortada" class="hidden absolute top-full left-0 right-0 mt-1 bg-white text-slate-900 rounded-b-2xl shadow-2xl max-h-60 overflow-y-auto z-50 divide-y divide-slate-100 text-xs border border-slate-200"></div>
                 </div>
 
-                <!-- 2 Acciones Estrella Lado a Lado en PC / Apiladas en Celular -->
+                <!-- 2 Acciones Estrella Lado a Lado en PC / Apiladas en Celular (Mismo grosor uniforme) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button onclick="mostrarDialogoMapachito('buscando', 'Localizando tu señal GPS para encontrar los colegios más cercanos a ti...', buscarColegiosMasCercanosGPS)" class="py-3 px-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#1d4ed8] hover:brightness-110 border border-sky-300/40 text-white font-black text-xs sm:text-sm shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
-                        <span>📍</span>
-                        <span>Colegios más cercanos a mí (GPS)</span>
-                        <span class="text-[10px] bg-sky-950/45 text-sky-100 border border-sky-200/30 px-2 py-0.5 rounded-full font-bold hidden md:inline">5-8</span>
+                    <button onclick="mostrarDialogoMapachito('buscando', 'Localizando tu señal GPS para encontrar los colegios más cercanos a ti...', buscarColegiosMasCercanosGPS)" class="min-h-[64px] w-full py-2.5 px-3.5 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#1d4ed8] hover:brightness-110 border border-sky-300/40 text-white font-black text-xs sm:text-[13px] leading-snug shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+                        <span class="text-lg shrink-0">📍</span>
+                        <span class="leading-snug">Colegios más Cercanos a Mí (GPS)</span>
+                        <span class="text-[10px] bg-sky-950/45 text-sky-100 border border-sky-200/30 px-2 py-0.5 rounded-full font-bold whitespace-nowrap shrink-0 hidden md:inline">5-8</span>
                     </button>
 
-                    <button onclick="mostrarDialogoMapachito('sorprendido', 'Consultando el semáforo de vacantes en tiempo real para todos los niveles.', function() { abrirPantallaVacantes(); })" class="py-3 px-4 rounded-2xl bg-gradient-to-r from-[#059669] to-[#0f766e] hover:brightness-110 border border-emerald-300/40 text-white font-black text-xs sm:text-sm shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
-                        <span>🚦</span>
-                        <span>Buscar vacantes disponibles</span>
+                    <button onclick="mostrarDialogoMapachito('sorprendido', 'Consultando el semáforo de vacantes en tiempo real para todos los niveles.', function() { abrirPantallaVacantes(); })" class="min-h-[64px] w-full py-2.5 px-3.5 rounded-2xl bg-gradient-to-r from-[#059669] to-[#0f766e] hover:brightness-110 border border-emerald-300/40 text-white font-black text-xs sm:text-[13px] leading-snug shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+                        <span class="text-lg shrink-0">🚦</span>
+                        <span class="leading-snug">Buscar Vacantes Disponibles</span>
                     </button>
                 </div>
 
-                <!-- 4 Tarjetas Horizontales Pastel con Cuadrado Sólido, Borde Definido y Sombra en los 3 Modos -->
+                <!-- 4 Tarjetas Pastel Mate con Cuerpo (Opción C · Grosor uniforme · Máx. 2 líneas) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    <button id="cardCatTodos" onclick="mostrarDialogoMapachito('feliz', '¡Cargando el mapa interactivo con todas las instituciones educativas!', verTodosEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-sky-50 hover:bg-sky-100/90 border-2 border-sky-300 hover:border-sky-500 shadow-md hover:shadow-lg text-left flex items-center justify-between gap-3 transition cursor-pointer group">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0 group-hover:scale-110 transition">🗺️</span>
-                            <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-slate-900">Ver todos los colegios</div>
-                                <div class="cat-sub text-[11px] font-medium text-slate-600">Mapa interactivo completo</div>
+                    <button id="cardCatTodos" onclick="mostrarDialogoMapachito('feliz', '¡Cargando el mapa interactivo con todas las instituciones educativas!', verTodosEnMapa)" class="min-h-[64px] w-full px-3.5 py-2.5 rounded-2xl bg-[#dbeafe] hover:bg-[#bfdbfe] border border-[#93c5fd] text-[#1e3a8a] shadow-lg text-left flex items-center justify-between gap-2.5 transition cursor-pointer group">
+                        <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                            <span class="text-xl shrink-0 group-hover:scale-110 transition">🗺️</span>
+                            <div class="min-w-0 leading-tight">
+                                <div class="cat-title font-black text-xs sm:text-[13px] leading-snug text-[#1e3a8a]">Ver todos los Colegios</div>
+                                <div class="cat-sub text-[10.5px] font-semibold leading-tight mt-0.5 text-[#1e40af]/80">Mapa interactivo completo</div>
                             </div>
                         </div>
-                        <span id="cntTodosPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-sky-100 text-sky-900 border border-sky-300">147 en mapa</span>
+                        <span id="cntTodosPortada" class="text-[10px] font-black px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/20">147 en mapa</span>
                     </button>
 
-                    <button id="cardCatRedes" onclick="mostrarDialogoMapachito('olfateando', 'Elige una de las 9 Redes Educativas de UGEL Ventanilla para explorar sus colegios.', abrirModalRedes)" class="p-3.5 sm:p-4 rounded-2xl bg-indigo-50 hover:bg-indigo-100/90 border-2 border-indigo-300 hover:border-indigo-500 shadow-md hover:shadow-lg text-left flex items-center justify-between gap-3 transition cursor-pointer group">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0 group-hover:scale-110 transition">🏫</span>
-                            <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-slate-900">Colegios por redes</div>
-                                <div class="cat-sub text-[11px] font-medium text-slate-600">Explora por Red Educativa</div>
+                    <button id="cardCatRedes" onclick="mostrarDialogoMapachito('olfateando', 'Elige una de las 9 Redes Educativas de UGEL Ventanilla para explorar sus colegios.', abrirModalRedes)" class="min-h-[64px] w-full px-3.5 py-2.5 rounded-2xl bg-[#e0e7ff] hover:bg-[#c7d2fe] border border-[#a5b4fc] text-[#312e81] shadow-lg text-left flex items-center justify-between gap-2.5 transition cursor-pointer group">
+                        <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                            <span class="text-xl shrink-0 group-hover:scale-110 transition">🏫</span>
+                            <div class="min-w-0 leading-tight">
+                                <div class="cat-title font-black text-xs sm:text-[13px] leading-snug text-[#312e81]">Colegios por Redes</div>
+                                <div class="cat-sub text-[10.5px] font-semibold leading-tight mt-0.5 text-[#3730a3]/80">Explora por red educativa</div>
                             </div>
                         </div>
-                        <span id="cntRedesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-indigo-100 text-indigo-900 border border-indigo-300">9 redes</span>
+                        <span id="cntRedesPortada" class="text-[10px] font-black px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap bg-[#312e81]/10 text-[#312e81] border border-[#312e81]/20">9 redes</span>
                     </button>
 
-                    <button id="cardCatEstatales" onclick="mostrarDialogoMapachito('saludando', 'Mostrando todos los colegios estatales públicos en el mapa.', verEstatalesEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-emerald-50 hover:bg-emerald-100/90 border-2 border-emerald-300 hover:border-emerald-500 shadow-md hover:shadow-lg text-left flex items-center justify-between gap-3 transition cursor-pointer group">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0 group-hover:scale-110 transition">🏛️</span>
-                            <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-slate-900">Colegios estatales</div>
-                                <div class="cat-sub text-[11px] font-medium text-slate-600">Instituciones públicas</div>
+                    <button id="cardCatEstatales" onclick="mostrarDialogoMapachito('saludando', 'Mostrando todos los colegios estatales públicos en el mapa.', verEstatalesEnMapa)" class="min-h-[64px] w-full px-3.5 py-2.5 rounded-2xl bg-[#d1fae5] hover:bg-[#a7f3d0] border border-[#6ee7b7] text-[#064e3b] shadow-lg text-left flex items-center justify-between gap-2.5 transition cursor-pointer group">
+                        <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                            <span class="text-xl shrink-0 group-hover:scale-110 transition">🏛️</span>
+                            <div class="min-w-0 leading-tight">
+                                <div class="cat-title font-black text-xs sm:text-[13px] leading-snug text-[#064e3b]">Colegios Estatales</div>
+                                <div class="cat-sub text-[10.5px] font-semibold leading-tight mt-0.5 text-[#065f46]/80">Instituciones públicas</div>
                             </div>
                         </div>
-                        <span id="cntEstatalesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-emerald-100 text-emerald-900 border border-emerald-300">Públicos</span>
+                        <span id="cntEstatalesPortada" class="text-[10px] font-black px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap bg-[#064e3b]/10 text-[#064e3b] border border-[#064e3b]/20">Públicos</span>
                     </button>
 
-                    <button id="cardCatParticulares" onclick="mostrarDialogoMapachito('guiñando', 'Explorando colegios particulares autorizados con membresía digital activa.', verParticularesEnMapa)" class="p-3.5 sm:p-4 rounded-2xl bg-amber-50 hover:bg-amber-100/90 border-2 border-amber-300 hover:border-amber-500 shadow-md hover:shadow-lg text-left flex items-center justify-between gap-3 transition cursor-pointer group">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <span class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-sm shrink-0 group-hover:scale-110 transition">⭐</span>
-                            <div class="min-w-0">
-                                <div class="cat-title font-extrabold text-xs sm:text-sm text-slate-900">Colegios particulares</div>
-                                <div class="cat-sub text-[11px] font-medium text-slate-600">Privados y convenios</div>
+                    <button id="cardCatParticulares" onclick="mostrarDialogoMapachito('guiñando', 'Explorando colegios particulares autorizados con membresía digital activa.', verParticularesEnMapa)" class="min-h-[64px] w-full px-3.5 py-2.5 rounded-2xl bg-[#fef3c7] hover:bg-[#fde68a] border border-[#fcd34d] text-[#78350f] shadow-lg text-left flex items-center justify-between gap-2.5 transition cursor-pointer group">
+                        <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                            <span class="text-xl shrink-0 group-hover:scale-110 transition">⭐</span>
+                            <div class="min-w-0 leading-tight">
+                                <div class="cat-title font-black text-xs sm:text-[13px] leading-snug text-[#78350f]">Colegios Particulares</div>
+                                <div class="cat-sub text-[10.5px] font-semibold leading-tight mt-0.5 text-[#92400e]/85">Privados y convenios</div>
                             </div>
                         </div>
-                        <span id="cntParticularesPortada" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-amber-100 text-amber-900 border border-amber-300">Privados</span>
+                        <span id="cntParticularesPortada" class="text-[10px] font-black px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap bg-[#78350f]/10 text-[#78350f] border border-[#78350f]/20">Privados</span>
                     </button>
                 </div>
             </div>
@@ -4565,6 +4565,7 @@
                     localStorage.setItem('mappache_app_rating_contadores', JSON.stringify({ likes: 0, dislikes: 0, estrellas: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } }));
                     localStorage.removeItem('mappache_app_rating_voto');
                     localStorage.removeItem('mappache_tiempo_uso_seg');
+                    localStorage.removeItem('mappache_rating_pospuesto_hasta_seg');
                 } catch(e) {}
                 renderizarContenidoAdmin();
                 mostrarToast('🗑️ Contadores de valoración reiniciados a cero.');
@@ -5060,7 +5061,7 @@
                     (esHeroOscuro ? 'text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)]' : 'text-slate-900 drop-shadow-xs');
             }
             if (sub) {
-                sub.className = 'text-xs sm:text-sm md:text-base font-bold mt-1.5 mb-0.5 ' + (esHeroOscuro ? 'text-slate-300' : 'text-slate-600');
+                sub.className = 'text-[11px] sm:text-sm md:text-base font-bold mt-1.5 mb-0.5 leading-snug break-words ' + (esHeroOscuro ? 'text-slate-300' : 'text-slate-600');
             }
             if (subDist) {
                 subDist.className = esHeroOscuro ? 'text-sky-300 font-extrabold' : 'text-sky-700 font-extrabold';
@@ -5093,30 +5094,51 @@
             if (bMix) bMix.className = 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition flex items-center gap-1 cursor-pointer ' + (tema === 'mixto' ? 'bg-amber-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-white hover:bg-white/10');
 
             var estilosCat = {
-                cardCatTodos: 'bg-sky-50 hover:bg-sky-100/90 border-2 border-sky-300 hover:border-sky-500 shadow-md hover:shadow-lg',
-                cardCatRedes: 'bg-indigo-50 hover:bg-indigo-100/90 border-2 border-indigo-300 hover:border-indigo-500 shadow-md hover:shadow-lg',
-                cardCatEstatales: 'bg-emerald-50 hover:bg-emerald-100/90 border-2 border-emerald-300 hover:border-emerald-500 shadow-md hover:shadow-lg',
-                cardCatParticulares: 'bg-amber-50 hover:bg-amber-100/90 border-2 border-amber-300 hover:border-amber-500 shadow-md hover:shadow-lg'
+                cardCatTodos: {
+                    btn: 'bg-[#dbeafe] hover:bg-[#bfdbfe] border border-[#93c5fd] text-[#1e3a8a]',
+                    tit: 'text-[#1e3a8a]',
+                    sub: 'text-[#1e40af]/80',
+                    pill: 'bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/20'
+                },
+                cardCatRedes: {
+                    btn: 'bg-[#e0e7ff] hover:bg-[#c7d2fe] border border-[#a5b4fc] text-[#312e81]',
+                    tit: 'text-[#312e81]',
+                    sub: 'text-[#3730a3]/80',
+                    pill: 'bg-[#312e81]/10 text-[#312e81] border border-[#312e81]/20'
+                },
+                cardCatEstatales: {
+                    btn: 'bg-[#d1fae5] hover:bg-[#a7f3d0] border border-[#6ee7b7] text-[#064e3b]',
+                    tit: 'text-[#064e3b]',
+                    sub: 'text-[#065f46]/80',
+                    pill: 'bg-[#064e3b]/10 text-[#064e3b] border border-[#064e3b]/20'
+                },
+                cardCatParticulares: {
+                    btn: 'bg-[#fef3c7] hover:bg-[#fde68a] border border-[#fcd34d] text-[#78350f]',
+                    tit: 'text-[#78350f]',
+                    sub: 'text-[#92400e]/85',
+                    pill: 'bg-[#78350f]/10 text-[#78350f] border border-[#78350f]/20'
+                }
             };
             var catIds = ['cardCatTodos', 'cardCatRedes', 'cardCatEstatales', 'cardCatParticulares'];
             for (var j = 0; j < catIds.length; j++) {
                 var cEl = document.getElementById(catIds[j]);
                 if (!cEl) continue;
-                cEl.className = 'p-3.5 sm:p-4 rounded-2xl text-left flex items-center justify-between gap-3 transition cursor-pointer group ' + estilosCat[catIds[j]];
+                var estCat = estilosCat[catIds[j]];
+                cEl.className = 'min-h-[64px] w-full px-3.5 py-2.5 rounded-2xl shadow-lg text-left flex items-center justify-between gap-2.5 transition cursor-pointer group ' + estCat.btn;
                 var tEl = cEl.querySelector('.cat-title');
                 var sEl = cEl.querySelector('.cat-sub');
-                if (tEl) tEl.className = 'cat-title font-extrabold text-xs sm:text-sm text-slate-900';
-                if (sEl) sEl.className = 'cat-sub text-[11px] font-medium text-slate-600';
+                if (tEl) tEl.className = 'cat-title font-black text-xs sm:text-[13px] leading-snug ' + estCat.tit;
+                if (sEl) sEl.className = 'cat-sub text-[10.5px] font-semibold leading-tight mt-0.5 ' + estCat.sub;
             }
 
             var bTodos = document.getElementById('cntTodosPortada');
             var bRedes = document.getElementById('cntRedesPortada');
             var bEst = document.getElementById('cntEstatalesPortada');
             var bPart = document.getElementById('cntParticularesPortada');
-            if (bTodos) bTodos.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-sky-100 text-sky-900 border border-sky-300';
-            if (bRedes) bRedes.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-indigo-100 text-indigo-900 border border-indigo-300';
-            if (bEst) bEst.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-emerald-100 text-emerald-900 border border-emerald-300';
-            if (bPart) bPart.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-amber-100 text-amber-900 border border-amber-300';
+            if (bTodos) bTodos.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap ' + estilosCat.cardCatTodos.pill;
+            if (bRedes) bRedes.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap ' + estilosCat.cardCatRedes.pill;
+            if (bEst) bEst.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap ' + estilosCat.cardCatEstatales.pill;
+            if (bPart) bPart.className = 'text-[10px] font-black px-2.5 py-0.5 rounded-full shrink-0 whitespace-nowrap ' + estilosCat.cardCatParticulares.pill;
 
             aplicarTemaVistasSecundariasStandalone(tema);
             if (typeof aplicarTemaPromptRatingStandalone === 'function') {
@@ -5183,8 +5205,8 @@
             }
         }
 
-        // Sistema de Calificación Permanente 1 a 5 Estrellas (una vez tras 3.5 minutos de uso continuo)
-        let ratingCerradoSesionStandalone = false;
+        // Sistema de Calificación Permanente 1 a 5 Estrellas (3.5 min iniciales; si pospone, tras 10 min de uso activo; nunca si ya votó)
+        let timerUsoCalificarStandalone = null;
         let estrellaSeleccionadaStandalone = 0;
         let estrellaHoverStandalone = 0;
         const ETIQUETAS_ESTRELLAS_STANDALONE = {
@@ -5298,8 +5320,17 @@
             actualizarVisualEstrellasStandalone();
         }
 
+        function obtenerMetaUsoRatingStandalone() {
+            try {
+                const p = Number(localStorage.getItem('mappache_rating_pospuesto_hasta_seg') || '0') || 0;
+                return Math.max(210, p);
+            } catch(e) {
+                return 210;
+            }
+        }
+
         function mostrarPromptCalificarStandalone() {
-            if (obtenerMiVotoRatingStandalone() || ratingCerradoSesionStandalone) return;
+            if (obtenerMiVotoRatingStandalone()) return false;
             const modalAdmin = document.getElementById('pantalla-admin');
             const modalDet = document.getElementById('modalDetalleColegio');
             const modalDir = document.getElementById('modalAccesoDirector');
@@ -5312,31 +5343,40 @@
         }
 
         function cerrarPromptCalificarStandalone() {
-            ratingCerradoSesionStandalone = true;
             const box = document.getElementById('promptCalificarApp');
             if (box) box.classList.add('hidden');
+            if (!obtenerMiVotoRatingStandalone()) {
+                try {
+                    const acum = Math.max(210, Number(localStorage.getItem('mappache_tiempo_uso_seg') || '0') || 0);
+                    localStorage.setItem('mappache_tiempo_uso_seg', String(acum));
+                    localStorage.setItem('mappache_rating_pospuesto_hasta_seg', String(acum + 600));
+                } catch(e) {}
+                iniciarContadorUsoCalificarStandalone();
+            }
         }
 
         function iniciarContadorUsoCalificarStandalone() {
-            if (obtenerMiVotoRatingStandalone() || ratingCerradoSesionStandalone) return;
+            if (obtenerMiVotoRatingStandalone() || timerUsoCalificarStandalone) return;
             var acumulados = 0;
             try { acumulados = Math.max(0, Number(localStorage.getItem('mappache_tiempo_uso_seg') || '0') || 0); } catch(e) {}
-            var timerUso = setInterval(function() {
-                if (obtenerMiVotoRatingStandalone() || ratingCerradoSesionStandalone) {
-                    clearInterval(timerUso);
+            timerUsoCalificarStandalone = setInterval(function() {
+                if (obtenerMiVotoRatingStandalone()) {
+                    clearInterval(timerUsoCalificarStandalone);
+                    timerUsoCalificarStandalone = null;
                     return;
                 }
                 if (document.visibilityState !== 'visible') return;
-                if (acumulados < 210) {
+                const box = document.getElementById('promptCalificarApp');
+                if (box && !box.classList.contains('hidden')) return;
+                var meta = obtenerMetaUsoRatingStandalone();
+                if (acumulados < meta) {
                     acumulados += 1;
-                    if (acumulados % 5 === 0 || acumulados >= 210) {
+                    if (acumulados % 5 === 0 || acumulados >= meta) {
                         try { localStorage.setItem('mappache_tiempo_uso_seg', String(acumulados)); } catch(e) {}
                     }
                 }
-                if (acumulados >= 210) {
-                    if (mostrarPromptCalificarStandalone()) {
-                        clearInterval(timerUso);
-                    }
+                if (acumulados >= meta) {
+                    mostrarPromptCalificarStandalone();
                 }
             }, 1000);
         }
@@ -5361,7 +5401,12 @@
             try {
                 localStorage.setItem('mappache_app_rating_contadores', JSON.stringify(nuevos));
                 localStorage.setItem('mappache_app_rating_voto', String(puntaje));
+                localStorage.removeItem('mappache_rating_pospuesto_hasta_seg');
             } catch(e) {}
+            if (timerUsoCalificarStandalone) {
+                clearInterval(timerUsoCalificarStandalone);
+                timerUsoCalificarStandalone = null;
+            }
 
             fetch(URL_API_GOOGLE, {
                 method: 'POST',
