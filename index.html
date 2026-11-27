@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>MAPPACHE - Red Escolar Digital • Edición Ventanilla &amp; Mi Perú</title>
+    <meta name="description" content="Plataforma escolar digital para ubicar colegios, consultar vacantes en tiempo real y contactar directores en Ventanilla y Mi Perú.">
+    <meta name="theme-color" content="#070d1a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MAPPACHE">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./pwa-192x192.png">
     <!-- Tailwind CSS CDN Oficial -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,12 +20,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Precarga ultra-rápida de todas las expresiones de Mapachito -->
-    <link rel="preload" as="image" href="./mapache_apoyado_en_la_pared.png">
-    <link rel="preload" as="image" href="./mapache_saludando.png">
-    <link rel="preload" as="image" href="./mapache_buscando.png">
-    <link rel="preload" as="image" href="./mapache_pensativo.png">
-    <link rel="preload" as="image" href="./mapache_sorprendido.png">
-    <link rel="preload" as="image" href="./mapache_durmiendo.png">
+    <link rel="preload" as="image" href="./mapache_apoyado_en_la_pared.png?v=peru3d">
+    <link rel="preload" as="image" href="./mapache_saludando.png?v=peru3d">
+    <link rel="preload" as="image" href="./mapache_buscando.png?v=peru3d">
+    <link rel="preload" as="image" href="./mapache_pensativo.png?v=peru3d">
+    <link rel="preload" as="image" href="./mapache_sorprendido.png?v=peru3d">
+    <link rel="preload" as="image" href="./mapache_durmiendo.png?v=peru3d">
     <style>
         * { font-family: 'Montserrat', sans-serif; }
         .pin-etiqueta-nombre {
@@ -99,7 +108,7 @@
             <header class="max-w-4xl w-full mx-auto px-3 sm:px-4 pt-5 sm:pt-7 pb-3 sm:pb-4 flex flex-col items-center justify-center text-center overflow-hidden">
                 <div class="flex flex-row items-center justify-center w-full max-w-full sm:-translate-x-2 flex-nowrap">
                     <img id="imgMapachitoHero" 
-                         src="./mapache_apoyado_en_la_pared.png" 
+                         src="./mapache_apoyado_en_la_pared.png?v=peru3d" 
                          onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';" 
                          alt="Mapachito apoyado en el título" 
                          class="w-auto h-28 sm:h-36 md:h-44 object-contain mr-[-2px] sm:mr-[-3px] md:mr-[-4px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0"
@@ -206,9 +215,17 @@
             </div>
         </main>
 
-        <div id="footerPortada" onclick="handleFooterClick()" title="MAPPACHE / LOS JOTITAS" class="w-full py-2.5 text-center text-[10.5px] text-slate-500 hover:text-slate-300 font-semibold shrink-0 cursor-pointer select-none transition">
-            Plataforma Tecnológica MAPPACHE / LOS JOTITAS 🦝
-        </div>
+        <footer class="w-full py-2.5 px-3 text-center shrink-0 space-y-1.5">
+            <div id="footerPortada" onclick="handleFooterClick()" title="MAPPACHE / LOS JOTITAS" class="text-[10.5px] text-slate-500 hover:text-slate-300 font-semibold cursor-pointer select-none transition">
+                Plataforma Tecnológica MAPPACHE / LOS JOTITAS 🦝
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10.5px] font-semibold">
+                <button type="button" onclick="event.stopPropagation(); abrirModalLegalStandalone('acerca')" class="text-slate-500 hover:text-sky-500 hover:underline cursor-pointer transition">ℹ️ Acerca de</button>
+                <button type="button" onclick="event.stopPropagation(); abrirModalLegalStandalone('privacidad')" class="text-slate-500 hover:text-sky-500 hover:underline cursor-pointer transition">🔒 Privacidad</button>
+                <button type="button" onclick="event.stopPropagation(); abrirModalLegalStandalone('terminos')" class="text-slate-500 hover:text-sky-500 hover:underline cursor-pointer transition">📜 Términos y Descargo</button>
+                <button id="btnInstalarPWAStandalone" type="button" onclick="event.stopPropagation(); instalarAppPWAStandalone()" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10.5px] font-bold bg-emerald-600/15 hover:bg-emerald-600/25 text-emerald-500 border border-emerald-500/35 cursor-pointer transition">📲 Instalar App</button>
+            </div>
+        </footer>
     </div>
 
     <!-- ============================================================== -->
@@ -415,7 +432,7 @@
                 <!-- Aviso Sin Foto con Mapachito -->
                 <div id="avisoSinFotoFachada" class="hidden text-center p-6 sm:p-7 bg-slate-900 border-2 border-sky-400/60 rounded-3xl max-w-sm sm:max-w-md shadow-2xl space-y-3.5 flex flex-col items-center">
                     <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-950 border-2 border-sky-400 flex items-center justify-center p-2 shadow-[0_0_20px_rgba(56,189,248,0.35)] overflow-hidden">
-                        <img src="./mapache_pensativo.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_pensativo.png';" alt="Mapachito trabajando" class="w-full h-full object-contain drop-shadow-md" />
+                        <img src="./mapache_pensativo.png?v=peru3d" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_pensativo.png';" alt="Mapachito trabajando" class="w-full h-full object-contain drop-shadow-md" />
                     </div>
                     <div class="relative bg-white text-slate-900 p-3.5 rounded-2xl font-black text-xs sm:text-sm leading-relaxed shadow-lg w-full border-2 border-sky-300">
                         <p class="text-[#0f172a] font-black">Estamos trabajando para mejorar este proyecto</p>
@@ -506,7 +523,7 @@
     <div id="modalAdminLogin" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4">
         <div class="bg-slate-900 border-2 border-sky-400 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl">
             <div class="flex justify-center mb-2">
-                <img src="./mapache_pensativo.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_pensativo.png';" alt="Mapachito Pensativo" class="h-28 w-28 object-contain drop-shadow-xl" />
+                <img src="./mapache_pensativo.png?v=peru3d" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_pensativo.png';" alt="Mapachito Pensativo" class="h-28 w-28 object-contain drop-shadow-xl" />
             </div>
             <h2 class="text-xl font-black text-sky-400 mb-1">Panel de Control Administrativo</h2>
             <p class="text-xs text-slate-300 mb-4">
@@ -564,7 +581,7 @@
         <!-- Barra superior del Dashboard -->
         <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex flex-wrap items-center justify-between gap-2.5 shrink-0">
             <div class="flex items-center gap-3">
-                <img src="./mapache_guiñando_ojo.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_gui%C3%B1ando_ojo.png';" alt="Mapachito" class="h-10 w-10 object-contain drop-shadow" />
+                <img src="./mapache_guiñando_ojo.png?v=peru3d" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_gui%C3%B1ando_ojo.png';" alt="Mapachito" class="h-10 w-10 object-contain drop-shadow" />
                 <div>
                     <h1 class="text-base sm:text-lg font-black text-sky-400 tracking-wide">
                         DASHBOARD ADMINISTRATIVO MAPPACHE
@@ -747,7 +764,7 @@
             <span id="tourPasoIndicador" class="text-[11px] bg-purple-900 text-purple-200 font-extrabold px-3 py-1 rounded-full">PASO 1 DE 5</span>
             <div class="h-32 flex items-center justify-center my-1">
                 <img id="tourImagen" 
-                     src="./mapache_saludando.png" 
+                     src="./mapache_saludando.png?v=peru3d" 
                      onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png';" 
                      alt="Mapachito Tour" 
                      class="max-h-32 max-w-32 object-contain drop-shadow-lg" />
@@ -838,7 +855,7 @@
 
             <!-- Marco circular con animación de habla (mueve la boca y cabeza mientras habla) -->
             <div id="contenedorImgMapachitoDialogo" class="relative w-[130px] h-[130px] rounded-full bg-[#0f172a] border-[3px] border-[#38bdf8] flex items-center justify-center mb-2 shadow-[0_0_20px_rgba(56,189,248,0.5)] overflow-hidden p-1">
-                <img id="imgDialogoMapachito" src="./mapache_saludando.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png';" alt="Mapachito Oficial" class="w-[110px] h-[110px] object-contain drop-shadow-xl" />
+                <img id="imgDialogoMapachito" src="./mapache_saludando.png?v=peru3d" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png';" alt="Mapachito Oficial" class="w-[110px] h-[110px] object-contain drop-shadow-xl" />
                 <span id="badgeHablandoMapachito" class="hidden absolute bottom-1 right-2 bg-sky-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black animate-pulse shadow">
                     🗣️ Hablando...
                 </span>
@@ -898,6 +915,82 @@
                 <p id="promptRatingResumen" class="text-xs font-semibold text-slate-300"></p>
             </div>
         </div>
+    </div>
+
+    <!-- MODAL LEGAL Y FICHA DE TIENDA (PRIVACIDAD, TÉRMINOS Y DESCARGO, ACERCA DE) -->
+    <div id="modalLegalStandalone" onclick="if(event.target===this) cerrarModalLegalStandalone()" class="hidden fixed inset-0 z-[65] flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-3 sm:p-4">
+        <div onclick="event.stopPropagation()" class="bg-slate-900 border-2 border-sky-400/70 rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl text-slate-100">
+            <div class="px-5 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="./mapache_saludando.png?v=peru3d" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png';" alt="Mapachito" class="w-9 h-9 object-contain shrink-0" />
+                    <div class="min-w-0">
+                        <h2 class="text-sm sm:text-base font-black text-sky-400 truncate">Información Legal, Privacidad y Ficha de la App</h2>
+                        <p class="text-[11px] text-slate-400 truncate">MAPPACHE • Red Escolar Digital (Ventanilla &amp; Mi Perú)</p>
+                    </div>
+                </div>
+                <button type="button" onclick="cerrarModalLegalStandalone()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-white font-bold flex items-center justify-center cursor-pointer shrink-0">✕</button>
+            </div>
+            <div class="flex border-b border-slate-800 bg-slate-950/60 px-4 gap-2 pt-2 overflow-x-auto shrink-0">
+                <button type="button" id="tabLegalPrivacidad" onclick="cambiarTabLegalStandalone('privacidad')" class="px-3.5 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer bg-slate-900 text-emerald-300 border-t-2 border-x-2 border-emerald-400">🔒 Política de Privacidad</button>
+                <button type="button" id="tabLegalTerminos" onclick="cambiarTabLegalStandalone('terminos')" class="px-3.5 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer text-slate-400 hover:text-white">📜 Términos y Descargo</button>
+                <button type="button" id="tabLegalAcerca" onclick="cambiarTabLegalStandalone('acerca')" class="px-3.5 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer text-slate-400 hover:text-white">ℹ️ Acerca de &amp; Permisos</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 sm:p-5 text-xs leading-relaxed text-slate-300 space-y-3.5">
+                <div id="panelLegalPrivacidad" class="space-y-3.5">
+                    <div class="bg-emerald-950/35 border border-emerald-500/40 rounded-2xl p-3.5 space-y-1.5">
+                        <h3 class="font-black text-emerald-300 text-xs">1. Ubicación GPS bajo demanda</h3>
+                        <p>MAPPACHE solicita acceso a tu ubicación únicamente cuando presionas <b>"Colegios más Cercanos a Mí (GPS)"</b>. Las coordenadas se procesan localmente en tu dispositivo para calcular distancias en kilómetros y <b>no se almacenan ni se venden a terceros</b>.</p>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5 space-y-1.5">
+                        <h3 class="font-black text-white text-xs">2. Datos locales y enlaces externos</h3>
+                        <p>Guardamos en tu dispositivo únicamente el tema visual, caché temporal del directorio escolar y estado opcional de calificación. La app no exige registro de cuentas ni recopila datos personales de menores. Puedes escribir a <a href="mailto:jjmixstore@gmail.com" class="text-sky-400 underline font-bold">jjmixstore@gmail.com</a> para soporte o retiro de sugerencias.</p>
+                    </div>
+                </div>
+                <div id="panelLegalTerminos" class="hidden space-y-3.5">
+                    <div class="bg-amber-950/40 border border-amber-500/50 rounded-2xl p-3.5 space-y-1.5">
+                        <h3 class="font-black text-amber-300 text-xs">Aviso de Independencia (No Gubernamental)</h3>
+                        <p><b>MAPPACHE</b> es una plataforma tecnológica independiente desarrollada por <b>LOS JOTITAS</b>. <b>NO es una aplicación oficial del MINEDU ni de la UGEL Ventanilla</b>, ni representa a ninguna entidad estatal.</p>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5 space-y-1.5">
+                        <h3 class="font-black text-white text-xs">Fuentes y Veracidad de Vacantes</h3>
+                        <p>Los datos de colegios corresponden a directorios educativos de referencia de Ventanilla y Mi Perú. Las vacantes en tiempo real son actualizadas por directores autorizados de cada plantel y tienen carácter referencial informativo.</p>
+                    </div>
+                </div>
+                <div id="panelLegalAcerca" class="hidden space-y-3.5">
+                    <div class="bg-sky-950/35 border border-sky-500/40 rounded-2xl p-3.5 space-y-1.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 class="font-black text-sky-300 text-xs">MAPPACHE • Red Escolar Digital (v2.6.0)</h3>
+                        </div>
+                        <p>Desarrollador: <b>Proyecto Tecnológico MAPPACHE / LOS JOTITAS</b> (Callao, Perú). Contacto: <a href="mailto:jjmixstore@gmail.com" class="text-sky-400 underline font-bold">jjmixstore@gmail.com</a>.</p>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5 space-y-1">
+                        <h3 class="font-black text-white text-xs">Permisos utilizados</h3>
+                        <p>• <b>Ubicación GPS:</b> Opcional para calcular colegios cercanos.<br>• <b>Internet:</b> Sincronización de vacantes, mapas y fachadas.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="px-5 py-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between gap-2">
+                <span class="text-[10.5px] text-slate-500 font-semibold">Última actualización: Noviembre 2026</span>
+                <button type="button" onclick="cerrarModalLegalStandalone()" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-xl cursor-pointer">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GUÍA DE INSTALACIÓN EN CELULAR (iPHONE / ANDROID) -->
+    <div id="modalGuiaInstalarStandalone" onclick="if(event.target===this) document.getElementById('modalGuiaInstalarStandalone').classList.add('hidden')" class="hidden fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+        <div onclick="event.stopPropagation()" class="w-full max-w-sm rounded-3xl bg-slate-900 border-2 border-emerald-400/60 p-5 shadow-2xl text-slate-100 space-y-3 text-left">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-black text-emerald-300">📲 Instalar MAPPACHE en tu Celular</h3>
+                <button type="button" onclick="document.getElementById('modalGuiaInstalarStandalone').classList.add('hidden')" class="w-7 h-7 rounded-full bg-slate-800 text-xs font-bold cursor-pointer">✕</button>
+            </div>
+            <div id="txtGuiaInstalarStandalone" class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3.5 text-xs space-y-2 leading-relaxed text-slate-300"></div>
+            <button type="button" onclick="document.getElementById('modalGuiaInstalarStandalone').classList.add('hidden')" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black cursor-pointer">Entendido</button>
+        </div>
+    </div>
+
+    <div id="toastOfflineStandalone" class="hidden fixed bottom-4 left-4 z-[65] flex items-center gap-2 rounded-full bg-amber-500 px-3.5 py-1.5 text-[11px] font-bold text-slate-950 shadow-lg border border-amber-300">
+        <span class="h-2 w-2 rounded-full bg-slate-950 animate-pulse"></span>
+        Modo sin conexión — Usando directorio guardado
     </div>
 
     <!-- ============================================================== -->
@@ -1003,14 +1096,14 @@
 
         // DICCIONARIOS DE EXPRESIONES OFICIALES DE MAPACHITO
         const MAPACHE_EMOCIONES_IMGS = {
-            'saludando': './mapache_saludando.png',
-            'buscando': './mapache_buscando.png',
-            'pensativo': './mapache_pensativo.png',
-            'sorprendido': './mapache_sorprendido.png',
-            'durmiendo': './mapache_durmiendo.png',
-            'olfateando': './mapache_olfateando.png',
-            'feliz': './mapache_saludando_en_un_pie.png',
-            'guiñando': './mapache_guiñando_ojo.png'
+            'saludando': './mapache_saludando.png?v=peru3d',
+            'buscando': './mapache_buscando.png?v=peru3d',
+            'pensativo': './mapache_pensativo.png?v=peru3d',
+            'sorprendido': './mapache_sorprendido.png?v=peru3d',
+            'durmiendo': './mapache_durmiendo.png?v=peru3d',
+            'olfateando': './mapache_olfateando.png?v=peru3d',
+            'feliz': './mapache_saludando_en_un_pie.png?v=peru3d',
+            'guiñando': './mapache_guiñando_ojo.png?v=peru3d'
         };
 
         const MAPACHE_FALLBACK_IMGS = {
@@ -1053,7 +1146,7 @@
 
             // Cargar imagen de Mapachito
             if (img) {
-                const localSrc = MAPACHE_EMOCIONES_IMGS[emocion] || './mapache_saludando.png';
+                const localSrc = MAPACHE_EMOCIONES_IMGS[emocion] || './mapache_saludando.png?v=peru3d';
                 const fallbackSrc = MAPACHE_FALLBACK_IMGS[emocion] || 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png';
                 img.onerror = function() {
                     this.onerror = function() {
@@ -4504,7 +4597,7 @@
                 <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 max-w-4xl mx-auto shadow-2xl space-y-5 text-xs">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
                         <div class="flex items-center gap-3">
-                            <img src="./mapache_saludando_en_un_pie.png" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png';" alt="Mapachito" class="h-11 w-11 object-contain drop-shadow" />
+                            <img src="./mapache_saludando_en_un_pie.png?v=peru3d" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png';" alt="Mapachito" class="h-11 w-11 object-contain drop-shadow" />
                             <div>
                                 <h3 class="text-base sm:text-lg font-black text-emerald-400">Valoración de la App (1 a 5 Estrellas y Likes)</h3>
                                 <p class="text-slate-400 text-xs">Conteo permanente de calificaciones recibidas tras 3–5 minutos de uso continuo</p>
@@ -4897,11 +4990,11 @@
 
         // TOUR INTERACTIVO CON FOTOS PRE-CARGADAS PARA 0 SEGUNDOS DE DEMORA
         const PASOS_TOUR = [
-            { titulo: '¡Hola! Soy Mapachito, orgulloso peruano', texto: '¡Bienvenido a MAPPACHE! Soy un mapache cangrejero peruano (Procyon cancrivorus), especie nativa poco conocida que vive en ríos, manglares y humedales del Perú.\n\nDato curioso: tengo patas más largas y pelaje corto, y uso mis manos ultrasensibles para "lavar" y rastrear alimento bajo el agua casi sin mirar. Con ese mismo instinto busco vacantes reales y te acerco al colegio ideal en Ventanilla y Mi Perú.', img: './mapache_saludando.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png' },
-            { titulo: '1. Busca tu colegio', texto: 'Escribe el nombre o número de colegio en la barra de búsqueda rápida.', img: './mapache_buscando.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_buscando.png' },
-            { titulo: '2. Filtra por Redes y Gestión', texto: 'Descubre colegios estatales y privados ordenados por zonas educativas.', img: './mapache_saludando_en_un_pie.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png' },
-            { titulo: '3. Semáforo de Vacantes', texto: 'Verde significa cupos confirmados, amarillo pocas vacantes y rojo sin vacantes.', img: './mapache_sorprendido.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_sorprendido.png' },
-            { titulo: '¡Listo para Matricular!', texto: 'Inicia el viaje con Google Maps o consulta sus redes oficiales con un solo clic.', img: './mapache_guiñando_ojo.png', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_gui%C3%B1ando_ojo.png' }
+            { titulo: '¡Hola! Soy Mapachito, orgulloso peruano', texto: '¡Bienvenido a MAPPACHE! Soy un mapache cangrejero peruano (Procyon cancrivorus), especie nativa poco conocida que vive en ríos, manglares y humedales del Perú.\n\nDato curioso: tengo patas más largas y pelaje corto, y uso mis manos ultrasensibles para "lavar" y rastrear alimento bajo el agua casi sin mirar. Con ese mismo instinto busco vacantes reales y te acerco al colegio ideal en Ventanilla y Mi Perú.', img: './mapache_saludando.png?v=peru3d', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando.png' },
+            { titulo: '1. Busca tu colegio', texto: 'Escribe el nombre o número de colegio en la barra de búsqueda rápida.', img: './mapache_buscando.png?v=peru3d', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_buscando.png' },
+            { titulo: '2. Filtra por Redes y Gestión', texto: 'Descubre colegios estatales y privados ordenados por zonas educativas.', img: './mapache_saludando_en_un_pie.png?v=peru3d', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png' },
+            { titulo: '3. Semáforo de Vacantes', texto: 'Verde significa cupos confirmados, amarillo pocas vacantes y rojo sin vacantes.', img: './mapache_sorprendido.png?v=peru3d', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_sorprendido.png' },
+            { titulo: '¡Listo para Matricular!', texto: 'Inicia el viaje con Google Maps o consulta sus redes oficiales con un solo clic.', img: './mapache_guiñando_ojo.png?v=peru3d', fallback: 'https://raw.githubusercontent.com/losJotitas/index/main/mapache_gui%C3%B1ando_ojo.png' }
         ];
 
         // Pre-carga inmediata de imágenes en memoria para cambio instantáneo
@@ -5476,6 +5569,75 @@
         // DETECCIÓN POR URL HASH (#admin o ?admin)
         if (window.location.hash === '#admin' || window.location.search.indexOf('admin') !== -1) {
             setTimeout(abrirAdminDashboard, 300);
+        }
+
+        // FICHA LEGAL TIENDAS, PWA SERVICE WORKER E INSTALACIÓN (PLAY STORE / APP STORE)
+        function abrirModalLegalStandalone(tab) {
+            var m = document.getElementById('modalLegalStandalone');
+            if (m) m.classList.remove('hidden');
+            cambiarTabLegalStandalone(tab || 'privacidad');
+        }
+        function cerrarModalLegalStandalone() {
+            var m = document.getElementById('modalLegalStandalone');
+            if (m) m.classList.add('hidden');
+        }
+        function cambiarTabLegalStandalone(tab) {
+            var tabs = { privacidad: 'Privacidad', terminos: 'Terminos', acerca: 'Acerca' };
+            Object.keys(tabs).forEach(function(k) {
+                var btn = document.getElementById('tabLegal' + tabs[k]);
+                var panel = document.getElementById('panelLegal' + tabs[k]);
+                var activo = (k === tab);
+                if (panel) panel.classList.toggle('hidden', !activo);
+                if (btn) {
+                    var colorCls = k === 'privacidad' ? 'text-emerald-300 border-emerald-400' : (k === 'terminos' ? 'text-amber-300 border-amber-400' : 'text-sky-300 border-sky-400');
+                    btn.className = 'px-3.5 py-2 text-xs font-bold rounded-t-xl transition whitespace-nowrap cursor-pointer ' + (activo ? ('bg-slate-900 border-t-2 border-x-2 ' + colorCls) : 'text-slate-400 hover:text-white');
+                }
+            });
+        }
+
+        var deferredPWAInstallPrompt = null;
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPWAInstallPrompt = e;
+        });
+        (function() {
+            var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            var btn = document.getElementById('btnInstalarPWAStandalone');
+            if (btn && isStandalone) btn.classList.add('hidden');
+            if (btn && /iphone|ipad|ipod/i.test(navigator.userAgent)) btn.textContent = '📲 Instalar en iPhone';
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js').catch(function() {});
+            }
+            var offlineEl = document.getElementById('toastOfflineStandalone');
+            function syncNet() {
+                if (offlineEl) offlineEl.classList.toggle('hidden', navigator.onLine !== false);
+            }
+            window.addEventListener('online', syncNet);
+            window.addEventListener('offline', syncNet);
+            syncNet();
+        })();
+
+        function instalarAppPWAStandalone() {
+            if (deferredPWAInstallPrompt) {
+                deferredPWAInstallPrompt.prompt();
+                deferredPWAInstallPrompt.userChoice.then(function(res) {
+                    if (res && res.outcome === 'accepted') {
+                        var btn = document.getElementById('btnInstalarPWAStandalone');
+                        if (btn) btn.classList.add('hidden');
+                    }
+                    deferredPWAInstallPrompt = null;
+                }).catch(function() {});
+                return;
+            }
+            var guia = document.getElementById('modalGuiaInstalarStandalone');
+            var txt = document.getElementById('txtGuiaInstalarStandalone');
+            var esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            if (txt) {
+                txt.innerHTML = esIOS
+                    ? '<p class="font-bold text-sky-300">En iPhone / iPad (Safari):</p><ol class="list-decimal list-inside space-y-1"><li>Toca el botón <b>Compartir</b> en la barra inferior de Safari.</li><li>Elige <b>"Agregar a inicio"</b>.</li><li>Pulsa <b>Agregar</b> para tener el ícono oficial en tu pantalla.</li></ol>'
+                    : '<p class="font-bold text-sky-300">En Android / Chrome / Edge:</p><ol class="list-decimal list-inside space-y-1"><li>Abre el menú del navegador (<b>⋮</b> arriba a la derecha).</li><li>Pulsa <b>"Instalar aplicación"</b> o <b>"Agregar a la pantalla principal"</b>.</li></ol>';
+            }
+            if (guia) guia.classList.remove('hidden');
         }
     </script>
 </body>
