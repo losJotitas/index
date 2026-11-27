@@ -988,6 +988,26 @@
         </div>
     </div>
 
+    <!-- MODAL MAPACHITO DORMIDO TRAS 40 SEGUNDOS DE INACTIVIDAD -->
+    <div id="modalMapachitoDormidoStandalone" onclick="despertarMapachitoStandalone()" class="hidden fixed inset-0 z-[115] flex items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4 select-none cursor-pointer">
+        <div onclick="event.stopPropagation(); despertarMapachitoStandalone()" class="relative max-w-xs w-full rounded-3xl p-5 text-center shadow-2xl border-2 border-sky-400 bg-slate-900 text-white space-y-3">
+            <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+                <span>😴</span> Modo descanso · 40s sin actividad
+            </div>
+            <div class="relative flex justify-center py-1">
+                <span class="absolute top-0 right-10 text-lg font-black text-sky-400 animate-bounce">Zzz...</span>
+                <img src="./mapache_durmiendo.png?v=peru3d" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_durmiendo.png';" alt="Mapachito durmiendo" class="w-[140px] h-[140px] object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.65)] pointer-events-none" />
+            </div>
+            <h3 class="text-base font-black leading-tight">¡Mapachito se quedó dormidito!</h3>
+            <p class="text-xs font-medium leading-relaxed text-slate-300">
+                Llevas 40 segundos sin usar la app. Toca aquí o mueve la pantalla para despertarme y seguir buscando colegios.
+            </p>
+            <button type="button" onclick="despertarMapachitoStandalone()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:brightness-110 text-white font-black text-xs shadow-lg cursor-pointer transition">
+                ☀️ ¡Despertar a Mapachito!
+            </button>
+        </div>
+    </div>
+
     <div id="toastOfflineStandalone" class="hidden fixed bottom-4 left-4 z-[65] flex items-center gap-2 rounded-full bg-amber-500 px-3.5 py-1.5 text-[11px] font-bold text-slate-950 shadow-lg border border-amber-300">
         <span class="h-2 w-2 rounded-full bg-slate-950 animate-pulse"></span>
         Modo sin conexión — Usando directorio guardado
@@ -3140,6 +3160,10 @@
         let mapacheClickCount = 0;
         let mapacheClickTimer = null;
         function handleMapachitoClick() {
+            if (typeof mapachitoDormidoStandalone !== 'undefined' && mapachitoDormidoStandalone) {
+                despertarMapachitoStandalone();
+                return;
+            }
             mapacheClickCount++;
             if (mapacheClickCount >= 3) {
                 mapacheClickCount = 0;
@@ -5639,6 +5663,88 @@
             }
             if (guia) guia.classList.remove('hidden');
         }
+
+        // MAPACHITO DORMIDO TRAS 40 SEGUNDOS CONTINUOS DE INACTIVIDAD
+        var mapachitoDormidoStandalone = false;
+        var timerInactividadMapachito = null;
+        var MODAL_IDS_BLOQUEO_SUENO = [
+            'modalFachadaColegio',
+            'modalDetalleColegio',
+            'modalAccesoDirector',
+            'modalAdminLogin',
+            'pantalla-admin',
+            'modalCodigosStandalone',
+            'modalEditarColegio',
+            'modalBuzon',
+            'modalTour',
+            'modalRedes',
+            'modalDialogoMapachito',
+            'promptCalificarApp',
+            'modalLegalStandalone',
+            'modalGuiaInstalarStandalone',
+            'drawerCercanosMapa'
+        ];
+
+        function hayModalActivoParaSuenoStandalone() {
+            for (var i = 0; i < MODAL_IDS_BLOQUEO_SUENO.length; i++) {
+                var el = document.getElementById(MODAL_IDS_BLOQUEO_SUENO[i]);
+                if (el && !el.classList.contains('hidden')) return true;
+            }
+            return false;
+        }
+
+        function activarSuenoMapachitoStandalone() {
+            if (document.visibilityState !== 'visible' || hayModalActivoParaSuenoStandalone()) {
+                programarSuenoMapachitoStandalone();
+                return;
+            }
+            mapachitoDormidoStandalone = true;
+            var heroImg = document.getElementById('imgMapachitoHero');
+            if (heroImg) heroImg.src = './mapache_durmiendo.png?v=peru3d';
+            var modalSueno = document.getElementById('modalMapachitoDormidoStandalone');
+            if (modalSueno) modalSueno.classList.remove('hidden');
+        }
+
+        function despertarMapachitoStandalone() {
+            if (mapachitoDormidoStandalone) {
+                mapachitoDormidoStandalone = false;
+                var heroImg = document.getElementById('imgMapachitoHero');
+                if (heroImg) heroImg.src = './mapache_apoyado_en_la_pared.png?v=peru3d';
+                var modalSueno = document.getElementById('modalMapachitoDormidoStandalone');
+                if (modalSueno) modalSueno.classList.add('hidden');
+            }
+            programarSuenoMapachitoStandalone();
+        }
+
+        function programarSuenoMapachitoStandalone() {
+            if (timerInactividadMapachito) clearTimeout(timerInactividadMapachito);
+            if (mapachitoDormidoStandalone || document.visibilityState !== 'visible') return;
+            timerInactividadMapachito = setTimeout(activarSuenoMapachitoStandalone, 40000);
+        }
+
+        (function initDetectorInactividadMapachito() {
+            ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'wheel', 'pointerdown'].forEach(function(ev) {
+                window.addEventListener(ev, function() {
+                    if (!mapachitoDormidoStandalone) {
+                        programarSuenoMapachitoStandalone();
+                    } else if (ev === 'keydown' || ev === 'touchstart' || ev === 'scroll') {
+                        despertarMapachitoStandalone();
+                    }
+                }, { passive: true });
+            });
+            window.addEventListener('click', function() {
+                if (mapachitoDormidoStandalone) despertarMapachitoStandalone();
+                else programarSuenoMapachitoStandalone();
+            }, { passive: true });
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'visible' && !mapachitoDormidoStandalone) {
+                    programarSuenoMapachitoStandalone();
+                } else if (document.visibilityState !== 'visible' && timerInactividadMapachito) {
+                    clearTimeout(timerInactividadMapachito);
+                }
+            });
+            programarSuenoMapachitoStandalone();
+        })();
     </script>
 </body>
 </html>
