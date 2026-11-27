@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Precarga ultra-rápida de todas las expresiones de Mapachito -->
-    <link rel="preload" as="image" href="./mapache_apoyado_en_la_pared.png?v=peru3d">
+    <link rel="preload" as="image" href="./mapache_apoyado_en_la_pared.png?v=peru3d2">
     <link rel="preload" as="image" href="./mapache_saludando.png?v=peru3d">
     <link rel="preload" as="image" href="./mapache_buscando.png?v=peru3d">
     <link rel="preload" as="image" href="./mapache_pensativo.png?v=peru3d">
@@ -88,13 +88,13 @@
 
                     <!-- Enlaces Superiores + Acceso Directores -->
                     <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs font-bold ml-auto">
-                        <button onclick="mostrarDialogoMapachito('saludando', '¡Te enseñaré paso a paso cómo buscar colegios y rastrear cupos!', iniciarTourMapachito)" class="px-2.5 py-1.5 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
+                        <button id="btnNavTour" onclick="activarColorNavStandalone('tour'); mostrarDialogoMapachito('saludando', '¡Te enseñaré paso a paso cómo buscar colegios y rastrear cupos!', iniciarTourMapachito)" class="px-2.5 py-1.5 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 border border-transparent transition flex items-center gap-1 cursor-pointer">
                             <span>🦝</span><span>Tour Interactivo</span>
                         </button>
-                        <button onclick="mostrarDialogoMapachito('pensativo', '¡Tu opinión nos ayuda a mejorar la comunidad! Déjanos tu sugerencia o comentario.', abrirModalBuzon)" class="px-2.5 py-1.5 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
+                        <button id="btnNavBuzon" onclick="activarColorNavStandalone('buzon'); mostrarDialogoMapachito('pensativo', '¡Tu opinión nos ayuda a mejorar la comunidad! Déjanos tu sugerencia o comentario.', abrirModalBuzon)" class="px-2.5 py-1.5 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 border border-transparent transition flex items-center gap-1 cursor-pointer">
                             <span>💬</span><span>Buzón de sugerencias</span>
                         </button>
-                        <button onclick="mostrarDialogoMapachito('feliz', 'Conoce cómo aportar al proyecto tecnológico MAPPACHE y activar membresías escolares.', abrirPantallaDonaciones)" class="px-2.5 py-1.5 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition flex items-center gap-1 cursor-pointer">
+                        <button id="btnNavMembresia" onclick="activarColorNavStandalone('membresia'); mostrarDialogoMapachito('feliz', 'Conoce cómo aportar al proyecto tecnológico MAPPACHE y activar membresías escolares.', abrirPantallaDonaciones)" class="px-2.5 py-1.5 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 border border-transparent transition flex items-center gap-1 cursor-pointer">
                             <span>💎</span><span>Membresía</span>
                         </button>
                         <button onclick="mostrarDialogoMapachito('saludando', 'Bienvenido al acceso exclusivo para Directores de colegios. Ingresa con tu contraseña.', abrirModalDirector)" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
@@ -108,7 +108,7 @@
             <header class="max-w-4xl w-full mx-auto px-3 sm:px-4 pt-5 sm:pt-7 pb-3 sm:pb-4 flex flex-col items-center justify-center text-center overflow-hidden">
                 <div class="flex flex-row items-center justify-center w-full max-w-full sm:-translate-x-2 flex-nowrap">
                     <img id="imgMapachitoHero" 
-                         src="./mapache_apoyado_en_la_pared.png?v=peru3d" 
+                         src="./mapache_apoyado_en_la_pared.png?v=peru3d2" 
                          onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';" 
                          alt="Mapachito apoyado en el título" 
                          class="w-auto h-28 sm:h-36 md:h-44 object-contain mr-[-2px] sm:mr-[-3px] md:mr-[-4px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0"
@@ -252,9 +252,6 @@
             <button onclick="buscarColegiosMasCercanosGPS()" class="px-3 py-2 bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-400/30 font-extrabold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap" title="Ver los 8 colegios más cercanos a mi ubicación">
                 <span>📍</span> Cercanos (GPS)
             </button>
-            <button onclick="sincronizarConGoogleSheets()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/30 font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap shadow-sm">
-                🔄 Sincronizar
-            </button>
         </header>
 
         <!-- Contenedor del Mapa Leaflet -->
@@ -288,9 +285,7 @@
                 <span>🚦</span>
                 <span class="truncate">Disponibilidad de Vacantes en Tiempo Real</span>
             </h2>
-            <button onclick="mostrarDialogoMapachito('buscando', 'Sincronizando disponibilidad de vacantes directamente con la nube de Google Sheets...', sincronizarConGoogleSheetsManual)" class="justify-self-end px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-400/30 font-bold text-xs rounded-xl transition cursor-pointer shrink-0 whitespace-nowrap shadow-sm">
-                🔄 Sincronizar
-            </button>
+            <div class="justify-self-end"></div>
         </header>
 
         <main class="flex-1 px-3 sm:px-5 py-5 max-w-3xl w-full mx-auto space-y-4">
@@ -872,7 +867,7 @@
     </div>
 
     <!-- MODAL CENTRADO DE CALIFICACIÓN 1 A 5 ESTRELLAS (UNA VEZ TRAS 3-5 MIN DE USO) -->
-    <div id="promptCalificarApp" onclick="if(event.target===this && document.getElementById('promptRatingGracias').classList.contains('hidden')) cerrarPromptCalificarStandalone()" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
+    <div id="promptCalificarApp" onclick="if(event.target===this && document.getElementById('promptRatingGracias').classList.contains('hidden')) cerrarPromptCalificarStandalone()" class="hidden fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
         <div id="cardPromptCalificarApp" onclick="event.stopPropagation()" class="relative max-w-sm w-full rounded-3xl p-6 shadow-2xl border transition-all text-center bg-slate-900 border-sky-400/40 text-slate-100">
             <button id="btnCerrarPromptRating" type="button" onclick="cerrarPromptCalificarStandalone()" aria-label="Cerrar ventana de calificación" class="absolute top-3.5 right-3.5 w-8 h-8 rounded-full text-sm font-black flex items-center justify-center cursor-pointer transition bg-white/10 hover:bg-white/20 text-slate-300">✕</button>
             <div id="promptRatingPregunta" class="space-y-4">
@@ -4624,12 +4619,15 @@
                             <img src="./mapache_saludando_en_un_pie.png?v=peru3d" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_saludando_en_un_pie.png';" alt="Mapachito" class="h-11 w-11 object-contain drop-shadow" />
                             <div>
                                 <h3 class="text-base sm:text-lg font-black text-emerald-400">Valoración de la App (1 a 5 Estrellas y Likes)</h3>
-                                <p class="text-slate-400 text-xs">Conteo permanente de calificaciones recibidas tras 3–5 minutos de uso continuo</p>
+                                <p class="text-slate-400 text-xs">Conteo permanente de calificaciones recibidas tras 5 minutos de uso continuo</p>
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <button type="button" onclick="actualizarContadoresRatingDashboardStandalone()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-bold text-xs cursor-pointer transition shadow-sm flex items-center gap-1.5">
                                 <span>🔄</span> Actualizar Conteo
+                            </button>
+                            <button type="button" onclick="reiniciarPruebaEncuestaLocalStandalone()" class="px-3.5 py-2 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-400/35 rounded-xl font-bold text-xs cursor-pointer transition flex items-center gap-1.5">
+                                <span>🧪</span> Probar encuesta en esta PC
                             </button>
                             <button type="button" onclick="reiniciarContadoresRatingStandalone()" class="px-3.5 py-2 bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-500/40 rounded-xl font-bold text-xs cursor-pointer transition flex items-center gap-1.5">
                                 <span>🗑️</span> Reiniciar a 0
@@ -4687,6 +4685,20 @@
                 renderizarContenidoAdmin();
                 mostrarToast('🗑️ Contadores de valoración reiniciados a cero.');
             }
+        }
+
+        function reiniciarPruebaEncuestaLocalStandalone() {
+            try {
+                localStorage.removeItem('mappache_app_rating_voto');
+                localStorage.removeItem('mappache_tiempo_uso_seg');
+                localStorage.removeItem('mappache_rating_pospuesto_hasta_seg');
+            } catch(e) {}
+            if (timerUsoCalificarStandalone) {
+                clearInterval(timerUsoCalificarStandalone);
+                timerUsoCalificarStandalone = null;
+            }
+            iniciarContadorUsoCalificarStandalone();
+            mostrarToast('🧪 Encuesta reiniciada en esta PC: volverá a salir en 5 min.');
         }
 
         // MODAL EDICIÓN DE COLEGIO EN ADMIN
@@ -5447,14 +5459,15 @@
         function obtenerMetaUsoRatingStandalone() {
             try {
                 const p = Number(localStorage.getItem('mappache_rating_pospuesto_hasta_seg') || '0') || 0;
-                return Math.max(210, p);
+                return Math.max(300, p);
             } catch(e) {
-                return 210;
+                return 300;
             }
         }
 
         function mostrarPromptCalificarStandalone() {
             if (obtenerMiVotoRatingStandalone()) return false;
+            if (typeof mapachitoDormidoStandalone !== 'undefined' && mapachitoDormidoStandalone) return false;
             const modalAdmin = document.getElementById('pantalla-admin');
             const modalDet = document.getElementById('modalDetalleColegio');
             const modalDir = document.getElementById('modalAccesoDirector');
@@ -5471,7 +5484,7 @@
             if (box) box.classList.add('hidden');
             if (!obtenerMiVotoRatingStandalone()) {
                 try {
-                    const acum = Math.max(210, Number(localStorage.getItem('mappache_tiempo_uso_seg') || '0') || 0);
+                    const acum = Math.max(300, Number(localStorage.getItem('mappache_tiempo_uso_seg') || '0') || 0);
                     localStorage.setItem('mappache_tiempo_uso_seg', String(acum));
                     localStorage.setItem('mappache_rating_pospuesto_hasta_seg', String(acum + 600));
                 } catch(e) {}
@@ -5709,11 +5722,25 @@
             if (mapachitoDormidoStandalone) {
                 mapachitoDormidoStandalone = false;
                 var heroImg = document.getElementById('imgMapachitoHero');
-                if (heroImg) heroImg.src = './mapache_apoyado_en_la_pared.png?v=peru3d';
+                if (heroImg) heroImg.src = './mapache_apoyado_en_la_pared.png?v=peru3d2';
                 var modalSueno = document.getElementById('modalMapachitoDormidoStandalone');
                 if (modalSueno) modalSueno.classList.add('hidden');
             }
             programarSuenoMapachitoStandalone();
+        }
+
+        function activarColorNavStandalone(tipo) {
+            var base = 'px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 cursor-pointer ';
+            var normal = 'text-slate-200 hover:text-white hover:bg-white/10 border border-transparent';
+            var mapaBtns = {
+                tour: { id: 'btnNavTour', activo: 'bg-rose-600 text-white shadow-md shadow-rose-500/30 border border-rose-400/60' },
+                buzon: { id: 'btnNavBuzon', activo: 'bg-amber-400 text-slate-950 font-extrabold shadow-md shadow-amber-400/30 border border-amber-300' },
+                membresia: { id: 'btnNavMembresia', activo: 'bg-emerald-600 text-white shadow-md shadow-emerald-500/30 border border-emerald-400/60' }
+            };
+            Object.keys(mapaBtns).forEach(function(k) {
+                var el = document.getElementById(mapaBtns[k].id);
+                if (el) el.className = base + (k === tipo ? mapaBtns[k].activo : normal);
+            });
         }
 
         function programarSuenoMapachitoStandalone() {
