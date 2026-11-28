@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Precarga ultra-rápida de todas las expresiones de Mapachito -->
-    <link rel="preload" as="image" href="./mapache_apoyado_en_la_pared.png?v=peru3d2">
+    <link rel="preload" as="image" href="./mapache_apoyado_en_la_pared.png?v=peru3d3">
     <link rel="preload" as="image" href="./mapache_saludando.png?v=peru3d">
     <link rel="preload" as="image" href="./mapache_buscando.png?v=peru3d">
     <link rel="preload" as="image" href="./mapache_pensativo.png?v=peru3d">
@@ -59,13 +59,29 @@
             50% { transform: scale(1.06, 0.94) translateY(-3px); }
             100% { transform: scale(0.96, 1.05) translateY(1px); }
         }
+        @-webkit-keyframes mapacheSaludaMano {
+            0%, 100% { -webkit-transform: rotate(12deg); transform: rotate(12deg); }
+            50% { -webkit-transform: rotate(-16deg); transform: rotate(-16deg); }
+        }
         @keyframes mapacheSaludaMano {
             0%, 100% { transform: rotate(12deg); }
             50% { transform: rotate(-16deg); }
         }
         .mapache-saluda-mano {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+            -webkit-transform-origin: 23.8% 31.0%;
             transform-origin: 23.8% 31.0%;
+            -webkit-animation: mapacheSaludaMano 1.15s ease-in-out infinite;
             animation: mapacheSaludaMano 1.15s ease-in-out infinite;
+            will-change: transform;
         }
     </style>
 </head>
@@ -115,19 +131,19 @@
             <!-- Hero Mapachito -->
             <header class="max-w-4xl w-full mx-auto px-3 sm:px-4 pt-5 sm:pt-7 pb-3 sm:pb-4 flex flex-col items-center justify-center text-center overflow-hidden">
                 <div class="flex flex-row items-center justify-center w-full max-w-full sm:-translate-x-2 flex-nowrap">
-                    <div onclick="handleMapachitoClick()" title="¡Toca a Mapachito!" class="relative inline-block mr-[-2px] sm:mr-[-3px] md:mr-[-4px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0">
+                    <div onclick="handleMapachitoClick()" title="¡Toca a Mapachito!" style="position: relative; display: inline-block;" class="relative inline-block mr-[-2px] sm:mr-[-3px] md:mr-[-4px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0">
                         <img id="imgMapachitoHero" 
-                             src="./mapache_apoyado_en_la_pared.png?v=peru3d2" 
-                             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';" 
+                             src="./mapache_apoyado_en_la_pared.png?v=peru3d3" 
+                             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png?v=peru3d3';" 
                              alt="Mapachito apoyado en el título" 
-                             style="clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 31.3%, 21.9% 31.3%, 25.9% 30.1%, 30.1% 30.1%, 30.1% 13%, 0% 13%);"
+                             style="-webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 31.3%, 21.9% 31.3%, 25.9% 30.1%, 30.1% 30.1%, 30.1% 13%, 0% 13%); clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 31.3%, 21.9% 31.3%, 25.9% 30.1%, 30.1% 30.1%, 30.1% 13%, 0% 13%);"
                              class="block w-auto h-28 sm:h-36 md:h-44 object-contain" />
                         <img id="imgMapachitoHeroMano"
-                             src="./mapache_apoyado_en_la_pared.png?v=peru3d2"
-                             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';"
+                             src="./mapache_apoyado_en_la_pared.png?v=peru3d3"
+                             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png?v=peru3d3';"
                              alt=""
                              aria-hidden="true"
-                             style="clip-path: polygon(9% 13%, 30.1% 13%, 30.1% 30.1%, 26.1% 32.4%, 22.3% 32.4%, 9% 31.3%);"
+                             style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-clip-path: polygon(9% 13%, 30.1% 13%, 30.1% 30.1%, 26.1% 32.4%, 22.3% 32.4%, 9% 31.3%); clip-path: polygon(9% 13%, 30.1% 13%, 30.1% 30.1%, 26.1% 32.4%, 22.3% 32.4%, 9% 31.3%); -webkit-transform-origin: 23.8% 31.0%; transform-origin: 23.8% 31.0%; -webkit-animation: mapacheSaludaMano 1.15s ease-in-out infinite; animation: mapacheSaludaMano 1.15s ease-in-out infinite; will-change: transform;"
                              class="absolute inset-0 w-full h-full object-contain pointer-events-none mapache-saluda-mano" />
                     </div>
                     <div class="flex flex-col items-start text-left z-0 min-w-0 flex-1 sm:flex-initial">
@@ -5659,7 +5675,19 @@
             if (btn && isStandalone) btn.classList.add('hidden');
             if (btn && /iphone|ipad|ipod/i.test(navigator.userAgent)) btn.textContent = '📲 Instalar en iPhone';
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js').catch(function() {});
+                var swRefreshingStandalone = false;
+                navigator.serviceWorker.addEventListener('controllerchange', function() {
+                    if (swRefreshingStandalone) return;
+                    try {
+                        if (sessionStorage.getItem('mappache_sw_reloaded') === 'v29') return;
+                        sessionStorage.setItem('mappache_sw_reloaded', 'v29');
+                    } catch(e) {}
+                    swRefreshingStandalone = true;
+                    window.location.reload();
+                });
+                navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(function(reg) {
+                    if (reg && reg.update) reg.update().catch(function() {});
+                }).catch(function() {});
             }
             var offlineEl = document.getElementById('toastOfflineStandalone');
             function syncNet() {
@@ -5732,8 +5760,9 @@
             var heroMano = document.getElementById('imgMapachitoHeroMano');
             if (heroMano) heroMano.classList.add('hidden');
             if (heroImg) {
+                heroImg.style.webkitClipPath = 'none';
                 heroImg.style.clipPath = 'none';
-                heroImg.src = './mapache_durmiendo.png?v=peru3d';
+                heroImg.src = './mapache_durmiendo.png?v=peru3d3';
             }
             var modalSueno = document.getElementById('modalMapachitoDormidoStandalone');
             if (modalSueno) modalSueno.classList.remove('hidden');
@@ -5745,8 +5774,10 @@
                 var heroImg = document.getElementById('imgMapachitoHero');
                 var heroMano = document.getElementById('imgMapachitoHeroMano');
                 if (heroImg) {
-                    heroImg.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 31.3%, 21.9% 31.3%, 25.9% 30.1%, 30.1% 30.1%, 30.1% 13%, 0% 13%)';
-                    heroImg.src = './mapache_apoyado_en_la_pared.png?v=peru3d2';
+                    var cuerpoClip = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 31.3%, 21.9% 31.3%, 25.9% 30.1%, 30.1% 30.1%, 30.1% 13%, 0% 13%)';
+                    heroImg.style.webkitClipPath = cuerpoClip;
+                    heroImg.style.clipPath = cuerpoClip;
+                    heroImg.src = './mapache_apoyado_en_la_pared.png?v=peru3d3';
                 }
                 if (heroMano) heroMano.classList.remove('hidden');
                 var modalSueno = document.getElementById('modalMapachitoDormidoStandalone');
