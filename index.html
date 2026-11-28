@@ -59,6 +59,14 @@
             50% { transform: scale(1.06, 0.94) translateY(-3px); }
             100% { transform: scale(0.96, 1.05) translateY(1px); }
         }
+        @keyframes mapacheSaludaMano {
+            0%, 100% { transform: rotate(12deg); }
+            50% { transform: rotate(-16deg); }
+        }
+        .mapache-saluda-mano {
+            transform-origin: 23.8% 31.0%;
+            animation: mapacheSaludaMano 1.15s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-sky-500 selection:text-white">
@@ -107,13 +115,21 @@
             <!-- Hero Mapachito -->
             <header class="max-w-4xl w-full mx-auto px-3 sm:px-4 pt-5 sm:pt-7 pb-3 sm:pb-4 flex flex-col items-center justify-center text-center overflow-hidden">
                 <div class="flex flex-row items-center justify-center w-full max-w-full sm:-translate-x-2 flex-nowrap">
-                    <img id="imgMapachitoHero" 
-                         src="./mapache_apoyado_en_la_pared.png?v=peru3d2" 
-                         onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';" 
-                         alt="Mapachito apoyado en el título" 
-                         class="w-auto h-28 sm:h-36 md:h-44 object-contain mr-[-2px] sm:mr-[-3px] md:mr-[-4px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0"
-                         title="¡Toca a Mapachito!"
-                         onclick="handleMapachitoClick()" />
+                    <div onclick="handleMapachitoClick()" title="¡Toca a Mapachito!" class="relative inline-block mr-[-2px] sm:mr-[-3px] md:mr-[-4px] z-10 drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)] cursor-pointer hover:scale-105 transition shrink-0">
+                        <img id="imgMapachitoHero" 
+                             src="./mapache_apoyado_en_la_pared.png?v=peru3d2" 
+                             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';" 
+                             alt="Mapachito apoyado en el título" 
+                             style="clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 31.3%, 21.9% 31.3%, 25.9% 30.1%, 30.1% 30.1%, 30.1% 13%, 0% 13%);"
+                             class="block w-auto h-28 sm:h-36 md:h-44 object-contain" />
+                        <img id="imgMapachitoHeroMano"
+                             src="./mapache_apoyado_en_la_pared.png?v=peru3d2"
+                             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/losJotitas/index/main/mapache_apoyado_en_la_pared.png';"
+                             alt=""
+                             aria-hidden="true"
+                             style="clip-path: polygon(9% 13%, 30.1% 13%, 30.1% 30.1%, 26.1% 32.4%, 22.3% 32.4%, 9% 31.3%);"
+                             class="absolute inset-0 w-full h-full object-contain pointer-events-none mapache-saluda-mano" />
+                    </div>
                     <div class="flex flex-col items-start text-left z-0 min-w-0 flex-1 sm:flex-initial">
                         <h1 id="tituloPrincipalPortada" class="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black tracking-wide text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)] leading-none m-0">
                             MAPPACHE
@@ -5713,7 +5729,12 @@
             }
             mapachitoDormidoStandalone = true;
             var heroImg = document.getElementById('imgMapachitoHero');
-            if (heroImg) heroImg.src = './mapache_durmiendo.png?v=peru3d';
+            var heroMano = document.getElementById('imgMapachitoHeroMano');
+            if (heroMano) heroMano.classList.add('hidden');
+            if (heroImg) {
+                heroImg.style.clipPath = 'none';
+                heroImg.src = './mapache_durmiendo.png?v=peru3d';
+            }
             var modalSueno = document.getElementById('modalMapachitoDormidoStandalone');
             if (modalSueno) modalSueno.classList.remove('hidden');
         }
@@ -5722,7 +5743,12 @@
             if (mapachitoDormidoStandalone) {
                 mapachitoDormidoStandalone = false;
                 var heroImg = document.getElementById('imgMapachitoHero');
-                if (heroImg) heroImg.src = './mapache_apoyado_en_la_pared.png?v=peru3d2';
+                var heroMano = document.getElementById('imgMapachitoHeroMano');
+                if (heroImg) {
+                    heroImg.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 31.3%, 21.9% 31.3%, 25.9% 30.1%, 30.1% 30.1%, 30.1% 13%, 0% 13%)';
+                    heroImg.src = './mapache_apoyado_en_la_pared.png?v=peru3d2';
+                }
+                if (heroMano) heroMano.classList.remove('hidden');
                 var modalSueno = document.getElementById('modalMapachitoDormidoStandalone');
                 if (modalSueno) modalSueno.classList.add('hidden');
             }
